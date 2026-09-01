@@ -143,6 +143,14 @@
   .tile .code{font-family:'Space Mono', monospace; font-size:10px; color:var(--ivory-faint); display:block; margin-bottom:3px;}
   .tile .title{font-size:13px; color:var(--ivory); font-weight:500;}
 
+  .works-more{text-align:center; margin-top:30px;}
+  .works-more button{
+    font-family:'Space Mono', monospace; font-size:12px; letter-spacing:1.5px;
+    color:var(--ivory-dim); background:none; border:1px solid var(--ivory-faint);
+    border-radius:24px; padding:11px 26px; cursor:pointer;
+  }
+  .works-more button:hover{color:var(--ivory); border-color:var(--ivory-dim);}
+
   @media(max-width:720px){
     .work-grid{grid-template-columns:repeat(2, 1fr);}
   }
@@ -208,6 +216,9 @@
   </div>
   <div class="work-grid" id="workGrid">
     <div class="tile loading"><span data-i="loading">불러오는 중…</span></div>
+  </div>
+  <div class="works-more">
+    <button id="btnMoreWorks" hidden>BROWSE ALL WORKS ↓</button>
   </div>
 </section>
 
@@ -279,13 +290,16 @@ function renderWorkTiles(rows){
       '</div>';
   }).join('');
 }
+var ALL_WORKS = [];
 function loadRecentWorks(){
   fetch(ARCHIVE_API + '?t=' + Date.now())
     .then(function(res){ return res.json(); })
     .then(function(j){
       if(!j.ok) throw new Error(j.error || '응답 오류');
       var rows = (j.rows || []).filter(function(r){ return String(r.title||'').trim(); });
-      renderWorkTiles(rows.slice(-6).reverse()); // 최근 등록순(시트 하단이 최신) 6점
+      ALL_WORKS = rows.slice().reverse(); // 최근 등록순(시트 하단이 최신)
+      renderWorkTiles(ALL_WORKS.slice(0, 6));
+      if(ALL_WORKS.length > 6) document.getElementById('btnMoreWorks').hidden = false;
     })
     .catch(function(e){
       console.error('아카이브 연동 실패:', e);
@@ -293,6 +307,10 @@ function loadRecentWorks(){
         '<div class="tile loading"><span data-i="error">' + I18N[LANG].error + '</span></div>';
     });
 }
+document.getElementById('btnMoreWorks').onclick = function(){
+  renderWorkTiles(ALL_WORKS);
+  this.hidden = true;
+};
 loadRecentWorks();
 </script>
 
