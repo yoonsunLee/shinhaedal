@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>얼빵해달 — 신해달</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@300;400;500;700&family=Press+Start+2P&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pearl:#f5f4f7; --pearl-2:#ecebf1;
+    --ink:#1a1b26; --ink-dim:rgba(26,27,38,.62); --ink-faint:rgba(26,27,38,.34);
+    --line:rgba(26,27,38,.14); --gold:#c9a227;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--pearl); color:var(--ink); font-family:'Noto Sans KR',sans-serif; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1040px; margin:0 auto; padding:0 28px;}
+  img{max-width:100%; display:block;}
+
+  /* nav — 메인 사이트와 동일 골격 */
+  nav{display:flex; align-items:flex-start; justify-content:space-between; padding:26px 28px; max-width:1040px; margin:0 auto;}
+  .logo-block{display:flex; flex-direction:column; gap:5px;}
+  .logo{font-family:'Black Han Sans',sans-serif; font-size:20px; letter-spacing:1px; color:var(--ink); text-decoration:none;}
+  .logo-caption{font-family:'Space Mono',monospace; font-size:11px; color:var(--ink-faint);}
+  .nav-right{display:flex; align-items:center; gap:14px;}
+  .lang{display:flex; border:1px solid var(--line); border-radius:20px; overflow:hidden;}
+  .lang button{border:none; background:transparent; color:var(--ink-faint); cursor:pointer; font-family:'Space Mono',monospace; font-size:11px; font-weight:700; padding:6px 12px;}
+  .lang button.on{background:var(--ink); color:var(--pearl);}
+  .nav-menu{display:flex; gap:22px; list-style:none; margin:0 4px 0 0; padding:0; align-items:center;}
+  .nav-menu a{font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.5px; color:var(--ink-dim); text-decoration:none;}
+  .nav-menu a:hover, .nav-menu a.on{color:var(--ink);}
+  .nav-menu .soon{font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.5px; color:var(--ink-faint); cursor:default;}
+  .menu-btn{display:none;}
+  .nav-overlay{position:fixed; inset:0; background:rgba(245,244,247,.98); z-index:50; display:none; flex-direction:column; align-items:center; justify-content:center;}
+  .nav-overlay.open{display:flex;}
+  .overlay-close{position:absolute; top:22px; right:24px; font-size:20px;}
+  .overlay-links{display:flex; flex-direction:column; gap:26px; text-align:center;}
+  .overlay-links a, .overlay-links .soon{font-family:'Black Han Sans',sans-serif; font-size:26px; color:var(--ink); text-decoration:none;}
+  .overlay-links .soon{color:var(--ink-faint);}
+  .overlay-links .overlay-ig{font-family:'Space Mono',monospace; font-size:13px; color:var(--ink-dim); margin-top:10px;}
+  @media(max-width:720px){ .nav-menu{display:none;} .menu-btn{display:flex;} }
+  .icon-btn{background:none; border:none; color:var(--ink); cursor:pointer; display:flex; padding:4px; opacity:.8;}
+  .icon-btn:hover{opacity:1;}
+
+  section{padding:76px 0;}
+  .sec-head{font-family:'Black Han Sans',sans-serif; font-weight:400; font-size:clamp(24px,3.4vw,34px); margin:0 0 10px;}
+  .sec-sub{color:var(--ink-dim); margin:0 0 40px; line-height:1.8; max-width:580px; font-weight:300;}
+
+  /* ── S1 캐릭터 히어로 (3p) ── */
+  .hero{padding:56px 0 80px; text-align:center; border-top:none;}
+  .hero .hero-title{margin:0 0 30px;}
+  .hero .lockup{max-width:300px; margin:0 auto; border-radius:16px; overflow:hidden; border:1px solid var(--line);}
+  .hero .statement{font-family:'Black Han Sans',sans-serif; font-weight:400; font-size:clamp(30px,5vw,50px); line-height:1.28; margin:30px 0 0; color:var(--ink);}
+  .hero .sub{max-width:540px; margin:18px auto 0; color:var(--ink-dim); line-height:1.85; font-weight:300;}
+  .hero .quote{margin:32px auto 0; font-family:'Space Mono',monospace; font-size:14px;}
+
+  /* ── S2 Naming (4p) ── */
+  .name-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start;}
+  .name-card{background:#fff; border:1px solid var(--line); border-radius:16px; padding:28px 26px; display:flex; flex-direction:column;}
+  .name-card .from-to{font-family:'Black Han Sans',sans-serif; font-size:22px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:16px;}
+  .name-card .mono{font-family:'Space Mono',monospace; font-size:15px; font-weight:700;}
+  .name-card p{color:var(--ink-dim); line-height:1.85; font-size:13.5px; margin:0 0 16px; font-weight:300;}
+  .name-card .art{border-radius:10px; overflow:hidden; background:var(--pearl-2); display:flex; align-items:center; justify-content:center;}
+  .name-card .art img{width:100%;}
+
+  /* ── S3 Character Sheet (5p) ── */
+  .sheet-grid{display:grid; grid-template-columns:1.05fr 1fr; gap:26px; align-items:start;}
+  .scene{border-radius:16px; overflow:hidden; border:1px solid var(--line);}
+  .status-card{background:#fff; border:3px solid var(--ink); border-radius:4px; box-shadow:6px 6px 0 var(--ink); padding:20px 22px 22px;}
+  .status-head{display:flex; justify-content:space-between; align-items:center; font-family:'Press Start 2P',monospace; font-size:9px; margin-bottom:16px;}
+  .status-row{display:grid; grid-template-columns:112px 1fr; gap:6px 14px; padding:9px 0; border-bottom:1px dashed var(--line); align-items:baseline;}
+  .status-row:last-child{border-bottom:none;}
+  .status-row dt{font-family:'Space Mono',monospace; font-size:10.5px; font-weight:700; color:var(--ink-faint); margin:0;}
+  .status-row dd{margin:0; font-size:14px; font-weight:500;}
+  .sheet-dots{display:none; justify-content:center; gap:8px; margin-top:14px;}
+  .sheet-dots span{width:7px; height:7px; border-radius:50%; background:var(--ink-faint); transition:background .25s;}
+  .sheet-dots span.on{background:var(--ink);}
+
+  /* ── S4 The Shell (6p) — 실제 4단 시퀀스 ── */
+  .shell-seq{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:8px 0 30px;}
+  .shell-seq figure{margin:0; text-align:center;}
+  .shell-seq .frame{border-radius:12px; overflow:hidden; border:1px solid var(--line); background:#fff;}
+  .bridge-line{text-align:center; font-family:'Space Mono',monospace; font-size:15px; margin:10px 0 6px;}
+  .bridge-line-sub{text-align:center; color:var(--ink-faint); font-size:13px; margin:0 0 26px;}
+  .works-link{text-align:center;}
+  .works-link a{color:var(--ink); font-size:14px; text-decoration:underline; text-underline-offset:4px;}
+
+  /* ── S5 Art Toy (8p) ── */
+  .toy-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:30px;}
+  @media(min-width:640px){ .toy-grid{grid-template-columns:repeat(4,1fr);} }
+  .toy-grid img{border-radius:12px; aspect-ratio:3/4; object-fit:cover;}
+  .spec-list{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; background:#fff; border:1px solid var(--line); border-radius:14px; padding:22px 24px;}
+  .spec-list div dt{font-family:'Space Mono',monospace; font-size:10.5px; color:var(--ink-faint); margin:0 0 6px;}
+  .spec-list div dd{margin:0; font-size:13.5px; font-weight:500; line-height:1.5;}
+
+  /* ── S6 Ilwolobongdan (11-12p) ── */
+  .band-hero{text-align:center; margin-bottom:34px;}
+  .band-hero img{max-width:280px; margin:0 auto; border-radius:16px;}
+  .band-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:12px;}
+  .member{background:#fff; border:1px solid var(--line); border-radius:12px; padding:16px 10px 16px; text-align:center;}
+  .member.me{border:2px solid var(--gold);}
+  .member .elem{font-family:'Space Mono',monospace; font-size:9.5px; font-weight:700; letter-spacing:1.4px; color:var(--ink-faint); display:block; margin-bottom:10px;}
+  .member img{height:64px; width:auto; margin:0 auto 10px;}
+  .member .kr{font-family:'Black Han Sans',sans-serif; font-size:15px; display:block;}
+  .member .en{font-size:10px; color:var(--ink-dim); display:block; margin-top:3px; min-height:2.4em;}
+  .member .role{font-size:11px; margin-top:8px; display:block; font-weight:500;}
+  .member .sig{font-family:'Space Mono',monospace; font-size:9px; color:var(--ink-faint); display:block; margin-top:5px;}
+  .band-close{text-align:center; margin-top:32px; font-family:'Space Mono',monospace; font-size:13px;}
+
+  .closing{padding:56px 0; text-align:center; border-top:1px solid var(--line);}
+  .closing p{margin:0; color:var(--ink-dim); font-size:14px;}
+  .closing a{color:var(--ink); text-decoration:underline; text-underline-offset:4px;}
+  footer{border-top:1px solid var(--line); padding:30px 28px 44px; text-align:center; font-family:'Space Mono',monospace; font-size:11px; color:var(--ink-faint);}
+  footer .menu{margin-bottom:12px; display:flex; gap:20px; justify-content:center; flex-wrap:wrap;}
+  footer .menu span{color:var(--ink-dim); cursor:default;}
+
+  @media(max-width:820px){
+    .name-grid{grid-template-columns:1fr;}
+    .sheet-grid{
+      display:flex; grid-template-columns:none;
+      overflow-x:auto; scroll-snap-type:x mandatory;
+      gap:12px; padding-bottom:4px;
+      -webkit-overflow-scrolling:touch;
+      scrollbar-width:none;
+    }
+    .sheet-grid::-webkit-scrollbar{display:none;}
+    .sheet-grid > *{flex:0 0 86%; scroll-snap-align:center;}
+    .sheet-dots{display:flex;}
+    .shell-seq{grid-template-columns:repeat(2,1fr);}
+    .spec-list{grid-template-columns:repeat(2,1fr);}
+    .band-grid{
+      display:flex; grid-template-columns:none;
+      overflow-x:auto; scroll-snap-type:x mandatory;
+      gap:10px; padding-bottom:4px;
+      -webkit-overflow-scrolling:touch;
+      scrollbar-width:none;
+    }
+    .band-grid::-webkit-scrollbar{display:none;}
+    .band-grid > *{flex:0 0 62%; scroll-snap-align:center;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo-block">
+    <a class="logo" href="../">신해달</a>
+    <div class="logo-caption" data-i="nav_caption">Haedal — 세계관</div>
+  </div>
+  <div class="nav-right">
+    <div class="lang" role="group" aria-label="Language">
+      <button id="langKo" class="on">KO</button>
+      <button id="langEn">EN</button>
+    </div>
+    <ul class="nav-menu">
+      <li><a href="../#works">Works</a></li>
+      <li><a href="./" class="on">Haedal</a></li>
+      <li><span class="soon" title="준비 중">Press</span></li>
+      <li><span class="soon" title="준비 중">About</span></li>
+    </ul>
+    <button class="icon-btn menu-btn" id="btnMenu" aria-label="메뉴">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 6H17M3 10H17M3 14H17" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</nav>
+
+<div class="nav-overlay" id="navOverlay">
+  <button class="icon-btn overlay-close" id="btnMenuClose" aria-label="닫기">✕</button>
+  <nav class="overlay-links">
+    <a href="../#works">Works</a>
+    <a href="./">Haedal</a>
+    <span class="soon">Press</span>
+    <span class="soon">About</span>
+    <a href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener" class="overlay-ig">Instagram ↗</a>
+  </nav>
+</div>
+
+<!-- S1 Character Intro (3p) -->
+<header class="hero wrap">
+  <h1 class="sec-head hero-title" data-i="hero_tag">MEET SPACED-OUT SEA OTTER</h1>
+  <div class="lockup"><img src="assets/hero_face.png" alt="얼빵해달"></div>
+  <p class="statement" data-i="hero_h1">수영 못 하는 해달,<br>조개배달부 얼빵해달</p>
+  <p class="sub" data-i="hero_sub">두 발로 걸어 조개를 배달해요. 조개껍데기 안에는 사랑과 응원, 위로 같은 작은 마음들이 담겨 있어요. 걸어서는 도무지 느려서, 요즘은 동네 스포츠센터 아침 수영반에 다니는 중이에요.</p>
+  <p class="quote">“Even sea otters have to learn to swim.”</p>
+</header>
+
+<!-- S2 Naming (4p) -->
+<section class="wrap">
+  <h2 class="sec-head" data-i="name_h">이름의 비밀</h2>
+  <p class="sec-sub" data-i="name_sub">얼빵해달은 이름 하나조차 소리가 아니라 성격과 의미를 옮긴 이름이에요.</p>
+  <div class="name-grid">
+    <div class="name-card">
+      <div class="from-to">얼빵 <span class="mono">→ SPACED-OUT</span></div>
+      <p data-i="name_c1">‘얼빵’을 소리 그대로 Eolbbang이라 쓰는 대신, 조금 얼빠져 있고 어딘가 엇박자지만 그래서 사랑스러운 느낌을 ‘Spaced-out’으로 옮겼어요. 이름 자체가 성격 소개가 되도록요.</p>
+      <div class="art"><img src="assets/hero_logo.png" alt="Spaced-out Sea Otter"></div>
+    </div>
+    <div class="name-card">
+      <div class="from-to">해달 <span class="mono">→ SUN + MOON</span></div>
+      <p data-i="name_c2">‘해달’은 동물 해달이면서, 해(☀)와 달(☾)로도 읽혀요. 하나의 이름 안에 동물과 하늘, 두 겹의 의미가 함께 들어 있어요.</p>
+      <div class="art"><img src="assets/name_haedal.png" alt="해 · 달 · 자개행성"></div>
+    </div>
+  </div>
+</section>
+
+<!-- S3 Character Sheet (5p) -->
+<section class="wrap">
+  <h2 class="sec-head" data-i="sheet_h">캐릭터 프로필</h2>
+  <p class="sec-sub" data-i="sheet_sub">처음 만나는 분들을 위한 얼빵해달 기본 정보.</p>
+  <div class="sheet-grid">
+    <div class="scene"><img src="assets/profile_scene.jpg" alt="조개배달부 얼빵해달"></div>
+    <div class="status-card">
+      <div class="status-head"><span>CHARACTER STATUS</span></div>
+      <dl style="margin:0">
+        <div class="status-row"><dt>NAME</dt><dd data-i="sheet_name">얼빵해달 (Spaced-out Sea Otter)</dd></div>
+        <div class="status-row"><dt>SPECIES</dt><dd data-i="sheet_species">해달</dd></div>
+        <div class="status-row"><dt>JOB</dt><dd data-i="sheet_job">조개배달부</dd></div>
+        <div class="status-row"><dt>SIGNATURE</dt><dd data-i="sheet_sig">조개껍데기</dd></div>
+        <div class="status-row"><dt>DELIVERS</dt><dd data-i="sheet_del">사랑 · 응원 · 위로</dd></div>
+        <div class="status-row"><dt>CREATED</dt><dd>2020</dd></div>
+      </dl>
+    </div>
+  </div>
+  <div class="sheet-dots" id="sheetDots" aria-hidden="true"><span class="on"></span><span></span></div>
+</section>
+
+<!-- S4 The Shell (6p) -->
+<section class="wrap">
+  <h2 class="sec-head" data-i="shell_h">조개껍데기 — 세계를 잇는 물건</h2>
+  <p class="sec-sub" data-i="shell_sub">얼빵해달이 배달하는 조개는 캐릭터의 소품이면서, 신해달 작업 전체를 관통하는 재료이기도 해요.</p>
+
+  <div class="shell-seq">
+    <figure><div class="frame"><img src="assets/shell_1.png" alt="조개"></div></figure>
+    <figure><div class="frame"><img src="assets/shell_2.png" alt="자개"></div></figure>
+    <figure><div class="frame"><img src="assets/shell_3.png" alt="나전칠기 작품"></div></figure>
+    <figure><div class="frame"><img src="assets/shell_4.png" alt="완성작"></div></figure>
+  </div>
+
+  <p class="bridge-line">“For the creator, a material. For someone else, a message.”</p>
+  <p class="bridge-line-sub" data-i="shell_line_sub">만드는 이에게는 재료, 받는 이에게는 마음.</p>
+  <div class="works-link"><a href="../#works" data-i="shell_link">이 조개가 작품이 되는 곳 — Works 보기</a></div>
+</section>
+
+<!-- S5 Art Toy (8p) -->
+<section class="wrap">
+  <h2 class="sec-head" data-i="toy_h">2D에서 3D로</h2>
+  <p class="sec-sub" data-i="toy_sub">얼빵해달은 자개와 옻칠을 그대로 입힌 3D 콜렉터블 아트토이로도 만들어졌어요. 시그니처 조개는 자석으로 탈부착되는 부속으로 재현했어요.</p>
+  <div class="toy-grid">
+    <img src="assets/arttoy_1.jpg" alt=""><img src="assets/arttoy_2.jpg" alt=""><img src="assets/arttoy_3.jpg" alt=""><img src="assets/arttoy_4.jpg" alt="">
+  </div>
+  <div class="spec-list">
+    <div><dt>MATERIALS</dt><dd data-i="toy_mat">자개 · 옻칠 · 친환경 패각 레진</dd></div>
+    <div><dt>FEATURE</dt><dd data-i="toy_feat">자석 탈부착 조개</dd></div>
+    <div><dt>YEAR</dt><dd>2026</dd></div>
+    <div><dt>SIZE</dt><dd>10 × 9 × 6 cm</dd></div>
+  </div>
+</section>
+
+<!-- S6 Ilwolobongdan (11-12p) -->
+<section class="wrap">
+  <h2 class="sec-head" data-i="band_h">얼빵해달은 혼자가 아니에요</h2>
+  <p class="sec-sub" data-i="band_sub">일월오봉단(日月五峯團)은 조선 왕실 그림 ‘일월오봉도’에서 출발한 신해달의 오리지널 캐릭터 그룹이에요. 학, 토끼, 호랑이, 사슴 — 한국 전통 도상 속 동물들이 각자의 직업을 갖고 살아가요.</p>
+
+  <div class="band-hero"><img src="assets/band_group.png" alt="일월오봉단"></div>
+
+  <div class="band-grid">
+    <div class="member">
+      <span class="elem">SUN</span>
+      <img src="assets/Crane_Crane.png" alt="학두루미">
+      <span class="kr">학두루미</span><span class="en">Crane Crane</span>
+      <span class="role" data-i="m1_role">경호원</span>
+      <span class="sig">sig. ㅎ</span>
+    </div>
+    <div class="member">
+      <span class="elem">MOON</span>
+      <img src="assets/First-Moon_Rabbit.png" alt="정월토끼">
+      <span class="kr">정월토끼</span><span class="en">First-Moon Rabbit</span>
+      <span class="role" data-i="m2_role">변장한 공주</span>
+      <span class="sig" data-i="m2_sig">sig. 달맞이꽃</span>
+    </div>
+    <div class="member">
+      <span class="elem">MOUNTAIN</span>
+      <img src="assets/Gentle_Tiger.png" alt="선한백호">
+      <span class="kr">선한백호</span><span class="en">Gentle Tiger</span>
+      <span class="role" data-i="m3_role">산지기</span>
+      <span class="sig" data-i="m3_sig">sig. 곶감</span>
+    </div>
+    <div class="member">
+      <span class="elem">PINE</span>
+      <img src="assets/Blunt_Deer.png" alt="솔직사슴">
+      <span class="kr">솔직사슴</span><span class="en">Blunt Deer</span>
+      <span class="role" data-i="m4_role">짐꾼</span>
+      <span class="sig" data-i="m4_sig">sig. 솔방울</span>
+    </div>
+    <div class="member me">
+      <span class="elem">SEA</span>
+      <img src="assets/Spaced-out_Sea_Otter.png" alt="얼빵해달">
+      <span class="kr">얼빵해달</span><span class="en">Spaced-out Sea Otter</span>
+      <span class="role" data-i="m5_role">조개배달부</span>
+      <span class="sig" data-i="m5_sig">sig. 자개</span>
+    </div>
+  </div>
+  <div class="sheet-dots" id="bandDots" aria-hidden="true"><span class="on"></span><span></span><span></span><span></span><span></span></div>
+
+  <p class="band-close" data-i="band_close">다섯 캐릭터, 다섯 역할, 다섯 상징 — 하나의 세계.</p>
+</section>
+
+<div class="closing wrap">
+  <p data-i="closing"><a href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener">Contact</a>를 통해 라이선싱·콜라보 문의를 받고 있어요.</p>
+</div>
+
+<footer>
+  <div class="menu"><a href="../#works" style="color:inherit;text-decoration:none">Works</a><a href="./" style="color:inherit;text-decoration:none">Haedal</a><span>Press</span><span>About</span></div>
+  © SHIN HAEDAL · IG @haedal_space
+</footer>
+
+<script>
+const I18N = {
+  ko: {
+    nav_caption:'Haedal — 세계관',
+    hero_tag:'MEET SPACED-OUT SEA OTTER',
+    hero_h1:'수영 못 하는 해달,<br>조개배달부 얼빵해달',
+    hero_sub:'두 발로 걸어 조개를 배달해요. 조개껍데기 안에는 사랑과 응원, 위로 같은 작은 마음들이 담겨 있어요. 걸어서는 도무지 느려서, 요즘은 동네 스포츠센터 아침 수영반에 다니는 중이에요.',
+    name_h:'이름의 비밀', name_sub:'얼빵해달은 이름 하나조차 소리가 아니라 성격과 의미를 옮긴 이름이에요.',
+    name_c1:'‘얼빵’을 소리 그대로 Eolbbang이라 쓰는 대신, 조금 얼빠져 있고 어딘가 엇박자지만 그래서 사랑스러운 느낌을 ‘Spaced-out’으로 옮겼어요. 이름 자체가 성격 소개가 되도록요.',
+    name_c2:'‘해달’은 동물 해달이면서, 해(☀)와 달(☾)로도 읽혀요. 하나의 이름 안에 동물과 하늘, 두 겹의 의미가 함께 들어 있어요.',
+    sheet_h:'캐릭터 프로필', sheet_sub:'처음 만나는 분들을 위한 얼빵해달 기본 정보.',
+    sheet_name:'얼빵해달 (Spaced-out Sea Otter)', sheet_species:'해달', sheet_job:'조개배달부', sheet_sig:'조개껍데기', sheet_del:'사랑 · 응원 · 위로',
+    shell_h:'조개껍데기 — 세계를 잇는 물건', shell_sub:'얼빵해달이 배달하는 조개는 캐릭터의 소품이면서, 신해달 작업 전체를 관통하는 재료이기도 해요.',
+    shell_c1:'SHELL', shell_c4:'ARTWORK', shell_line_sub:'만드는 이에게는 재료, 받는 이에게는 마음.', shell_link:'이 조개가 작품이 되는 곳 — Works 보기',
+    toy_h:'2D에서 3D로', toy_sub:'얼빵해달은 자개와 옻칠을 그대로 입힌 3D 콜렉터블 아트토이로도 만들어졌어요. 시그니처 조개는 자석으로 탈부착되는 부속으로 재현했어요.',
+    toy_mat:'자개 · 옻칠 · 친환경 패각 레진', toy_feat:'자석 탈부착 조개',
+    band_h:'얼빵해달은 혼자가 아니에요', band_sub:'일월오봉단(日月五峯團)은 조선 왕실 그림 ‘일월오봉도’에서 출발한 신해달의 오리지널 캐릭터 그룹이에요. 학, 토끼, 호랑이, 사슴 — 한국 전통 도상 속 동물들이 각자의 직업을 갖고 살아가요.',
+    m1_role:'경호원', m2_role:'변장한 공주', m3_role:'산지기', m4_role:'짐꾼', m5_role:'조개배달부',
+    m2_sig:'sig. 달맞이꽃', m3_sig:'sig. 곶감', m4_sig:'sig. 솔방울', m5_sig:'sig. 자개',
+    band_close:'다섯 캐릭터, 다섯 역할, 다섯 상징 — 하나의 세계.',
+    closing:'<a href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener">Contact</a>를 통해 라이선싱·콜라보 문의를 받고 있어요.'
+  },
+  en: {
+    nav_caption:'Haedal — The World',
+    hero_tag:'MEET SPACED-OUT SEA OTTER',
+    hero_h1:'A sea otter who cannot swim.<br>Meet Spaced-out Sea Otter.',
+    hero_sub:'A shell delivery worker who walks on two feet, carrying shells from place to place — along with little pieces of love, encouragement and comfort. Walking was way too slow, so these days it attends a morning swim class at the local sports center.',
+    name_h:'What\'s in a Name?', name_sub:'Spaced-out Sea Otter is not only a translation of a name — it is a translation of the character itself.',
+    name_c1:'Rather than romanizing ‘얼빵’ as Eolbbang, it was translated as ‘Spaced-out’ — slightly absent-minded, a little offbeat, and endearing. The name itself introduces the personality.',
+    name_c2:'In Korean, ‘해달’ (haedal) means sea otter. But it can also be read as 해 (sun) + 달 (moon) — one name carrying two layers: the animal, and the sky.',
+    sheet_h:'Character Profile', sheet_sub:'The essentials, for those meeting Spaced-out Sea Otter for the first time.',
+    sheet_name:'Spaced-out Sea Otter (얼빵해달)', sheet_species:'Sea Otter', sheet_job:'Shell Delivery Worker', sheet_sig:'Shell', sheet_del:'Love · Encouragement · Comfort',
+    shell_h:'The Shell — more than an accessory', shell_sub:'The shell Spaced-out Sea Otter delivers is both a character prop and the very material running through all of Shin Haedal\'s work.',
+    shell_c1:'SHELL', shell_c4:'ARTWORK', shell_line_sub:'', shell_link:'Where the shell becomes art — View Works',
+    toy_h:'From 2D to 3D', toy_sub:'Spaced-out Sea Otter has been developed into a 3D collectible art toy finished in natural mother-of-pearl and lacquer, with a detachable magnetic shell.',
+    toy_mat:'Natural Mother-of-Pearl · Lacquer · Eco-friendly Oyster Shell Resin', toy_feat:'Detachable Magnetic Shell',
+    band_h:'Spaced-out Sea Otter is not alone', band_sub:'Ilwolobongdan (일월오봉단) is Shin Haedal\'s original character group inspired by Ilworobongdo, the traditional Korean royal painting of the sun, moon, five peaks, pine trees and water. Its members draw from Korean traditional motifs — crane, rabbit, tiger, deer — each living out an occupation of their own.',
+    m1_role:'Guard', m2_role:'Princess in Disguise', m3_role:'Mountain Keeper', m4_role:'Porter', m5_role:'Shell Delivery Worker',
+    m2_sig:'sig. Evening Primrose', m3_sig:'sig. Dried Persimmon', m4_sig:'sig. Pine Cone', m5_sig:'sig. Mother-of-Pearl',
+    band_close:'Five characters. Five roles. Five symbols. One world.',
+    closing:'For licensing & collaboration, reach us via <a href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener">Contact</a>.'
+  }
+};
+function applyLang(l){
+  document.documentElement.lang = l==='ko' ? 'ko' : 'en';
+  document.querySelectorAll('[data-i]').forEach(el=>{
+    const v=I18N[l][el.dataset.i];
+    if(v===undefined)return;
+    el.innerHTML=v;
+    el.style.display = v==='' ? 'none' : '';
+  });
+  document.getElementById('langKo').classList.toggle('on', l==='ko');
+  document.getElementById('langEn').classList.toggle('on', l==='en');
+}
+function attachDots(gridSel, dotsSel){
+  var grid=document.querySelector(gridSel), dots=document.querySelectorAll(dotsSel+' span');
+  if(!grid||!dots.length)return;
+  grid.addEventListener('scroll', function(){
+    var max=grid.scrollWidth-grid.clientWidth;
+    var i=max>0?Math.round(grid.scrollLeft/max*(dots.length-1)):0;
+    dots.forEach(function(d,k){ d.classList.toggle('on', k===i); });
+  }, {passive:true});
+}
+attachDots('.sheet-grid','#sheetDots');
+attachDots('.band-grid','#bandDots');
+document.getElementById('langKo').onclick=()=>applyLang('ko');
+document.getElementById('langEn').onclick=()=>applyLang('en');
+</script>
+
+<script>
+(function(){
+  var ov=document.getElementById('navOverlay');
+  document.getElementById('btnMenu').onclick=function(){ov.classList.add('open');};
+  document.getElementById('btnMenuClose').onclick=function(){ov.classList.remove('open');};
+  ov.querySelectorAll('a').forEach(function(a){a.onclick=function(){ov.classList.remove('open');};});
+})();
+</script>
+</body>
+</html>
