@@ -358,6 +358,7 @@ const I18N = {
   }
 };
 function applyLang(l){
+  try{ localStorage.setItem('site_lang', l); }catch(e){}
   document.documentElement.lang = l==='ko' ? 'ko' : 'en';
   document.querySelectorAll('[data-i]').forEach(el=>{
     const v=I18N[l][el.dataset.i];
@@ -381,6 +382,7 @@ attachDots('.sheet-grid','#sheetDots');
 attachDots('.band-grid','#bandDots');
 document.getElementById('langKo').onclick=()=>applyLang('ko');
 document.getElementById('langEn').onclick=()=>applyLang('en');
+try{ if(localStorage.getItem('site_lang')==='en') applyLang('en'); }catch(e){}
 </script>
 
 <script>

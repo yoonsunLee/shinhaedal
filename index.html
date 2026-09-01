@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>신해달 — Hero Mockup</title>
+<title>SHIN HAEDAL</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@300;400;500;700&family=Press+Start+2P&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -38,8 +38,10 @@
   }
   .logo-block{display:flex; flex-direction:column; gap:5px;}
   .logo{font-family:'Black Han Sans', sans-serif; font-size:20px; letter-spacing:1px; color:var(--ivory);}
-  .logo-caption{font-family:'Space Mono', monospace; font-size:11px; color:var(--ivory-faint); letter-spacing:0.2px;}
   .nav-icons{display:flex; align-items:center; gap:16px; padding-top:2px;}
+  .lang{display:flex; border:1px solid var(--ivory-faint); border-radius:20px; overflow:hidden;}
+  .lang button{border:none; background:transparent; color:var(--ivory-dim); cursor:pointer; font-family:'Space Mono',monospace; font-size:11px; font-weight:700; padding:6px 12px;}
+  .lang button.on{background:var(--ivory); color:var(--bg);}
   .nav-menu{display:flex; gap:24px; list-style:none; margin:0 8px 0 0; padding:0; align-items:center;}
   .nav-menu a{font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-dim); text-decoration:none;}
   .nav-menu a:hover{color:var(--ivory);}
@@ -83,14 +85,6 @@
     position:absolute; inset:0; z-index:1; pointer-events:none;
     background:radial-gradient(ellipse at 50% 55%, transparent 35%, rgba(0,0,0,0.6) 100%);
   }
-  .retro-tag{
-    position:absolute; right:24px; bottom:20px; z-index:2;
-    font-family:'Press Start 2P', monospace; font-size:8px; letter-spacing:1px;
-    color:var(--ivory-faint); opacity:0.75;
-  }
-  .retro-tag .cursor{animation:blink 1s step-end infinite;}
-  @keyframes blink{ 50%{opacity:0;} }
-
   .hero-inner{
     position:relative; z-index:2;
     max-width:1180px; margin:0 auto; width:100%;
@@ -151,7 +145,6 @@
 
   @media(max-width:720px){
     .work-grid{grid-template-columns:repeat(2, 1fr);}
-    .logo-caption{display:none;}
   }
 </style>
 </head>
@@ -159,10 +152,13 @@
 
 <nav>
   <div class="logo-block">
-    <div class="logo">신해달</div>
-    <div class="logo-caption">개인전 · 11/23(월)–11/29(일) 갤러리비브</div>
+    <div class="logo">ⓒSHIN HAEDAL</div>
   </div>
   <div class="nav-icons">
+    <div class="lang" role="group" aria-label="Language">
+      <button id="langKo" class="on">KO</button>
+      <button id="langEn">EN</button>
+    </div>
     <ul class="nav-menu">
       <li><a href="#works">Works</a></li>
       <li><a href="haedal/">Haedal</a></li>
@@ -197,10 +193,9 @@
   <div class="scanlines"></div>
   <div class="grain"></div>
   <div class="vignette"></div>
-  <div class="retro-tag">SHIN HAEDAL · 2026<span class="cursor">_</span></div>
 
   <div class="hero-inner">
-    <h1 class="statement">쉽게 들어와서<br><span class="accent">오래 머무는</span> 작업</h1>
+    <h1 class="statement" data-i="statement">쉽게 들어와서<br><span class="accent">오래 머무는</span> 작업</h1>
     <div class="scroll-cue">SCROLL <span class="arrow">↓</span></div>
   </div>
 </header>
@@ -208,12 +203,45 @@
 <section class="grid-section" id="works">
   <div class="grid-head">
     <h2>Recent works</h2>
-    <span>ARCHIVE 2026 —</span>
   </div>
   <div class="work-grid" id="workGrid">
-    <div class="tile loading"><span>불러오는 중…</span></div>
+    <div class="tile loading"><span data-i="loading">불러오는 중…</span></div>
   </div>
 </section>
+
+<script>
+/* ---------- 언어 토글 (KO/EN) ---------- */
+var I18N = {
+  ko: {
+    statement:'쉽게 들어와서<br><span class="accent">오래 머무는</span> 작업',
+    loading:'불러오는 중…',
+    empty:'등록된 작품이 아직 없어요',
+    error:'작품을 불러오지 못했어요'
+  },
+  en: {
+    statement:'Easy to walk into,<br><span class="accent">hard to walk away from</span>.',
+    loading:'Loading…',
+    empty:'No works registered yet',
+    error:'Could not load works'
+  }
+};
+var LANG = 'ko';
+try{ if(localStorage.getItem('site_lang')==='en') LANG='en'; }catch(e){}
+function applyLang(l){
+  LANG = l;
+  try{ localStorage.setItem('site_lang', l); }catch(e){}
+  document.documentElement.lang = l;
+  document.querySelectorAll('[data-i]').forEach(function(el){
+    var v = I18N[l][el.dataset.i];
+    if(v!==undefined) el.innerHTML = v;
+  });
+  document.getElementById('langKo').classList.toggle('on', l==='ko');
+  document.getElementById('langEn').classList.toggle('on', l==='en');
+}
+document.getElementById('langKo').onclick = function(){ applyLang('ko'); };
+document.getElementById('langEn').onclick = function(){ applyLang('en'); };
+if(LANG!=='ko') applyLang(LANG);
+</script>
 
 <script>
 /* ---------- 해달아카이브 연동 (공개 필드만) ---------- */
@@ -237,7 +265,7 @@ function archiveImgUrl(v, size){
 function renderWorkTiles(rows){
   var grid = document.getElementById('workGrid');
   if(!rows.length){
-    grid.innerHTML = '<div class="tile loading"><span>등록된 작품이 아직 없어요</span></div>';
+    grid.innerHTML = '<div class="tile loading"><span data-i="empty">' + I18N[LANG].empty + '</span></div>';
     return;
   }
   grid.innerHTML = rows.map(function(r){
@@ -260,7 +288,7 @@ function loadRecentWorks(){
     .catch(function(e){
       console.error('아카이브 연동 실패:', e);
       document.getElementById('workGrid').innerHTML =
-        '<div class="tile loading"><span>작품을 불러오지 못했어요</span></div>';
+        '<div class="tile loading"><span data-i="error">' + I18N[LANG].error + '</span></div>';
     });
 }
 loadRecentWorks();
