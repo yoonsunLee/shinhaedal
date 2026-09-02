@@ -53,13 +53,34 @@
   .icon-btn{background:none; border:none; color:var(--ivory); cursor:pointer; display:flex; padding:4px; opacity:0.85;}
   .icon-btn:hover{opacity:1;}
 
-  /* soon body */
-  .soon-wrap{
-    min-height:60vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
-    text-align:center; padding:60px 32px;
-  }
-  .soon-wrap h1{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:clamp(30px,4.4vw,46px); margin:0;}
-  .soon-wrap p{font-family:'Space Mono', monospace; font-size:13px; color:var(--ivory-faint); margin:16px 0 0;}
+  /* about content */
+  .about-hero{max-width:820px; margin:0 auto; padding:50px 32px 10px;}
+  .about-hero h1{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:clamp(34px,5vw,54px); margin:0 0 22px;}
+  .about-hero .lede{font-size:16px; line-height:1.85; color:var(--ivory); font-weight:400; margin:0 0 26px;}
+  .about-hero .body p{font-size:14.5px; line-height:1.9; color:var(--ivory-dim); font-weight:300; margin:0 0 20px;}
+  .about-hero .body p:last-child{margin-bottom:0;}
+
+  .about-section{max-width:820px; margin:0 auto; padding:56px 32px;}
+  .about-section + .about-section{border-top:1px solid rgba(245,240,230,.1);}
+  .about-section h2{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:22px; margin:0 0 8px;}
+  .about-section .sub{font-family:'Space Mono', monospace; font-size:12px; color:var(--ivory-faint); margin:0 0 26px;}
+
+  .bio-name{font-family:'Black Han Sans', sans-serif; font-size:20px; margin-bottom:6px;}
+  .bio-name .en{font-family:'Space Mono', monospace; font-size:12px; color:var(--ivory-faint); margin-left:10px; font-weight:400;}
+  .bio-role{color:var(--ivory-dim); font-size:14px; margin-bottom:20px;}
+  .bio-list ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px;}
+  .bio-list li{font-size:14px; color:var(--ivory-dim); position:relative; padding-left:16px;}
+  .bio-list li::before{content:'—'; position:absolute; left:0; color:var(--ivory-faint);}
+
+  .ex-year-group{margin-bottom:22px;}
+  .ex-year-group:last-child{margin-bottom:0;}
+  .ex-year{font-family:'Space Mono', monospace; font-size:13px; color:var(--gold); margin-bottom:10px; letter-spacing:1px;}
+  .ex-item{display:flex; justify-content:space-between; align-items:baseline; gap:16px; padding:9px 0; border-bottom:1px dashed rgba(245,240,230,.14); font-size:14px;}
+  .ex-item .ex-title{color:var(--ivory);}
+  .ex-item .ex-venue{color:var(--ivory-faint); font-family:'Space Mono', monospace; font-size:12px; white-space:nowrap;}
+  .ex-empty, .proj-empty{font-family:'Space Mono', monospace; font-size:12px; color:var(--ivory-faint);}
+
+  .contact-cta{display:inline-block; margin-top:6px; font-family:'Space Mono', monospace; font-size:12px; color:var(--gold); text-decoration:underline; text-underline-offset:4px;}
 </style>
 </head>
 <body>
@@ -103,23 +124,100 @@
   </div>
 </nav>
 
-<div class="soon-wrap">
-  <h1 data-i="title">About</h1>
-  <p data-i="sub">준비 중입니다. 곧 만나요.</p>
+<div class="about-hero">
+  <h1>SHIN HAEDAL</h1>
+  <p class="lede">법과 사회의 규범, 그리고 그 안을 살아가는 개인의 이야기를 나전칠기로 표현하는 작가입니다.</p>
+  <div class="body">
+    <p>법학을 전공하고 지식재산권법을 연구했으며, 법을 읽고 해석해 온 경험을 바탕으로 법률의 개념과 현대인의 일상을 작업의 소재로 가져옵니다. 법률 언어와 전통공예라는 서로 다른 두 영역을 연결하여, 익숙하지만 쉽게 보이지 않는 사회의 규칙과 개인의 관계를 시각적으로 풀어냅니다.</p>
+    <p>주요 재료로 천연자개와 옻칠을 사용합니다. 일정한 구조와 규칙 안에서도 조각마다 서로 다른 색과 빛을 내는 자개의 성질은 신해달의 작업에서 중요한 조형 언어입니다. 작가는 이를 통해 같은 사회와 규칙 안에서도 서로 다른 모습으로 살아가는 개인을 이야기합니다.</p>
+    <p>작품에는 작가의 페르소나인 캐릭터 '얼빵해달(Eolbbang Haedal)'이 등장하기도 합니다. 얼빵해달은 복잡한 법과 사회의 규칙을 관객의 일상 가까이 가져오는 매개이자, 그 안에서 살아가는 개인의 모습을 대신하는 존재입니다.</p>
+    <p>신해달은 전통 나전칠기의 재료와 기술을 기반으로 평면 작업에서 오브제, 아트토이까지 작업 영역을 확장하고 있습니다.</p>
+  </div>
 </div>
 
+<section class="about-section" id="biography">
+  <h2>Biography</h2>
+  <div class="bio-list">
+    <div class="bio-name">신해달<span class="en">SHIN HAEDAL</span></div>
+    <div class="bio-role">나전칠기 아티스트</div>
+    <ul>
+      <li>법학 전공</li>
+      <li>지식재산권법 석사</li>
+      <li>지식재산권법 박사과정 수료</li>
+      <li>국가유산수리기능자 — 칠공</li>
+    </ul>
+  </div>
+</section>
+
+<section class="about-section" id="exhibitions">
+  <h2>Selected Exhibitions</h2>
+  <p class="sub">개인전과 주요 단체전, 아트페어를 연도순으로 기재</p>
+  <div id="exList"><p class="ex-empty">불러오는 중…</p></div>
+</section>
+
+<section class="about-section" id="projects">
+  <h2>Projects &amp; Collaborations</h2>
+  <p class="sub">주요 기업 협업, 기획 프로젝트, 브랜드 프로젝트 등을 선별하여 기재</p>
+  <p class="proj-empty">준비 중입니다.</p>
+</section>
+
+<section class="about-section" id="contact-blurb">
+  <h2>Contact</h2>
+  <p class="sub" style="font-family:'Noto Sans KR',sans-serif; font-size:14.5px; color:var(--ivory-dim); line-height:1.85;">전시, 작품, 기업 협업 및 라이선싱에 관한 문의를 받고 있습니다.<br>상세 포트폴리오는 요청 시 전달드립니다.</p>
+  <a class="contact-cta" href="../contact/">Contact 페이지로 이동 →</a>
+</section>
+
 <script>
-var I18N = {
-  ko: { title:'About', sub:'준비 중입니다. 곧 만나요.' },
-  en: { title:'About', sub:'Coming soon.' }
-};
+function esc(s){
+  return String(s==null?'':s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+function loadExhibitions(){
+  var ARCHIVE_API = 'https://script.google.com/macros/s/AKfycbxpI_YNIOKVfk76Z_dVVN1oHlfnGfO0EJ9xEub2IxHOnNtdFKquHQDT8Xayzv1umQto/exec';
+  fetch(ARCHIVE_API + '?sheet=exhibitions&t=' + Date.now())
+    .then(function(res){ return res.json(); })
+    .then(function(j){
+      if(!j.ok) throw new Error(j.error || '응답 오류');
+      renderExhibitions(j.rows || []);
+    })
+    .catch(function(e){
+      console.error('전시 이력 연동 실패:', e);
+      document.getElementById('exList').innerHTML = '<p class="ex-empty">전시 이력을 불러오지 못했어요.</p>';
+    });
+}
+function renderExhibitions(rows){
+  var sorted = rows.slice().sort(function(a, b){ return String(b.start_date||'').localeCompare(String(a.start_date||'')); });
+  var personal = sorted.filter(function(r){ return r.type === '개인전'; });
+  var rest = sorted.filter(function(r){ return r.type !== '개인전'; });
+  var picked = [];
+  personal.forEach(function(r){ if(picked.length < 5) picked.push(r); });
+  rest.forEach(function(r){ if(picked.length < 5) picked.push(r); });
+  picked.sort(function(a, b){ return String(b.start_date||'').localeCompare(String(a.start_date||'')); });
+
+  if(!picked.length){
+    document.getElementById('exList').innerHTML = '<p class="ex-empty">등록된 전시가 없습니다.</p>';
+    return;
+  }
+  var groups = {};
+  picked.forEach(function(r){
+    var y = String(r.start_date||'').slice(0, 4) || '—';
+    (groups[y] = groups[y] || []).push(r);
+  });
+  var years = Object.keys(groups).sort(function(a, b){ return b.localeCompare(a); });
+  document.getElementById('exList').innerHTML = years.map(function(y){
+    return '<div class="ex-year-group"><div class="ex-year">' + esc(y) + '</div>' +
+      groups[y].map(function(r){
+        return '<div class="ex-item"><span class="ex-title">' + esc(r.title) + '</span><span class="ex-venue">' + esc(r.venue) + '</span></div>';
+      }).join('') +
+      '</div>';
+  }).join('');
+}
+loadExhibitions();
+
 function applyLang(l){
   try{ localStorage.setItem('site_lang', l); }catch(e){}
   document.documentElement.lang = l;
-  document.querySelectorAll('[data-i]').forEach(function(el){
-    var v = I18N[l][el.dataset.i];
-    if(v!==undefined) el.innerHTML = v;
-  });
   document.getElementById('langKo').classList.toggle('on', l==='ko');
   document.getElementById('langEn').classList.toggle('on', l==='en');
 }

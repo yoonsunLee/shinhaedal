@@ -104,6 +104,7 @@
     animation:sheen 7s linear infinite;
   }
   @keyframes sheen{ to{ background-position:300% 0; } }
+  .hero-tagline{font-size:15px; color:var(--ivory-dim); font-weight:300; margin:18px 0 0;}
 
   .scroll-cue{
     display:flex; align-items:center; gap:8px; margin-top:36px;
@@ -116,9 +117,18 @@
 
   /* grid */
   .grid-section{max-width:1180px; margin:0 auto; padding:56px 32px 100px;}
-  .grid-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:28px;}
+  .grid-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px;}
   .grid-head h2{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:22px; margin:0;}
   .grid-head span{font-family:'Space Mono', monospace; font-size:12px; color:var(--ivory-faint);}
+  .grid-head-block{margin-bottom:28px;}
+  .grid-sub{font-size:13.5px; line-height:1.7; color:var(--ivory-faint); font-weight:300; margin:0;}
+
+  /* artist statement */
+  .statement-section{max-width:1180px; margin:0 auto; padding:20px 32px 120px;}
+  .statement-section .label{font-family:'Space Mono',monospace; font-size:12px; letter-spacing:2px; color:var(--ivory-faint); text-transform:uppercase; margin:0 0 24px;}
+  .statement-section .lede{font-family:'Black Han Sans',sans-serif; font-weight:400; font-size:clamp(21px,2.8vw,30px); line-height:1.55; margin:0 0 34px; max-width:720px;}
+  .statement-section .body p{font-size:15px; line-height:1.9; color:var(--ivory-dim); max-width:640px; margin:0 0 22px; font-weight:300;}
+  .statement-section .body p:last-child{margin-bottom:0;}
 
   .work-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:34px 14px;}
   .tile{
@@ -280,19 +290,35 @@
 
   <div class="hero-inner">
     <h1 class="statement" data-i="statement">쉽게 들어와서<br><span class="accent">오래 머무는</span> 작업</h1>
+    <p class="hero-tagline">법과 사회의 규범을 나전칠기의 언어로 옮깁니다.</p>
     <div class="scroll-cue">SCROLL <span class="arrow">↓</span></div>
   </div>
 </header>
 
 <section class="grid-section" id="works">
-  <div class="grid-head">
-    <h2>Recent works</h2>
+  <div class="grid-head-block">
+    <div class="grid-head">
+      <h2>Recent works</h2>
+    </div>
+    <p class="grid-sub">최근의 작업을 소개합니다.<br>전시 기간에는 현재 전시 중인 작품을 중심으로 보여드립니다.</p>
   </div>
   <div class="work-grid" id="workGrid">
     <div class="tile loading"><span data-i="loading">불러오는 중…</span></div>
   </div>
   <div class="works-more">
     <a href="works/" id="btnMoreWorks" data-i="browse_all" hidden>모든 작품 보기 →</a>
+  </div>
+</section>
+
+<section class="statement-section" id="statement">
+  <p class="label">Artist Statement</p>
+  <p class="lede">독해하고, 해석하고, 번역하는 것.<br>저는 법을 읽고 의미를 찾아, 그것을 나전칠기의 언어로 옮깁니다.</p>
+  <div class="body">
+    <p>제 작업은 법과 사회의 규범 안에서 살아가는 개인에 대한 이야기입니다.</p>
+    <p>저에게 법은 차갑고 어려운 규칙에 머무는 것이 아니라, 사람들이 함께 살아가기 위해 만든 하나의 언어이자 사회의 질서입니다. 우리는 그 안에서 같은 규칙을 마주하지만, 각자 다른 방식으로 읽고 받아들이며 살아갑니다.</p>
+    <p>저는 법학적 개념과 현대인의 일상에서 발견한 장면을 전통 나전칠기의 재료와 방식으로 다시 해석합니다. 규칙과 질서는 반복되는 구조와 배경이 되고, 천연자개가 만들어내는 서로 다른 빛은 그 안을 살아가는 개인의 모습을 드러냅니다.</p>
+    <p>작품 속에는 저의 페르소나인 '얼빵해달'도 등장합니다. 얼빵해달은 법과 규칙을 완벽히 이해하는 존재가 아니라, 우리처럼 때로는 헤매고 부딪히면서도 그 안을 살아가는 평범한 개인입니다.</p>
+    <p>어렵게 느껴질 수 있는 법과 사회의 이야기에 조금 더 쉽게 들어와, 작품 앞에서는 오래 머물 수 있기를 바랍니다.</p>
   </div>
 </section>
 
