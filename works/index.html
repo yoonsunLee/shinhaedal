@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Works — SHIN HAEDAL</title>
+<meta name="description" content="신해달의 작품을 모두 모았어요. 나전칠기로 옮긴 법과 사회, 그리고 개인의 이야기.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Works — SHIN HAEDAL">
+<meta property="og:description" content="신해달의 작품을 모두 모았어요. 나전칠기로 옮긴 법과 사회, 그리고 개인의 이야기.">
+<meta property="og:image" content="https://shinhaedal.art/haedal/assets/hero_logo.png">
+<meta property="og:url" content="https://shinhaedal.art/works/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.78em' font-size='90'>ⓒ</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -67,6 +75,7 @@
     display:block; width:100%;
     cursor:pointer; border:none; background:none; padding:0; text-align:left;
   }
+  .tile:focus-visible{outline:2px solid var(--gold); outline-offset:4px; border-radius:2px;}
   .tile-media{position:relative; aspect-ratio:1/1; overflow:hidden; border-radius:2px; background:var(--bg-2);}
   .tile-media img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .6s ease;}
   .tile:hover .tile-media img{transform:scale(1.03);}
@@ -230,7 +239,7 @@
       <div class="wm-spec" id="wmSpec"></div>
       <p class="wm-caption" id="wmCaption"></p>
       <div class="wm-exhibitions" id="wmExhibitions">
-        <div class="wm-ex-label">전시 이력</div>
+        <div class="wm-ex-label" data-i="wm_ex_label">전시 이력</div>
         <ul class="wm-ex-list" id="wmExList"></ul>
         <button class="wm-ex-toggle" id="wmExToggle" hidden></button>
       </div>
@@ -246,14 +255,20 @@ var I18N = {
     page_sub:'신해달의 작품을 모두 모았어요.',
     loading:'불러오는 중…',
     empty:'등록된 작품이 아직 없어요',
-    error:'작품을 불러오지 못했어요'
+    error:'작품을 불러오지 못했어요',
+    wm_ex_label:'전시 이력',
+    wm_ex_more:'전시 이력 더보기 ({n})',
+    wm_ex_collapse:'접기'
   },
   en: {
     page_h:'Works',
     page_sub:'Every piece from Shin Haedal, in one place.',
     loading:'Loading…',
     empty:'No works registered yet',
-    error:'Could not load works'
+    error:'Could not load works',
+    wm_ex_label:'Exhibitions',
+    wm_ex_more:'Show more ({n})',
+    wm_ex_collapse:'Show less'
   }
 };
 var LANG = 'ko';
@@ -310,9 +325,10 @@ function renderWorkTiles(rows){
   grid.innerHTML = rows.map(function(r, i){
     var img = archiveImgUrl(r.image, 900);
     var media = img ? '<img src="' + img.replace(/"/g,'&quot;') + '" alt="" loading="lazy">' : '';
-    return '<figure class="tile" data-idx="' + i + '">' +
+    var title = primaryTitle(r);
+    return '<figure class="tile" data-idx="' + i + '" tabindex="0" role="button" aria-label="' + esc(title) + '">' +
       '<div class="tile-media">' + media + '<div class="tile-sheen"></div></div>' +
-      '<figcaption class="tile-cap"><span class="tile-title">' + esc(primaryTitle(r)) + '</span></figcaption>' +
+      '<figcaption class="tile-cap"><span class="tile-title">' + esc(title) + '</span></figcaption>' +
       '</figure>';
   }).join('');
 }
@@ -346,6 +362,13 @@ loadAllWorks();
 document.getElementById('workGrid').addEventListener('click', function(e){
   var tile = e.target.closest('.tile[data-idx]');
   if(!tile) return;
+  openWorkModal(parseInt(tile.dataset.idx, 10));
+});
+document.getElementById('workGrid').addEventListener('keydown', function(e){
+  if(e.key !== 'Enter' && e.key !== ' ') return;
+  var tile = e.target.closest('.tile[data-idx]');
+  if(!tile) return;
+  e.preventDefault();
   openWorkModal(parseInt(tile.dataset.idx, 10));
 });
 </script>
@@ -397,7 +420,7 @@ function renderWorkModal(){
     if(lines.length > LIMIT){
       toggle.hidden = false;
       toggle.dataset.open = 'false';
-      toggle.textContent = '전시 이력 더보기 (' + lines.length + ')';
+      toggle.textContent = I18N[LANG].wm_ex_more.replace('{n}', lines.length);
     }else{
       toggle.hidden = true;
     }
@@ -434,8 +457,8 @@ document.getElementById('wmExToggle').onclick = function(){
   document.querySelectorAll('#wmExList .wm-ex-extra').forEach(function(li){ li.hidden = isOpen; });
   this.dataset.open = isOpen ? 'false' : 'true';
   this.textContent = isOpen
-    ? '전시 이력 더보기 (' + exhibitionLines(ALL_WORKS[wmIndex].exhibitions).length + ')'
-    : '접기';
+    ? I18N[LANG].wm_ex_more.replace('{n}', exhibitionLines(ALL_WORKS[wmIndex].exhibitions).length)
+    : I18N[LANG].wm_ex_collapse;
 };
 document.addEventListener('keydown', function(e){
   if(!wmModal.classList.contains('open')) return;

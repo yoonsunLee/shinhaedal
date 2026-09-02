@@ -3,7 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SHIN HAEDAL</title>
+<title>SHIN HAEDAL — 신해달</title>
+<meta name="description" content="법과 사회의 규범을 나전칠기의 언어로 옮기는 작가, 신해달의 공식 홈페이지.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="SHIN HAEDAL — 신해달">
+<meta property="og:description" content="법과 사회의 규범을 나전칠기의 언어로 옮기는 작가, 신해달의 공식 홈페이지.">
+<meta property="og:image" content="https://shinhaedal.art/haedal/assets/hero_logo.png">
+<meta property="og:url" content="https://shinhaedal.art/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.78em' font-size='90'>ⓒ</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@300;400;500;700&family=Press+Start+2P&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -37,7 +45,7 @@
     padding:26px 32px; max-width:1180px; margin:0 auto;
   }
   .logo-block{display:flex; flex-direction:column; gap:5px;}
-  .logo{font-family:'Black Han Sans', sans-serif; font-size:20px; letter-spacing:1px; color:var(--ivory);}
+  .logo{font-family:'Black Han Sans', sans-serif; font-size:20px; letter-spacing:1px; color:var(--ivory); text-decoration:none;}
   .nav-icons{display:flex; align-items:center; gap:16px; padding-top:2px;}
   .lang{display:flex; border:1px solid var(--ivory-faint); border-radius:20px; overflow:hidden;}
   .lang button{border:none; background:transparent; color:var(--ivory-dim); cursor:pointer; font-family:'Space Mono',monospace; font-size:11px; font-weight:700; padding:6px 12px;}
@@ -135,6 +143,7 @@
     display:block; width:100%;
     cursor:pointer; border:none; background:none; padding:0; text-align:left;
   }
+  .tile:focus-visible{outline:2px solid var(--gold); outline-offset:4px; border-radius:2px;}
   .tile-media{position:relative; aspect-ratio:1/1; overflow:hidden; border-radius:2px; background:var(--bg-2);}
   .tile-media img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .6s ease;}
   .tile:hover .tile-media img{transform:scale(1.03);}
@@ -242,7 +251,7 @@
 
 <nav>
   <div class="logo-block">
-    <div class="logo">ⓒSHIN HAEDAL</div>
+    <a class="logo" href="./">ⓒSHIN HAEDAL</a>
   </div>
   <div class="nav-icons">
     <ul class="nav-menu">
@@ -290,7 +299,7 @@
 
   <div class="hero-inner">
     <h1 class="statement" data-i="statement">쉽게 들어와서<br><span class="accent">오래 머무는</span> 작업</h1>
-    <p class="hero-tagline">법과 사회의 규범을 나전칠기의 언어로 옮깁니다.</p>
+    <p class="hero-tagline" data-i="hero_tagline">법과 사회의 규범을 나전칠기의 언어로 옮깁니다.</p>
     <div class="scroll-cue">SCROLL <span class="arrow">↓</span></div>
   </div>
 </header>
@@ -300,7 +309,7 @@
     <div class="grid-head">
       <h2>Recent works</h2>
     </div>
-    <p class="grid-sub">최근의 작업을 소개합니다.<br>전시 기간에는 현재 전시 중인 작품을 중심으로 보여드립니다.</p>
+    <p class="grid-sub" data-i="grid_sub">최근의 작업을 소개합니다.</p>
   </div>
   <div class="work-grid" id="workGrid">
     <div class="tile loading"><span data-i="loading">불러오는 중…</span></div>
@@ -312,8 +321,8 @@
 
 <section class="statement-section" id="statement">
   <p class="label">Artist Statement</p>
-  <p class="lede">독해하고, 해석하고, 번역하는 것.<br>저는 법을 읽고 의미를 찾아, 그것을 나전칠기의 언어로 옮깁니다.</p>
-  <div class="body">
+  <p class="lede" data-i="stmt_lede">독해하고, 해석하고, 번역하는 것.<br>저는 법을 읽고 의미를 찾아, 그것을 나전칠기의 언어로 옮깁니다.</p>
+  <div class="body" data-i="stmt_body">
     <p>제 작업은 법과 사회의 규범 안에서 살아가는 개인에 대한 이야기입니다.</p>
     <p>저에게 법은 차갑고 어려운 규칙에 머무는 것이 아니라, 사람들이 함께 살아가기 위해 만든 하나의 언어이자 사회의 질서입니다. 우리는 그 안에서 같은 규칙을 마주하지만, 각자 다른 방식으로 읽고 받아들이며 살아갑니다.</p>
     <p>저는 법학적 개념과 현대인의 일상에서 발견한 장면을 전통 나전칠기의 재료와 방식으로 다시 해석합니다. 규칙과 질서는 반복되는 구조와 배경이 되고, 천연자개가 만들어내는 서로 다른 빛은 그 안을 살아가는 개인의 모습을 드러냅니다.</p>
@@ -339,7 +348,7 @@
       <div class="wm-spec" id="wmSpec"></div>
       <p class="wm-caption" id="wmCaption"></p>
       <div class="wm-exhibitions" id="wmExhibitions">
-        <div class="wm-ex-label">전시 이력</div>
+        <div class="wm-ex-label" data-i="wm_ex_label">전시 이력</div>
         <ul class="wm-ex-list" id="wmExList"></ul>
         <button class="wm-ex-toggle" id="wmExToggle" hidden></button>
       </div>
@@ -352,17 +361,39 @@
 var I18N = {
   ko: {
     statement:'쉽게 들어와서<br><span class="accent">오래 머무는</span> 작업',
+    hero_tagline:'법과 사회의 규범을 나전칠기의 언어로 옮깁니다.',
+    grid_sub:'최근의 작업을 소개합니다.',
     loading:'불러오는 중…',
     empty:'등록된 작품이 아직 없어요',
     error:'작품을 불러오지 못했어요',
-    browse_all:'모든 작품 보기 →'
+    browse_all:'모든 작품 보기 →',
+    wm_ex_label:'전시 이력',
+    wm_ex_more:'전시 이력 더보기 ({n})',
+    wm_ex_collapse:'접기',
+    stmt_lede:'독해하고, 해석하고, 번역하는 것.<br>저는 법을 읽고 의미를 찾아, 그것을 나전칠기의 언어로 옮깁니다.',
+    stmt_body:'<p>제 작업은 법과 사회의 규범 안에서 살아가는 개인에 대한 이야기입니다.</p>'
+      + '<p>저에게 법은 차갑고 어려운 규칙에 머무는 것이 아니라, 사람들이 함께 살아가기 위해 만든 하나의 언어이자 사회의 질서입니다. 우리는 그 안에서 같은 규칙을 마주하지만, 각자 다른 방식으로 읽고 받아들이며 살아갑니다.</p>'
+      + '<p>저는 법학적 개념과 현대인의 일상에서 발견한 장면을 전통 나전칠기의 재료와 방식으로 다시 해석합니다. 규칙과 질서는 반복되는 구조와 배경이 되고, 천연자개가 만들어내는 서로 다른 빛은 그 안을 살아가는 개인의 모습을 드러냅니다.</p>'
+      + '<p>작품 속에는 저의 페르소나인 \'얼빵해달\'도 등장합니다. 얼빵해달은 법과 규칙을 완벽히 이해하는 존재가 아니라, 우리처럼 때로는 헤매고 부딪히면서도 그 안을 살아가는 평범한 개인입니다.</p>'
+      + '<p>어렵게 느껴질 수 있는 법과 사회의 이야기에 조금 더 쉽게 들어와, 작품 앞에서는 오래 머물 수 있기를 바랍니다.</p>'
   },
   en: {
     statement:'Easy to walk into,<br><span class="accent">hard to walk away from</span>.',
+    hero_tagline:'I translate the norms of law and society into the language of mother-of-pearl lacquer.',
+    grid_sub:'A look at recent work.',
     loading:'Loading…',
     empty:'No works registered yet',
     error:'Could not load works',
-    browse_all:'Browse all works →'
+    browse_all:'Browse all works →',
+    wm_ex_label:'Exhibitions',
+    wm_ex_more:'Show more ({n})',
+    wm_ex_collapse:'Show less',
+    stmt_lede:'To read, interpret, translate.<br>I read the law, search for its meaning, and carry it into the language of mother-of-pearl lacquer.',
+    stmt_body:'<p>My work is about the individual living within the norms of law and society.</p>'
+      + '<p>To me, law isn\'t just a cold, difficult set of rules — it\'s a language and an order people created so they could live together. We all face the same rules, yet each of us reads and accepts them in our own way.</p>'
+      + '<p>I reinterpret legal concepts and scenes from everyday contemporary life through the traditional materials and methods of mother-of-pearl lacquer. Rule and order become a repeating structure and backdrop, while the distinct light each piece of natural mother-of-pearl gives off reveals the individual living within it.</p>'
+      + '<p>My persona, Spaced-out Sea Otter, also appears in the work. It doesn\'t fully understand the law and its rules — like the rest of us, it\'s an ordinary individual who sometimes stumbles and struggles while still living within them.</p>'
+      + '<p>I hope these stories of law and society, which can feel difficult, become a little easier to step into — and that you might stay a while longer in front of the work.</p>'
   }
 };
 var LANG = 'ko';
@@ -419,9 +450,10 @@ function renderWorkTiles(rows){
   grid.innerHTML = rows.map(function(r, i){
     var img = archiveImgUrl(r.image, 900);
     var media = img ? '<img src="' + img.replace(/"/g,'&quot;') + '" alt="" loading="lazy">' : '';
-    return '<figure class="tile" data-idx="' + i + '">' +
+    var title = primaryTitle(r);
+    return '<figure class="tile" data-idx="' + i + '" tabindex="0" role="button" aria-label="' + esc(title) + '">' +
       '<div class="tile-media">' + media + '<div class="tile-sheen"></div></div>' +
-      '<figcaption class="tile-cap"><span class="tile-title">' + esc(primaryTitle(r)) + '</span></figcaption>' +
+      '<figcaption class="tile-cap"><span class="tile-title">' + esc(title) + '</span></figcaption>' +
       '</figure>';
   }).join('');
 }
@@ -456,6 +488,13 @@ loadRecentWorks();
 document.getElementById('workGrid').addEventListener('click', function(e){
   var tile = e.target.closest('.tile[data-idx]');
   if(!tile) return;
+  openWorkModal(parseInt(tile.dataset.idx, 10));
+});
+document.getElementById('workGrid').addEventListener('keydown', function(e){
+  if(e.key !== 'Enter' && e.key !== ' ') return;
+  var tile = e.target.closest('.tile[data-idx]');
+  if(!tile) return;
+  e.preventDefault();
   openWorkModal(parseInt(tile.dataset.idx, 10));
 });
 </script>
@@ -507,7 +546,7 @@ function renderWorkModal(){
     if(lines.length > LIMIT){
       toggle.hidden = false;
       toggle.dataset.open = 'false';
-      toggle.textContent = '전시 이력 더보기 (' + lines.length + ')';
+      toggle.textContent = I18N[LANG].wm_ex_more.replace('{n}', lines.length);
     }else{
       toggle.hidden = true;
     }
@@ -544,8 +583,8 @@ document.getElementById('wmExToggle').onclick = function(){
   document.querySelectorAll('#wmExList .wm-ex-extra').forEach(function(li){ li.hidden = isOpen; });
   this.dataset.open = isOpen ? 'false' : 'true';
   this.textContent = isOpen
-    ? '전시 이력 더보기 (' + exhibitionLines(ALL_WORKS[wmIndex].exhibitions).length + ')'
-    : '접기';
+    ? I18N[LANG].wm_ex_more.replace('{n}', exhibitionLines(ALL_WORKS[wmIndex].exhibitions).length)
+    : I18N[LANG].wm_ex_collapse;
 };
 document.addEventListener('keydown', function(e){
   if(!wmModal.classList.contains('open')) return;
