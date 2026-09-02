@@ -320,8 +320,17 @@ function loadAllWorks(){
     .then(function(res){ return res.json(); })
     .then(function(j){
       if(!j.ok) throw new Error(j.error || '응답 오류');
-      var rows = (j.rows || []).filter(function(r){ return String(r.title||'').trim(); });
-      ALL_WORKS = rows.slice().reverse(); // 최근 등록순(시트 하단이 최신)
+      var rows = (j.rows || [])
+        .filter(function(r){ return String(r.title||'').trim(); })
+        .filter(function(r){ return !/^ER/i.test(String(r.no||'').trim()); });
+      rows = rows.slice().reverse(); // 최근 등록순(시트 하단이 최신)
+      var seenTitles = {};
+      ALL_WORKS = rows.filter(function(r){
+        var key = String(r.title||'').trim();
+        if(seenTitles[key]) return false;
+        seenTitles[key] = true;
+        return true;
+      });
       renderWorkTiles(ALL_WORKS);
     })
     .catch(function(e){
