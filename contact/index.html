@@ -53,13 +53,46 @@
   .icon-btn{background:none; border:none; color:var(--ivory); cursor:pointer; display:flex; padding:4px; opacity:0.85;}
   .icon-btn:hover{opacity:1;}
 
-  /* soon body */
-  .soon-wrap{
-    min-height:60vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
-    text-align:center; padding:60px 32px;
+  /* contact content */
+  .contact-hero{max-width:820px; margin:0 auto; padding:50px 32px 10px;}
+  .contact-hero h1{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:clamp(34px,5vw,54px); margin:0 0 24px;}
+  .contact-hero p{font-size:14.5px; line-height:1.9; color:var(--ivory-dim); font-weight:300; margin:0 0 18px;}
+  .contact-hero p:last-child{margin-bottom:0;}
+
+  .contact-section{max-width:820px; margin:0 auto; padding:56px 32px;}
+  .contact-section + .contact-section{border-top:1px solid rgba(245,240,230,.1);}
+  .contact-section h2{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:22px; margin:0 0 26px;}
+
+  .inquiry-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:26px 24px;}
+  .inquiry-item .label{font-family:'Space Mono', monospace; font-size:13px; font-weight:700; color:var(--gold); letter-spacing:.5px; margin:0 0 8px;}
+  .inquiry-item p{font-size:13px; color:var(--ivory-dim); line-height:1.6; margin:0;}
+  @media(max-width:640px){ .inquiry-grid{grid-template-columns:1fr 1fr;} }
+  @media(max-width:420px){ .inquiry-grid{grid-template-columns:1fr;} }
+
+  .contact-form{display:flex; flex-direction:column; gap:18px;}
+  .cf-row label{display:block; font-family:'Space Mono', monospace; font-size:11px; letter-spacing:1px; color:var(--ivory-faint); text-transform:uppercase; margin-bottom:8px;}
+  .cf-row input, .cf-row select, .cf-row textarea{
+    width:100%; background:var(--bg-2); border:1px solid rgba(245,240,230,.16); border-radius:6px;
+    color:var(--ivory); font-family:'Noto Sans KR',sans-serif; font-size:14px; padding:11px 13px;
   }
-  .soon-wrap h1{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:clamp(30px,4.4vw,46px); margin:0;}
-  .soon-wrap p{font-family:'Space Mono', monospace; font-size:13px; color:var(--ivory-faint); margin:16px 0 0;}
+  .cf-row textarea{min-height:120px; resize:vertical; font-family:inherit;}
+  .cf-row .hint{font-size:12px; color:var(--ivory-faint); margin-top:8px; line-height:1.6;}
+  .cf-submit{
+    align-self:flex-start; margin-top:6px;
+    font-family:'Space Mono', monospace; font-size:12px; letter-spacing:1.5px;
+    color:var(--bg); background:var(--ivory); border:none; border-radius:24px;
+    padding:13px 32px; cursor:pointer;
+  }
+  .cf-submit:hover{opacity:.9;}
+  .cf-note{font-size:12px; color:var(--ivory-faint); margin-top:14px;}
+
+  .direct-list{display:flex; flex-direction:column; gap:16px;}
+  .direct-list .dl-label{font-family:'Space Mono', monospace; font-size:11px; letter-spacing:1px; color:var(--ivory-faint); text-transform:uppercase; margin-bottom:4px;}
+  .direct-list a{color:var(--ivory); font-size:15px; text-decoration:none;}
+  .direct-list a:hover{text-decoration:underline;}
+  .direct-note{font-size:13px; color:var(--ivory-faint); margin-top:22px; line-height:1.7;}
+
+  .contact-foot{text-align:center; padding:50px 32px 60px; font-family:'Space Mono', monospace; font-size:11px; color:var(--ivory-faint);}
 </style>
 </head>
 <body>
@@ -103,23 +136,90 @@
   </div>
 </nav>
 
-<div class="soon-wrap">
-  <h1 data-i="title">Contact</h1>
-  <p data-i="sub">준비 중입니다. 곧 만나요.</p>
+<div class="contact-hero">
+  <h1>Contact</h1>
+  <p>신해달의 작품과 전시, 협업에 관한 문의를 받고 있습니다.</p>
+  <p>작품 소장 문의, 전시 및 프로젝트 제안, 기업 협업과 라이선싱 등 아래의 내용을 통해 문의해 주세요.</p>
+  <p>상세 포트폴리오는 전시 및 협업 목적에 따라 요청 시 전달드립니다.</p>
 </div>
 
+<section class="contact-section" id="inquiries">
+  <h2>Inquiries</h2>
+  <div class="inquiry-grid">
+    <div class="inquiry-item"><p class="label">Artwork</p><p>작품 소장 및 작품 관련 문의</p></div>
+    <div class="inquiry-item"><p class="label">Exhibition</p><p>전시, 아트페어 및 갤러리 제안</p></div>
+    <div class="inquiry-item"><p class="label">Collaboration</p><p>기업 및 브랜드 협업, 프로젝트 제안</p></div>
+    <div class="inquiry-item"><p class="label">Licensing</p><p>얼빵해달 IP 및 이미지 라이선싱 문의</p></div>
+    <div class="inquiry-item"><p class="label">Portfolio</p><p>전시·협업 검토를 위한 포트폴리오 요청</p></div>
+  </div>
+</section>
+
+<section class="contact-section" id="contact-form-section">
+  <h2>Contact Form</h2>
+  <form class="contact-form" id="contactForm">
+    <div class="cf-row">
+      <label for="cfName">Name / Organization</label>
+      <input id="cfName" name="name" type="text" placeholder="성함 또는 소속" required>
+    </div>
+    <div class="cf-row">
+      <label for="cfEmail">Email</label>
+      <input id="cfEmail" name="email" type="email" placeholder="회신받으실 이메일" required>
+    </div>
+    <div class="cf-row">
+      <label for="cfType">Inquiry Type</label>
+      <select id="cfType" name="type">
+        <option>Artwork</option>
+        <option>Exhibition</option>
+        <option>Collaboration</option>
+        <option>Licensing</option>
+        <option>Portfolio</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div class="cf-row">
+      <label for="cfSubject">Subject</label>
+      <input id="cfSubject" name="subject" type="text" placeholder="문의 제목" required>
+    </div>
+    <div class="cf-row">
+      <label for="cfMessage">Message</label>
+      <textarea id="cfMessage" name="message" placeholder="문의 내용을 작성해 주세요." required></textarea>
+      <p class="hint">전시 및 협업 문의의 경우 일정, 장소, 프로젝트 내용 등 확인 가능한 정보를 함께 보내주시면 보다 원활하게 답변드릴 수 있습니다.</p>
+    </div>
+    <button type="submit" class="cf-submit">SEND MESSAGE</button>
+    <p class="cf-note" id="cfNote"></p>
+  </form>
+</section>
+
+<section class="contact-section" id="direct">
+  <h2>Direct Contact</h2>
+  <div class="direct-list">
+    <div><div class="dl-label">Email</div><a href="mailto:haedarney@naver.com">haedarney@naver.com</a></div>
+    <div><div class="dl-label">Instagram</div><a href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener">@haedal_space</a></div>
+  </div>
+  <p class="direct-note">전시 및 협업 관련 자료는 문의 내용을 확인한 후 필요한 범위에서 전달드립니다.</p>
+</section>
+
+<div class="contact-foot">ⓒ SHIN HAEDAL</div>
+
 <script>
-var I18N = {
-  ko: { title:'Contact', sub:'준비 중입니다. 곧 만나요.' },
-  en: { title:'Contact', sub:'Coming soon.' }
-};
+document.getElementById('contactForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  var name = document.getElementById('cfName').value.trim();
+  var email = document.getElementById('cfEmail').value.trim();
+  var type = document.getElementById('cfType').value;
+  var subject = document.getElementById('cfSubject').value.trim();
+  var message = document.getElementById('cfMessage').value.trim();
+  var body = 'Name/Organization: ' + name + '\nEmail: ' + email + '\n\n' + message;
+  var mailto = 'mailto:haedarney@naver.com'
+    + '?subject=' + encodeURIComponent('[' + type + '] ' + subject)
+    + '&body=' + encodeURIComponent(body);
+  document.getElementById('cfNote').textContent = '메일 앱이 열립니다. 내용을 확인하고 전송해 주세요.';
+  window.location.href = mailto;
+});
+
 function applyLang(l){
   try{ localStorage.setItem('site_lang', l); }catch(e){}
   document.documentElement.lang = l;
-  document.querySelectorAll('[data-i]').forEach(function(el){
-    var v = I18N[l][el.dataset.i];
-    if(v!==undefined) el.innerHTML = v;
-  });
   document.getElementById('langKo').classList.toggle('on', l==='ko');
   document.getElementById('langEn').classList.toggle('on', l==='en');
 }
