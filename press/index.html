@@ -134,23 +134,15 @@
   <p data-i="page_sub">신해달을 다룬 기사와 매체 소개.</p>
 </div>
 
-<section class="press-feed" id="pressFeed"></section>
+<section class="press-feed" id="pressFeed"><p class="press-empty" data-i="loading">불러오는 중…</p></section>
 
 <script>
-var PRESS_ITEMS = [
-  {
-    outlet:'코리안투데이',
-    date:'2026.04.30',
-    title:'나전칠기 신해달 작가, 법학적 사유를 자개의 빛으로 시각화하다',
-    quote:'옻칠은 법의 영속성을 상징하며 자개의 빛은 법의 해석에 따라 달라지는 정의의 얼굴을 의미',
-    image:'https://newsx.ecn.cdn.infralab.net/www.thekorean.today/imgdata/smilestory_kr/202604/2026043015333141.jpg',
-    url:'https://m.thekorean.today/49646'
-  }
-];
+var ARCHIVE_API = 'https://script.google.com/macros/s/AKfycbxpI_YNIOKVfk76Z_dVVN1oHlfnGfO0EJ9xEub2IxHOnNtdFKquHQDT8Xayzv1umQto/exec';
+var PRESS_ITEMS = null; // null = 아직 로드 전
 
 var I18N = {
-  ko: { page_h:'Press', page_sub:'신해달을 다룬 기사와 매체 소개.', press_link:'기사 원문 보기 ↗', empty:'아직 등록된 기사가 없어요' },
-  en: { page_h:'Press', page_sub:'Articles and features covering Shin Haedal.', press_link:'Read the article ↗', empty:'No press coverage yet' }
+  ko: { page_h:'Press', page_sub:'신해달을 다룬 기사와 매체 소개.', press_link:'기사 원문 보기 ↗', loading:'불러오는 중…', empty:'아직 등록된 기사가 없어요', error:'기사를 불러오지 못했어요' },
+  en: { page_h:'Press', page_sub:'Articles and features covering Shin Haedal.', press_link:'Read the article ↗', loading:'Loading…', empty:'No press coverage yet', error:'Could not load press coverage' }
 };
 var LANG = 'ko';
 try{ if(localStorage.getItem('site_lang')==='en') LANG='en'; }catch(e){}
@@ -160,13 +152,43 @@ function esc(s){
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
   });
 }
+function archiveImgUrl(v, size){
+  v = String(v||'').trim();
+  if(!v) return '';
+  var m;
+  if(/^drive:/.test(v)) return 'https://drive.google.com/thumbnail?id=' + v.slice(6) + '&sz=w' + (size||900);
+  m = v.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|thumbnail\?id=)([\w-]+)/);
+  if(m) return 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w' + (size||900);
+  if(/^https?:\/\//.test(v)) return v;
+  return '';
+}
+function loadPress(){
+  fetch(ARCHIVE_API + '?sheet=press&t=' + Date.now())
+    .then(function(res){ return res.json(); })
+    .then(function(j){
+      if(!j.ok) throw new Error(j.error || '응답 오류');
+      var rows = (j.rows || []).filter(function(r){ return String(r.title||'').trim(); });
+      PRESS_ITEMS = rows.slice().reverse(); // 최근 등록순(시트 하단이 최신)
+      renderPress();
+    })
+    .catch(function(e){
+      console.error('Press 연동 실패:', e);
+      PRESS_ITEMS = [];
+      document.getElementById('pressFeed').innerHTML = '<p class="press-empty">' + I18N[LANG].error + '</p>';
+    });
+}
 function renderPress(){
   var feed = document.getElementById('pressFeed');
+  if(PRESS_ITEMS === null){
+    feed.innerHTML = '<p class="press-empty">' + I18N[LANG].loading + '</p>';
+    return;
+  }
   if(!PRESS_ITEMS.length){
     feed.innerHTML = '<p class="press-empty">' + I18N[LANG].empty + '</p>';
     return;
   }
   feed.innerHTML = PRESS_ITEMS.map(function(p){
+    p = Object.assign({}, p, { image: archiveImgUrl(p.image) });
     return '<article class="press-card">' +
       '<div class="press-media"><img src="' + esc(p.image) + '" alt="" loading="lazy"><span class="press-outlet-tag">' + esc(p.outlet) + '</span></div>' +
       '<div class="press-body">' +
@@ -193,7 +215,7 @@ function applyLang(l){
 }
 document.getElementById('langKo').onclick = function(){ applyLang('ko'); };
 document.getElementById('langEn').onclick = function(){ applyLang('en'); };
-renderPress();
+loadPress();
 if(LANG!=='ko') applyLang(LANG);
 </script>
 
