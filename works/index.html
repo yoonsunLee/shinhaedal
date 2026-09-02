@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SHIN HAEDAL</title>
+<title>Works — SHIN HAEDAL</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@300;400;500;700&family=Press+Start+2P&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#0b0b0f;
@@ -17,9 +17,6 @@
     --ivory:#f5f0e6;
     --ivory-dim:rgba(245,240,230,0.62);
     --ivory-faint:rgba(245,240,230,0.32);
-    --status-ok-bg:#1f4d3a; --status-ok-fg:#8fe0b8;
-    --status-done-bg:#5c2323; --status-done-fg:#f0a6a6;
-    --status-nfs-bg:#4a3a22; --status-nfs-fg:#e0c48f;
   }
   *{box-sizing:border-box;}
   body{
@@ -37,7 +34,7 @@
     padding:26px 32px; max-width:1180px; margin:0 auto;
   }
   .logo-block{display:flex; flex-direction:column; gap:5px;}
-  .logo{font-family:'Black Han Sans', sans-serif; font-size:20px; letter-spacing:1px; color:var(--ivory);}
+  .logo{font-family:'Black Han Sans', sans-serif; font-size:20px; letter-spacing:1px; color:var(--ivory); text-decoration:none;}
   .nav-icons{display:flex; align-items:center; gap:16px; padding-top:2px;}
   .lang{display:flex; border:1px solid var(--ivory-faint); border-radius:20px; overflow:hidden;}
   .lang button{border:none; background:transparent; color:var(--ivory-dim); cursor:pointer; font-family:'Space Mono',monospace; font-size:11px; font-weight:700; padding:6px 12px;}
@@ -58,68 +55,13 @@
   .icon-btn{background:none; border:none; color:var(--ivory); cursor:pointer; display:flex; padding:4px; opacity:0.85;}
   .icon-btn:hover{opacity:1;}
 
-  /* hero */
-  header.hero{
-    position:relative; overflow:hidden;
-    min-height:88vh;
-    display:flex; flex-direction:column; justify-content:flex-end;
-    margin-top:-86px; /* let canvas run behind nav too */
-    padding-top:86px;
-    background:#05050a;
-  }
-  #bg-canvas{
-    position:absolute; inset:0; width:100%; height:100%; z-index:0;
-    image-rendering:pixelated;
-  }
-  .scanlines{
-    position:absolute; inset:0; z-index:1; pointer-events:none;
-    background-image:repeating-linear-gradient(rgba(0,0,0,0.22) 0px, rgba(0,0,0,0.22) 1px, transparent 1px, transparent 3px);
-    mix-blend-mode:multiply; opacity:0.45;
-  }
-  .grain{
-    position:absolute; inset:0; z-index:1; pointer-events:none;
-    background-image:radial-gradient(circle, rgba(245,240,230,0.7) 1px, transparent 1.3px);
-    background-size:3px 3px; opacity:0.05;
-  }
-  .vignette{
-    position:absolute; inset:0; z-index:1; pointer-events:none;
-    background:radial-gradient(ellipse at 50% 55%, transparent 35%, rgba(0,0,0,0.6) 100%);
-  }
-  .hero-inner{
-    position:relative; z-index:2;
-    max-width:1180px; margin:0 auto; width:100%;
-    padding:0 32px 64px;
-  }
-  .statement{
-    font-family:'Black Han Sans', sans-serif; font-weight:400;
-    font-size:clamp(38px, 6.6vw, 82px);
-    line-height:1.16;
-    margin:0;
-    color:var(--ivory);
-  }
-  .statement .accent{
-    background:linear-gradient(100deg,#ffb6d9,#9fe7ff,#c9b6ff,#ffd97a,#ffb6d9);
-    background-size:300% 100%;
-    -webkit-background-clip:text; background-clip:text; color:transparent;
-    animation:sheen 7s linear infinite;
-  }
-  @keyframes sheen{ to{ background-position:300% 0; } }
-
-  .scroll-cue{
-    display:flex; align-items:center; gap:8px; margin-top:36px;
-    font-family:'Space Mono', monospace; font-size:11px; letter-spacing:1.5px;
-    color:var(--ivory-faint);
-  }
-  .scroll-cue .arrow{animation:bob 1.6s ease-in-out infinite;}
-  @keyframes bob{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(4px);} }
-
+  /* page head */
+  .page-head{max-width:1180px; margin:0 auto; padding:36px 32px 10px;}
+  .page-head h1{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:clamp(30px,4.4vw,46px); margin:0;}
+  .page-head p{font-family:'Space Mono', monospace; font-size:12px; color:var(--ivory-faint); margin:10px 0 0;}
 
   /* grid */
-  .grid-section{max-width:1180px; margin:0 auto; padding:56px 32px 100px;}
-  .grid-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:28px;}
-  .grid-head h2{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:22px; margin:0;}
-  .grid-head span{font-family:'Space Mono', monospace; font-size:12px; color:var(--ivory-faint);}
-
+  .grid-section{max-width:1180px; margin:0 auto; padding:36px 32px 100px;}
   .work-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:34px 14px;}
   .tile{
     display:block; width:100%;
@@ -142,15 +84,6 @@
   .tile.loading span{font-family:'Space Mono',monospace; font-size:11px; color:var(--ivory-faint);}
   .tile-cap{padding-top:12px;}
   .tile-title{font-size:13px; color:var(--ivory-dim); font-weight:500; line-height:1.4;}
-
-  .works-more{text-align:center; margin-top:30px;}
-  .works-more a{
-    display:inline-block;
-    font-family:'Space Mono', monospace; font-size:12px; letter-spacing:1.5px;
-    color:var(--ivory-dim); background:none; border:1px solid var(--ivory-faint);
-    border-radius:24px; padding:11px 26px; cursor:pointer; text-decoration:none;
-  }
-  .works-more a:hover{color:var(--ivory); border-color:var(--ivory-dim);}
 
   @media(max-width:720px){
     .work-grid{grid-template-columns:repeat(2, 1fr); gap:26px 14px;}
@@ -232,13 +165,13 @@
 
 <nav>
   <div class="logo-block">
-    <div class="logo">ⓒSHIN HAEDAL</div>
+    <a class="logo" href="../">ⓒSHIN HAEDAL</a>
   </div>
   <div class="nav-icons">
     <ul class="nav-menu">
-      <li><a href="./" class="on">Home</a></li>
-      <li><a href="works/">Works</a></li>
-      <li><a href="haedal/">Haedal</a></li>
+      <li><a href="../">Home</a></li>
+      <li><a href="./" class="on">Works</a></li>
+      <li><a href="../haedal/">Haedal</a></li>
       <li><span class="soon" title="준비 중">Press</span></li>
       <li><span class="soon" title="준비 중">About</span></li>
     </ul>
@@ -257,9 +190,9 @@
   <div class="nav-overlay" id="navOverlay">
     <button class="icon-btn overlay-close" id="btnMenuClose" aria-label="닫기">✕</button>
     <nav class="overlay-links">
-      <a href="./">Home</a>
-      <a href="works/">Works</a>
-      <a href="haedal/">Haedal</a>
+      <a href="../">Home</a>
+      <a href="./">Works</a>
+      <a href="../haedal/">Haedal</a>
       <span class="soon">Press</span>
       <span class="soon">About</span>
       <a href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener" class="overlay-ig">Instagram ↗</a>
@@ -267,30 +200,14 @@
   </div>
 </nav>
 
-<header class="hero">
-  <!-- 배경 자리표시자: 실제 촬영 영상(작업 과정, 빛에 반사되는 자개 클로즈업 등)이 있으면
-       #bg-canvas를 <video autoplay muted loop playsinline> 로 교체하고,
-       scanlines / grain / vignette 오버레이는 그대로 위에 두면 동일한 톤이 유지됩니다. -->
-  <canvas id="bg-canvas" aria-hidden="true"></canvas>
-  <div class="scanlines"></div>
-  <div class="grain"></div>
-  <div class="vignette"></div>
+<div class="page-head">
+  <h1 data-i="page_h">Works</h1>
+  <p data-i="page_sub">신해달의 작품을 모두 모았어요.</p>
+</div>
 
-  <div class="hero-inner">
-    <h1 class="statement" data-i="statement">쉽게 들어와서<br><span class="accent">오래 머무는</span> 작업</h1>
-    <div class="scroll-cue">SCROLL <span class="arrow">↓</span></div>
-  </div>
-</header>
-
-<section class="grid-section" id="works">
-  <div class="grid-head">
-    <h2>Recent works</h2>
-  </div>
+<section class="grid-section">
   <div class="work-grid" id="workGrid">
     <div class="tile loading"><span data-i="loading">불러오는 중…</span></div>
-  </div>
-  <div class="works-more">
-    <a href="works/" id="btnMoreWorks" data-i="browse_all" hidden>모든 작품 보기 →</a>
   </div>
 </section>
 
@@ -323,18 +240,18 @@
 /* ---------- 언어 토글 (KO/EN) ---------- */
 var I18N = {
   ko: {
-    statement:'쉽게 들어와서<br><span class="accent">오래 머무는</span> 작업',
+    page_h:'Works',
+    page_sub:'신해달의 작품을 모두 모았어요.',
     loading:'불러오는 중…',
     empty:'등록된 작품이 아직 없어요',
-    error:'작품을 불러오지 못했어요',
-    browse_all:'모든 작품 보기 →'
+    error:'작품을 불러오지 못했어요'
   },
   en: {
-    statement:'Easy to walk into,<br><span class="accent">hard to walk away from</span>.',
+    page_h:'Works',
+    page_sub:'Every piece from Shin Haedal, in one place.',
     loading:'Loading…',
     empty:'No works registered yet',
-    error:'Could not load works',
-    browse_all:'Browse all works →'
+    error:'Could not load works'
   }
 };
 var LANG = 'ko';
@@ -349,7 +266,7 @@ function applyLang(l){
   });
   document.getElementById('langKo').classList.toggle('on', l==='ko');
   document.getElementById('langEn').classList.toggle('on', l==='en');
-  if(typeof renderWorkTiles==='function' && typeof ALL_WORKS!=='undefined' && ALL_WORKS.length) renderWorkTiles(ALL_WORKS.slice(0, 6));
+  if(typeof renderWorkTiles==='function' && typeof ALL_WORKS!=='undefined' && ALL_WORKS.length) renderWorkTiles(ALL_WORKS);
   if(typeof renderWorkModal==='function' && document.getElementById('workModal').classList.contains('open')) renderWorkModal();
 }
 document.getElementById('langKo').onclick = function(){ applyLang('ko'); };
@@ -398,15 +315,14 @@ function renderWorkTiles(rows){
   }).join('');
 }
 var ALL_WORKS = [];
-function loadRecentWorks(){
+function loadAllWorks(){
   fetch(ARCHIVE_API + '?t=' + Date.now())
     .then(function(res){ return res.json(); })
     .then(function(j){
       if(!j.ok) throw new Error(j.error || '응답 오류');
       var rows = (j.rows || []).filter(function(r){ return String(r.title||'').trim(); });
       ALL_WORKS = rows.slice().reverse(); // 최근 등록순(시트 하단이 최신)
-      renderWorkTiles(ALL_WORKS.slice(0, 6));
-      if(ALL_WORKS.length > 6) document.getElementById('btnMoreWorks').hidden = false;
+      renderWorkTiles(ALL_WORKS);
     })
     .catch(function(e){
       console.error('아카이브 연동 실패:', e);
@@ -414,7 +330,7 @@ function loadRecentWorks(){
         '<div class="tile loading"><span data-i="error">' + I18N[LANG].error + '</span></div>';
     });
 }
-loadRecentWorks();
+loadAllWorks();
 
 document.getElementById('workGrid').addEventListener('click', function(e){
   var tile = e.target.closest('.tile[data-idx]');
@@ -429,7 +345,7 @@ var wmModal = document.getElementById('workModal');
 var wmIndex = -1;
 
 function cleanText(s){
-  return String(s==null?'':s).replace(/[\r]/g, '\n');
+  return String(s==null?'':s).replace(/[\r]/g, '\n');
 }
 function exhibitionLines(str){
   return cleanText(str).split('\n').map(function(s){
@@ -516,58 +432,6 @@ document.addEventListener('keydown', function(e){
   else if(e.key === 'ArrowLeft') stepWorkModal(-1);
   else if(e.key === 'ArrowRight') stepWorkModal(1);
 });
-</script>
-
-<script>
-(function(){
-  var canvas = document.getElementById('bg-canvas');
-  var ctx = canvas.getContext('2d');
-  var hero = document.querySelector('.hero');
-  var SCALE = 6; // internal render scale-down -> CSS upscales with pixelated rendering for a retro low-res feel
-  var w, h, particles;
-  var colors = ['#c9a227','#c9a227','#f5f0e6','#f5f0e6','#ffb6d9','#9fe7ff','#c9b6ff'];
-
-  function resize(){
-    w = Math.max(60, Math.floor(hero.clientWidth / SCALE));
-    h = Math.max(40, Math.floor(hero.clientHeight / SCALE));
-    canvas.width = w; canvas.height = h;
-  }
-  function initParticles(){
-    particles = [];
-    var count = 80;
-    for(var i=0;i<count;i++){
-      particles.push({
-        x: Math.random()*w,
-        y: Math.random()*h,
-        size: Math.random()<0.18 ? 2 : 1,
-        speed: 0.03 + Math.random()*0.07,
-        drift: Math.random()*Math.PI*2,
-        color: colors[Math.floor(Math.random()*colors.length)]
-      });
-    }
-  }
-  function tick(t){
-    var grad = ctx.createLinearGradient(0,0,0,h);
-    grad.addColorStop(0,'#161c2c');
-    grad.addColorStop(1,'#07070b');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0,0,w,h);
-
-    for(var i=0;i<particles.length;i++){
-      var p = particles[i];
-      p.y -= p.speed;
-      p.x += Math.sin((t/1800)+p.drift)*0.03;
-      if(p.y < -2){ p.y = h+2; p.x = Math.random()*w; }
-      ctx.fillStyle = p.color;
-      ctx.fillRect(Math.round(p.x), Math.round(p.y), p.size, p.size);
-    }
-    requestAnimationFrame(tick);
-  }
-  window.addEventListener('resize', resize);
-  resize();
-  initParticles();
-  requestAnimationFrame(tick);
-})();
 </script>
 
 <script>
