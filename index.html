@@ -29,65 +29,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@300;400;500;700&family=Press+Start+2P&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
 <style>
-  :root{
-    --bg:#0b0b0f;
-    --bg-2:#111420;
-    --navy:#1b2a4a;
-    --gold:#c9a227;
-    --gold-dim:rgba(201,162,39,0.35);
-    --ivory:#f5f0e6;
-    --ivory-dim:rgba(245,240,230,0.62);
-    --ivory-faint:rgba(245,240,230,0.32);
-    --status-ok-bg:#1f4d3a; --status-ok-fg:#8fe0b8;
-    --status-done-bg:#5c2323; --status-done-fg:#f0a6a6;
-    --status-nfs-bg:#4a3a22; --status-nfs-fg:#e0c48f;
-  }
-  *{box-sizing:border-box;}
-  @media (prefers-reduced-motion: reduce){
-    *, *::before, *::after{
-      animation-duration:0.01ms !important;
-      animation-iteration-count:1 !important;
-      transition-duration:0.01ms !important;
-      scroll-behavior:auto !important;
-    }
-  }
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--ivory);
-    font-family:'Noto Sans KR', sans-serif;
-    -webkit-font-smoothing:antialiased;
-  }
-
-  /* nav */
-  nav{
-    position:relative; z-index:3;
-    display:flex; align-items:flex-start; justify-content:space-between;
-    padding:26px 32px; max-width:1180px; margin:0 auto;
-  }
-  .logo-block{display:flex; flex-direction:column; gap:5px;}
-  .logo{font-family:'Black Han Sans', sans-serif; font-size:20px; letter-spacing:1px; color:var(--ivory); text-decoration:none;}
-  .nav-icons{display:flex; align-items:center; gap:16px; padding-top:2px;}
-  .lang{display:flex; border:1px solid var(--ivory-faint); border-radius:20px; overflow:hidden;}
-  .lang button{border:none; background:transparent; color:var(--ivory-dim); cursor:pointer; font-family:'Space Mono',monospace; font-size:11px; font-weight:700; padding:6px 12px;}
-  .lang button.on{background:var(--ivory); color:var(--bg);}
-  .nav-menu{display:flex; gap:24px; list-style:none; margin:0 8px 0 0; padding:0; align-items:center;}
-  .nav-menu a{font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-dim); text-decoration:none;}
-  .nav-menu a:hover, .nav-menu a.on{color:var(--ivory);}
-  .nav-menu .soon{font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-faint); cursor:default;}
-  .menu-btn{display:none;}
-  .nav-overlay{position:fixed; inset:0; background:rgba(6,7,12,.97); z-index:50; display:none; flex-direction:column; align-items:center; justify-content:center;}
-  .nav-overlay.open{display:flex;}
-  .overlay-close{position:absolute; top:22px; right:24px; font-size:20px;}
-  .overlay-links{display:flex; flex-direction:column; gap:26px; text-align:center;}
-  .overlay-links a, .overlay-links .soon{font-family:'Black Han Sans',sans-serif; font-size:26px; color:var(--ivory); text-decoration:none;}
-  .overlay-links .soon{color:var(--ivory-faint);}
-  .overlay-links .overlay-ig{font-family:'Space Mono',monospace; font-size:13px; color:var(--ivory-dim); margin-top:10px;}
-  @media(max-width:720px){ .nav-menu{display:none;} .menu-btn{display:flex;} }
-  .icon-btn{background:none; border:none; color:var(--ivory); cursor:pointer; display:flex; padding:4px; opacity:0.85;}
-  .icon-btn:hover{opacity:1;}
-
   /* hero */
   header.hero{
     position:relative; z-index:0; overflow:hidden;
@@ -787,13 +730,6 @@ document.addEventListener('contextmenu', function(e){
 })();
 </script>
 
-<script>
-(function(){
-  var ov=document.getElementById('navOverlay');
-  document.getElementById('btnMenu').onclick=function(){ov.classList.add('open');};
-  document.getElementById('btnMenuClose').onclick=function(){ov.classList.remove('open');};
-  ov.querySelectorAll('a').forEach(function(a){a.onclick=function(){ov.classList.remove('open');};});
-})();
-</script>
+<script src="assets/site.js"></script>
 </body>
 </html>
