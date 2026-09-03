@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — SHIN HAEDAL</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.78em' font-size='90'>ⓒ</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0b0f;
+    --gold:#c9a227;
+    --ivory:#f5f0e6;
+    --ivory-dim:rgba(245,240,230,0.62);
+    --ivory-faint:rgba(245,240,230,0.32);
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0; background:var(--bg); color:var(--ivory);
+    font-family:'Noto Sans KR', sans-serif; -webkit-font-smoothing:antialiased;
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    padding:32px;
+    background-image:
+      linear-gradient(rgba(245,240,230,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245,240,230,0.05) 1px, transparent 1px);
+    background-size:34px 34px;
+  }
+  .wrap{max-width:480px;}
+  .code{
+    font-family:'Black Han Sans', sans-serif; font-weight:400;
+    font-size:clamp(64px,14vw,120px); line-height:1; margin:0;
+    color:var(--gold);
+  }
+  h1{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:24px; margin:18px 0 12px;}
+  p{font-size:14px; line-height:1.8; color:var(--ivory-dim); margin:0 0 32px;}
+  .links{display:flex; gap:20px; justify-content:center; flex-wrap:wrap;}
+  .links a{
+    font-family:'Space Mono', monospace; font-size:12px; letter-spacing:.5px;
+    color:var(--ivory); text-decoration:none; border-bottom:1px solid var(--ivory-faint);
+    padding-bottom:2px;
+  }
+  .links a:hover{border-color:var(--gold); color:var(--gold);}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <p class="code">404</p>
+    <h1>페이지를 찾을 수 없어요</h1>
+    <p>Page not found. The link may be outdated, or the page may have moved.</p>
+    <div class="links">
+      <a href="/">HOME</a>
+      <a href="/works/">WORKS</a>
+      <a href="/contact/">CONTACT</a>
+    </div>
+  </div>
+</body>
+</html>
