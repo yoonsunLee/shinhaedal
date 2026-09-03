@@ -213,6 +213,12 @@
         <option value="Other" data-i="opt_other">Other</option>
       </select>
     </div>
+    <div class="cf-row" id="artworkSelectRow" hidden>
+      <label for="cfArtworkSelect" data-i="select_artwork">Select Artwork</label>
+      <select id="cfArtworkSelect">
+        <option value="" data-i="opt_general_inquiry">General artwork inquiry (no specific work)</option>
+      </select>
+    </div>
     <div class="cf-row">
       <label for="cfSubject">Subject</label>
       <input id="cfSubject" name="subject" type="text" data-i-ph="ph_subject" placeholder="문의 제목" required>
@@ -255,6 +261,8 @@ var I18N = {
     opt_licensing:'라이선싱',
     opt_portfolio:'포트폴리오',
     opt_other:'기타',
+    select_artwork:'작품 선택',
+    opt_general_inquiry:'특정 작품 없이 일반 문의',
     wic_label:'이 작품에 대해 문의하고 있습니다.',
     ph_name:'성함 또는 소속',
     ph_email:'회신받으실 이메일',
@@ -279,6 +287,8 @@ var I18N = {
     opt_licensing:'Licensing',
     opt_portfolio:'Portfolio',
     opt_other:'Other',
+    select_artwork:'Select Artwork',
+    opt_general_inquiry:'General artwork inquiry (no specific work)',
     wic_label:'You are inquiring about this work.',
     ph_name:'Your name or organization',
     ph_email:'Email address for reply',
@@ -292,25 +302,48 @@ var I18N = {
 var LANG = 'ko';
 try{ if(localStorage.getItem('site_lang')==='en') LANG='en'; }catch(e){}
 
-/* ---------- 작품 문의 자동 연동 (?type=artwork&work=ID) ---------- */
+/* ---------- 작품 문의 자동 연동 (?type=artwork&work=ID) + Contact 내 작품 선택 ---------- */
 var CURRENT_WORK = null; // {id, title_ko, title_en, year}
+var WORKS_INDEX = null;
 
+function esc(s){
+  return String(s==null?'':s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
 function renderWorkInquiryCard(){
-  if(!CURRENT_WORK) return;
+  if(!CURRENT_WORK){ document.getElementById('workInquiryCard').hidden = true; return; }
   var primary = LANG === 'en' ? (CURRENT_WORK.title_en || CURRENT_WORK.title_ko) : (CURRENT_WORK.title_ko || CURRENT_WORK.title_en);
   document.getElementById('wicTitle').textContent = primary;
   document.getElementById('wicMeta').textContent = CURRENT_WORK.id + (CURRENT_WORK.year ? ' · ' + CURRENT_WORK.year : '');
+  document.getElementById('workInquiryCard').hidden = false;
 }
-function initWorkInquiry(){
-  var params = new URLSearchParams(location.search);
-  var type = params.get('type');
-  var workId = params.get('work');
-  if(type === 'artwork'){
-    var sel = document.getElementById('cfType');
-    if(sel) sel.value = 'Artwork';
+function loadWorksIndex(){
+  if(WORKS_INDEX) return Promise.resolve(WORKS_INDEX);
+  return fetch('../data/works-index.json?t=' + Date.now())
+    .then(function(res){ return res.json(); })
+    .then(function(rows){ WORKS_INDEX = rows || []; return WORKS_INDEX; });
+}
+function populateArtworkSelect(){
+  return loadWorksIndex().then(function(rows){
+    var sel = document.getElementById('cfArtworkSelect');
+    var current = sel.value;
+    var opts = ['<option value="" data-i="opt_general_inquiry">' + esc(I18N[LANG].opt_general_inquiry) + '</option>'];
+    rows.forEach(function(r){
+      var title = LANG === 'en' ? (r.title_en || r.title) : (r.title || r.title_en);
+      opts.push('<option value="' + esc(r.id) + '">' + esc(title) + ' — ' + esc(r.id) + '</option>');
+    });
+    sel.innerHTML = opts.join('');
+    sel.value = current;
+  });
+}
+function selectWork(workId){
+  if(!workId){
+    CURRENT_WORK = null;
+    renderWorkInquiryCard();
+    return Promise.resolve();
   }
-  if(!workId) return;
-  fetch('../data/works/' + encodeURIComponent(workId) + '.json')
+  return fetch('../data/works/' + encodeURIComponent(workId) + '.json?t=' + Date.now())
     .then(function(res){ return res.json(); })
     .then(function(w){
       var titleLines = String(w.title || '').split('\n');
@@ -320,16 +353,43 @@ function initWorkInquiry(){
         title_en: (titleLines[1] || '').trim(),
         year: w.year
       };
-      var thumb = w.images && w.images.thumb;
-      if(thumb) document.getElementById('wicThumb').src = '../' + thumb;
-      document.getElementById('workInquiryCard').hidden = false;
+      var entry = WORKS_INDEX && WORKS_INDEX.find(function(r){ return r.id === workId; });
+      if(entry && entry.thumb) document.getElementById('wicThumb').src = '../' + entry.thumb;
       renderWorkInquiryCard();
       var subjectEl = document.getElementById('cfSubject');
-      if(subjectEl && !subjectEl.value){
+      if(subjectEl && !subjectEl.value.trim()){
         subjectEl.value = LANG === 'en' ? (CURRENT_WORK.title_en || CURRENT_WORK.title_ko) : (CURRENT_WORK.title_ko || CURRENT_WORK.title_en);
       }
     })
     .catch(function(e){ console.error('작품 정보를 불러오지 못했습니다:', e); });
+}
+function updateArtworkUI(){
+  var isArtwork = document.getElementById('cfType').value === 'Artwork';
+  var selectRow = document.getElementById('artworkSelectRow');
+  if(isArtwork){
+    selectRow.hidden = false;
+    populateArtworkSelect().then(function(){
+      document.getElementById('cfArtworkSelect').value = CURRENT_WORK ? CURRENT_WORK.id : '';
+    });
+  }else{
+    selectRow.hidden = true;
+    CURRENT_WORK = null;
+    renderWorkInquiryCard();
+  }
+}
+document.getElementById('cfType').addEventListener('change', updateArtworkUI);
+document.getElementById('cfArtworkSelect').addEventListener('change', function(){
+  selectWork(this.value);
+});
+function initWorkInquiry(){
+  var params = new URLSearchParams(location.search);
+  var type = params.get('type');
+  var workId = params.get('work');
+  if(type === 'artwork'){
+    document.getElementById('cfType').value = 'Artwork';
+  }
+  var afterSelect = workId ? selectWork(workId) : Promise.resolve();
+  afterSelect.then(updateArtworkUI);
 }
 
 document.getElementById('contactForm').addEventListener('submit', function(e){
@@ -369,6 +429,7 @@ function applyLang(l){
   document.getElementById('langKo').classList.toggle('on', l==='ko');
   document.getElementById('langEn').classList.toggle('on', l==='en');
   renderWorkInquiryCard();
+  if(!document.getElementById('artworkSelectRow').hidden) populateArtworkSelect();
 }
 document.getElementById('langKo').onclick = function(){ applyLang('ko'); };
 document.getElementById('langEn').onclick = function(){ applyLang('en'); };
