@@ -25,6 +25,14 @@
     --line:rgba(26,27,38,.14); --gold:#c9a227;
   }
   *{box-sizing:border-box;}
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{
+      animation-duration:0.01ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:0.01ms !important;
+      scroll-behavior:auto !important;
+    }
+  }
   body{margin:0; background:var(--pearl); color:var(--ink); font-family:'Noto Sans KR',sans-serif; -webkit-font-smoothing:antialiased;}
   .wrap{max-width:1040px; margin:0 auto; padding:0 28px;}
   img{max-width:100%; display:block;}
