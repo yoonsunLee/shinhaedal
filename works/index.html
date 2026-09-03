@@ -70,7 +70,7 @@
 
   /* grid */
   .grid-section{max-width:1180px; margin:0 auto; padding:36px 32px 100px;}
-  .work-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:34px 14px;}
+  .work-grid{display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:34px 14px;}
   .tile{
     display:block; width:100%;
     cursor:pointer; border:none; background:none; padding:0; text-align:left;
@@ -95,7 +95,7 @@
   .tile-title{font-size:13px; color:var(--ivory-dim); font-weight:500; line-height:1.4;}
 
   @media(max-width:720px){
-    .work-grid{grid-template-columns:repeat(2, 1fr); gap:26px 14px;}
+    .work-grid{grid-template-columns:repeat(2, minmax(0, 1fr)); gap:26px 14px;}
   }
 
   /* work modal */
