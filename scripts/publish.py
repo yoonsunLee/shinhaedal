@@ -152,6 +152,18 @@ def write_json(path, payload):
         json.dump(payload, f, ensure_ascii=False, indent=1)
 
 
+ID_RE = re.compile(r"^[A-Z]+-(\d{4})-(\d+)$", re.I)
+
+
+def sort_key(r):
+    # ID(HD-YYYY-NNN)의 연도·순번을 최신순 정렬 기준으로 쓴다.
+    # 같은 해 안에서는 순번이 클수록 나중에 등록된 작품이라고 가정.
+    m = ID_RE.match(str(r.get("no", "")).strip())
+    if not m:
+        return (0, 0)
+    return (int(m.group(1)), int(m.group(2)))
+
+
 def main():
     admin_rows = fetch_admin_works()
     works = []
@@ -160,6 +172,8 @@ def main():
         if not no or EXCLUDE_PREFIX_RE.match(no) or no in EXCLUDE_IDS:
             continue
         works.append(r)
+
+    works.sort(key=sort_key, reverse=True)  # 최신 작품(연도↓, 순번↓)부터
 
     validate_works(works)
 
