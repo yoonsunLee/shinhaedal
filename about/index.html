@@ -212,15 +212,13 @@ var LANG = 'ko';
 try{ if(localStorage.getItem('site_lang')==='en') LANG='en'; }catch(e){}
 
 function loadExhibitions(){
-  var ARCHIVE_API = 'https://script.google.com/macros/s/AKfycbxpI_YNIOKVfk76Z_dVVN1oHlfnGfO0EJ9xEub2IxHOnNtdFKquHQDT8Xayzv1umQto/exec';
-  fetch(ARCHIVE_API + '?sheet=exhibitions&t=' + Date.now())
+  fetch('../data/exhibitions.json?t=' + Date.now())
     .then(function(res){ return res.json(); })
-    .then(function(j){
-      if(!j.ok) throw new Error(j.error || '응답 오류');
-      renderExhibitions(j.rows || []);
+    .then(function(rows){
+      renderExhibitions(rows || []);
     })
     .catch(function(e){
-      console.error('전시 이력 연동 실패:', e);
+      console.error('전시 이력을 불러오지 못했습니다:', e);
       document.getElementById('exList').innerHTML = '<p class="ex-empty">' + I18N[LANG].ex_error + '</p>';
     });
 }

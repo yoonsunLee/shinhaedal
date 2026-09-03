@@ -147,7 +147,6 @@
 <section class="press-feed" id="pressFeed"><p class="press-empty" data-i="loading">불러오는 중…</p></section>
 
 <script>
-var ARCHIVE_API = 'https://script.google.com/macros/s/AKfycbxpI_YNIOKVfk76Z_dVVN1oHlfnGfO0EJ9xEub2IxHOnNtdFKquHQDT8Xayzv1umQto/exec';
 var PRESS_ITEMS = null; // null = 아직 로드 전
 
 var I18N = {
@@ -173,16 +172,14 @@ function archiveImgUrl(v, size){
   return '';
 }
 function loadPress(){
-  fetch(ARCHIVE_API + '?sheet=press&t=' + Date.now())
+  fetch('../data/press.json?t=' + Date.now())
     .then(function(res){ return res.json(); })
-    .then(function(j){
-      if(!j.ok) throw new Error(j.error || '응답 오류');
-      var rows = (j.rows || []).filter(function(r){ return String(r.title||'').trim(); });
-      PRESS_ITEMS = rows.slice().reverse(); // 최근 등록순(시트 하단이 최신)
+    .then(function(rows){
+      PRESS_ITEMS = (rows || []).slice().reverse(); // 최근 등록순(시트 하단이 최신)
       renderPress();
     })
     .catch(function(e){
-      console.error('Press 연동 실패:', e);
+      console.error('Press 기사를 불러오지 못했습니다:', e);
       PRESS_ITEMS = [];
       document.getElementById('pressFeed').innerHTML = '<p class="press-empty">' + I18N[LANG].error + '</p>';
     });
