@@ -239,6 +239,9 @@
     cursor:pointer; transition:border-color .2s ease, color .2s ease;
   }
   .wm-action-btn:hover{border-color:var(--gold); color:var(--gold);}
+  .wm-action-btn{text-decoration:none; display:inline-block;}
+  .wm-action-btn--gold{border-color:var(--gold-dim); color:var(--gold);}
+  .wm-action-btn--gold:hover{border-color:var(--gold); color:var(--ivory); background:var(--gold-dim);}
 
   .large-view-overlay{
     position:fixed; inset:0; z-index:90;
@@ -385,6 +388,7 @@
       </div>
       <div class="wm-actions">
         <button class="wm-action-btn" id="wmViewLarger" data-i="wm_view_larger">VIEW LARGER ⛶</button>
+        <a class="wm-action-btn wm-action-btn--gold" id="wmAskAbout" data-i="wm_ask_about" href="#">ASK ABOUT THIS WORK →</a>
       </div>
     </div>
   </div>
@@ -410,6 +414,7 @@ var I18N = {
     wm_ex_more:'전시 이력 더보기 ({n})',
     wm_ex_collapse:'접기',
     wm_view_larger:'크게 보기 ⛶',
+    wm_ask_about:'이 작품에 대해 문의하기 →',
     stmt_lede:'독해하고, 해석하고, 번역하는 것.<br>저는 법을 읽고 의미를 찾아, 그것을 나전칠기의 언어로 옮깁니다.',
     stmt_body:'<p>제 작업은 법과 사회의 규범 안에서 살아가는 개인에 대한 이야기입니다.</p>'
       + '<p>저에게 법은 차갑고 어려운 규칙에 머무는 것이 아니라, 사람들이 함께 살아가기 위해 만든 하나의 언어이자 사회의 질서입니다. 우리는 그 안에서 같은 규칙을 마주하지만, 각자 다른 방식으로 읽고 받아들이며 살아갑니다.</p>'
@@ -429,6 +434,7 @@ var I18N = {
     wm_ex_more:'Show more ({n})',
     wm_ex_collapse:'Show less',
     wm_view_larger:'VIEW LARGER ⛶',
+    wm_ask_about:'ASK ABOUT THIS WORK →',
     stmt_lede:'To read, interpret, translate.<br>I read the law, search for its meaning, and carry it into the language of mother-of-pearl lacquer.',
     stmt_body:'<p>My work is about the individual living within the norms of law and society.</p>'
       + '<p>To me, law isn\'t just a cold, difficult set of rules — it\'s a language and an order people created so they could live together. We all face the same rules, yet each of us reads and accepts them in our own way.</p>'
@@ -552,6 +558,7 @@ function renderWorkModal(){
   var imgEl = document.getElementById('wmImg');
   imgEl.src = meta.thumb ? ASSET_BASE + meta.thumb : '';
   imgEl.alt = metaPrimary;
+  document.getElementById('wmAskAbout').href = 'contact/?type=artwork&work=' + encodeURIComponent(meta.id);
 
   fetchDetail(meta.id).then(function(w){
     if(wmIndex !== requestIndex) return; // 그 사이 다른 작품으로 넘어갔으면 무시

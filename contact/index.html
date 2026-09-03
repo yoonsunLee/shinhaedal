@@ -77,6 +77,16 @@
   @media(max-width:640px){ .inquiry-grid{grid-template-columns:1fr 1fr;} }
   @media(max-width:420px){ .inquiry-grid{grid-template-columns:1fr;} }
 
+  .work-inquiry-card{
+    display:flex; gap:14px; align-items:center;
+    background:var(--bg-2); border:1px solid rgba(245,240,230,.14); border-radius:8px;
+    padding:14px; margin-bottom:22px;
+  }
+  .work-inquiry-card img{width:56px; height:56px; object-fit:cover; border-radius:4px; flex-shrink:0; -webkit-user-select:none; user-select:none;}
+  .wic-label{font-family:'Space Mono', monospace; font-size:10.5px; letter-spacing:.5px; color:var(--gold); text-transform:uppercase; margin-bottom:4px;}
+  .wic-title{font-size:14px; color:var(--ivory); line-height:1.4;}
+  .wic-meta{font-family:'Space Mono', monospace; font-size:11px; color:var(--ivory-faint); margin-top:3px;}
+
   .contact-form{display:flex; flex-direction:column; gap:18px;}
   .cf-row label{display:block; font-family:'Space Mono', monospace; font-size:11px; letter-spacing:1px; color:var(--ivory-faint); text-transform:uppercase; margin-bottom:8px;}
   .cf-row input, .cf-row select, .cf-row textarea{
@@ -164,6 +174,14 @@
 
 <section class="contact-section" id="contact-form-section">
   <h2>Contact Form</h2>
+  <div class="work-inquiry-card" id="workInquiryCard" hidden>
+    <img id="wicThumb" alt="" draggable="false">
+    <div>
+      <div class="wic-label" data-i="wic_label">You are inquiring about this work.</div>
+      <div class="wic-title" id="wicTitle"></div>
+      <div class="wic-meta" id="wicMeta"></div>
+    </div>
+  </div>
   <form class="contact-form" id="contactForm">
     <div class="cf-row">
       <label for="cfName">Name / Organization</label>
@@ -176,12 +194,12 @@
     <div class="cf-row">
       <label for="cfType">Inquiry Type</label>
       <select id="cfType" name="type">
-        <option>Artwork</option>
-        <option>Exhibition</option>
-        <option>Collaboration</option>
-        <option>Licensing</option>
-        <option>Portfolio</option>
-        <option>Other</option>
+        <option value="Artwork" data-i="opt_artwork">Artwork</option>
+        <option value="Exhibition" data-i="opt_exhibition">Exhibition</option>
+        <option value="Collaboration" data-i="opt_collaboration">Collaboration</option>
+        <option value="Licensing" data-i="opt_licensing">Licensing</option>
+        <option value="Portfolio" data-i="opt_portfolio">Portfolio</option>
+        <option value="Other" data-i="opt_other">Other</option>
       </select>
     </div>
     <div class="cf-row">
@@ -220,6 +238,13 @@ var I18N = {
     inq_collab:'기업 및 브랜드 협업, 프로젝트 제안',
     inq_licensing:'얼빵해달 IP 및 이미지 라이선싱 문의',
     inq_portfolio:'전시·협업 검토를 위한 포트폴리오 요청',
+    opt_artwork:'작품 소장',
+    opt_exhibition:'전시',
+    opt_collaboration:'협업',
+    opt_licensing:'라이선싱',
+    opt_portfolio:'포트폴리오',
+    opt_other:'기타',
+    wic_label:'이 작품에 대해 문의하고 있습니다.',
     ph_name:'성함 또는 소속',
     ph_email:'회신받으실 이메일',
     ph_subject:'문의 제목',
@@ -237,6 +262,13 @@ var I18N = {
     inq_collab:'Corporate and brand collaboration, project proposals',
     inq_licensing:'Eolbbang Haedal IP and image licensing inquiries',
     inq_portfolio:'Portfolio requests for exhibition/collaboration review',
+    opt_artwork:'Artwork',
+    opt_exhibition:'Exhibition',
+    opt_collaboration:'Collaboration',
+    opt_licensing:'Licensing',
+    opt_portfolio:'Portfolio',
+    opt_other:'Other',
+    wic_label:'You are inquiring about this work.',
     ph_name:'Your name or organization',
     ph_email:'Email address for reply',
     ph_subject:'Subject',
@@ -249,6 +281,46 @@ var I18N = {
 var LANG = 'ko';
 try{ if(localStorage.getItem('site_lang')==='en') LANG='en'; }catch(e){}
 
+/* ---------- 작품 문의 자동 연동 (?type=artwork&work=ID) ---------- */
+var CURRENT_WORK = null; // {id, title_ko, title_en, year}
+
+function renderWorkInquiryCard(){
+  if(!CURRENT_WORK) return;
+  var primary = LANG === 'en' ? (CURRENT_WORK.title_en || CURRENT_WORK.title_ko) : (CURRENT_WORK.title_ko || CURRENT_WORK.title_en);
+  document.getElementById('wicTitle').textContent = primary;
+  document.getElementById('wicMeta').textContent = CURRENT_WORK.id + (CURRENT_WORK.year ? ' · ' + CURRENT_WORK.year : '');
+}
+function initWorkInquiry(){
+  var params = new URLSearchParams(location.search);
+  var type = params.get('type');
+  var workId = params.get('work');
+  if(type === 'artwork'){
+    var sel = document.getElementById('cfType');
+    if(sel) sel.value = 'Artwork';
+  }
+  if(!workId) return;
+  fetch('../data/works/' + encodeURIComponent(workId) + '.json')
+    .then(function(res){ return res.json(); })
+    .then(function(w){
+      var titleLines = String(w.title || '').split('\n');
+      CURRENT_WORK = {
+        id: workId,
+        title_ko: (titleLines[0] || '').trim(),
+        title_en: (titleLines[1] || '').trim(),
+        year: w.year
+      };
+      var thumb = w.images && w.images.thumb;
+      if(thumb) document.getElementById('wicThumb').src = '../' + thumb;
+      document.getElementById('workInquiryCard').hidden = false;
+      renderWorkInquiryCard();
+      var subjectEl = document.getElementById('cfSubject');
+      if(subjectEl && !subjectEl.value){
+        subjectEl.value = LANG === 'en' ? (CURRENT_WORK.title_en || CURRENT_WORK.title_ko) : (CURRENT_WORK.title_ko || CURRENT_WORK.title_en);
+      }
+    })
+    .catch(function(e){ console.error('작품 정보를 불러오지 못했습니다:', e); });
+}
+
 document.getElementById('contactForm').addEventListener('submit', function(e){
   e.preventDefault();
   var name = document.getElementById('cfName').value.trim();
@@ -257,8 +329,15 @@ document.getElementById('contactForm').addEventListener('submit', function(e){
   var subject = document.getElementById('cfSubject').value.trim();
   var message = document.getElementById('cfMessage').value.trim();
   var body = 'Name/Organization: ' + name + '\nEmail: ' + email + '\n\n' + message;
+  var mailSubject = '[' + type + '] ' + subject;
+  if(CURRENT_WORK){
+    var workTitle = CURRENT_WORK.title_ko || CURRENT_WORK.title_en;
+    mailSubject = '[Artwork Inquiry] ' + CURRENT_WORK.id + ' — ' + workTitle;
+    body = 'Artwork\n' + CURRENT_WORK.id + '\n' + workTitle + '\n'
+      + 'https://shinhaedal.art/works/?w=' + encodeURIComponent(CURRENT_WORK.id) + '\n\n' + body;
+  }
   var mailto = 'mailto:haedarney@naver.com'
-    + '?subject=' + encodeURIComponent('[' + type + '] ' + subject)
+    + '?subject=' + encodeURIComponent(mailSubject)
     + '&body=' + encodeURIComponent(body);
   document.getElementById('cfNote').textContent = I18N[LANG].cf_sent;
   window.location.href = mailto;
@@ -278,10 +357,12 @@ function applyLang(l){
   });
   document.getElementById('langKo').classList.toggle('on', l==='ko');
   document.getElementById('langEn').classList.toggle('on', l==='en');
+  renderWorkInquiryCard();
 }
 document.getElementById('langKo').onclick = function(){ applyLang('ko'); };
 document.getElementById('langEn').onclick = function(){ applyLang('en'); };
 if(LANG!=='ko') applyLang(LANG);
+initWorkInquiry();
 </script>
 
 <script>
