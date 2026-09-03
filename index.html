@@ -75,6 +75,18 @@
     padding-top:86px;
     background:#05050a;
   }
+  .hero-bg{
+    position:absolute; inset:0; z-index:-2;
+    background-image:url('assets/landing/hero-bg.webp');
+    background-size:cover; background-position:center 25%;
+  }
+  .hero-overlay{
+    position:absolute; inset:0; z-index:-1;
+    background:linear-gradient(to bottom, rgba(5,6,10,.22) 0%, rgba(5,6,10,.45) 55%, rgba(5,6,10,.84) 100%);
+  }
+  @media(max-width:720px){
+    .hero-overlay{ background:linear-gradient(to bottom, rgba(5,6,10,.4) 0%, rgba(5,6,10,.58) 45%, rgba(5,6,10,.9) 100%); }
+  }
   #bg-canvas{
     position:absolute; inset:0; width:100%; height:100%; z-index:0;
     image-rendering:pixelated;
@@ -323,9 +335,8 @@
 </nav>
 
 <header class="hero">
-  <!-- 배경 자리표시자: 실제 촬영 영상(작업 과정, 빛에 반사되는 자개 클로즈업 등)이 있으면
-       #bg-canvas를 <video autoplay muted loop playsinline> 로 교체하고,
-       scanlines / grain / vignette 오버레이는 그대로 위에 두면 동일한 톤이 유지됩니다. -->
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-overlay" aria-hidden="true"></div>
   <canvas id="bg-canvas" aria-hidden="true"></canvas>
   <div class="scanlines"></div>
   <div class="grain"></div>
@@ -704,11 +715,7 @@ document.addEventListener('contextmenu', function(e){
     }
   }
   function tick(t){
-    var grad = ctx.createLinearGradient(0,0,0,h);
-    grad.addColorStop(0,'#161c2c');
-    grad.addColorStop(1,'#07070b');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0,0,w,h);
+    ctx.clearRect(0,0,w,h); // 배경 작품 이미지가 파티클 사이로 비치도록 투명하게 지움
 
     for(var i=0;i<particles.length;i++){
       var p = particles[i];
