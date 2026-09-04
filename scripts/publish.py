@@ -42,7 +42,7 @@ AUDIO_FIELDS = ["audio_master", "transcript_ko", "transcript_en"]  # 시트에 �
 EXHIBITION_FIELDS = ["id", "title", "venue", "start_date", "end_date", "work_nos", "docent_url", "type", "note_public"]
 PRESS_FIELDS = ["no", "outlet", "date", "title", "url", "quote", "image", "note"]
 
-IMG_TIERS = {"thumb": 700, "detail": 1600, "large": 2400}
+IMG_TIERS = {"thumb": 560, "detail": 1600, "large": 2400}  # thumb: 그리드 카드가 실제 표시되는 폭(~280px) 기준 2x 레티나
 
 
 def fetch_json(url):
@@ -99,7 +99,8 @@ def make_image_tiers(no, image_field):
         else:
             im2 = im
         rel = f"assets/works/{no}/{tier}.webp"
-        im2.save(os.path.join(out_dir, f"{tier}.webp"), "WEBP", quality=85 if tier != "large" else 90)
+        quality = 90 if tier == "large" else (80 if tier == "thumb" else 85)
+        im2.save(os.path.join(out_dir, f"{tier}.webp"), "WEBP", quality=quality)
         paths[tier] = rel
     return paths
 
