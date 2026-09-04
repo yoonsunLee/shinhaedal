@@ -39,13 +39,12 @@
   .work-inquiry-card{
     display:flex; gap:14px; align-items:center;
     background:var(--bg-2); border:1px solid rgba(245,240,230,.14); border-radius:8px;
-    padding:14px; margin-bottom:22px;
+    padding:14px;
   }
   .work-inquiry-card[hidden]{display:none;}
   .work-inquiry-card img{width:56px; height:56px; object-fit:cover; border-radius:4px; flex-shrink:0; -webkit-user-select:none; user-select:none;}
   .wic-label{font-family:'Space Mono', monospace; font-size:10.5px; letter-spacing:.5px; color:var(--gold); text-transform:uppercase; margin-bottom:4px;}
   .wic-title{font-size:14px; color:var(--ivory); line-height:1.4;}
-  .wic-meta{font-family:'Space Mono', monospace; font-size:11px; color:var(--ivory-faint); margin-top:3px;}
 
   .contact-form{display:flex; flex-direction:column; gap:18px;}
   .cf-row label{display:block; font-family:'Space Mono', monospace; font-size:11px; letter-spacing:1px; color:var(--ivory-faint); text-transform:uppercase; margin-bottom:8px;}
@@ -86,7 +85,7 @@
       <li><a href="../works/">Works</a></li>
       <li><a href="../haedal/">IP</a></li>
       <li><a href="../press/">Press</a></li>
-      <li><a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop ↗</a></li>
+      <li><a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop</a></li>
       <li><a href="./" class="on">Contact</a></li>
     </ul>
     <div class="lang" role="group" aria-label="Language">
@@ -109,7 +108,7 @@
       <a href="../works/">Works</a>
       <a href="../haedal/">IP</a>
       <a href="../press/">Press</a>
-      <a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop ↗</a>
+      <a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop</a>
       <a href="./">Contact</a>
       <a href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener" class="overlay-ig">Instagram ↗</a>
     </nav>
@@ -136,14 +135,6 @@
 
 <section class="contact-section" id="contact-form-section">
   <h2>Contact Form</h2>
-  <div class="work-inquiry-card" id="workInquiryCard" hidden>
-    <img id="wicThumb" alt="" draggable="false">
-    <div>
-      <div class="wic-label" data-i="wic_label">You are inquiring about this work.</div>
-      <div class="wic-title" id="wicTitle"></div>
-      <div class="wic-meta" id="wicMeta"></div>
-    </div>
-  </div>
   <form class="contact-form" id="contactForm">
     <div class="cf-row">
       <label for="cfName">Name / Organization</label>
@@ -169,6 +160,13 @@
       <select id="cfArtworkSelect">
         <option value="" data-i="opt_general_inquiry">General artwork inquiry (no specific work)</option>
       </select>
+    </div>
+    <div class="work-inquiry-card" id="workInquiryCard" hidden>
+      <img id="wicThumb" alt="" draggable="false">
+      <div>
+        <div class="wic-label" data-i="wic_label">You are inquiring about this work.</div>
+        <div class="wic-title" id="wicTitle"></div>
+      </div>
     </div>
     <div class="cf-row">
       <label for="cfSubject">Subject</label>
@@ -270,7 +268,6 @@ function renderWorkInquiryCard(){
   if(!CURRENT_WORK){ document.getElementById('workInquiryCard').hidden = true; return; }
   var primary = LANG === 'en' ? (CURRENT_WORK.title_en || CURRENT_WORK.title_ko) : (CURRENT_WORK.title_ko || CURRENT_WORK.title_en);
   document.getElementById('wicTitle').textContent = primary;
-  document.getElementById('wicMeta').textContent = CURRENT_WORK.id + (CURRENT_WORK.year ? ' · ' + CURRENT_WORK.year : '');
   document.getElementById('workInquiryCard').hidden = false;
 }
 function loadWorksIndex(){
@@ -286,7 +283,7 @@ function populateArtworkSelect(){
     var opts = ['<option value="" data-i="opt_general_inquiry">' + esc(I18N[LANG].opt_general_inquiry) + '</option>'];
     rows.forEach(function(r){
       var title = LANG === 'en' ? (r.title_en || r.title) : (r.title || r.title_en);
-      opts.push('<option value="' + esc(r.id) + '">' + esc(title) + ' — ' + esc(r.id) + '</option>');
+      opts.push('<option value="' + esc(r.id) + '">' + esc(title) + '</option>');
     });
     sel.innerHTML = opts.join('');
     sel.value = current;

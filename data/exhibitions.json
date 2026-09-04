@@ -9,5 +9,38 @@
   "docent_url": "",
   "type": "개인전",
   "note_public": ""
+ },
+ {
+  "id": "EX-2026-02",
+  "title": "어반브레이크 토이콘 서울",
+  "venue": "코엑스",
+  "start_date": "2026-07-30",
+  "end_date": "2026-08-02",
+  "work_nos": "",
+  "docent_url": "",
+  "type": "아트페어",
+  "note_public": ""
+ },
+ {
+  "id": "EX-2026-03",
+  "title": "아트쇼핑",
+  "venue": "루브르 카루젤, 파리, 프랑스",
+  "start_date": "2026-04-10",
+  "end_date": "2026-04-12",
+  "work_nos": "",
+  "docent_url": "",
+  "type": "아트페어",
+  "note_public": ""
+ },
+ {
+  "id": "EX-2026-04",
+  "title": "언노운바이브 더블룸",
+  "venue": "신라호텔, 서울, 대한민국",
+  "start_date": "2026-03-20",
+  "end_date": "2026-03-22",
+  "work_nos": "",
+  "docent_url": "",
+  "type": "단체전",
+  "note_public": ""
  }
 ]

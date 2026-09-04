@@ -62,15 +62,74 @@
   .icon-btn{background:none; border:none; color:var(--ink); cursor:pointer; display:flex; padding:4px; opacity:.8;}
   .icon-btn:hover{opacity:1;}
 
-  section{padding:76px 0;}
-  section.gap-top{padding-top:130px;}
   .sec-head{font-family:'Black Han Sans',sans-serif; font-weight:400; font-size:clamp(24px,3.4vw,34px); margin:0 0 10px;}
   .sec-head .title-sub{display:block; font-family:'Space Mono',monospace; font-size:14px; font-weight:400; color:var(--ink-dim); letter-spacing:.3px; margin-top:6px;}
   .sec-sub{color:var(--ink-dim); margin:0 0 40px; line-height:1.8; max-width:580px; font-weight:300;}
   .band-tag{font-family:'Space Mono',monospace; font-size:14px; font-weight:700; color:var(--ink-dim); margin:0 0 28px; letter-spacing:.3px;}
 
+  /* ── 섹션 = 하나의 슬라이드처럼: 관대한 풀바이 챕터 + 테마 배경 (실사진 없이 CSS로 재해석) ── */
+  .chapter{position:relative; padding:100px 0; overflow:hidden;}
+  .chapter .wrap{position:relative; z-index:1;}
+
+  /* BEACH — 히어로: 조개배달부가 살아가는 세계의 출발점 */
+  .chapter--beach{
+    background:
+      radial-gradient(ellipse 80% 55% at 50% 105%, rgba(201,162,39,.12), transparent 62%),
+      linear-gradient(180deg, #eef3f6 0%, #f3ede1 60%, #efe4cd 100%);
+  }
+
+  /* POOL — 캐릭터 프로필: 수영을 배우는 얕은 물 */
+  .chapter--pool{
+    background:
+      radial-gradient(circle at 18% 22%, rgba(255,255,255,.55), transparent 38%),
+      radial-gradient(circle at 78% 65%, rgba(255,255,255,.4), transparent 36%),
+      linear-gradient(160deg, #e2f4f6 0%, #cdeaf0 45%, #bfe1ec 100%);
+  }
+
+  /* NACRE — 조개껍데기: 자개 특유의 은은한 무지갯빛(이 섹션에서만 제한적으로 사용) */
+  .chapter--nacre{
+    background:linear-gradient(120deg,#f7e9f2 0%,#e6f3fb 25%,#f4f0e0 50%,#eee8f7 75%,#f7e9f2 100%);
+    background-size:260% 260%;
+    animation:nacreShift 28s ease-in-out infinite alternate;
+  }
+  @keyframes nacreShift{ from{background-position:0% 50%;} to{background-position:100% 50%;} }
+
+  /* SHOWCASE — 2D→3D: 다크 쇼케이스/스포트라이트 */
+  .chapter--showcase{
+    background:radial-gradient(ellipse 60% 50% at 50% 25%, rgba(255,255,255,.07), transparent 60%) , #15151c;
+    color:#f2f1ee;
+  }
+  .chapter--showcase .sec-head{color:#fff;}
+  .chapter--showcase .sec-sub{color:rgba(242,241,238,.62);}
+  .chapter--showcase .spec-table{background:rgba(255,255,255,.05); border-color:rgba(255,255,255,.14);}
+  .chapter--showcase .spec-row{border-bottom-color:rgba(255,255,255,.12);}
+  .chapter--showcase .spec-row dt{color:rgba(242,241,238,.45);}
+  .chapter--showcase .spec-row dd{color:#f2f1ee;}
+
+  /* CLIMAX — 일월오봉단: 일월오봉도를 현대적으로 재해석한 깊은 남색 + 금/적 악센트 */
+  .chapter--climax{
+    background:
+      radial-gradient(circle at 18% 12%, rgba(230,190,90,.17), transparent 42%),
+      radial-gradient(circle at 82% 8%, rgba(235,235,245,.10), transparent 36%),
+      radial-gradient(circle at 50% 100%, rgba(150,60,60,.14), transparent 45%),
+      linear-gradient(180deg,#12172c 0%,#171b30 55%,#1b1436 100%);
+    color:#f2f1ee;
+  }
+  .chapter--climax .sec-head{color:#fff;}
+  .chapter--climax .sec-sub{color:rgba(242,241,238,.62);}
+  .chapter--climax .band-tag{color:rgba(242,241,238,.72);}
+  .chapter--climax .member{background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.16);}
+  .chapter--climax .member .kr{color:#fff;}
+  .chapter--climax .member .en, .chapter--climax .member .elem, .chapter--climax .member .sig{color:rgba(242,241,238,.55);}
+  .chapter--climax .member .role{color:#f2f1ee;}
+  .chapter--climax .band-close{color:#fff;}
+  .chapter--climax .sheet-dots span{background:rgba(255,255,255,.3);}
+  .chapter--climax .sheet-dots span.on{background:#fff;}
+  html[lang="en"] .chapter--climax .name-stack .kr{color:rgba(242,241,238,.55);}
+  html[lang="en"] .chapter--climax .name-stack .en{color:#fff;}
+
   /* ── S1 캐릭터 히어로 (3p) ── */
-  .hero{padding:56px 0 80px; text-align:center; border-top:none;}
+  .hero{padding-top:56px; padding-bottom:80px; text-align:center; border-top:none;}
   .hero .hero-title{margin:0 0 30px; text-align:left;}
   .hero .lockup{max-width:300px; margin:0 auto; border-radius:16px; overflow:hidden; border:1px solid var(--line);}
   .hero .statement{font-family:'Black Han Sans',sans-serif; font-weight:400; font-size:clamp(20px,2.6vw,28px); line-height:1.4; margin:30px 0 0; color:var(--ink);}
@@ -184,7 +243,7 @@
       <li><a href="../works/">Works</a></li>
       <li><a href="./" class="on">IP</a></li>
       <li><a href="../press/">Press</a></li>
-      <li><a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop ↗</a></li>
+      <li><a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop</a></li>
       <li><a href="../contact/">Contact</a></li>
     </ul>
     <div class="lang" role="group" aria-label="Language">
@@ -205,155 +264,170 @@
     <a href="../works/">Works</a>
     <a href="./">IP</a>
     <a href="../press/">Press</a>
-    <a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop ↗</a>
+    <a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop</a>
     <a href="../contact/">Contact</a>
     <a href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener" class="overlay-ig">Instagram ↗</a>
   </nav>
 </div>
 
-<!-- S1 Character Intro (3p) -->
-<header class="hero wrap">
-  <h1 class="sec-head hero-title" data-i="hero_tag">MEET SPACED-OUT SEA OTTER</h1>
-  <div class="lockup"><img src="assets/hero_face.png" alt="얼빵해달"></div>
-  <p class="statement" data-i="hero_h1">수영 못 하는 해달,<br>조개배달부 얼빵해달</p>
-  <p class="sub" data-i="hero_sub">두 발로 걸어 조개를 배달해요. 조개껍데기 안에는 사랑과 응원, 위로 같은 작은 마음들이 담겨 있어요. 걸어서는 도무지 느려서, 요즘은 동네 스포츠센터 아침 수영반에 다니는 중이에요.</p>
-  <p class="quote">“Even sea otters have to learn to swim.”</p>
+<!-- S1 Character Intro (3p) — BEACH chapter -->
+<header class="hero chapter chapter--beach">
+  <div class="wrap">
+    <h1 class="sec-head hero-title" data-i="hero_tag">MEET SPACED-OUT SEA OTTER</h1>
+    <div class="lockup"><img src="assets/hero_face.png" alt="얼빵해달"></div>
+    <p class="statement" data-i="hero_h1">수영 못 하는 해달,<br>조개배달부 얼빵해달</p>
+    <p class="sub" data-i="hero_sub">두 발로 걸어 조개를 배달해요. 조개껍데기 안에는 사랑과 응원, 위로 같은 작은 마음들이 담겨 있어요. 걸어서는 도무지 느려서, 요즘은 동네 스포츠센터 아침 수영반에 다니는 중이에요.</p>
+    <p class="quote">“Even sea otters have to learn to swim.”</p>
+  </div>
 </header>
 
-<!-- S2 Naming (4p) -->
-<section class="wrap">
-  <h2 class="sec-head" data-i="name_h">이름의 비밀</h2>
-  <p class="sec-sub" data-i="name_sub">얼빵해달은 이름 하나조차 소리가 아니라 성격과 의미를 옮긴 이름이에요.</p>
-  <div class="name-grid">
-    <div class="name-card">
-      <div class="from-to">얼빵 <span class="mono">→ SPACED-OUT</span></div>
-      <p data-i="name_c1">‘얼빵’을 소리 그대로 Eolbbang이라 쓰는 대신, 조금 얼빠져 있고 어딘가 엇박자지만 그래서 사랑스러운 느낌을 ‘Spaced-out’으로 옮겼어요. 이름 자체가 성격 소개가 되도록요.</p>
-      <div class="art"><img src="assets/hero_logo.png" alt="Spaced-out Sea Otter" loading="lazy" decoding="async"></div>
-    </div>
-    <div class="name-card">
-      <div class="from-to">해달 <span class="mono">→ SUN + MOON</span></div>
-      <p data-i="name_c2">‘해달’은 동물 해달이면서, 해(☀)와 달(☾)로도 읽혀요. 하나의 이름 안에 동물과 하늘, 두 겹의 의미가 함께 들어 있어요.</p>
-      <div class="art"><img src="assets/name_haedal.png" alt="해 · 달 · 자개행성" loading="lazy" decoding="async"></div>
+<!-- S2 Naming (4p) — 조용한 정보 비트 -->
+<section class="chapter">
+  <div class="wrap">
+    <h2 class="sec-head" data-i="name_h">이름의 비밀</h2>
+    <p class="sec-sub" data-i="name_sub">얼빵해달은 이름 하나조차 소리가 아니라 성격과 의미를 옮긴 이름이에요.</p>
+    <div class="name-grid">
+      <div class="name-card">
+        <div class="from-to">얼빵 <span class="mono">→ SPACED-OUT</span></div>
+        <p data-i="name_c1">‘얼빵’을 소리 그대로 Eolbbang이라 쓰는 대신, 조금 얼빠져 있고 어딘가 엇박자지만 그래서 사랑스러운 느낌을 ‘Spaced-out’으로 옮겼어요. 이름 자체가 성격 소개가 되도록요.</p>
+        <div class="art"><img src="assets/hero_logo.png" alt="Spaced-out Sea Otter" loading="lazy" decoding="async"></div>
+      </div>
+      <div class="name-card">
+        <div class="from-to">해달 <span class="mono">→ SUN + MOON</span></div>
+        <p data-i="name_c2">‘해달’은 동물 해달이면서, 해(☀)와 달(☾)로도 읽혀요. 하나의 이름 안에 동물과 하늘, 두 겹의 의미가 함께 들어 있어요.</p>
+        <div class="art"><img src="assets/name_haedal.png" alt="해 · 달 · 자개행성" loading="lazy" decoding="async"></div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- S3 Character Sheet (5p) -->
-<section class="wrap gap-top">
-  <h2 class="sec-head" data-i="sheet_h">캐릭터 프로필</h2>
-  <p class="sec-sub" data-i="sheet_sub">처음 만나는 분들을 위한 얼빵해달 기본 정보.</p>
-  <div class="sheet-grid">
-    <div class="scene"><img src="assets/profile_scene.jpg" alt="조개배달부 얼빵해달" loading="lazy" decoding="async"></div>
-    <div class="status-card">
-      <div class="status-head"><span>CHARACTER STATUS</span></div>
-      <dl style="margin:0">
-        <div class="status-row"><dt>NAME</dt><dd data-i="sheet_name">얼빵해달 (Spaced-out Sea Otter)</dd></div>
-        <div class="status-row"><dt>SPECIES</dt><dd data-i="sheet_species">해달</dd></div>
-        <div class="status-row"><dt>JOB</dt><dd data-i="sheet_job">조개배달부</dd></div>
-        <div class="status-row"><dt>SIGNATURE</dt><dd data-i="sheet_sig">조개껍데기</dd></div>
-        <div class="status-row"><dt>DELIVERS</dt><dd data-i="sheet_del">사랑 · 응원 · 위로</dd></div>
-        <div class="status-row"><dt>CREATED</dt><dd>2020</dd></div>
-      </dl>
+<!-- S3 Character Sheet (5p) — POOL chapter: 수영을 배우는 얕은 물 -->
+<section class="chapter chapter--pool">
+  <div class="wrap">
+    <h2 class="sec-head" data-i="sheet_h">캐릭터 프로필</h2>
+    <p class="sec-sub" data-i="sheet_sub">처음 만나는 분들을 위한 얼빵해달 기본 정보.</p>
+    <div class="sheet-grid">
+      <div class="scene"><img src="assets/profile_scene.jpg" alt="조개배달부 얼빵해달" loading="lazy" decoding="async"></div>
+      <div class="status-card">
+        <div class="status-head"><span>CHARACTER STATUS</span></div>
+        <dl style="margin:0">
+          <div class="status-row"><dt>NAME</dt><dd data-i="sheet_name">얼빵해달 (Spaced-out Sea Otter)</dd></div>
+          <div class="status-row"><dt>SPECIES</dt><dd data-i="sheet_species">해달</dd></div>
+          <div class="status-row"><dt>JOB</dt><dd data-i="sheet_job">조개배달부</dd></div>
+          <div class="status-row"><dt>SIGNATURE</dt><dd data-i="sheet_sig">조개껍데기</dd></div>
+          <div class="status-row"><dt>DELIVERS</dt><dd data-i="sheet_del">사랑 · 응원 · 위로</dd></div>
+          <div class="status-row"><dt>CREATED</dt><dd>2020</dd></div>
+        </dl>
+      </div>
     </div>
+    <div class="sheet-dots" id="sheetDots" aria-hidden="true"><span class="on"></span><span></span></div>
   </div>
-  <div class="sheet-dots" id="sheetDots" aria-hidden="true"><span class="on"></span><span></span></div>
 </section>
 
-<!-- S4 The Shell (6p) -->
-<section class="wrap gap-top">
-  <h2 class="sec-head" data-i="shell_h">조개껍데기 — 세계를 잇는 물건</h2>
-  <p class="sec-sub" data-i="shell_sub">얼빵해달이 배달하는 조개는 캐릭터의 소품이면서, 신해달 작업 전체를 관통하는 재료이기도 해요.</p>
+<!-- S4 The Shell (6p) — NACRE chapter -->
+<section class="chapter chapter--nacre">
+  <div class="wrap">
+    <h2 class="sec-head" data-i="shell_h">조개껍데기 — 세계를 잇는 물건</h2>
+    <p class="sec-sub" data-i="shell_sub">얼빵해달이 배달하는 조개는 캐릭터의 소품이면서, 신해달 작업 전체를 관통하는 재료이기도 해요.</p>
 
-  <div class="shell-seq">
-    <figure><div class="frame"><img src="assets/shell_1.png" alt="조개" loading="lazy" decoding="async"></div></figure>
-    <figure><div class="frame"><img src="assets/shell_2.png" alt="자개" loading="lazy" decoding="async"></div></figure>
-    <figure><div class="frame"><img src="assets/shell_3.png" alt="나전칠기 작품" loading="lazy" decoding="async"></div></figure>
-    <figure><div class="frame"><img src="assets/shell_4.png" alt="완성작" loading="lazy" decoding="async"></div></figure>
+    <div class="shell-seq">
+      <figure><div class="frame"><img src="assets/shell_1.png" alt="조개" loading="lazy" decoding="async"></div></figure>
+      <figure><div class="frame"><img src="assets/shell_2.png" alt="자개" loading="lazy" decoding="async"></div></figure>
+      <figure><div class="frame"><img src="assets/shell_3.png" alt="나전칠기 작품" loading="lazy" decoding="async"></div></figure>
+      <figure><div class="frame"><img src="assets/shell_4.png" alt="완성작" loading="lazy" decoding="async"></div></figure>
+    </div>
+
+    <p class="bridge-line">“For the creator, a material. For someone else, a message.”</p>
+    <p class="bridge-line-sub" data-i="shell_line_sub">만드는 이에게는 재료, 받는 이에게는 마음.</p>
   </div>
-
-  <p class="bridge-line">“For the creator, a material. For someone else, a message.”</p>
-  <p class="bridge-line-sub" data-i="shell_line_sub">만드는 이에게는 재료, 받는 이에게는 마음.</p>
 </section>
 
-<!-- S5 Art Toy (8p) -->
-<section class="wrap gap-top">
-  <h2 class="sec-head" data-i="toy_h">2D에서 3D로</h2>
-  <p class="sec-sub" data-i="toy_sub">얼빵해달은 자개와 옻칠을 그대로 입힌 3D 콜렉터블 아트토이로도 만들어졌어요. 시그니처 조개는 자석으로 탈부착되는 부속으로 재현했어요.</p>
-  <div class="toy-grid">
-    <img src="assets/arttoy_1.jpg" alt="" loading="lazy" decoding="async"><img src="assets/arttoy_2.jpg" alt="" loading="lazy" decoding="async"><img src="assets/arttoy_3.jpg" alt="" loading="lazy" decoding="async"><img src="assets/arttoy_4.jpg" alt="" loading="lazy" decoding="async">
+<!-- S5 Art Toy (8p) — SHOWCASE chapter: 다크 쇼케이스/스포트라이트 -->
+<section class="chapter chapter--showcase">
+  <div class="wrap">
+    <h2 class="sec-head" data-i="toy_h">2D에서 3D로</h2>
+    <p class="sec-sub" data-i="toy_sub">얼빵해달은 자개와 옻칠을 그대로 입힌 3D 콜렉터블 아트토이로도 만들어졌어요. 시그니처 조개는 자석으로 탈부착되는 부속으로 재현했어요.</p>
+    <div class="toy-grid">
+      <img src="assets/arttoy_1.jpg" alt="" loading="lazy" decoding="async"><img src="assets/arttoy_2.jpg" alt="" loading="lazy" decoding="async"><img src="assets/arttoy_3.jpg" alt="" loading="lazy" decoding="async"><img src="assets/arttoy_4.jpg" alt="" loading="lazy" decoding="async">
+    </div>
+    <dl class="spec-table">
+      <div class="spec-row"><dt>Material</dt><dd data-i="toy_mat">자개 · 옻칠 · 친환경 패각 레진</dd></div>
+      <div class="spec-row"><dt>Feature</dt><dd data-i="toy_feat">자석 탈부착 조개</dd></div>
+      <div class="spec-row"><dt>Year</dt><dd>2026</dd></div>
+      <div class="spec-row"><dt>Size</dt><dd>10 × 9 × 6 cm</dd></div>
+    </dl>
   </div>
-  <dl class="spec-table">
-    <div class="spec-row"><dt>Material</dt><dd data-i="toy_mat">자개 · 옻칠 · 친환경 패각 레진</dd></div>
-    <div class="spec-row"><dt>Feature</dt><dd data-i="toy_feat">자석 탈부착 조개</dd></div>
-    <div class="spec-row"><dt>Year</dt><dd>2026</dd></div>
-    <div class="spec-row"><dt>Size</dt><dd>10 × 9 × 6 cm</dd></div>
-  </dl>
 </section>
 
-<!-- S6 Ilwolobongdan (11-12p) -->
-<section class="wrap gap-top">
-  <h2 class="sec-head" data-i="band_h">일월오봉단<span class="title-sub">Ilwolobongdan</span></h2>
-  <p class="band-tag" data-i="band_tag">얼빵해달은 혼자가 아니에요</p>
-  <p class="sec-sub" data-i="band_sub">일월오봉단(日月五峯團)은 조선 왕실 그림 ‘일월오봉도’에서 출발한 신해달의 오리지널 캐릭터 그룹이에요. 학, 토끼, 호랑이, 사슴 — 한국 전통 도상 속 동물들이 각자의 직업을 갖고 살아가요.</p>
+<!-- S6 Ilwolobongdan (11-12p) — CLIMAX chapter: 일월오봉도의 현대적 재해석 -->
+<section class="chapter chapter--climax">
+  <div class="wrap">
+    <h2 class="sec-head" data-i="band_h">일월오봉단<span class="title-sub">Ilwolobongdan</span></h2>
+    <p class="band-tag" data-i="band_tag">얼빵해달은 혼자가 아니에요</p>
+    <p class="sec-sub" data-i="band_sub">일월오봉단(日月五峯團)은 조선 왕실 그림 ‘일월오봉도’에서 출발한 신해달의 오리지널 캐릭터 그룹이에요. 학, 토끼, 호랑이, 사슴 — 한국 전통 도상 속 동물들이 각자의 직업을 갖고 살아가요.</p>
 
-  <div class="band-hero"><img src="assets/band_group.png" alt="일월오봉단" loading="lazy" decoding="async"></div>
+    <div class="band-hero"><img src="assets/band_group.png" alt="일월오봉단" loading="lazy" decoding="async"></div>
 
-  <div class="band-grid">
-    <div class="member">
-      <span class="elem">SUN</span>
-      <div class="portrait"><img src="assets/Crane_Crane.png" alt="학두루미" loading="lazy" decoding="async"></div>
-      <div class="name-stack"><span class="kr">학두루미</span><span class="en">Crane Crane</span></div>
-      <span class="role" data-i="m1_role">경호원</span>
-      <span class="sig" data-i="m1_sig">Signature: ㅎ</span>
+    <div class="band-grid">
+      <div class="member">
+        <span class="elem">SUN</span>
+        <div class="portrait"><img src="assets/Crane_Crane.png" alt="학두루미" loading="lazy" decoding="async"></div>
+        <div class="name-stack"><span class="kr">학두루미</span><span class="en">Crane Crane</span></div>
+        <span class="role" data-i="m1_role">경호원</span>
+        <span class="sig" data-i="m1_sig">Signature: ㅎ</span>
+      </div>
+      <div class="member">
+        <span class="elem">MOON</span>
+        <div class="portrait"><img src="assets/First-Moon_Rabbit.png" alt="정월토끼" loading="lazy" decoding="async"></div>
+        <div class="name-stack"><span class="kr">정월토끼</span><span class="en">First-Moon Rabbit</span></div>
+        <span class="role" data-i="m2_role">변장한 공주</span>
+        <span class="sig" data-i="m2_sig">Signature: 달맞이꽃</span>
+      </div>
+      <div class="member">
+        <span class="elem">MOUNTAIN</span>
+        <div class="portrait"><img src="assets/Gentle_Tiger.png" alt="선한백호" loading="lazy" decoding="async"></div>
+        <div class="name-stack"><span class="kr">선한백호</span><span class="en">Gentle Tiger</span></div>
+        <span class="role" data-i="m3_role">산지기</span>
+        <span class="sig" data-i="m3_sig">Signature: 곶감</span>
+      </div>
+      <div class="member">
+        <span class="elem">PINE</span>
+        <div class="portrait"><img src="assets/Blunt_Deer.png" alt="솔직사슴" loading="lazy" decoding="async"></div>
+        <div class="name-stack"><span class="kr">솔직사슴</span><span class="en">Blunt Deer</span></div>
+        <span class="role" data-i="m4_role">짐꾼</span>
+        <span class="sig" data-i="m4_sig">Signature: 솔방울</span>
+      </div>
+      <div class="member">
+        <span class="elem">SEA</span>
+        <div class="portrait"><img src="assets/Spaced-out_Sea_Otter.png" alt="얼빵해달" loading="lazy" decoding="async"></div>
+        <div class="name-stack"><span class="kr">얼빵해달</span><span class="en">Spaced-out Sea Otter</span></div>
+        <span class="role" data-i="m5_role">조개배달부</span>
+        <span class="sig" data-i="m5_sig">Signature: 자개</span>
+      </div>
     </div>
-    <div class="member">
-      <span class="elem">MOON</span>
-      <div class="portrait"><img src="assets/First-Moon_Rabbit.png" alt="정월토끼" loading="lazy" decoding="async"></div>
-      <div class="name-stack"><span class="kr">정월토끼</span><span class="en">First-Moon Rabbit</span></div>
-      <span class="role" data-i="m2_role">변장한 공주</span>
-      <span class="sig" data-i="m2_sig">Signature: 달맞이꽃</span>
-    </div>
-    <div class="member">
-      <span class="elem">MOUNTAIN</span>
-      <div class="portrait"><img src="assets/Gentle_Tiger.png" alt="선한백호" loading="lazy" decoding="async"></div>
-      <div class="name-stack"><span class="kr">선한백호</span><span class="en">Gentle Tiger</span></div>
-      <span class="role" data-i="m3_role">산지기</span>
-      <span class="sig" data-i="m3_sig">Signature: 곶감</span>
-    </div>
-    <div class="member">
-      <span class="elem">PINE</span>
-      <div class="portrait"><img src="assets/Blunt_Deer.png" alt="솔직사슴" loading="lazy" decoding="async"></div>
-      <div class="name-stack"><span class="kr">솔직사슴</span><span class="en">Blunt Deer</span></div>
-      <span class="role" data-i="m4_role">짐꾼</span>
-      <span class="sig" data-i="m4_sig">Signature: 솔방울</span>
-    </div>
-    <div class="member">
-      <span class="elem">SEA</span>
-      <div class="portrait"><img src="assets/Spaced-out_Sea_Otter.png" alt="얼빵해달" loading="lazy" decoding="async"></div>
-      <div class="name-stack"><span class="kr">얼빵해달</span><span class="en">Spaced-out Sea Otter</span></div>
-      <span class="role" data-i="m5_role">조개배달부</span>
-      <span class="sig" data-i="m5_sig">Signature: 자개</span>
-    </div>
+    <div class="sheet-dots" id="bandDots" aria-hidden="true"><span class="on"></span><span></span><span></span><span></span><span></span></div>
+
+    <p class="band-close" data-i="band_close">다섯 캐릭터, 다섯 역할, 다섯 상징 — 하나의 세계.</p>
   </div>
-  <div class="sheet-dots" id="bandDots" aria-hidden="true"><span class="on"></span><span></span><span></span><span></span><span></span></div>
-
-  <p class="band-close" data-i="band_close">다섯 캐릭터, 다섯 역할, 다섯 상징 — 하나의 세계.</p>
 </section>
 
-<section class="wrap gap-top available-section">
-  <h2 class="sec-head" data-i="avail_h">Licensing &amp; Collaboration</h2>
-  <p class="sec-sub" data-i="avail_sub">얼빵해달과 일월오봉단은 다음과 같은 협업에 열려 있어요.</p>
-  <div class="avail-grid">
-    <div class="avail-item"><span class="avail-label">01 · LICENSING</span><span data-i="avail_1">캐릭터 · 이미지 라이선싱</span></div>
-    <div class="avail-item"><span class="avail-label">02 · BRAND</span><span data-i="avail_2">브랜드 협업</span></div>
-    <div class="avail-item"><span class="avail-label">03 · PRODUCT</span><span data-i="avail_3">아트토이 · 제품 협업</span></div>
-    <div class="avail-item"><span class="avail-label">04 · PROJECT</span><span data-i="avail_4">전시 · 프로젝트 제안</span></div>
+<!-- Closing — 다시 조용하게 -->
+<section class="chapter available-section">
+  <div class="wrap">
+    <h2 class="sec-head" data-i="avail_h">Licensing &amp; Collaboration</h2>
+    <p class="sec-sub" data-i="avail_sub">얼빵해달과 일월오봉단은 다음과 같은 협업에 열려 있어요.</p>
+    <div class="avail-grid">
+      <div class="avail-item"><span class="avail-label">01 · LICENSING</span><span data-i="avail_1">캐릭터 · 이미지 라이선싱</span></div>
+      <div class="avail-item"><span class="avail-label">02 · BRAND</span><span data-i="avail_2">브랜드 협업</span></div>
+      <div class="avail-item"><span class="avail-label">03 · PRODUCT</span><span data-i="avail_3">아트토이 · 제품 협업</span></div>
+      <div class="avail-item"><span class="avail-label">04 · PROJECT</span><span data-i="avail_4">전시 · 프로젝트 제안</span></div>
+    </div>
+    <a class="avail-cta" href="../contact/?type=licensing" data-i="avail_cta">LICENSING &amp; COLLABORATION →</a>
   </div>
-  <a class="avail-cta" href="../contact/?type=licensing" data-i="avail_cta">LICENSING &amp; COLLABORATION →</a>
 </section>
 
 <footer>
-  <div class="menu"><a href="../" style="color:inherit;text-decoration:none">Home</a><a href="../about/" style="color:inherit;text-decoration:none">About</a><a href="../works/" style="color:inherit;text-decoration:none">Works</a><a href="./" style="color:inherit;text-decoration:none">IP</a><a href="../press/" style="color:inherit;text-decoration:none">Press</a><a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Brand Shop ↗</a><a href="../contact/" style="color:inherit;text-decoration:none">Contact</a></div>
+  <div class="menu"><a href="../" style="color:inherit;text-decoration:none">Home</a><a href="../about/" style="color:inherit;text-decoration:none">About</a><a href="../works/" style="color:inherit;text-decoration:none">Works</a><a href="./" style="color:inherit;text-decoration:none">IP</a><a href="../press/" style="color:inherit;text-decoration:none">Press</a><a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">Brand Shop</a><a href="../contact/" style="color:inherit;text-decoration:none">Contact</a></div>
   © SHIN HAEDAL · IG @haedal_space
 </footer>
 
