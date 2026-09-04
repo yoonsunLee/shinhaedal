@@ -411,7 +411,16 @@ function seriesKey(title){
   // "N차적"/"nn차적"처럼 앞에 n이 반복되는 표기는 같은 시리즈로 취급
   return key.replace(/^[nN]+(?=차적)/, 'n');
 }
+// 제목 패턴만으로는 묶이지 않는 시리즈를 수동으로 지정 (예: "우주조약"/"무주의 바다"는
+// 공통 텍스트 패턴이 없어 seriesKey()로 못 잡음). 여기에 ID를 추가하면 된다.
+var MANUAL_SERIES_GROUPS = [
+  ["HD-2026-004", "HD-2026-009"]
+];
 function seriesSiblings(meta){
+  var manualGroup = MANUAL_SERIES_GROUPS.filter(function(ids){ return ids.indexOf(meta.id) !== -1; })[0];
+  if(manualGroup){
+    return ALL_WORKS.filter(function(w){ return manualGroup.indexOf(w.id) !== -1 && w.id !== meta.id; });
+  }
   var key = seriesKey(meta.title);
   if(!key) return [];
   var group = ALL_WORKS.filter(function(w){ return seriesKey(w.title) === key; });
