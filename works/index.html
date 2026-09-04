@@ -399,11 +399,16 @@ var DETAIL_CACHE = {};
 // 한글 바로 뒤에 알파벳 한 글자가 붙어 변주를 나타내는 제목만 시리즈로 묶는다.
 function seriesKey(title){
   title = String(title||'').trim();
+  var key = null;
   var colonMatch = title.match(/^(.+?)\s+:\s+/);
-  if(colonMatch) return colonMatch[1].trim();
-  var letterMatch = title.match(/[ㄱ-힝][A-Za-z]$/);
-  if(letterMatch) return title.slice(0, -1).trim();
-  return null;
+  if(colonMatch) key = colonMatch[1].trim();
+  else{
+    var letterMatch = title.match(/[ㄱ-힝][A-Za-z]$/);
+    if(letterMatch) key = title.slice(0, -1).trim();
+  }
+  if(!key) return null;
+  // "N차적"/"nn차적"처럼 앞에 n이 반복되는 표기는 같은 시리즈로 취급
+  return key.replace(/^[nN]+(?=차적)/, 'n');
 }
 function seriesSiblings(meta){
   var key = seriesKey(meta.title);
