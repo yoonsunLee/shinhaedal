@@ -59,6 +59,7 @@
   .press-meta{display:flex; align-items:center; gap:10px; font-family:'Space Mono',monospace; font-size:11px; letter-spacing:1px; color:var(--ivory-faint); text-transform:uppercase; margin:0 0 14px;}
   .press-meta .dot{width:3px; height:3px; border-radius:50%; background:var(--ivory-faint); flex:none;}
   .press-title{font-size:15px; color:var(--ivory-dim); font-weight:500; line-height:1.6; margin:0 0 20px;}
+  .press-links{display:flex; flex-wrap:wrap; gap:8px 20px;}
   .press-link{font-family:'Space Mono',monospace; font-size:12px; color:var(--gold); text-decoration:underline; text-underline-offset:4px;}
   .press-empty{font-family:'Space Mono',monospace; font-size:12px; color:var(--ivory-faint); text-align:center; padding:60px 0;}
 
@@ -129,8 +130,8 @@
 var PRESS_ITEMS = null; // null = 아직 로드 전
 
 var I18N = {
-  ko: { page_h:'Press', page_sub:'신해달을 다룬 기사와 매체 소개.', press_link:'기사 원문 보기 ↗', loading:'불러오는 중…', empty:'아직 등록된 기사가 없어요', error:'기사를 불러오지 못했어요' },
-  en: { page_h:'Press', page_sub:'Articles and features covering Shin Haedal.', press_link:'Read the article ↗', loading:'Loading…', empty:'No press coverage yet', error:'Could not load press coverage' }
+  ko: { page_h:'Press', page_sub:'신해달을 다룬 기사와 매체 소개.', press_link:'기사 원문 보기 ↗', ex_link:'전시 작품 보기 →', loading:'불러오는 중…', empty:'아직 등록된 기사가 없어요', error:'기사를 불러오지 못했어요' },
+  en: { page_h:'Press', page_sub:'Articles and features covering Shin Haedal.', press_link:'Read the article ↗', ex_link:'See exhibited works →', loading:'Loading…', empty:'No press coverage yet', error:'Could not load press coverage' }
 };
 var LANG = 'ko';
 try{
@@ -154,11 +155,22 @@ function archiveImgUrl(v, size){
   if(/^https?:\/\//.test(v)) return v;
   return '';
 }
+var EXHIBITIONS = [];
+function matchExhibition(p){
+  var title = String(p.title||'');
+  for(var i = 0; i < EXHIBITIONS.length; i++){
+    var t = String(EXHIBITIONS[i].title||'').replace(/\s*(단체전|개인전|아트페어)$/,'').trim();
+    if(t && title.indexOf(t) !== -1) return EXHIBITIONS[i];
+  }
+  return null;
+}
 function loadPress(){
-  fetch('../data/press.json')
-    .then(function(res){ return res.json(); })
-    .then(function(rows){
-      PRESS_ITEMS = (rows || []).slice().sort(function(a, b){ return String(b.date||'').localeCompare(String(a.date||'')); }); // 최신 날짜순
+  Promise.all([
+    fetch('../data/press.json').then(function(res){ return res.json(); }),
+    fetch('../data/exhibitions.json').then(function(res){ return res.json(); }).catch(function(){ return []; })
+  ]).then(function(results){
+      PRESS_ITEMS = (results[0] || []).slice().sort(function(a, b){ return String(b.date||'').localeCompare(String(a.date||'')); }); // 최신 날짜순
+      EXHIBITIONS = results[1] || [];
       renderPress();
     })
     .catch(function(e){
@@ -180,6 +192,8 @@ function renderPress(){
   feed.innerHTML = PRESS_ITEMS.map(function(p){
     p = Object.assign({}, p, { image: archiveImgUrl(p.image) });
     var img = p.image ? '<img src="' + esc(p.image) + '" alt="" loading="lazy">' : '';
+    var ex = matchExhibition(p);
+    var exLink = ex ? '<a class="press-link" href="../works/?ex=' + encodeURIComponent(ex.id) + '">' + esc(I18N[LANG].ex_link) + '</a>' : '';
     return '<article class="press-card">' +
       '<div class="press-media">' + img + '<span class="press-outlet-tag">' + esc(p.outlet) + '</span></div>' +
       '<div class="press-body">' +
@@ -187,7 +201,10 @@ function renderPress(){
         '<p class="press-quote">' + esc(p.quote) + '</p>' +
         '<div class="press-meta"><span>' + esc(p.outlet) + '</span><span class="dot"></span><span>' + esc(p.date) + '</span></div>' +
         '<h2 class="press-title">' + esc(p.title) + '</h2>' +
-        '<a class="press-link" href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(I18N[LANG].press_link) + '</a>' +
+        '<div class="press-links">' +
+          '<a class="press-link" href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(I18N[LANG].press_link) + '</a>' +
+          exLink +
+        '</div>' +
       '</div>' +
     '</article>';
   }).join('');

@@ -26,6 +26,13 @@
   .page-head{max-width:1180px; margin:0 auto; padding:36px 32px 10px;}
   .page-head h1{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:clamp(30px,4.4vw,46px); margin:0;}
   .page-head p{font-family:'Space Mono', monospace; font-size:12px; color:var(--ivory-faint); margin:10px 0 0;}
+  .ex-filter-row{display:flex; align-items:center; gap:10px; margin-top:22px;}
+  .ex-filter-row label{font-family:'Space Mono', monospace; font-size:10.5px; letter-spacing:1px; color:var(--ivory-faint); text-transform:uppercase;}
+  .ex-filter-row select{
+    background:var(--bg-2); border:1px solid rgba(245,240,230,.16); border-radius:6px;
+    color:var(--ivory); font-family:'Noto Sans KR',sans-serif; font-size:13px; padding:8px 11px;
+    max-width:100%;
+  }
 
   /* grid */
   .grid-section{max-width:1180px; margin:0 auto; padding:36px 32px 100px;}
@@ -221,6 +228,12 @@
 <div class="page-head">
   <h1 data-i="page_h">Works</h1>
   <p data-i="page_sub">신해달의 작품을 모두 모았어요.</p>
+  <div class="ex-filter-row">
+    <label for="exFilter" data-i="filter_label">전시별로 보기</label>
+    <select id="exFilter">
+      <option value="" data-i="filter_all">전체 작품</option>
+    </select>
+  </div>
 </div>
 
 <section class="grid-section">
@@ -272,6 +285,9 @@ var I18N = {
     loading:'불러오는 중…',
     empty:'등록된 작품이 아직 없어요',
     error:'작품을 불러오지 못했어요',
+    filter_label:'전시별로 보기',
+    filter_all:'전체 작품',
+    filter_empty:'이 전시에는 등록된 작품이 없어요',
     wm_ex_label:'전시 이력',
     wm_ex_more:'전시 이력 더보기 ({n})',
     wm_ex_collapse:'접기',
@@ -284,6 +300,9 @@ var I18N = {
     loading:'Loading…',
     empty:'No works registered yet',
     error:'Could not load works',
+    filter_label:'Browse by exhibition',
+    filter_all:'All works',
+    filter_empty:'No works registered for this exhibition',
     wm_ex_label:'Exhibitions',
     wm_ex_more:'Show more ({n})',
     wm_ex_collapse:'Show less',
@@ -315,7 +334,7 @@ function applyLang(l, opts){
   });
   document.getElementById('langKo').classList.toggle('on', l==='ko');
   document.getElementById('langEn').classList.toggle('on', l==='en');
-  if(typeof renderWorkTiles==='function' && typeof ALL_WORKS!=='undefined' && ALL_WORKS.length) renderWorkTiles(ALL_WORKS);
+  if(typeof renderWorkTiles==='function' && typeof VISIBLE_WORKS!=='undefined' && VISIBLE_WORKS.length) renderWorkTiles(VISIBLE_WORKS);
   if(typeof renderWorkModal==='function' && document.getElementById('workModal').classList.contains('open')) renderWorkModal();
 }
 document.getElementById('langKo').onclick = function(){ applyLang('ko'); };
@@ -356,13 +375,54 @@ function renderWorkTiles(rows){
   }).join('');
 }
 var ALL_WORKS = [];
+var VISIBLE_WORKS = [];
+var EXHIBITIONS = [];
 var DETAIL_CACHE = {};
+
+function populateExFilter(){
+  var select = document.getElementById('exFilter');
+  var sorted = EXHIBITIONS.slice().sort(function(a, b){ return String(b.start_date||'').localeCompare(String(a.start_date||'')); });
+  select.innerHTML = '<option value="" data-i="filter_all">' + I18N[LANG].filter_all + '</option>' +
+    sorted.map(function(ex){
+      return '<option value="' + esc(ex.id) + '">' + esc(ex.title) + '</option>';
+    }).join('');
+}
+function exWorkIds(exId){
+  var ex = EXHIBITIONS.find(function(e){ return e.id === exId; });
+  if(!ex) return null;
+  return String(ex.work_nos||'').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+}
+function applyExFilter(exId, opts){
+  opts = opts || {};
+  var ids = exId ? exWorkIds(exId) : null;
+  VISIBLE_WORKS = ids ? ALL_WORKS.filter(function(w){ return ids.indexOf(w.id) !== -1; }) : ALL_WORKS.slice();
+  document.getElementById('exFilter').value = exId || '';
+  if(!VISIBLE_WORKS.length && exId){
+    document.getElementById('workGrid').innerHTML = '<div class="tile loading"><span>' + I18N[LANG].filter_empty + '</span></div>';
+  }else{
+    renderWorkTiles(VISIBLE_WORKS);
+  }
+  if(!opts.skipUrl){
+    try{
+      var url = new URL(location.href);
+      if(exId) url.searchParams.set('ex', exId); else url.searchParams.delete('ex');
+      history.replaceState(null, '', url);
+    }catch(e){}
+  }
+}
+document.getElementById('exFilter').addEventListener('change', function(){ applyExFilter(this.value); });
+
 function loadAllWorks(){
-  fetch(DATA_BASE + 'works-index.json')
-    .then(function(res){ return res.json(); })
-    .then(function(rows){
-      ALL_WORKS = rows || [];
-      renderWorkTiles(ALL_WORKS);
+  Promise.all([
+    fetch(DATA_BASE + 'works-index.json').then(function(res){ return res.json(); }),
+    fetch(DATA_BASE + 'exhibitions.json').then(function(res){ return res.json(); }).catch(function(){ return []; })
+  ]).then(function(results){
+      ALL_WORKS = results[0] || [];
+      EXHIBITIONS = results[1] || [];
+      populateExFilter();
+      var urlEx = new URLSearchParams(location.search).get('ex');
+      var initialEx = (urlEx && EXHIBITIONS.some(function(e){ return e.id === urlEx; })) ? urlEx : '';
+      applyExFilter(initialEx, {skipUrl:true});
       openFromUrlIfPresent();
     })
     .catch(function(e){
@@ -407,7 +467,7 @@ function fetchDetail(id){
     .then(function(d){ DETAIL_CACHE[id] = d; return d; });
 }
 function renderWorkModal(){
-  var meta = ALL_WORKS[wmIndex];
+  var meta = VISIBLE_WORKS[wmIndex];
   if(!meta) return;
   var requestIndex = wmIndex;
 
@@ -469,7 +529,7 @@ function renderWorkModal(){
 function setWorkIndex(idx, historyMode){
   wmIndex = idx;
   renderWorkModal();
-  var id = ALL_WORKS[idx] && ALL_WORKS[idx].id;
+  var id = VISIBLE_WORKS[idx] && VISIBLE_WORKS[idx].id;
   if(id && historyMode){
     try{
       if(historyMode === 'push') history.pushState({w:id}, '', '?w=' + encodeURIComponent(id));
@@ -495,7 +555,7 @@ function trapFocus(e, container){
   }
 }
 function openWorkModal(idx){
-  if(!ALL_WORKS[idx]) return;
+  if(!VISIBLE_WORKS[idx]) return;
   wmLastFocused = document.activeElement;
   setWorkIndex(idx, 'push');
   wmModal.classList.add('open');
@@ -511,15 +571,21 @@ function closeWorkModal(){
   if(wmLastFocused){ wmLastFocused.focus(); wmLastFocused = null; }
 }
 function stepWorkModal(delta){
-  if(!ALL_WORKS.length) return;
-  setWorkIndex((wmIndex + delta + ALL_WORKS.length) % ALL_WORKS.length, 'replace');
+  if(!VISIBLE_WORKS.length) return;
+  setWorkIndex((wmIndex + delta + VISIBLE_WORKS.length) % VISIBLE_WORKS.length, 'replace');
 }
 function openFromUrlIfPresent(){
   var params = new URLSearchParams(location.search);
   var w = params.get('w');
   if(!w) return;
-  var idx = ALL_WORKS.findIndex(function(r){ return r.id === w; });
-  if(idx < 0) return;
+  var idx = VISIBLE_WORKS.findIndex(function(r){ return r.id === w; });
+  if(idx < 0){
+    // 현재 필터에 없는 작품이면 필터를 해제하고 다시 찾음
+    if(ALL_WORKS.findIndex(function(r){ return r.id === w; }) < 0) return;
+    applyExFilter('');
+    idx = VISIBLE_WORKS.findIndex(function(r){ return r.id === w; });
+    if(idx < 0) return;
+  }
   wmIndex = idx;
   renderWorkModal();
   wmModal.classList.add('open');
@@ -535,7 +601,7 @@ document.getElementById('wmExToggle').onclick = function(){
   var isOpen = this.dataset.open === 'true';
   document.querySelectorAll('#wmExList .wm-ex-extra').forEach(function(li){ li.hidden = isOpen; });
   this.dataset.open = isOpen ? 'false' : 'true';
-  var meta = ALL_WORKS[wmIndex];
+  var meta = VISIBLE_WORKS[wmIndex];
   var w = meta && DETAIL_CACHE[meta.id];
   this.textContent = isOpen
     ? I18N[LANG].wm_ex_more.replace('{n}', w ? exhibitionLines(w.exhibitions).length : 0)
@@ -559,7 +625,7 @@ var lvOverlay = document.getElementById('largeView');
 var lvImg = document.getElementById('lvImg');
 var lvLastFocused = null;
 document.getElementById('wmViewLarger').onclick = function(){
-  var meta = ALL_WORKS[wmIndex];
+  var meta = VISIBLE_WORKS[wmIndex];
   var w = meta && DETAIL_CACHE[meta.id];
   var src = w && w.images && (w.images.large || w.images.detail);
   if(!src) return;
