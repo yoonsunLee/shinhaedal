@@ -33,6 +33,11 @@
     color:var(--ivory); font-family:'Noto Sans KR',sans-serif; font-size:13px; padding:8px 11px;
     max-width:100%;
   }
+  .ex-filter-notice{
+    font-family:'Space Mono', monospace; font-size:11px; color:var(--gold);
+    opacity:0; transition:opacity .3s ease;
+  }
+  .ex-filter-notice.show{opacity:1;}
 
   /* grid */
   .grid-section{max-width:1180px; margin:0 auto; padding:36px 32px 100px;}
@@ -40,6 +45,7 @@
   .tile{
     display:block; width:100%; margin:0;
     cursor:pointer; border:none; background:none; padding:0; text-align:left;
+    text-decoration:none; color:inherit;
     transition:transform .3s ease;
   }
   .tile:hover{transform:translateY(-3px);}
@@ -234,6 +240,7 @@
     <select id="exFilter">
       <option value="" data-i="filter_all">전체 작품</option>
     </select>
+    <span class="ex-filter-notice" id="exFilterNotice" data-i="filter_cleared_notice" hidden>다른 전시의 작품이라 필터가 해제됐어요</span>
   </div>
 </div>
 
@@ -247,7 +254,7 @@
   <div class="work-modal">
     <div class="wm-handle"></div>
     <div class="wm-media">
-      <img id="wmImg" alt="" draggable="false">
+      <img id="wmImg" alt="" draggable="false" onerror="this.style.visibility='hidden'" onload="this.style.visibility=''">
       <button class="wm-close" id="wmClose" aria-label="닫기">✕</button>
       <button class="wm-nav wm-prev" id="wmPrev" aria-label="이전 작품">‹</button>
       <button class="wm-nav wm-next" id="wmNext" aria-label="다음 작품">›</button>
@@ -293,6 +300,7 @@ var I18N = {
     filter_label:'전시별로 보기',
     filter_all:'전체 작품',
     filter_empty:'이 전시에는 등록된 작품이 없어요',
+    filter_cleared_notice:'다른 전시의 작품이라 필터가 해제됐어요',
     wm_ex_label:'전시 이력',
     wm_ex_more:'전시 이력 더보기',
     wm_ex_collapse:'접기',
@@ -309,6 +317,7 @@ var I18N = {
     filter_label:'Browse by exhibition',
     filter_all:'All works',
     filter_empty:'No works registered for this exhibition',
+    filter_cleared_notice:'Cleared the filter — this work is from a different exhibition',
     wm_ex_label:'Exhibitions',
     wm_ex_more:'Show more',
     wm_ex_collapse:'Show less',
@@ -372,12 +381,12 @@ function renderWorkTiles(rows){
   }
   grid.innerHTML = rows.map(function(r, i){
     var img = r.thumb ? ASSET_BASE + r.thumb : '';
-    var media = img ? '<img src="' + img.replace(/"/g,'&quot;') + '" alt="" loading="lazy" draggable="false">' : '';
+    var media = img ? '<img src="' + img.replace(/"/g,'&quot;') + '" alt="" loading="lazy" draggable="false" onerror="this.style.visibility=\'hidden\'">' : '';
     var title = primaryTitle(r);
-    return '<figure class="tile" data-idx="' + i + '" tabindex="0" role="button" aria-label="' + esc(title) + '">' +
+    return '<a class="tile" href="?w=' + encodeURIComponent(r.id) + '" data-idx="' + i + '" aria-label="' + esc(title) + '">' +
       '<div class="tile-media">' + media + '<div class="tile-sheen"></div></div>' +
-      '<figcaption class="tile-cap"><span class="tile-title">' + esc(title) + '</span></figcaption>' +
-      '</figure>';
+      '<span class="tile-cap"><span class="tile-title">' + esc(title) + '</span></span>' +
+      '</a>';
   }).join('');
 }
 var ALL_WORKS = [];
@@ -387,6 +396,8 @@ var DETAIL_CACHE = {};
 
 // 제목 패턴으로 시리즈 판별: "POV : 출근"처럼 콜론으로 구분되거나, "저작물B"처럼
 // 한글 바로 뒤에 알파벳 한 글자가 붙어 변주를 나타내는 제목만 시리즈로 묶는다.
+// 주의: 아카이브에 별도 series_id 필드가 없어 순전히 제목 텍스트로 추론한다 —
+// 시리즈 작품의 제목을 바꾸면(오타 수정 포함) 조율 없이 조용히 그룹이 깨진다.
 function seriesKey(title){
   title = String(title||'').trim();
   var key = null;
@@ -465,12 +476,8 @@ loadAllWorks();
 document.getElementById('workGrid').addEventListener('click', function(e){
   var tile = e.target.closest('.tile[data-idx]');
   if(!tile) return;
-  openWorkModal(parseInt(tile.dataset.idx, 10));
-});
-document.getElementById('workGrid').addEventListener('keydown', function(e){
-  if(e.key !== 'Enter' && e.key !== ' ') return;
-  var tile = e.target.closest('.tile[data-idx]');
-  if(!tile) return;
+  // 가운데클릭/Ctrl/Cmd/Shift-클릭은 브라우저 기본 동작(새 탭 등)을 그대로 둔다
+  if(e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
   e.preventDefault();
   openWorkModal(parseInt(tile.dataset.idx, 10));
 });
@@ -520,7 +527,7 @@ function renderWorkModal(){
       var sTitle = primaryTitle(s);
       var sImg = s.thumb ? ASSET_BASE + s.thumb : '';
       return '<button class="wm-series-item" type="button" data-work-id="' + esc(s.id) + '" aria-label="' + esc(sTitle) + '">' +
-        (sImg ? '<img src="' + sImg.replace(/"/g,'&quot;') + '" alt="" loading="lazy" draggable="false">' : '') +
+        (sImg ? '<img src="' + sImg.replace(/"/g,'&quot;') + '" alt="" loading="lazy" draggable="false" onerror="this.style.visibility=\'hidden\'">' : '') +
         '<span>' + esc(sTitle) + '</span>' +
         '</button>';
     }).join('');
@@ -610,6 +617,17 @@ function openWorkModal(idx){
   document.body.style.overflow = 'hidden';
   document.getElementById('wmClose').focus();
 }
+var exFilterNoticeTimer = null;
+function showExFilterNotice(){
+  var el = document.getElementById('exFilterNotice');
+  el.hidden = false;
+  requestAnimationFrame(function(){ el.classList.add('show'); });
+  clearTimeout(exFilterNoticeTimer);
+  exFilterNoticeTimer = setTimeout(function(){
+    el.classList.remove('show');
+    setTimeout(function(){ el.hidden = true; }, 300);
+  }, 3000);
+}
 function openWorkById(id){
   var idx = VISIBLE_WORKS.findIndex(function(r){ return r.id === id; });
   if(idx < 0){
@@ -617,6 +635,7 @@ function openWorkById(id){
     applyExFilter('');
     idx = VISIBLE_WORKS.findIndex(function(r){ return r.id === id; });
     if(idx < 0) return;
+    showExFilterNotice();
   }
   setWorkIndex(idx, 'push');
 }
@@ -655,6 +674,35 @@ function openFromUrlIfPresent(){
   document.body.style.overflow = 'hidden';
   document.getElementById('wmClose').focus();
 }
+function handlePopState(){
+  var w = new URLSearchParams(location.search).get('w');
+  if(w){
+    var idx = VISIBLE_WORKS.findIndex(function(r){ return r.id === w; });
+    if(idx < 0 && ALL_WORKS.findIndex(function(r){ return r.id === w; }) >= 0){
+      applyExFilter('');
+      idx = VISIBLE_WORKS.findIndex(function(r){ return r.id === w; });
+    }
+    if(idx >= 0){
+      wmIndex = idx;
+      renderWorkModal();
+      if(!wmModal.classList.contains('open')){
+        wmLastFocused = document.activeElement;
+        wmModal.classList.add('open');
+        wmModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+      return;
+    }
+  }
+  // ?w= 없거나 못 찾은 작품 -> 열려 있으면 히스토리는 건드리지 않고 닫기만
+  if(wmModal.classList.contains('open')){
+    wmModal.classList.remove('open');
+    wmModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if(wmLastFocused){ wmLastFocused.focus(); wmLastFocused = null; }
+  }
+}
+window.addEventListener('popstate', handlePopState);
 document.getElementById('wmClose').onclick = closeWorkModal;
 document.getElementById('wmPrev').onclick = function(){ stepWorkModal(-1); };
 document.getElementById('wmNext').onclick = function(){ stepWorkModal(1); };

@@ -154,6 +154,7 @@
   .tile{
     display:block; width:100%; margin:0;
     cursor:pointer; border:none; background:none; padding:0; text-align:left;
+    text-decoration:none; color:inherit;
     transition:transform .3s ease;
   }
   .tile:hover{transform:translateY(-3px);}
@@ -397,7 +398,7 @@
   <div class="work-modal">
     <div class="wm-handle"></div>
     <div class="wm-media">
-      <img id="wmImg" alt="" draggable="false">
+      <img id="wmImg" alt="" draggable="false" onerror="this.style.visibility='hidden'" onload="this.style.visibility=''">
       <button class="wm-close" id="wmClose" aria-label="닫기">✕</button>
       <button class="wm-nav wm-prev" id="wmPrev" aria-label="이전 작품">‹</button>
       <button class="wm-nav wm-next" id="wmNext" aria-label="다음 작품">›</button>
@@ -532,12 +533,12 @@ function renderWorkTiles(rows){
   }
   grid.innerHTML = rows.map(function(r, i){
     var img = r.thumb ? ASSET_BASE + r.thumb : '';
-    var media = img ? '<img src="' + img.replace(/"/g,'&quot;') + '" alt="" loading="lazy" draggable="false">' : '';
+    var media = img ? '<img src="' + img.replace(/"/g,'&quot;') + '" alt="" loading="lazy" draggable="false" onerror="this.style.visibility=\'hidden\'">' : '';
     var title = primaryTitle(r);
-    return '<figure class="tile" data-idx="' + i + '" tabindex="0" role="button" aria-label="' + esc(title) + '">' +
+    return '<a class="tile" href="?w=' + encodeURIComponent(r.id) + '" data-idx="' + i + '" aria-label="' + esc(title) + '">' +
       '<div class="tile-media">' + media + '<div class="tile-sheen"></div></div>' +
-      '<figcaption class="tile-cap"><span class="tile-title">' + esc(title) + '</span></figcaption>' +
-      '</figure>';
+      '<span class="tile-cap"><span class="tile-title">' + esc(title) + '</span></span>' +
+      '</a>';
   }).join('');
 }
 var ALL_WORKS = [];
@@ -549,8 +550,11 @@ function formatDateRange(start, end){
   function fmt(d){ return String(d||'').replace(/-/g,'.'); }
   return fmt(start) + ' – ' + fmt(end);
 }
+function todayKST(){
+  return new Intl.DateTimeFormat('en-CA', {timeZone:'Asia/Seoul'}).format(new Date());
+}
 function pickActiveExhibition(list){
-  var today = new Date().toISOString().slice(0,10);
+  var today = todayKST();
   for(var i=0;i<list.length;i++){
     var ex = list[i];
     if(ex.start_date && ex.end_date && today >= ex.start_date && today <= ex.end_date) return ex;
@@ -573,7 +577,7 @@ function renderHomeGrid(){
   renderWorkTiles(HOME_LIST);
 }
 function loadExhibitionAndRender(){
-  fetch(DATA_BASE + 'exhibitions.json')
+  return fetch(DATA_BASE + 'exhibitions.json')
     .then(function(res){ return res.json(); })
     .then(function(list){
       var ex = pickActiveExhibition(list || []);
@@ -596,8 +600,9 @@ function loadRecentWorks(){
     .then(function(rows){
       ALL_WORKS = rows || [];
       if(ALL_WORKS.length > 6) document.getElementById('btnMoreWorks').hidden = false;
-      loadExhibitionAndRender();
+      return loadExhibitionAndRender();
     })
+    .then(function(){ openFromUrlIfPresent(); })
     .catch(function(e){
       console.error('작품 목록을 불러오지 못했습니다:', e);
       document.getElementById('workGrid').innerHTML =
@@ -609,12 +614,7 @@ loadRecentWorks();
 document.getElementById('workGrid').addEventListener('click', function(e){
   var tile = e.target.closest('.tile[data-idx]');
   if(!tile) return;
-  openWorkModal(parseInt(tile.dataset.idx, 10));
-});
-document.getElementById('workGrid').addEventListener('keydown', function(e){
-  if(e.key !== 'Enter' && e.key !== ' ') return;
-  var tile = e.target.closest('.tile[data-idx]');
-  if(!tile) return;
+  if(e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
   e.preventDefault();
   openWorkModal(parseInt(tile.dataset.idx, 10));
 });
@@ -727,17 +727,51 @@ function openWorkModal(idx){
   wmModal.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
   document.getElementById('wmClose').focus();
+  try{ history.pushState({w:HOME_LIST[idx].id}, '', '?w=' + encodeURIComponent(HOME_LIST[idx].id)); }catch(e){}
 }
 function closeWorkModal(){
   wmModal.classList.remove('open');
   wmModal.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
+  try{ history.pushState({}, '', location.pathname); }catch(e){}
   if(wmLastFocused){ wmLastFocused.focus(); wmLastFocused = null; }
 }
+function openFromUrlIfPresent(){
+  var w = new URLSearchParams(location.search).get('w');
+  if(!w) return;
+  var idx = HOME_LIST.findIndex(function(r){ return r.id === w; });
+  if(idx < 0) return;
+  openWorkModal(idx);
+}
+function handlePopState(){
+  var w = new URLSearchParams(location.search).get('w');
+  if(w){
+    var idx = HOME_LIST.findIndex(function(r){ return r.id === w; });
+    if(idx >= 0){
+      wmIndex = idx;
+      renderWorkModal();
+      if(!wmModal.classList.contains('open')){
+        wmLastFocused = document.activeElement;
+        wmModal.classList.add('open');
+        wmModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+      return;
+    }
+  }
+  if(wmModal.classList.contains('open')){
+    wmModal.classList.remove('open');
+    wmModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if(wmLastFocused){ wmLastFocused.focus(); wmLastFocused = null; }
+  }
+}
+window.addEventListener('popstate', handlePopState);
 function stepWorkModal(delta){
   if(!HOME_LIST.length) return;
   wmIndex = (wmIndex + delta + HOME_LIST.length) % HOME_LIST.length;
   renderWorkModal();
+  try{ history.replaceState({w:HOME_LIST[wmIndex].id}, '', '?w=' + encodeURIComponent(HOME_LIST[wmIndex].id)); }catch(e){}
 }
 document.getElementById('wmClose').onclick = closeWorkModal;
 document.getElementById('wmPrev').onclick = function(){ stepWorkModal(-1); };

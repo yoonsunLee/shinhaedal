@@ -15,9 +15,9 @@
 
 데이터 검증 실패 시 exit 1 -> 기존 파일 유지 (사이트는 마지막 정상본으로 계속 운영).
 """
-import json, os, re, sys, subprocess, urllib.request, urllib.parse, datetime
+import json, os, re, shutil, sys, subprocess, urllib.request, urllib.parse, datetime
 import requests
-from PIL import Image
+from PIL import Image, ImageCms, ImageOps
 from io import BytesIO
 
 API = os.environ.get("ARCHIVE_API", "").strip()
@@ -81,13 +81,28 @@ def download_drive_file(file_id):
     return resp.content
 
 
+def to_srgb(im):
+    # 자개 색/광택 정확도가 중요한 작업이라, 임베드된 ICC 프로파일이 있으면 sRGB로 명시 변환한다.
+    icc = im.info.get("icc_profile")
+    if not icc:
+        return im
+    try:
+        src_profile = ImageCms.ImageCmsProfile(BytesIO(icc))
+        dst_profile = ImageCms.createProfile("sRGB")
+        return ImageCms.profileToProfile(im, src_profile, dst_profile, outputMode="RGB")
+    except Exception:
+        return im
+
+
 def make_image_tiers(no, image_field):
     fid = drive_id(image_field)
     if not fid:
         return {}
     raw = download_drive_file(fid)
     im = Image.open(BytesIO(raw))
+    im = ImageOps.exif_transpose(im)  # 촬영 방향(EXIF Orientation) 반영 후 태그 제거
     im = im.convert("RGB") if im.mode not in ("RGB", "RGBA") else im
+    im = to_srgb(im)
     out_dir = os.path.join(ASSETS_DIR, no)
     os.makedirs(out_dir, exist_ok=True)
     paths = {}
@@ -153,6 +168,22 @@ def write_json(path, payload):
         json.dump(payload, f, ensure_ascii=False, indent=1)
 
 
+def cleanup_orphans(current_ids):
+    # 더 이상 공개 대상이 아닌 작품의 예전 상세/이미지 파일을 정리한다(URL이 계속 살아있지 않도록).
+    works_dir = os.path.join(DATA_DIR, "works")
+    if os.path.isdir(works_dir):
+        for name in os.listdir(works_dir):
+            no = name[:-5] if name.endswith(".json") else None
+            if no and no not in current_ids:
+                os.remove(os.path.join(works_dir, name))
+                print(f"orphan 정리: data/works/{name}")
+    if os.path.isdir(ASSETS_DIR):
+        for name in os.listdir(ASSETS_DIR):
+            if name not in current_ids:
+                shutil.rmtree(os.path.join(ASSETS_DIR, name))
+                print(f"orphan 정리: assets/works/{name}/")
+
+
 ID_RE = re.compile(r"^[A-Z]+-(\d{4})-(\d+)$", re.I)
 
 
@@ -210,21 +241,25 @@ def main():
     write_json(os.path.join(DATA_DIR, "works-index.json"), index_entries)
     print(f"works-index.json: {len(index_entries)}건")
 
+    cleanup_orphans({r["no"] for r in works})
+
+    exhibitions_path = os.path.join(DATA_DIR, "exhibitions.json")
     try:
         exhibitions = fetch_sheet("exhibitions", EXHIBITION_FIELDS)
+        write_json(exhibitions_path, exhibitions)
+        print(f"exhibitions.json: {len(exhibitions)}건")
     except Exception as e:
-        print(f"전시 시트 읽기 실패({e}) — 전시 없음으로 처리")
-        exhibitions = []
-    write_json(os.path.join(DATA_DIR, "exhibitions.json"), exhibitions)
-    print(f"exhibitions.json: {len(exhibitions)}건")
+        print(f"전시 시트 읽기 실패({e}) — 기존 exhibitions.json 유지")
 
+    press_path = os.path.join(DATA_DIR, "press.json")
     try:
         press = fetch_sheet("press", PRESS_FIELDS)
+        for row in press:
+            row["note_public"] = row.pop("note", "")
+        write_json(press_path, press)
+        print(f"press.json: {len(press)}건")
     except Exception as e:
-        print(f"Press 시트 읽기 실패({e}) — Press 없음으로 처리")
-        press = []
-    write_json(os.path.join(DATA_DIR, "press.json"), press)
-    print(f"press.json: {len(press)}건")
+        print(f"Press 시트 읽기 실패({e}) — 기존 press.json 유지")
 
 
 if __name__ == "__main__":

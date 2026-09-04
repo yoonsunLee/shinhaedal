@@ -156,7 +156,14 @@ function archiveImgUrl(v, size){
   return '';
 }
 var EXHIBITIONS = [];
+function safeUrl(v){
+  // 아카이브 데이터가 손상되더라도 href에 javascript: 등 위험한 스킴이 들어가지 않도록 https만 허용
+  return /^https:\/\//i.test(String(v||'').trim()) ? v : '';
+}
 var BRAND_SHOP_URL = 'https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product';
+// 주의: 아래 두 매칭 함수는 press.title 문자열에 브랜드명/전시명이 그대로 들어있는지로
+// 판단한다(전용 필드 없음) — 기사 제목이 브랜드/전시명을 그대로 안 쓰면(의역된 헤드라인 등)
+// 조용히 매칭에 실패해서 "전시 작품 보기"/"브랜드 샵" 링크가 안 뜬다.
 function matchBrandShop(p){
   return /해달자개/.test(String(p.title||'')) ? BRAND_SHOP_URL : null;
 }
@@ -195,12 +202,14 @@ function renderPress(){
   }
   feed.innerHTML = PRESS_ITEMS.map(function(p){
     p = Object.assign({}, p, { image: archiveImgUrl(p.image) });
-    var img = p.image ? '<img src="' + esc(p.image) + '" alt="" loading="lazy">' : '';
+    var img = p.image ? '<img src="' + esc(p.image) + '" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">' : '';
     var shop = matchBrandShop(p);
     var ex = shop ? null : matchExhibition(p);
     var exLink = shop
-      ? '<a class="press-link" href="' + esc(shop) + '" target="_blank" rel="noopener">' + esc(I18N[LANG].shop_link) + '</a>'
+      ? '<a class="press-link" href="' + esc(safeUrl(shop)) + '" target="_blank" rel="noopener">' + esc(I18N[LANG].shop_link) + '</a>'
       : (ex ? '<a class="press-link" href="../works/?ex=' + encodeURIComponent(ex.id) + '">' + esc(I18N[LANG].ex_link) + '</a>' : '');
+    var articleUrl = safeUrl(p.url);
+    var articleLink = articleUrl ? '<a class="press-link" href="' + esc(articleUrl) + '" target="_blank" rel="noopener">' + esc(I18N[LANG].press_link) + '</a>' : '';
     return '<article class="press-card">' +
       '<div class="press-media">' + img + '<span class="press-outlet-tag">' + esc(p.outlet) + '</span></div>' +
       '<div class="press-body">' +
@@ -209,7 +218,7 @@ function renderPress(){
         '<div class="press-meta"><span>' + esc(p.outlet) + '</span><span class="dot"></span><span>' + esc(p.date) + '</span></div>' +
         '<h2 class="press-title">' + esc(p.title) + '</h2>' +
         '<div class="press-links">' +
-          '<a class="press-link" href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(I18N[LANG].press_link) + '</a>' +
+          articleLink +
           exLink +
         '</div>' +
       '</div>' +

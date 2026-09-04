@@ -240,8 +240,11 @@ function formatDateRange(start, end){
   var e = sameMonth ? end.slice(5).replace(/-/g, '.') : end.replace(/-/g, '.');
   return s + ' – ' + e;
 }
+function todayKST(){
+  return new Intl.DateTimeFormat('en-CA', {timeZone:'Asia/Seoul'}).format(new Date());
+}
 function renderExhibitions(rows){
-  var today = new Date().toISOString().slice(0, 10);
+  var today = todayKST();
   var upcoming = rows.filter(function(r){ return String(r.start_date||'') > today; })
     .sort(function(a, b){ return String(a.start_date||'').localeCompare(String(b.start_date||'')); });
   var past = rows.filter(function(r){ return String(r.start_date||'') <= today; });
