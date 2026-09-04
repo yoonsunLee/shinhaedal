@@ -130,8 +130,8 @@
 var PRESS_ITEMS = null; // null = 아직 로드 전
 
 var I18N = {
-  ko: { page_h:'Press', page_sub:'신해달을 다룬 기사와 매체 소개.', press_link:'기사 원문 보기 ↗', ex_link:'전시 작품 보기 →', loading:'불러오는 중…', empty:'아직 등록된 기사가 없어요', error:'기사를 불러오지 못했어요' },
-  en: { page_h:'Press', page_sub:'Articles and features covering Shin Haedal.', press_link:'Read the article ↗', ex_link:'See exhibited works →', loading:'Loading…', empty:'No press coverage yet', error:'Could not load press coverage' }
+  ko: { page_h:'Press', page_sub:'신해달을 다룬 기사와 매체 소개.', press_link:'기사 원문 보기 ↗', ex_link:'전시 작품 보기 →', shop_link:'브랜드 샵 바로가기 ↗', loading:'불러오는 중…', empty:'아직 등록된 기사가 없어요', error:'기사를 불러오지 못했어요' },
+  en: { page_h:'Press', page_sub:'Articles and features covering Shin Haedal.', press_link:'Read the article ↗', ex_link:'See exhibited works →', shop_link:'Visit the brand shop ↗', loading:'Loading…', empty:'No press coverage yet', error:'Could not load press coverage' }
 };
 var LANG = 'ko';
 try{
@@ -156,6 +156,10 @@ function archiveImgUrl(v, size){
   return '';
 }
 var EXHIBITIONS = [];
+var BRAND_SHOP_URL = 'https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product';
+function matchBrandShop(p){
+  return /해달자개/.test(String(p.title||'')) ? BRAND_SHOP_URL : null;
+}
 function matchExhibition(p){
   var title = String(p.title||'');
   for(var i = 0; i < EXHIBITIONS.length; i++){
@@ -192,8 +196,11 @@ function renderPress(){
   feed.innerHTML = PRESS_ITEMS.map(function(p){
     p = Object.assign({}, p, { image: archiveImgUrl(p.image) });
     var img = p.image ? '<img src="' + esc(p.image) + '" alt="" loading="lazy">' : '';
-    var ex = matchExhibition(p);
-    var exLink = ex ? '<a class="press-link" href="../works/?ex=' + encodeURIComponent(ex.id) + '">' + esc(I18N[LANG].ex_link) + '</a>' : '';
+    var shop = matchBrandShop(p);
+    var ex = shop ? null : matchExhibition(p);
+    var exLink = shop
+      ? '<a class="press-link" href="' + esc(shop) + '" target="_blank" rel="noopener">' + esc(I18N[LANG].shop_link) + '</a>'
+      : (ex ? '<a class="press-link" href="../works/?ex=' + encodeURIComponent(ex.id) + '">' + esc(I18N[LANG].ex_link) + '</a>' : '');
     return '<article class="press-card">' +
       '<div class="press-media">' + img + '<span class="press-outlet-tag">' + esc(p.outlet) + '</span></div>' +
       '<div class="press-body">' +
