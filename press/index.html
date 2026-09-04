@@ -158,7 +158,7 @@ function loadPress(){
   fetch('../data/press.json')
     .then(function(res){ return res.json(); })
     .then(function(rows){
-      PRESS_ITEMS = (rows || []).slice().reverse(); // 최근 등록순(시트 하단이 최신)
+      PRESS_ITEMS = (rows || []).slice().sort(function(a, b){ return String(b.date||'').localeCompare(String(a.date||'')); }); // 최신 날짜순
       renderPress();
     })
     .catch(function(e){
