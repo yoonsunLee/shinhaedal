@@ -33,7 +33,9 @@
   .tile{
     display:block; width:100%; margin:0;
     cursor:pointer; border:none; background:none; padding:0; text-align:left;
+    transition:transform .3s ease;
   }
+  .tile:hover{transform:translateY(-3px);}
   .tile:focus-visible{outline:2px solid var(--gold); outline-offset:4px; border-radius:2px;}
   .tile-media{position:relative; aspect-ratio:1/1; overflow:hidden; border-radius:2px; background:var(--bg-2);}
   .tile-media img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .6s ease;}
@@ -48,6 +50,15 @@
     transition:opacity .5s ease, background-position 1.4s ease;
   }
   .tile:hover .tile-sheen{opacity:.22; background-position:0 0, 100% 60%;}
+  .tile-meta{
+    position:absolute; left:9px; bottom:9px; z-index:2;
+    font-family:'Space Mono',monospace; font-size:10.5px; letter-spacing:.3px;
+    color:var(--ivory); background:rgba(5,5,10,.6); padding:3px 8px; border-radius:20px;
+    opacity:0; transform:translateY(4px);
+    transition:opacity .3s ease, transform .3s ease;
+    pointer-events:none;
+  }
+  .tile:hover .tile-meta{opacity:1; transform:translateY(0);}
   .tile.loading{display:flex; align-items:center; justify-content:center; aspect-ratio:1/1; border-radius:2px; background:var(--bg-2); cursor:default;}
   .tile.loading span{font-family:'Space Mono',monospace; font-size:11px; color:var(--ivory-faint);}
   .tile-cap{padding-top:12px;}
@@ -337,8 +348,9 @@ function renderWorkTiles(rows){
     var img = r.thumb ? ASSET_BASE + r.thumb : '';
     var media = img ? '<img src="' + img.replace(/"/g,'&quot;') + '" alt="" loading="lazy" draggable="false">' : '';
     var title = primaryTitle(r);
+    var metaText = [r.id, r.year].filter(Boolean).join(' · ');
     return '<figure class="tile" data-idx="' + i + '" tabindex="0" role="button" aria-label="' + esc(title) + '">' +
-      '<div class="tile-media">' + media + '<div class="tile-sheen"></div></div>' +
+      '<div class="tile-media">' + media + '<div class="tile-sheen"></div>' + (metaText ? '<div class="tile-meta">' + esc(metaText) + '</div>' : '') + '</div>' +
       '<figcaption class="tile-cap"><span class="tile-title">' + esc(title) + '</span></figcaption>' +
       '</figure>';
   }).join('');
