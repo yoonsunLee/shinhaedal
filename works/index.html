@@ -143,6 +143,16 @@
   .wm-action-btn--gold{border-color:var(--gold-dim); color:var(--gold);}
   .wm-action-btn--gold:hover{border-color:var(--gold); color:var(--ivory); background:var(--gold-dim);}
 
+  .wm-series{border-top:1px solid var(--gold-dim); padding-top:14px;}
+  .wm-series-label{font-family:'Space Mono',monospace; font-size:11px; letter-spacing:1px; color:var(--ivory-faint); margin-bottom:10px; text-transform:uppercase;}
+  .wm-series-list{display:flex; gap:10px; flex-wrap:wrap;}
+  .wm-series-item{
+    display:block; width:64px; cursor:pointer; border:none; background:none; padding:0; text-align:left;
+  }
+  .wm-series-item img{width:64px; height:64px; object-fit:cover; border-radius:4px; display:block; transition:opacity .2s ease;}
+  .wm-series-item:hover img{opacity:.75;}
+  .wm-series-item span{display:block; font-size:10.5px; color:var(--ivory-faint); line-height:1.3; margin-top:4px;}
+
   .large-view-overlay{
     position:fixed; inset:0; z-index:90;
     background:#000;
@@ -267,6 +277,10 @@
         <button class="wm-action-btn" id="wmViewLarger" data-i="wm_view_larger">VIEW LARGER ⛶</button>
         <a class="wm-action-btn wm-action-btn--gold" id="wmAskAbout" data-i="wm_ask_about" href="#">ASK ABOUT THIS WORK →</a>
       </div>
+      <div class="wm-series" id="wmSeries" hidden>
+        <div class="wm-series-label" data-i="wm_series_label">시리즈 작품</div>
+        <div class="wm-series-list" id="wmSeriesList"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -289,10 +303,11 @@ var I18N = {
     filter_all:'전체 작품',
     filter_empty:'이 전시에는 등록된 작품이 없어요',
     wm_ex_label:'전시 이력',
-    wm_ex_more:'전시 이력 더보기 ({n})',
+    wm_ex_more:'전시 이력 더보기',
     wm_ex_collapse:'접기',
     wm_view_larger:'크게 보기 ⛶',
-    wm_ask_about:'이 작품에 대해 문의하기 →'
+    wm_ask_about:'이 작품에 대해 문의하기 →',
+    wm_series_label:'시리즈 작품'
   },
   en: {
     page_h:'Works',
@@ -304,10 +319,11 @@ var I18N = {
     filter_all:'All works',
     filter_empty:'No works registered for this exhibition',
     wm_ex_label:'Exhibitions',
-    wm_ex_more:'Show more ({n})',
+    wm_ex_more:'Show more',
     wm_ex_collapse:'Show less',
     wm_view_larger:'VIEW LARGER ⛶',
-    wm_ask_about:'ASK ABOUT THIS WORK →'
+    wm_ask_about:'ASK ABOUT THIS WORK →',
+    wm_series_label:'Series'
   }
 };
 var LANG = 'ko';
@@ -378,6 +394,24 @@ var ALL_WORKS = [];
 var VISIBLE_WORKS = [];
 var EXHIBITIONS = [];
 var DETAIL_CACHE = {};
+
+// 제목 패턴으로 시리즈 판별: "POV : 출근"처럼 콜론으로 구분되거나, "저작물B"처럼
+// 한글 바로 뒤에 알파벳 한 글자가 붙어 변주를 나타내는 제목만 시리즈로 묶는다.
+function seriesKey(title){
+  title = String(title||'').trim();
+  var colonMatch = title.match(/^(.+?)\s+:\s+/);
+  if(colonMatch) return colonMatch[1].trim();
+  var letterMatch = title.match(/[ㄱ-힝][A-Za-z]$/);
+  if(letterMatch) return title.slice(0, -1).trim();
+  return null;
+}
+function seriesSiblings(meta){
+  var key = seriesKey(meta.title);
+  if(!key) return [];
+  var group = ALL_WORKS.filter(function(w){ return seriesKey(w.title) === key; });
+  if(group.length < 2) return [];
+  return group.filter(function(w){ return w.id !== meta.id; });
+}
 
 function populateExFilter(){
   var select = document.getElementById('exFilter');
@@ -481,6 +515,22 @@ function renderWorkModal(){
   imgEl.alt = metaPrimary;
   document.getElementById('wmAskAbout').href = '../contact/?type=artwork&work=' + encodeURIComponent(meta.id);
 
+  var seriesWrap = document.getElementById('wmSeries');
+  var siblings = seriesSiblings(meta);
+  if(!siblings.length){
+    seriesWrap.hidden = true;
+  }else{
+    seriesWrap.hidden = false;
+    document.getElementById('wmSeriesList').innerHTML = siblings.map(function(s){
+      var sTitle = primaryTitle(s);
+      var sImg = s.thumb ? ASSET_BASE + s.thumb : '';
+      return '<button class="wm-series-item" type="button" data-work-id="' + esc(s.id) + '" aria-label="' + esc(sTitle) + '">' +
+        (sImg ? '<img src="' + sImg.replace(/"/g,'&quot;') + '" alt="" loading="lazy" draggable="false">' : '') +
+        '<span>' + esc(sTitle) + '</span>' +
+        '</button>';
+    }).join('');
+  }
+
   fetchDetail(meta.id).then(function(w){
     if(wmIndex !== requestIndex) return; // 그 사이 다른 작품으로 넘어갔으면 무시
 
@@ -513,7 +563,7 @@ function renderWorkModal(){
       if(lines.length > LIMIT){
         toggle.hidden = false;
         toggle.dataset.open = 'false';
-        toggle.textContent = I18N[LANG].wm_ex_more.replace('{n}', lines.length);
+        toggle.textContent = I18N[LANG].wm_ex_more;
       }else{
         toggle.hidden = true;
       }
@@ -563,6 +613,21 @@ function openWorkModal(idx){
   document.body.style.overflow = 'hidden';
   document.getElementById('wmClose').focus();
 }
+function openWorkById(id){
+  var idx = VISIBLE_WORKS.findIndex(function(r){ return r.id === id; });
+  if(idx < 0){
+    if(ALL_WORKS.findIndex(function(r){ return r.id === id; }) < 0) return;
+    applyExFilter('');
+    idx = VISIBLE_WORKS.findIndex(function(r){ return r.id === id; });
+    if(idx < 0) return;
+  }
+  setWorkIndex(idx, 'push');
+}
+document.getElementById('wmSeriesList').addEventListener('click', function(e){
+  var btn = e.target.closest('.wm-series-item');
+  if(!btn) return;
+  openWorkById(btn.dataset.workId);
+});
 function closeWorkModal(){
   wmModal.classList.remove('open');
   wmModal.setAttribute('aria-hidden', 'true');
@@ -601,11 +666,7 @@ document.getElementById('wmExToggle').onclick = function(){
   var isOpen = this.dataset.open === 'true';
   document.querySelectorAll('#wmExList .wm-ex-extra').forEach(function(li){ li.hidden = isOpen; });
   this.dataset.open = isOpen ? 'false' : 'true';
-  var meta = VISIBLE_WORKS[wmIndex];
-  var w = meta && DETAIL_CACHE[meta.id];
-  this.textContent = isOpen
-    ? I18N[LANG].wm_ex_more.replace('{n}', w ? exhibitionLines(w.exhibitions).length : 0)
-    : I18N[LANG].wm_ex_collapse;
+  this.textContent = isOpen ? I18N[LANG].wm_ex_more : I18N[LANG].wm_ex_collapse;
 };
 document.addEventListener('keydown', function(e){
   if(lvOverlay.classList.contains('open')){
