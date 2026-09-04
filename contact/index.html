@@ -120,9 +120,7 @@
 
 <div class="contact-hero">
   <h1>Contact</h1>
-  <p data-i="c_p1">제 작품과 전시, 협업에 관한 문의를 받고 있습니다.</p>
-  <p data-i="c_p2">작품 소장 문의, 전시 및 프로젝트 제안, 기업 협업과 라이선싱 등 아래의 내용을 통해 문의해 주세요.</p>
-  <p data-i="c_p3">상세 포트폴리오는 전시 및 협업 목적에 따라 요청 시 전달드립니다.</p>
+  <p data-i="c_p1">작품 소장, 전시 및 프로젝트, 기업·브랜드 협업과 IP 라이선싱에 관한 문의를 받고 있습니다.</p>
 </div>
 
 <section class="contact-section" id="inquiries">
@@ -132,7 +130,6 @@
     <div class="inquiry-item"><p class="label">Exhibition</p><p data-i="inq_exhibition">전시, 아트페어 및 갤러리 제안</p></div>
     <div class="inquiry-item"><p class="label">Collaboration</p><p data-i="inq_collab">기업 및 브랜드 협업, 프로젝트 제안</p></div>
     <div class="inquiry-item"><p class="label">Licensing</p><p data-i="inq_licensing">얼빵해달 IP 및 이미지 라이선싱 문의</p></div>
-    <div class="inquiry-item"><p class="label">Portfolio</p><p data-i="inq_portfolio">전시·협업 검토를 위한 포트폴리오 요청</p></div>
   </div>
 </section>
 
@@ -154,7 +151,6 @@
         <option value="Exhibition" data-i="opt_exhibition">Exhibition</option>
         <option value="Collaboration" data-i="opt_collaboration">Collaboration</option>
         <option value="Licensing" data-i="opt_licensing">Licensing</option>
-        <option value="Portfolio" data-i="opt_portfolio">Portfolio</option>
         <option value="Other" data-i="opt_other">Other</option>
       </select>
     </div>
@@ -199,19 +195,15 @@
 <script>
 var I18N = {
   ko: {
-    c_p1:'제 작품과 전시, 협업에 관한 문의를 받고 있습니다.',
-    c_p2:'작품 소장 문의, 전시 및 프로젝트 제안, 기업 협업과 라이선싱 등 아래의 내용을 통해 문의해 주세요.',
-    c_p3:'상세 포트폴리오는 전시 및 협업 목적에 따라 요청 시 전달드립니다.',
+    c_p1:'작품 소장, 전시 및 프로젝트, 기업·브랜드 협업과 IP 라이선싱에 관한 문의를 받고 있습니다.',
     inq_artwork:'작품 소장 및 작품 관련 문의',
     inq_exhibition:'전시, 아트페어 및 갤러리 제안',
     inq_collab:'기업 및 브랜드 협업, 프로젝트 제안',
     inq_licensing:'얼빵해달 IP 및 이미지 라이선싱 문의',
-    inq_portfolio:'전시·협업 검토를 위한 포트폴리오 요청',
     opt_artwork:'작품 소장',
     opt_exhibition:'전시',
     opt_collaboration:'협업',
     opt_licensing:'라이선싱',
-    opt_portfolio:'포트폴리오',
     opt_other:'기타',
     select_artwork:'작품 선택',
     opt_general_inquiry:'특정 작품 없이 일반 문의',
@@ -225,19 +217,15 @@ var I18N = {
     direct_note:'전시 및 협업 관련 자료는 문의 내용을 확인한 후 필요한 범위에서 전달드립니다.'
   },
   en: {
-    c_p1:'I welcome inquiries about my artwork, exhibitions, and collaborations.',
-    c_p2:'Please reach out below for artwork acquisition, exhibition or project proposals, corporate collaboration, and licensing.',
-    c_p3:'A detailed portfolio is available upon request, depending on the purpose of the exhibition or collaboration.',
+    c_p1:'For inquiries regarding artwork acquisition, exhibitions and projects, brand collaborations, and IP licensing.',
     inq_artwork:'Artwork acquisition and related inquiries',
     inq_exhibition:'Exhibition, art fair, and gallery proposals',
     inq_collab:'Corporate and brand collaboration, project proposals',
     inq_licensing:'Eolbbang Haedal IP and image licensing inquiries',
-    inq_portfolio:'Portfolio requests for exhibition/collaboration review',
     opt_artwork:'Artwork',
     opt_exhibition:'Exhibition',
     opt_collaboration:'Collaboration',
     opt_licensing:'Licensing',
-    opt_portfolio:'Portfolio',
     opt_other:'Other',
     select_artwork:'Select Artwork',
     opt_general_inquiry:'General artwork inquiry (no specific work)',
@@ -350,7 +338,7 @@ document.getElementById('cfType').addEventListener('change', updateArtworkUI);
 document.getElementById('cfArtworkSelect').addEventListener('change', function(){
   selectWork(this.value);
 });
-var TYPE_VALUES = ['Artwork','Exhibition','Collaboration','Licensing','Portfolio','Other'];
+var TYPE_VALUES = ['Artwork','Exhibition','Collaboration','Licensing','Other'];
 function initWorkInquiry(){
   var params = new URLSearchParams(location.search);
   var type = params.get('type');
