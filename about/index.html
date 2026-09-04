@@ -64,6 +64,11 @@
   .bio-list li{font-size:14px; color:var(--ivory-dim); position:relative; padding-left:16px;}
   .bio-list li::before{content:'—'; position:absolute; left:0; color:var(--ivory-faint);}
 
+  .ex-upcoming{
+    border:1px solid var(--gold-dim); border-radius:6px; padding:16px 18px; margin-bottom:26px;
+  }
+  .ex-upcoming-label{font-family:'Space Mono', monospace; font-size:11px; letter-spacing:1.5px; color:var(--gold); text-transform:uppercase; margin-bottom:8px;}
+  .ex-upcoming .ex-item{border-bottom:none; padding:2px 0;}
   .ex-year-group{margin-bottom:22px;}
   .ex-year-group:last-child{margin-bottom:0;}
   .ex-year{font-family:'Space Mono', monospace; font-size:13px; color:var(--gold); margin-bottom:10px; letter-spacing:1px;}
@@ -186,6 +191,8 @@ var I18N = {
     ex_loading:'불러오는 중…',
     ex_error:'전시 이력을 불러오지 못했어요.',
     ex_empty:'등록된 전시가 없습니다.',
+    ex_upcoming_solo:'예정된 개인전',
+    ex_upcoming:'예정된 전시',
     about_contact_blurb:'전시, 작품, 기업 협업 및 라이선싱에 관한 문의를 받고 있습니다.',
     about_contact_cta:'Contact 페이지로 이동 →'
   },
@@ -200,6 +207,8 @@ var I18N = {
     ex_loading:'Loading…',
     ex_error:'Could not load exhibitions.',
     ex_empty:'No exhibitions registered yet.',
+    ex_upcoming_solo:'Upcoming Solo Exhibition',
+    ex_upcoming:'Upcoming Exhibition',
     about_contact_blurb:'I welcome inquiries about exhibitions, artwork, corporate collaboration, and licensing.',
     about_contact_cta:'Go to Contact →'
   }
@@ -222,8 +231,29 @@ function loadExhibitions(){
       document.getElementById('exList').innerHTML = '<p class="ex-empty">' + I18N[LANG].ex_error + '</p>';
     });
 }
+function formatDateRange(start, end){
+  start = String(start||''); end = String(end||'');
+  if(!start) return '';
+  var s = start.replace(/-/g, '.');
+  if(!end || end === start) return s;
+  var sameMonth = start.slice(0,7) === end.slice(0,7);
+  var e = sameMonth ? end.slice(5).replace(/-/g, '.') : end.replace(/-/g, '.');
+  return s + ' – ' + e;
+}
 function renderExhibitions(rows){
-  var sorted = rows.slice().sort(function(a, b){ return String(b.start_date||'').localeCompare(String(a.start_date||'')); });
+  var today = new Date().toISOString().slice(0, 10);
+  var upcoming = rows.filter(function(r){ return String(r.start_date||'') > today; })
+    .sort(function(a, b){ return String(a.start_date||'').localeCompare(String(b.start_date||'')); });
+  var past = rows.filter(function(r){ return String(r.start_date||'') <= today; });
+
+  var upcomingHtml = upcoming.map(function(r){
+    var label = r.type === '개인전' ? I18N[LANG].ex_upcoming_solo : I18N[LANG].ex_upcoming;
+    return '<div class="ex-upcoming"><div class="ex-upcoming-label">' + esc(label) + '</div>' +
+      '<div class="ex-item"><span class="ex-title">' + esc(r.title) + '</span><span class="ex-venue">' + esc(r.venue) + '</span></div>' +
+      '<div class="ex-item"><span class="ex-title">' + esc(formatDateRange(r.start_date, r.end_date)) + '</span></div></div>';
+  }).join('');
+
+  var sorted = past.slice().sort(function(a, b){ return String(b.start_date||'').localeCompare(String(a.start_date||'')); });
   var personal = sorted.filter(function(r){ return r.type === '개인전'; });
   var rest = sorted.filter(function(r){ return r.type !== '개인전'; });
   var picked = [];
@@ -232,7 +262,7 @@ function renderExhibitions(rows){
   rest.forEach(function(r){ if(picked.length < LIMIT) picked.push(r); });
   picked.sort(function(a, b){ return String(b.start_date||'').localeCompare(String(a.start_date||'')); });
 
-  if(!picked.length){
+  if(!picked.length && !upcoming.length){
     document.getElementById('exList').innerHTML = '<p class="ex-empty">' + I18N[LANG].ex_empty + '</p>';
     return;
   }
@@ -242,7 +272,7 @@ function renderExhibitions(rows){
     (groups[y] = groups[y] || []).push(r);
   });
   var years = Object.keys(groups).sort(function(a, b){ return b.localeCompare(a); });
-  document.getElementById('exList').innerHTML = years.map(function(y){
+  document.getElementById('exList').innerHTML = upcomingHtml + years.map(function(y){
     return '<div class="ex-year-group"><div class="ex-year">' + esc(y) + '</div>' +
       groups[y].map(function(r){
         return '<div class="ex-item"><span class="ex-title">' + esc(r.title) + '</span><span class="ex-venue">' + esc(r.venue) + '</span></div>';
