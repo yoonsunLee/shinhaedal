@@ -41,8 +41,8 @@ nav{
 .logo{font-family:'Black Han Sans', sans-serif; font-size:20px; letter-spacing:1px; color:var(--ivory); text-decoration:none;}
 .nav-icons{display:flex; align-items:center; gap:16px; padding-top:2px;}
 .lang{display:flex; align-items:center; gap:5px;}
-.lang button{border:none; background:none; padding:0; cursor:pointer; color:var(--ivory-faint); font-family:'Space Mono',monospace; font-size:12px; font-weight:700; letter-spacing:.5px;}
-.lang button:hover{color:var(--ivory-dim);}
+.lang button{border:none; background:none; padding:11px 4px; margin:-11px -4px; cursor:pointer; color:var(--ivory-dim); font-family:'Space Mono',monospace; font-size:12px; font-weight:700; letter-spacing:.5px;}
+.lang button:hover{color:var(--ivory);}
 .lang button.on{color:var(--ivory);}
 .lang .lang-sep{color:var(--ivory-faint); font-family:'Space Mono',monospace; font-size:12px;}
 .nav-menu{display:flex; gap:24px; list-style:none; margin:0 8px 0 0; padding:0; align-items:center; font-family:'Space Mono',monospace; font-size:12px;}
@@ -54,9 +54,9 @@ nav{
 .nav-overlay.open{display:flex;}
 .overlay-close{position:absolute; top:22px; right:24px; font-size:20px;}
 .overlay-links{display:flex; flex-direction:column; gap:26px; text-align:center;}
-.overlay-links a, .overlay-links .soon{font-family:'Black Han Sans',sans-serif; font-size:26px; color:var(--ivory); text-decoration:none;}
+.overlay-links a, .overlay-links .soon{font-family:'Black Han Sans',sans-serif; font-size:26px; color:var(--ivory); text-decoration:none; padding:6px 0;}
 .overlay-links .soon{color:var(--ivory-faint);}
 .overlay-links .overlay-ig{font-family:'Space Mono',monospace; font-size:13px; color:var(--ivory-dim); margin-top:10px;}
-@media(max-width:720px){ .nav-menu{display:none;} .menu-btn{display:flex;} }
-.icon-btn{background:none; border:none; color:var(--ivory); cursor:pointer; display:flex; padding:4px; opacity:0.85;}
+@media(max-width:900px){ .nav-menu{display:none;} .menu-btn{display:flex;} }
+.icon-btn{background:none; border:none; color:var(--ivory); cursor:pointer; display:flex; align-items:center; justify-content:center; width:44px; height:44px; margin:-12px; opacity:0.85;}
 .icon-btn:hover{opacity:1;}

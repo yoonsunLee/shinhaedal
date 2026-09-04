@@ -157,11 +157,9 @@
     text-decoration:none; color:inherit;
     transition:transform .3s ease;
   }
-  .tile:hover{transform:translateY(-3px);}
   .tile:focus-visible{outline:2px solid var(--gold); outline-offset:4px; border-radius:2px;}
   .tile-media{position:relative; aspect-ratio:1/1; overflow:hidden; border-radius:2px; background:var(--bg-2);}
-  .tile-media img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .6s ease;}
-  .tile:hover .tile-media img{transform:scale(1.03);}
+  .tile-media img{width:100%; height:100%; object-fit:cover; display:block;}
   .tile-sheen{
     position:absolute; inset:0; opacity:0;
     background:
@@ -169,11 +167,16 @@
       linear-gradient(125deg,#ffb6d9,#9fe7ff,#c9b6ff,#ffd97a,#ffb6d9) 0 0/320% 320%;
     background-blend-mode:normal, screen;
     mix-blend-mode:screen;
-    transition:opacity .5s ease, background-position 1.4s ease;
   }
-  .tile:hover .tile-sheen{opacity:.22; background-position:0 0, 100% 60%;}
+  @media (hover:hover) and (pointer:fine){
+    .tile:hover{transform:translateY(-3px);}
+    .tile-media img{transition:transform .6s ease;}
+    .tile:hover .tile-media img{transform:scale(1.03);}
+    .tile-sheen{transition:opacity .5s ease, background-position 1.4s ease;}
+    .tile:hover .tile-sheen{opacity:.22; background-position:0 0, 100% 60%;}
+  }
   .tile.loading{display:flex; align-items:center; justify-content:center; aspect-ratio:1/1; border-radius:2px; background:var(--bg-2); cursor:default;}
-  .tile.loading span{font-family:'Space Mono',monospace; font-size:11px; color:var(--ivory-faint);}
+  .tile.loading span{font-family:'Space Mono',monospace; font-size:11px; color:var(--ivory-dim);}
   .tile-cap{padding-top:12px;}
   .tile-title{font-size:13px; color:var(--ivory-dim); font-weight:500; line-height:1.4;}
 
@@ -186,7 +189,7 @@
   }
   .works-more a:hover{color:var(--ivory); border-color:var(--ivory-dim);}
 
-  @media(max-width:720px){
+  @media(max-width:900px){
     .work-grid{grid-template-columns:repeat(2, minmax(0, 1fr)); gap:26px 14px;}
   }
 
@@ -239,11 +242,11 @@
     display:flex; flex-direction:column; gap:16px;
   }
   .wm-title-primary{font-family:'Black Han Sans',sans-serif; font-weight:400; font-size:22px; color:var(--ivory); line-height:1.3;}
-  .wm-title-secondary{font-family:'Space Mono',monospace; font-size:12px; color:var(--ivory-faint); margin-top:5px;}
+  .wm-title-secondary{font-family:'Space Mono',monospace; font-size:12px; color:var(--ivory-dim); margin-top:5px;}
   .wm-spec{font-family:'Space Mono',monospace; font-size:11.5px; color:var(--ivory-dim); letter-spacing:.3px;}
   .wm-caption{font-size:14px; line-height:1.7; color:var(--ivory-dim); margin:0; white-space:pre-line;}
   .wm-exhibitions{border-top:1px solid var(--gold-dim); padding-top:14px;}
-  .wm-ex-label{font-family:'Space Mono',monospace; font-size:11px; letter-spacing:1px; color:var(--ivory-faint); margin-bottom:8px; text-transform:uppercase;}
+  .wm-ex-label{font-family:'Space Mono',monospace; font-size:11px; letter-spacing:1px; color:var(--ivory-dim); margin-bottom:8px; text-transform:uppercase;}
   .wm-ex-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px;}
   .wm-ex-list li{font-size:12.5px; color:var(--ivory-dim); line-height:1.5;}
   .wm-ex-toggle{margin-top:10px; background:none; border:none; padding:0; color:var(--gold); font-family:'Space Mono',monospace; font-size:11.5px; cursor:pointer; text-decoration:underline; text-underline-offset:3px;}
@@ -320,7 +323,7 @@
     <a class="icon-btn" aria-label="인스타그램" href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.4"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor"/></svg>
     </a>
-    <button class="icon-btn menu-btn" id="btnMenu" aria-label="메뉴">
+    <button class="icon-btn menu-btn" id="btnMenu" aria-label="메뉴" aria-expanded="false">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 6H17M3 10H17M3 14H17" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
     </button>
   </div>
