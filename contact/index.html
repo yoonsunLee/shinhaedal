@@ -289,10 +289,26 @@ function populateArtworkSelect(){
     sel.value = current;
   });
 }
+/* 자동으로 채워 넣은 제목만 다음 선택으로 교체/삭제한다 — 사용자가 직접 고친 subject는 건드리지 않음 */
+var lastAutoSubject = '';
+function applyAutoSubject(text){
+  var subjectEl = document.getElementById('cfSubject');
+  if(!subjectEl) return;
+  if(subjectEl.value.trim() === '' || subjectEl.value === lastAutoSubject){
+    subjectEl.value = text;
+    lastAutoSubject = text;
+  }
+}
+function clearAutoSubject(){
+  var subjectEl = document.getElementById('cfSubject');
+  if(subjectEl && subjectEl.value === lastAutoSubject) subjectEl.value = '';
+  lastAutoSubject = '';
+}
 function selectWork(workId){
   if(!workId){
     CURRENT_WORK = null;
     renderWorkInquiryCard();
+    clearAutoSubject();
     return Promise.resolve();
   }
   return fetch('../data/works/' + encodeURIComponent(workId) + '.json')
@@ -308,10 +324,7 @@ function selectWork(workId){
       var entry = WORKS_INDEX && WORKS_INDEX.find(function(r){ return r.id === workId; });
       if(entry && entry.thumb) document.getElementById('wicThumb').src = '../' + entry.thumb;
       renderWorkInquiryCard();
-      var subjectEl = document.getElementById('cfSubject');
-      if(subjectEl && !subjectEl.value.trim()){
-        subjectEl.value = LANG === 'en' ? (CURRENT_WORK.title_en || CURRENT_WORK.title_ko) : (CURRENT_WORK.title_ko || CURRENT_WORK.title_en);
-      }
+      applyAutoSubject(LANG === 'en' ? (CURRENT_WORK.title_en || CURRENT_WORK.title_ko) : (CURRENT_WORK.title_ko || CURRENT_WORK.title_en));
     })
     .catch(function(e){ console.error('작품 정보를 불러오지 못했습니다:', e); });
 }
@@ -327,6 +340,7 @@ function updateArtworkUI(){
     selectRow.hidden = true;
     CURRENT_WORK = null;
     renderWorkInquiryCard();
+    clearAutoSubject();
   }
 }
 document.getElementById('cfType').addEventListener('change', updateArtworkUI);
@@ -392,6 +406,7 @@ function applyLang(l, opts){
   document.getElementById('langEn').classList.toggle('on', l==='en');
   renderWorkInquiryCard();
   if(!document.getElementById('artworkSelectRow').hidden) populateArtworkSelect();
+  if(CURRENT_WORK) applyAutoSubject(l === 'en' ? (CURRENT_WORK.title_en || CURRENT_WORK.title_ko) : (CURRENT_WORK.title_ko || CURRENT_WORK.title_en));
 }
 document.getElementById('langKo').onclick = function(){ applyLang('ko'); };
 document.getElementById('langEn').onclick = function(){ applyLang('en'); };
