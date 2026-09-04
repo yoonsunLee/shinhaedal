@@ -82,10 +82,11 @@
   <div class="nav-icons">
     <ul class="nav-menu">
       <li><a href="../">Home</a></li>
-      <li><a href="../works/">Works</a></li>
       <li><a href="./" class="on">About</a></li>
-      <li><a href="../haedal/">Haedal</a></li>
+      <li><a href="../works/">Works</a></li>
+      <li><a href="../haedal/">IP</a></li>
       <li><a href="../press/">Press</a></li>
+      <li><a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop ↗</a></li>
       <li><a href="../contact/">Contact</a></li>
     </ul>
     <div class="lang" role="group" aria-label="Language">
@@ -104,10 +105,11 @@
     <button class="icon-btn overlay-close" id="btnMenuClose" aria-label="닫기">✕</button>
     <nav class="overlay-links">
       <a href="../">Home</a>
-      <a href="../works/">Works</a>
       <a href="./">About</a>
-      <a href="../haedal/">Haedal</a>
+      <a href="../works/">Works</a>
+      <a href="../haedal/">IP</a>
       <a href="../press/">Press</a>
+      <a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop ↗</a>
       <a href="../contact/">Contact</a>
       <a href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener" class="overlay-ig">Instagram ↗</a>
     </nav>
@@ -200,10 +202,14 @@ var I18N = {
   }
 };
 var LANG = 'ko';
-try{ if(localStorage.getItem('site_lang')==='en') LANG='en'; }catch(e){}
+try{
+  var urlLang = new URLSearchParams(location.search).get('lang');
+  if(urlLang === 'en' || urlLang === 'ko') LANG = urlLang;
+  else if(localStorage.getItem('site_lang')==='en') LANG = 'en';
+}catch(e){}
 
 function loadExhibitions(){
-  fetch('../data/exhibitions.json?t=' + Date.now())
+  fetch('../data/exhibitions.json')
     .then(function(res){ return res.json(); })
     .then(function(rows){
       renderExhibitions(rows || []);
@@ -242,9 +248,17 @@ function renderExhibitions(rows){
 }
 loadExhibitions();
 
-function applyLang(l){
+function applyLang(l, opts){
+  opts = opts || {};
   LANG = l;
   try{ localStorage.setItem('site_lang', l); }catch(e){}
+  if(!opts.skipUrl){
+    try{
+      var url = new URL(location.href);
+      url.searchParams.set('lang', l);
+      history.replaceState(null, '', url);
+    }catch(e){}
+  }
   document.documentElement.lang = l;
   document.querySelectorAll('[data-i]').forEach(function(el){
     var v = I18N[l][el.dataset.i];
@@ -255,7 +269,7 @@ function applyLang(l){
 }
 document.getElementById('langKo').onclick = function(){ applyLang('ko'); };
 document.getElementById('langEn').onclick = function(){ applyLang('en'); };
-if(LANG!=='ko') applyLang(LANG);
+if(LANG!=='ko') applyLang(LANG, {skipUrl:true});
 </script>
 
 <script src="../assets/site.js"></script>

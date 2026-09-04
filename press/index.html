@@ -20,10 +20,23 @@
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/site.css">
 <style>
-  /* page head */
-  .page-head{max-width:900px; margin:0 auto; padding:36px 32px 10px;}
-  .page-head h1{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:clamp(30px,4.4vw,46px); margin:0;}
-  .page-head p{font-family:'Space Mono', monospace; font-size:12px; color:var(--ivory-faint); margin:10px 0 0;}
+  /* press hero */
+  .press-hero{position:relative; overflow:hidden; min-height:46vh; display:flex; align-items:flex-end;}
+  .press-hero-bg{
+    position:absolute; inset:0; z-index:0;
+    background-image:url('assets/press-hero.webp');
+    background-size:cover; background-position:center 38%;
+    animation:pressHeroZoom 22s ease-in-out infinite alternate;
+  }
+  @keyframes pressHeroZoom{ from{transform:scale(1);} to{transform:scale(1.02);} }
+  .press-hero-overlay{
+    position:absolute; inset:0; z-index:1;
+    background:linear-gradient(to bottom, rgba(5,5,10,.35) 0%, rgba(5,5,10,.55) 55%, rgba(5,5,10,.92) 100%);
+  }
+  .press-hero-inner{position:relative; z-index:2; max-width:900px; margin:0 auto; width:100%; padding:0 32px 40px;}
+  .press-hero-inner h1{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:clamp(30px,4.4vw,46px); margin:0; color:var(--ivory);}
+  .press-hero-inner p{font-family:'Space Mono', monospace; font-size:12px; color:var(--ivory-faint); margin:10px 0 0;}
+  @media(max-width:720px){ .press-hero{min-height:38vh;} }
 
   /* press feed */
   .press-feed{max-width:900px; margin:0 auto; padding:50px 32px 130px; display:flex; flex-direction:column; gap:96px;}
@@ -64,10 +77,11 @@
   <div class="nav-icons">
     <ul class="nav-menu">
       <li><a href="../">Home</a></li>
-      <li><a href="../works/">Works</a></li>
       <li><a href="../about/">About</a></li>
-      <li><a href="../haedal/">Haedal</a></li>
+      <li><a href="../works/">Works</a></li>
+      <li><a href="../haedal/">IP</a></li>
       <li><a href="./" class="on">Press</a></li>
+      <li><a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop ↗</a></li>
       <li><a href="../contact/">Contact</a></li>
     </ul>
     <div class="lang" role="group" aria-label="Language">
@@ -86,19 +100,24 @@
     <button class="icon-btn overlay-close" id="btnMenuClose" aria-label="닫기">✕</button>
     <nav class="overlay-links">
       <a href="../">Home</a>
-      <a href="../works/">Works</a>
       <a href="../about/">About</a>
-      <a href="../haedal/">Haedal</a>
+      <a href="../works/">Works</a>
+      <a href="../haedal/">IP</a>
       <a href="./">Press</a>
+      <a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop ↗</a>
       <a href="../contact/">Contact</a>
       <a href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener" class="overlay-ig">Instagram ↗</a>
     </nav>
   </div>
 </nav>
 
-<div class="page-head">
-  <h1 data-i="page_h">Press</h1>
-  <p data-i="page_sub">신해달을 다룬 기사와 매체 소개.</p>
+<div class="press-hero">
+  <div class="press-hero-bg" aria-hidden="true"></div>
+  <div class="press-hero-overlay" aria-hidden="true"></div>
+  <div class="press-hero-inner">
+    <h1 data-i="page_h">Press</h1>
+    <p data-i="page_sub">신해달을 다룬 기사와 매체 소개.</p>
+  </div>
 </div>
 
 <section class="press-feed" id="pressFeed"><p class="press-empty" data-i="loading">불러오는 중…</p></section>
@@ -111,7 +130,11 @@ var I18N = {
   en: { page_h:'Press', page_sub:'Articles and features covering Shin Haedal.', press_link:'Read the article ↗', loading:'Loading…', empty:'No press coverage yet', error:'Could not load press coverage' }
 };
 var LANG = 'ko';
-try{ if(localStorage.getItem('site_lang')==='en') LANG='en'; }catch(e){}
+try{
+  var urlLang = new URLSearchParams(location.search).get('lang');
+  if(urlLang === 'en' || urlLang === 'ko') LANG = urlLang;
+  else if(localStorage.getItem('site_lang')==='en') LANG = 'en';
+}catch(e){}
 
 function esc(s){
   return String(s==null?'':s).replace(/[&<>"']/g, function(c){
@@ -129,7 +152,7 @@ function archiveImgUrl(v, size){
   return '';
 }
 function loadPress(){
-  fetch('../data/press.json?t=' + Date.now())
+  fetch('../data/press.json')
     .then(function(res){ return res.json(); })
     .then(function(rows){
       PRESS_ITEMS = (rows || []).slice().reverse(); // 최근 등록순(시트 하단이 최신)
@@ -165,9 +188,17 @@ function renderPress(){
     '</article>';
   }).join('');
 }
-function applyLang(l){
+function applyLang(l, opts){
+  opts = opts || {};
   LANG = l;
   try{ localStorage.setItem('site_lang', l); }catch(e){}
+  if(!opts.skipUrl){
+    try{
+      var url = new URL(location.href);
+      url.searchParams.set('lang', l);
+      history.replaceState(null, '', url);
+    }catch(e){}
+  }
   document.documentElement.lang = l;
   document.querySelectorAll('[data-i]').forEach(function(el){
     var v = I18N[l][el.dataset.i];
@@ -180,7 +211,7 @@ function applyLang(l){
 document.getElementById('langKo').onclick = function(){ applyLang('ko'); };
 document.getElementById('langEn').onclick = function(){ applyLang('en'); };
 loadPress();
-if(LANG!=='ko') applyLang(LANG);
+if(LANG!=='ko') applyLang(LANG, {skipUrl:true});
 </script>
 
 <script src="../assets/site.js"></script>

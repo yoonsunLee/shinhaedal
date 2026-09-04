@@ -115,6 +115,38 @@
   .statement-section .body p{font-size:15px; line-height:1.9; color:var(--ivory-dim); max-width:640px; margin:0 0 22px; font-weight:300;}
   .statement-section .body p:last-child{margin-bottom:0;}
 
+  /* IP teaser */
+  .ip-teaser-wrap{max-width:1180px; margin:0 auto; padding:0 32px 120px;}
+  .ip-teaser{
+    position:relative; display:block; overflow:hidden; border-radius:8px;
+    aspect-ratio:21/9; text-decoration:none; isolation:isolate;
+    transition:transform .35s ease, box-shadow .35s ease;
+  }
+  .ip-teaser:hover{transform:translateY(-3px); box-shadow:0 20px 50px rgba(0,0,0,.35);}
+  .ip-teaser:focus-visible{outline:2px solid var(--gold); outline-offset:4px;}
+  .ip-teaser-bg{
+    position:absolute; inset:0; background-size:cover; background-position:center 22%;
+    transition:transform 1.2s ease;
+  }
+  .ip-teaser:hover .ip-teaser-bg{transform:scale(1.03);}
+  .ip-teaser-overlay{
+    position:absolute; inset:0;
+    background:linear-gradient(100deg, rgba(5,5,10,.92) 0%, rgba(5,5,10,.6) 42%, rgba(5,5,10,.15) 100%);
+  }
+  .ip-teaser-body{
+    position:relative; z-index:1; height:100%; max-width:480px;
+    display:flex; flex-direction:column; justify-content:center; gap:10px;
+    padding:0 6%;
+  }
+  .ip-teaser-label{font-family:'Space Mono',monospace; font-size:11px; letter-spacing:2px; color:var(--ivory-faint); text-transform:uppercase; margin:0;}
+  .ip-teaser-lede{font-family:'Black Han Sans',sans-serif; font-weight:400; font-size:clamp(20px,2.6vw,28px); color:var(--ivory); line-height:1.4; margin:0;}
+  .ip-teaser-cta{font-family:'Space Mono',monospace; font-size:12px; letter-spacing:1px; color:var(--gold); transition:color .2s ease;}
+  .ip-teaser:hover .ip-teaser-cta{color:var(--ivory);}
+  @media(max-width:720px){
+    .ip-teaser{aspect-ratio:4/5;}
+    .ip-teaser-body{max-width:none; padding:0 24px;}
+  }
+
   .work-grid{display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:34px 14px;}
   .tile{
     display:block; width:100%; margin:0;
@@ -267,10 +299,11 @@
   <div class="nav-icons">
     <ul class="nav-menu">
       <li><a href="./" class="on">Home</a></li>
-      <li><a href="works/">Works</a></li>
       <li><a href="about/">About</a></li>
-      <li><a href="haedal/">Haedal</a></li>
+      <li><a href="works/">Works</a></li>
+      <li><a href="haedal/">IP</a></li>
       <li><a href="press/">Press</a></li>
+      <li><a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop ↗</a></li>
       <li><a href="contact/">Contact</a></li>
     </ul>
     <div class="lang" role="group" aria-label="Language">
@@ -289,10 +322,11 @@
     <button class="icon-btn overlay-close" id="btnMenuClose" aria-label="닫기">✕</button>
     <nav class="overlay-links">
       <a href="./">Home</a>
-      <a href="works/">Works</a>
       <a href="about/">About</a>
-      <a href="haedal/">Haedal</a>
+      <a href="works/">Works</a>
+      <a href="haedal/">IP</a>
       <a href="press/">Press</a>
+      <a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop ↗</a>
       <a href="contact/">Contact</a>
       <a href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener" class="overlay-ig">Instagram ↗</a>
     </nav>
@@ -317,9 +351,9 @@
 <section class="grid-section" id="works">
   <div class="grid-head-block">
     <div class="grid-head">
-      <h2>Recent works</h2>
+      <h2 id="gridTitle">Recent works</h2>
     </div>
-    <p class="grid-sub" data-i="grid_sub">최근의 작업을 소개합니다.</p>
+    <p class="grid-sub" id="gridSub" data-i="grid_sub">최근의 작업을 소개합니다.</p>
   </div>
   <div class="work-grid" id="workGrid">
     <div class="tile loading"><span data-i="loading">불러오는 중…</span></div>
@@ -340,6 +374,18 @@
     <p>어렵게 느껴질 수 있는 법과 사회의 이야기에 조금 더 쉽게 들어와, 작품 앞에서는 오래 머물 수 있기를 바랍니다.</p>
   </div>
 </section>
+
+<div class="ip-teaser-wrap">
+  <a class="ip-teaser" href="haedal/" aria-label="Explore the Haedal IP world">
+    <div class="ip-teaser-bg" style="background-image:url('haedal/assets/profile_scene.jpg')"></div>
+    <div class="ip-teaser-overlay"></div>
+    <div class="ip-teaser-body">
+      <p class="ip-teaser-label" data-i="ip_teaser_label">MEET HAEDAL</p>
+      <p class="ip-teaser-lede" data-i="ip_teaser_lede">신해달의 페르소나, 조개배달부 얼빵해달.</p>
+      <span class="ip-teaser-cta" data-i="ip_teaser_cta">세계관 보기 →</span>
+    </div>
+  </a>
+</div>
 
 <div class="work-modal-overlay" id="workModal" role="dialog" aria-modal="true" aria-hidden="true">
   <div class="work-modal">
@@ -391,6 +437,9 @@ var I18N = {
     wm_ex_collapse:'접기',
     wm_view_larger:'크게 보기 ⛶',
     wm_ask_about:'이 작품에 대해 문의하기 →',
+    ip_teaser_label:'MEET HAEDAL',
+    ip_teaser_lede:'신해달의 페르소나, 조개배달부 얼빵해달.',
+    ip_teaser_cta:'세계관 보기 →',
     stmt_lede:'독해하고, 해석하고, 번역하는 것.<br>저는 법을 읽고 의미를 찾아, 그것을 나전칠기의 언어로 옮깁니다.',
     stmt_body:'<p>제 작업은 법과 사회의 규범 안에서 살아가는 개인에 대한 이야기입니다.</p>'
       + '<p>저에게 법은 차갑고 어려운 규칙에 머무는 것이 아니라, 사람들이 함께 살아가기 위해 만든 하나의 언어이자 사회의 질서입니다. 우리는 그 안에서 같은 규칙을 마주하지만, 각자 다른 방식으로 읽고 받아들이며 살아갑니다.</p>'
@@ -411,6 +460,9 @@ var I18N = {
     wm_ex_collapse:'Show less',
     wm_view_larger:'VIEW LARGER ⛶',
     wm_ask_about:'ASK ABOUT THIS WORK →',
+    ip_teaser_label:'MEET HAEDAL',
+    ip_teaser_lede:"Shin Haedal's persona, Spaced-out Sea Otter the shell courier.",
+    ip_teaser_cta:'EXPLORE THE IP WORLD →',
     stmt_lede:'To read, interpret, translate.<br>I read the law, search for its meaning, and carry it into the language of mother-of-pearl lacquer.',
     stmt_body:'<p>My work is about the individual living within the norms of law and society.</p>'
       + '<p>To me, law isn\'t just a cold, difficult set of rules — it\'s a language and an order people created so they could live together. We all face the same rules, yet each of us reads and accepts them in our own way.</p>'
@@ -420,10 +472,22 @@ var I18N = {
   }
 };
 var LANG = 'ko';
-try{ if(localStorage.getItem('site_lang')==='en') LANG='en'; }catch(e){}
-function applyLang(l){
+try{
+  var urlLang = new URLSearchParams(location.search).get('lang');
+  if(urlLang === 'en' || urlLang === 'ko') LANG = urlLang;
+  else if(localStorage.getItem('site_lang')==='en') LANG = 'en';
+}catch(e){}
+function applyLang(l, opts){
+  opts = opts || {};
   LANG = l;
   try{ localStorage.setItem('site_lang', l); }catch(e){}
+  if(!opts.skipUrl){
+    try{
+      var url = new URL(location.href);
+      url.searchParams.set('lang', l);
+      history.replaceState(null, '', url);
+    }catch(e){}
+  }
   document.documentElement.lang = l;
   document.querySelectorAll('[data-i]').forEach(function(el){
     var v = I18N[l][el.dataset.i];
@@ -431,12 +495,12 @@ function applyLang(l){
   });
   document.getElementById('langKo').classList.toggle('on', l==='ko');
   document.getElementById('langEn').classList.toggle('on', l==='en');
-  if(typeof renderWorkTiles==='function' && typeof ALL_WORKS!=='undefined' && ALL_WORKS.length) renderWorkTiles(ALL_WORKS.slice(0, 6));
+  if(typeof renderHomeGrid==='function' && typeof ALL_WORKS!=='undefined' && ALL_WORKS.length) renderHomeGrid();
   if(typeof renderWorkModal==='function' && document.getElementById('workModal').classList.contains('open')) renderWorkModal();
 }
 document.getElementById('langKo').onclick = function(){ applyLang('ko'); };
 document.getElementById('langEn').onclick = function(){ applyLang('en'); };
-if(LANG!=='ko') applyLang(LANG);
+if(LANG!=='ko') applyLang(LANG, {skipUrl:true});
 </script>
 
 <script>
@@ -471,14 +535,62 @@ function renderWorkTiles(rows){
   }).join('');
 }
 var ALL_WORKS = [];
+var HOME_LIST = [];
 var DETAIL_CACHE = {};
+var HOME_STATE = { mode:'recent', exhibition:null, works:[] };
+
+function formatDateRange(start, end){
+  function fmt(d){ return String(d||'').replace(/-/g,'.'); }
+  return fmt(start) + ' – ' + fmt(end);
+}
+function pickActiveExhibition(list){
+  var today = new Date().toISOString().slice(0,10);
+  for(var i=0;i<list.length;i++){
+    var ex = list[i];
+    if(ex.start_date && ex.end_date && today >= ex.start_date && today <= ex.end_date) return ex;
+  }
+  return null;
+}
+function renderHomeGrid(){
+  var titleEl = document.getElementById('gridTitle');
+  var subEl = document.getElementById('gridSub');
+  if(HOME_STATE.mode === 'now' && HOME_STATE.exhibition){
+    var ex = HOME_STATE.exhibition;
+    titleEl.textContent = 'Now on View';
+    subEl.textContent = ex.title + ' · ' + ex.venue + ' · ' + formatDateRange(ex.start_date, ex.end_date);
+    HOME_LIST = HOME_STATE.works;
+  }else{
+    titleEl.textContent = LANG === 'en' ? 'Recent Works' : 'Recent works';
+    subEl.textContent = I18N[LANG].grid_sub;
+    HOME_LIST = ALL_WORKS.slice(0, 6);
+  }
+  renderWorkTiles(HOME_LIST);
+}
+function loadExhibitionAndRender(){
+  fetch(DATA_BASE + 'exhibitions.json')
+    .then(function(res){ return res.json(); })
+    .then(function(list){
+      var ex = pickActiveExhibition(list || []);
+      if(ex){
+        var ids = String(ex.work_nos||'').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+        var works = ids.map(function(id){ return ALL_WORKS.filter(function(w){ return w.id===id; })[0]; }).filter(Boolean);
+        if(works.length){
+          HOME_STATE.mode = 'now';
+          HOME_STATE.exhibition = ex;
+          HOME_STATE.works = works;
+        }
+      }
+    })
+    .catch(function(e){ console.error('전시 정보를 불러오지 못했습니다:', e); })
+    .then(renderHomeGrid);
+}
 function loadRecentWorks(){
-  fetch(DATA_BASE + 'works-index.json?t=' + Date.now())
+  fetch(DATA_BASE + 'works-index.json')
     .then(function(res){ return res.json(); })
     .then(function(rows){
       ALL_WORKS = rows || [];
-      renderWorkTiles(ALL_WORKS.slice(0, 6));
       if(ALL_WORKS.length > 6) document.getElementById('btnMoreWorks').hidden = false;
+      loadExhibitionAndRender();
     })
     .catch(function(e){
       console.error('작품 목록을 불러오지 못했습니다:', e);
@@ -517,12 +629,12 @@ function exhibitionLines(str){
 }
 function fetchDetail(id){
   if(DETAIL_CACHE[id]) return Promise.resolve(DETAIL_CACHE[id]);
-  return fetch(DATA_BASE + 'works/' + encodeURIComponent(id) + '.json?t=' + Date.now())
+  return fetch(DATA_BASE + 'works/' + encodeURIComponent(id) + '.json')
     .then(function(res){ return res.json(); })
     .then(function(d){ DETAIL_CACHE[id] = d; return d; });
 }
 function renderWorkModal(){
-  var meta = ALL_WORKS[wmIndex];
+  var meta = HOME_LIST[wmIndex];
   if(!meta) return;
   var requestIndex = wmIndex;
 
@@ -599,7 +711,7 @@ function trapFocus(e, container){
   }
 }
 function openWorkModal(idx){
-  if(!ALL_WORKS[idx]) return;
+  if(!HOME_LIST[idx]) return;
   wmLastFocused = document.activeElement;
   wmIndex = idx;
   renderWorkModal();
@@ -615,8 +727,8 @@ function closeWorkModal(){
   if(wmLastFocused){ wmLastFocused.focus(); wmLastFocused = null; }
 }
 function stepWorkModal(delta){
-  if(!ALL_WORKS.length) return;
-  wmIndex = (wmIndex + delta + ALL_WORKS.length) % ALL_WORKS.length;
+  if(!HOME_LIST.length) return;
+  wmIndex = (wmIndex + delta + HOME_LIST.length) % HOME_LIST.length;
   renderWorkModal();
 }
 document.getElementById('wmClose').onclick = closeWorkModal;
@@ -627,7 +739,7 @@ document.getElementById('wmExToggle').onclick = function(){
   var isOpen = this.dataset.open === 'true';
   document.querySelectorAll('#wmExList .wm-ex-extra').forEach(function(li){ li.hidden = isOpen; });
   this.dataset.open = isOpen ? 'false' : 'true';
-  var meta = ALL_WORKS[wmIndex];
+  var meta = HOME_LIST[wmIndex];
   var w = meta && DETAIL_CACHE[meta.id];
   this.textContent = isOpen
     ? I18N[LANG].wm_ex_more.replace('{n}', w ? exhibitionLines(w.exhibitions).length : 0)
@@ -651,7 +763,7 @@ var lvOverlay = document.getElementById('largeView');
 var lvImg = document.getElementById('lvImg');
 var lvLastFocused = null;
 document.getElementById('wmViewLarger').onclick = function(){
-  var meta = ALL_WORKS[wmIndex];
+  var meta = HOME_LIST[wmIndex];
   var w = meta && DETAIL_CACHE[meta.id];
   var src = w && w.images && (w.images.large || w.images.detail);
   if(!src) return;
