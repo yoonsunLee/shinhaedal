@@ -179,8 +179,9 @@ function renderPress(){
   }
   feed.innerHTML = PRESS_ITEMS.map(function(p){
     p = Object.assign({}, p, { image: archiveImgUrl(p.image) });
+    var img = p.image ? '<img src="' + esc(p.image) + '" alt="" loading="lazy">' : '';
     return '<article class="press-card">' +
-      '<div class="press-media"><img src="' + esc(p.image) + '" alt="" loading="lazy"><span class="press-outlet-tag">' + esc(p.outlet) + '</span></div>' +
+      '<div class="press-media">' + img + '<span class="press-outlet-tag">' + esc(p.outlet) + '</span></div>' +
       '<div class="press-body">' +
         '<div class="press-mark" aria-hidden="true">“</div>' +
         '<p class="press-quote">' + esc(p.quote) + '</p>' +
