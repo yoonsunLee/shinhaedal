@@ -224,8 +224,9 @@ function renderExhibitions(rows){
   var personal = sorted.filter(function(r){ return r.type === '개인전'; });
   var rest = sorted.filter(function(r){ return r.type !== '개인전'; });
   var picked = [];
-  personal.forEach(function(r){ if(picked.length < 5) picked.push(r); });
-  rest.forEach(function(r){ if(picked.length < 5) picked.push(r); });
+  var LIMIT = 10;
+  personal.forEach(function(r){ if(picked.length < LIMIT) picked.push(r); });
+  rest.forEach(function(r){ if(picked.length < LIMIT) picked.push(r); });
   picked.sort(function(a, b){ return String(b.start_date||'').localeCompare(String(a.start_date||'')); });
 
   if(!picked.length){
