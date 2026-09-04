@@ -1,37 +1,62 @@
 # shinhaedal.art — 홈페이지
 
 신해달 작가 공식 홈페이지 (정적 사이트, GitHub Pages).
+현재 배포 주소: https://yoonsunlee.github.io/shinhaedal/ (커스텀 도메인 연결 전)
+
+## 아키텍처
+
+```
+해달아카이브 (Google Sheet + Apps Script, 별도 repo: Haedalarchive)
+        │  관리자 토큰으로 전체 데이터 조회
+        ▼
+scripts/publish.py  ── 공개 whitelist만 추림, 이미지 3단계 WebP 생성
+        │
+        ▼
+data/*.json, assets/works/*/  (이 repo에 커밋됨)
+        │
+        ▼
+Home / Works / About / Press 등의 페이지가 이 정적 파일만 fetch
+```
+
+브라우저는 아카이브 API(Apps Script)를 직접 호출하지 않는다 — 전부 이 repo 안의
+정적 JSON/이미지만 읽는다. 가격·판매여부·소장자 등 내부 필드는 `publish.py`의
+whitelist 단계에서 아예 걸러지고, 애초에 이 repo로 넘어오지 않는다.
+
+Publish는 `.github/workflows/publish.yml`이 실행한다. 트리거는 세 가지:
+- 해달아카이브 admin 패널의 "🚀 홈페이지에 반영" 버튼 (`repository_dispatch`)
+- Actions 탭에서 수동 실행 (`workflow_dispatch`)
+- 매일 자정(UTC) 자동 실행 (`schedule`)
+
+작품 수가 0건이거나 급감하면 publish 자체가 중단되고 기존 파일이 유지된다
+(`scripts/publish.py`의 `validate_works()`). 전시/Press 데이터도 API 호출이
+실패하면 빈 값으로 덮어쓰지 않고 마지막 정상본을 유지한다.
 
 ## 구조
 ```
-index.html            홈 (히어로 + Recent works — 아카이브 실시간 연동)
-haedal/               얼빵해달 IP 세계관 페이지 (KO/EN)
-haedal/assets/        Haedal 페이지 디자인 에셋
-.github/workflows/    주 1회 데이터 동기화 로봇
-scripts/              동기화 스크립트 (공개 필드 화이트리스트)
-templates/            전시 시트 스키마 참고
+index.html            Home — Recent Works / Now on View 자동 전환
+about/                 About — 작가 소개, 학력, Selected Exhibitions
+works/                 Works — 작품 아카이브, 전시별 필터, 작품 상세 모달
+haedal/                IP — 얼빵해달/일월오봉단 세계관 (KO/EN)
+press/                 Press — 매체 기사
+contact/                Contact — 문의 폼 (mailto 연동)
+data/                  publish.py가 생성하는 공개 정적 JSON
+assets/works/<id>/     작품별 thumb/detail/large WebP + (있으면) audio.mp3
+scripts/publish.py      Archive → Publish 스크립트
+.github/workflows/     publish 자동화 워크플로
 ```
 
-## 최초 배포 (10분)
-1. GitHub에서 새 repo 생성 (예: `shinhaedal-site`, Public)
-2. 이 폴더 내용 전체 업로드 (Add file → Upload files, 폴더째 드래그)
-3. Settings → Pages → Branch: `main`, 폴더: `/ (root)` → Save
-4. 1~2분 후 `https://<계정명>.github.io/<repo명>/` 접속 확인
-
-## 동기화 로봇 활성화 (선택, 5분)
-지금 홈은 아카이브 API를 실시간으로 읽으므로 없어도 작동함.
-Now 섹션(전시 모드) 구현 시 필요.
-1. repo Settings → Secrets and variables → Actions → New repository secret
-   - Name: `ARCHIVE_API_URL` / Value: 아카이브 Apps Script /exec URL
-2. Actions 탭 → "Sync archive data" → Run workflow (첫 수동 실행)
-
-## 아직 없는 것 (예정)
-- Works 전체 페이지 (현재 메뉴의 Works는 홈 그리드로 이동)
-- Press / About 페이지 (메뉴에 회색 "준비 중" 표시)
-- Now 섹션 전시 모드 전환
-- 커스텀 도메인 (shinhaedal.art — 구매 후 Settings → Pages → Custom domain)
+## 메뉴 구성
+Home / About / Works / IP / Press / Brand Shop(외부 링크, 아이디어스) / Contact
 
 ## 원칙
-- 작품·전시 데이터: 해달아카이브에서만 관리 (이 repo에서 수정 금지)
-- 디자인 에셋: 이 repo에서 관리
-- 민감정보(실거래가·소장자 등)는 API 단계에서 차단됨
+- 작품·전시·Press 데이터는 해달아카이브에서만 관리한다 — 이 repo의 `data/*.json`을
+  직접 편집하지 않는다(다음 자동 publish 때 덮어써짐).
+- 디자인/카피는 이 repo에서 직접 관리한다.
+- 민감정보(실거래가·소장자·결제방식 등)는 `publish.py`의 whitelist 단계에서
+  차단되며, 애초에 이 repo에 존재하지 않는다.
+
+## 남은 것
+- 커스텀 도메인(shinhaedal.art) 연결 — 구매 후 진행 예정. 연결 시 6페이지 +
+  `sitemap.xml`/`robots.txt`의 `og:url`/`canonical` 등을 `yoonsunlee.github.io/shinhaedal`
+  에서 `shinhaedal.art`로 일괄 변경해야 함.
+- Audio Guide — 우선순위 최후순위로 보류 중.

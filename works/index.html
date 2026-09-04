@@ -595,8 +595,10 @@ function setWorkIndex(idx, historyMode){
   var id = VISIBLE_WORKS[idx] && VISIBLE_WORKS[idx].id;
   if(id && historyMode){
     try{
-      if(historyMode === 'push') history.pushState({w:id}, '', '?w=' + encodeURIComponent(id));
-      else history.replaceState({w:id}, '', '?w=' + encodeURIComponent(id));
+      var url = new URL(location.href);
+      url.searchParams.set('w', id);
+      if(historyMode === 'push') history.pushState({w:id}, '', url);
+      else history.replaceState({w:id}, '', url);
     }catch(e){}
   }
 }
@@ -657,7 +659,11 @@ function closeWorkModal(){
   wmModal.classList.remove('open');
   wmModal.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
-  try{ history.pushState({}, '', location.pathname); }catch(e){}
+  try{
+    var url = new URL(location.href);
+    url.searchParams.delete('w');
+    history.pushState({}, '', url);
+  }catch(e){}
   if(wmLastFocused){ wmLastFocused.focus(); wmLastFocused = null; }
 }
 function stepWorkModal(delta){

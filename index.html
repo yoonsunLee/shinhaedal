@@ -727,13 +727,21 @@ function openWorkModal(idx){
   wmModal.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
   document.getElementById('wmClose').focus();
-  try{ history.pushState({w:HOME_LIST[idx].id}, '', '?w=' + encodeURIComponent(HOME_LIST[idx].id)); }catch(e){}
+  try{
+    var url = new URL(location.href);
+    url.searchParams.set('w', HOME_LIST[idx].id);
+    history.pushState({w:HOME_LIST[idx].id}, '', url);
+  }catch(e){}
 }
 function closeWorkModal(){
   wmModal.classList.remove('open');
   wmModal.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
-  try{ history.pushState({}, '', location.pathname); }catch(e){}
+  try{
+    var url = new URL(location.href);
+    url.searchParams.delete('w');
+    history.pushState({}, '', url);
+  }catch(e){}
   if(wmLastFocused){ wmLastFocused.focus(); wmLastFocused = null; }
 }
 function openFromUrlIfPresent(){
@@ -771,7 +779,11 @@ function stepWorkModal(delta){
   if(!HOME_LIST.length) return;
   wmIndex = (wmIndex + delta + HOME_LIST.length) % HOME_LIST.length;
   renderWorkModal();
-  try{ history.replaceState({w:HOME_LIST[wmIndex].id}, '', '?w=' + encodeURIComponent(HOME_LIST[wmIndex].id)); }catch(e){}
+  try{
+    var url = new URL(location.href);
+    url.searchParams.set('w', HOME_LIST[wmIndex].id);
+    history.replaceState({w:HOME_LIST[wmIndex].id}, '', url);
+  }catch(e){}
 }
 document.getElementById('wmClose').onclick = closeWorkModal;
 document.getElementById('wmPrev').onclick = function(){ stepWorkModal(-1); };
