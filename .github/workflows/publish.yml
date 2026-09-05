@@ -5,7 +5,7 @@ on:
     types: [archive-publish]
   workflow_dispatch: {}   # Actions 탭에서 수동 실행
   schedule:
-    # 매일 09:00 KST (= 00:00 UTC) — 관리자 패널 발행 버튼을 못 눌렀을 때 대비한 백업
+    # 매일 09:00 KST (= 00:00 UTC) — 발행 버튼을 못 눌렀을 때 대비한 백업
     - cron: '0 0 * * *'
 
 permissions:
@@ -24,11 +24,31 @@ jobs:
       - name: Install dependencies
         run: pip install requests Pillow
 
+      # 아카이브 원본은 Supabase에 있다. service_role 키는 RLS를 우회하므로
+      # 반드시 서버(Actions secret)에만 두고 브라우저에는 넣지 않는다.
       - name: Fetch, filter & build derivatives
         env:
-          ARCHIVE_API: ${{ secrets.ARCHIVE_API_URL }}
-          ADMIN_TOKEN: ${{ secrets.ARCHIVE_ADMIN_TOKEN }}
-        run: python scripts/publish.py
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: python scripts/publish_sb.py
+
+      # 발행물이 비었으면 커밋하지 않는다. 일시적 실패로 살아있는 공개 데이터를
+      # 빈 배열로 덮어쓰는 사고를 막는다.
+      - name: Sanity check before commit
+        run: |
+          python - <<'PY'
+          import json, sys
+          idx = json.load(open('data/works-index.json', encoding='utf-8'))
+          ex  = json.load(open('data/exhibitions.json', encoding='utf-8'))
+          if len(idx) == 0:
+              sys.exit('작품이 0건 — 발행 중단')
+          if len(ex) == 0:
+              sys.exit('전시가 0건 — 발행 중단')
+          missing = [r['id'] for r in idx if not r.get('thumb')]
+          if missing:
+              sys.exit('썸네일 없는 작품: %s — 발행 중단' % missing)
+          print('검사 통과: 작품 %d건, 전시 %d건' % (len(idx), len(ex)))
+          PY
 
       - name: Commit if changed
         run: |
