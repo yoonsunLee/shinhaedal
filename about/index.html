@@ -74,7 +74,11 @@
   .ex-year{font-family:'Space Mono', monospace; font-size:13px; color:var(--gold); margin-bottom:10px; letter-spacing:1px;}
   .ex-item{display:flex; justify-content:space-between; align-items:baseline; gap:16px; padding:9px 0; border-bottom:1px dashed rgba(245,240,230,.14); font-size:14px;}
   .ex-item .ex-title{color:var(--ivory);}
-  .ex-item .ex-venue{color:var(--ivory-dim); font-family:'Space Mono', monospace; font-size:12px; white-space:nowrap;}
+  .ex-item .ex-venue{color:var(--ivory-dim); font-family:'Space Mono', monospace; font-size:12px; text-align:right;}
+  @media(max-width:480px){
+    .ex-item{flex-direction:column; align-items:flex-start; gap:3px;}
+    .ex-item .ex-venue{text-align:left;}
+  }
   .ex-empty, .proj-empty{font-family:'Space Mono', monospace; font-size:12px; color:var(--ivory-faint);}
 
   .contact-cta{display:inline-block; margin-top:6px; font-family:'Space Mono', monospace; font-size:12px; color:var(--gold); text-decoration:underline; text-underline-offset:4px;}
@@ -220,11 +224,13 @@ try{
   else if(localStorage.getItem('site_lang')==='en') LANG = 'en';
 }catch(e){}
 
+var EX_ROWS = [];
 function loadExhibitions(){
   fetch('../data/exhibitions.json')
     .then(function(res){ return res.json(); })
     .then(function(rows){
-      renderExhibitions(rows || []);
+      EX_ROWS = rows || [];
+      renderExhibitions(EX_ROWS);
     })
     .catch(function(e){
       console.error('전시 이력을 불러오지 못했습니다:', e);
@@ -249,10 +255,13 @@ function renderExhibitions(rows){
     .sort(function(a, b){ return String(a.start_date||'').localeCompare(String(b.start_date||'')); });
   var past = rows.filter(function(r){ return String(r.start_date||'') <= today; });
 
+  function exTitle(r){ return LANG === 'en' ? (r.title_en || r.title) : r.title; }
+  function exVenue(r){ return LANG === 'en' ? (r.venue_en || r.venue) : r.venue; }
+
   var upcomingHtml = upcoming.map(function(r){
     var label = r.type === '개인전' ? I18N[LANG].ex_upcoming_solo : I18N[LANG].ex_upcoming;
     return '<div class="ex-upcoming"><div class="ex-upcoming-label">' + esc(label) + '</div>' +
-      '<div class="ex-item"><span class="ex-title">' + esc(r.title) + '</span><span class="ex-venue">' + esc(r.venue) + '</span></div>' +
+      '<div class="ex-item"><span class="ex-title">' + esc(exTitle(r)) + '</span><span class="ex-venue">' + esc(exVenue(r)) + '</span></div>' +
       '<div class="ex-item"><span class="ex-title">' + esc(formatDateRange(r.start_date, r.end_date)) + '</span></div></div>';
   }).join('');
 
@@ -278,7 +287,7 @@ function renderExhibitions(rows){
   document.getElementById('exList').innerHTML = upcomingHtml + years.map(function(y){
     return '<div class="ex-year-group"><div class="ex-year">' + esc(y) + '</div>' +
       groups[y].map(function(r){
-        return '<div class="ex-item"><span class="ex-title">' + esc(r.title) + '</span><span class="ex-venue">' + esc(r.venue) + '</span></div>';
+        return '<div class="ex-item"><span class="ex-title">' + esc(exTitle(r)) + '</span><span class="ex-venue">' + esc(exVenue(r)) + '</span></div>';
       }).join('') +
       '</div>';
   }).join('');
@@ -303,6 +312,7 @@ function applyLang(l, opts){
   });
   document.getElementById('langKo').classList.toggle('on', l==='ko');
   document.getElementById('langEn').classList.toggle('on', l==='en');
+  if(EX_ROWS.length) renderExhibitions(EX_ROWS);
 }
 document.getElementById('langKo').onclick = function(){ applyLang('ko'); };
 document.getElementById('langEn').onclick = function(){ applyLang('en'); };

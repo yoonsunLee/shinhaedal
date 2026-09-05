@@ -36,11 +36,13 @@ EXCLUDE_IDS = {"HD-2026-013", "HD-2026-014"}  # HD-2026-012가 대표로 남음
 
 # 공개 whitelist — price/sold/discount/actual_price/payment/sale_date/delivery_date/
 # channel/owner/note/qty/sold_qty 등 내부 필드는 절대 포함하지 않는다.
-PUBLIC_FIELDS = ["no", "title", "caption", "material", "size", "year", "exhibitions"]
+PUBLIC_FIELDS = ["no", "title", "caption", "material", "size", "year", "exhibitions",
+                 "title_en", "caption_en", "material_en"]
 AUDIO_FIELDS = ["audio_master", "transcript_ko", "transcript_en"]  # 시트에 컬럼이 없으면 빈 값으로 처리됨
 
-EXHIBITION_FIELDS = ["id", "title", "venue", "start_date", "end_date", "work_nos", "docent_url", "type", "note_public"]
-PRESS_FIELDS = ["no", "outlet", "date", "title", "url", "quote", "image", "note"]
+EXHIBITION_FIELDS = ["id", "title", "venue", "start_date", "end_date", "work_nos", "docent_url", "type", "note_public",
+                     "title_en", "venue_en"]
+PRESS_FIELDS = ["no", "outlet", "date", "title", "url", "quote", "image", "note", "title_en", "quote_en"]
 
 IMG_TIERS = {"thumb": 560, "detail": 1600, "large": 2400}  # thumb: 그리드 카드가 실제 표시되는 폭(~280px) 기준 2x 레티나
 
@@ -216,10 +218,15 @@ def main():
         images = make_image_tiers(no, r.get("image"))
         audio = make_audio(no, r.get("audio_master"))
 
+        # title 컬럼은 예전 방식("한글\n영어" 한 필드에 혼합)이 남아있을 수 있어 하위호환으로 계속 지원하되,
+        # 전용 title_en 컬럼이 채워져 있으면 그쪽을 우선한다(신규 작품은 title_en 컬럼 사용 권장).
         title_full = str(r.get("title", "")).strip()
-        title_ko, _, title_en = title_full.partition("\n")
+        title_ko, _, title_en_legacy = title_full.partition("\n")
+        title_en = str(r.get("title_en", "") or "").strip() or title_en_legacy
 
         detail = {k: str(r.get(k, "") or "").strip() for k in PUBLIC_FIELDS}
+        detail["title"] = title_ko
+        detail["title_en"] = title_en
         detail["year"] = int(detail["year"]) if detail["year"].isdigit() else detail["year"]
         detail["images"] = images
         detail["audio"] = audio

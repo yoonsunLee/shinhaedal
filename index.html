@@ -569,8 +569,10 @@ function renderHomeGrid(){
   var subEl = document.getElementById('gridSub');
   if(HOME_STATE.mode === 'now' && HOME_STATE.exhibition){
     var ex = HOME_STATE.exhibition;
+    var exTitle = LANG === 'en' ? (ex.title_en || ex.title) : ex.title;
+    var exVenue = LANG === 'en' ? (ex.venue_en || ex.venue) : ex.venue;
     titleEl.textContent = 'Now on View';
-    subEl.textContent = ex.title + ' · ' + ex.venue + ' · ' + formatDateRange(ex.start_date, ex.end_date);
+    subEl.textContent = exTitle + ' · ' + exVenue + ' · ' + formatDateRange(ex.start_date, ex.end_date);
     HOME_LIST = HOME_STATE.works;
   }else{
     titleEl.textContent = LANG === 'en' ? 'Recent Works' : 'Recent works';
