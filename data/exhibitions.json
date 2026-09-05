@@ -5,10 +5,12 @@
   "venue": "갤러리 비브, 서울, 대한민국",
   "start_date": "2026-11-23",
   "end_date": "2026-11-29",
-  "work_nos": "HD-2026-001,HD-2025-002,HD-2026-008,HD-2026-009,HD-2026-014,HD-2026-011",
+  "work_nos": "HD-2025-002,HD-2026-001,HD-2026-008,HD-2026-009,HD-2026-011,HD-2026-012",
   "docent_url": "",
   "type": "개인전",
-  "note_public": ""
+  "note_public": "",
+  "title_en": "",
+  "venue_en": ""
  },
  {
   "id": "EX-2026-02",
@@ -16,10 +18,12 @@
   "venue": "더현대, 서울, 대한민국",
   "start_date": "2026-08-06",
   "end_date": "2026-08-18",
-  "work_nos": "HD-2026-012,HD-2026-013,HD-2026-014",
+  "work_nos": "HD-2026-012",
   "docent_url": "",
   "type": "아트페어",
-  "note_public": ""
+  "note_public": "",
+  "title_en": "",
+  "venue_en": ""
  },
  {
   "id": "EX-2026-03",
@@ -27,10 +31,12 @@
   "venue": "코엑스, 서울, 대한민국",
   "start_date": "2026-07-30",
   "end_date": "2026-08-02",
-  "work_nos": "HD-2026-001,HD-2025-002,HD-2026-009,HD-2026-011,HD-2026-012,HD-2026-013,HD-2026-014,ER-2026-001",
+  "work_nos": "HD-2025-002,HD-2026-001,HD-2026-009,HD-2026-011,HD-2026-012",
   "docent_url": "",
   "type": "아트페어",
-  "note_public": ""
+  "note_public": "",
+  "title_en": "",
+  "venue_en": ""
  },
  {
   "id": "EX-2026-04",
@@ -41,7 +47,9 @@
   "work_nos": "HD-2026-009,HD-2026-011",
   "docent_url": "",
   "type": "단체전",
-  "note_public": ""
+  "note_public": "",
+  "title_en": "",
+  "venue_en": ""
  },
  {
   "id": "EX-2026-05",
@@ -49,10 +57,12 @@
   "venue": "레온갤러리, 서울, 대한민국",
   "start_date": "2026-06-26",
   "end_date": "2026-06-29",
-  "work_nos": "HD-2026-001,HD-2026-008,HD-2026-009,HD-2026-010,HD-2026-012,HD-2026-013,HD-2026-014",
+  "work_nos": "HD-2026-001,HD-2026-008,HD-2026-009,HD-2026-010,HD-2026-012",
   "docent_url": "",
   "type": "단체전",
-  "note_public": ""
+  "note_public": "",
+  "title_en": "",
+  "venue_en": ""
  },
  {
   "id": "EX-2026-06",
@@ -63,7 +73,9 @@
   "work_nos": "HD-2026-006,HD-2026-007",
   "docent_url": "",
   "type": "아트페어",
-  "note_public": ""
+  "note_public": "",
+  "title_en": "",
+  "venue_en": ""
  },
  {
   "id": "EX-2026-07",
@@ -74,7 +86,9 @@
   "work_nos": "HD-2026-006,HD-2026-007",
   "docent_url": "",
   "type": "단체전",
-  "note_public": ""
+  "note_public": "",
+  "title_en": "",
+  "venue_en": ""
  },
  {
   "id": "EX-2026-08",
@@ -85,7 +99,9 @@
   "work_nos": "HD-2025-004,HD-2026-005",
   "docent_url": "",
   "type": "아트페어",
-  "note_public": ""
+  "note_public": "",
+  "title_en": "",
+  "venue_en": ""
  },
  {
   "id": "EX-2026-09",
@@ -96,7 +112,9 @@
   "work_nos": "HD-2025-002",
   "docent_url": "",
   "type": "단체전",
-  "note_public": ""
+  "note_public": "",
+  "title_en": "",
+  "venue_en": ""
  },
  {
   "id": "EX-2026-10",
@@ -107,7 +125,9 @@
   "work_nos": "HD-2026-001,HD-2026-004",
   "docent_url": "",
   "type": "아트페어",
-  "note_public": ""
+  "note_public": "",
+  "title_en": "",
+  "venue_en": ""
  },
  {
   "id": "EX-2026-11",
@@ -118,7 +138,9 @@
   "work_nos": "HD-2026-002,HD-2026-003",
   "docent_url": "",
   "type": "단체전",
-  "note_public": ""
+  "note_public": "",
+  "title_en": "",
+  "venue_en": ""
  },
  {
   "id": "EX-2026-12",
@@ -126,10 +148,12 @@
   "venue": "신라호텔, 서울, 대한민국",
   "start_date": "2026-03-20",
   "end_date": "2026-03-22",
-  "work_nos": "HD-2026-001,HD-2026-002,HD-2025-002,HD-2025-004,HD-2026-003,HD-2026-004,HD-2026-005",
+  "work_nos": "HD-2025-002,HD-2025-004,HD-2026-001,HD-2026-002,HD-2026-003,HD-2026-004,HD-2026-005",
   "docent_url": "",
   "type": "단체전",
-  "note_public": ""
+  "note_public": "",
+  "title_en": "",
+  "venue_en": ""
  },
  {
   "id": "EX-2026-13",
@@ -137,10 +161,12 @@
   "venue": "갤러리가우디움, 서울, 대한민국",
   "start_date": "2026-02-05",
   "end_date": "2026-02-09",
-  "work_nos": "HD-2026-001,HD-2026-002,HD-2025-002,HD-2025-004,HD-2025-001",
+  "work_nos": "HD-2025-001,HD-2025-002,HD-2025-004,HD-2026-001,HD-2026-002",
   "docent_url": "",
   "type": "단체전",
-  "note_public": ""
+  "note_public": "",
+  "title_en": "",
+  "venue_en": ""
  },
  {
   "id": "EX-2026-14",
@@ -148,9 +174,11 @@
   "venue": "코엑스, 서울, 대한민국",
   "start_date": "2025-12-24",
   "end_date": "2025-12-28",
-  "work_nos": "HD-2026-001,HD-2026-002,HD-2025-002,HD-2025-004,HD-2025-001",
+  "work_nos": "HD-2025-001,HD-2025-002,HD-2025-004,HD-2026-001,HD-2026-002",
   "docent_url": "",
   "type": "아트페어",
-  "note_public": ""
+  "note_public": "",
+  "title_en": "",
+  "venue_en": ""
  }
 ]
