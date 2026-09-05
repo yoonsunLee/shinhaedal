@@ -43,9 +43,10 @@
   }
   .about-hero-text{flex:1 1 auto; min-width:0; max-width:560px;}
   .about-hero-text h1{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:clamp(30px,4.4vw,46px); margin:0 0 20px;}
-  .about-hero-text .lede{font-size:15.5px; line-height:1.85; color:var(--ivory); font-weight:400; margin:0 0 24px;}
-  .about-hero-text .body p{font-size:14px; line-height:1.9; color:var(--ivory-dim); font-weight:300; margin:0 0 18px;}
+  .about-hero-text .lede{font-size:clamp(18px,2.3vw,22px); line-height:1.5; color:var(--ivory); font-weight:400; margin:0 0 26px;}
+  .about-hero-text .body p{font-size:16px; line-height:1.85; color:var(--ivory-dim); font-weight:300; margin:0 0 20px;}
   .about-hero-text .body p:last-child{margin-bottom:0;}
+  .about-hero-text .pull-quote{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:clamp(20px,2.6vw,25px); line-height:1.5; color:var(--ivory); margin:6px 0 24px; padding-left:18px; border-left:2px solid var(--gold-dim);}
   @media(max-width:720px){
     .about-hero-inner{flex-direction:column; gap:28px;}
     .about-portrait{flex-basis:auto; width:180px; margin:0 auto;}
@@ -140,7 +141,10 @@
       <p class="lede" data-i="about_lede">법과 사회의 규범, 그리고 그 안을 살아가는 개인의 이야기를 나전칠기로 표현하는 작가입니다.</p>
       <div class="body" data-i="about_body">
         <p>법학을 전공하고 지식재산권법을 연구했으며, 법을 읽고 해석해 온 경험을 바탕으로 법률의 개념과 현대인의 일상을 작업의 소재로 가져옵니다. 법률 언어와 전통공예라는 서로 다른 두 영역을 연결하여, 익숙하지만 쉽게 보이지 않는 사회의 규칙과 개인의 관계를 시각적으로 풀어냅니다.</p>
-        <p>주요 재료로 천연자개와 옻칠을 사용합니다. 일정한 구조와 규칙 안에서도 조각마다 서로 다른 색과 빛을 내는 자개의 성질은 제 작업에서 중요한 조형 언어입니다. 저는 이를 통해 같은 사회와 규칙 안에서도 서로 다른 모습으로 살아가는 개인을 이야기합니다.</p>
+        <p>주요 재료로 천연자개와 옻칠을 사용합니다. 일정한 구조와 규칙 안에서도 조각마다 서로 다른 색과 빛을 내는 자개의 성질은 제 작업에서 중요한 조형 언어입니다.</p>
+      </div>
+      <p class="pull-quote" data-i="about_pull_quote">저는 이를 통해 같은 사회와 규칙 안에서도 서로 다른 모습으로 살아가는 개인을 이야기합니다.</p>
+      <div class="body" data-i="about_body2">
         <p>작품에는 제 페르소나인 캐릭터 '얼빵해달(Eolbbang Haedal)'이 등장하기도 합니다. 얼빵해달은 복잡한 법과 사회의 규칙을 관객의 일상 가까이 가져오는 매개이자, 그 안에서 살아가는 개인의 모습을 대신하는 존재입니다.</p>
         <p>전통 나전칠기의 재료와 기술을 기반으로 평면 작업에서 오브제, 아트토이까지 작업 영역을 확장하고 있습니다.</p>
       </div>
@@ -187,8 +191,9 @@ var I18N = {
   ko: {
     about_lede:'법과 사회의 규범, 그리고 그 안을 살아가는 개인의 이야기를 나전칠기로 표현하는 작가입니다.',
     about_body:'<p>법학을 전공하고 지식재산권법을 연구했으며, 법을 읽고 해석해 온 경험을 바탕으로 법률의 개념과 현대인의 일상을 작업의 소재로 가져옵니다. 법률 언어와 전통공예라는 서로 다른 두 영역을 연결하여, 익숙하지만 쉽게 보이지 않는 사회의 규칙과 개인의 관계를 시각적으로 풀어냅니다.</p>'
-      + '<p>주요 재료로 천연자개와 옻칠을 사용합니다. 일정한 구조와 규칙 안에서도 조각마다 서로 다른 색과 빛을 내는 자개의 성질은 제 작업에서 중요한 조형 언어입니다. 저는 이를 통해 같은 사회와 규칙 안에서도 서로 다른 모습으로 살아가는 개인을 이야기합니다.</p>'
-      + '<p>작품에는 제 페르소나인 캐릭터 \'얼빵해달(Eolbbang Haedal)\'이 등장하기도 합니다. 얼빵해달은 복잡한 법과 사회의 규칙을 관객의 일상 가까이 가져오는 매개이자, 그 안에서 살아가는 개인의 모습을 대신하는 존재입니다.</p>'
+      + '<p>주요 재료로 천연자개와 옻칠을 사용합니다. 일정한 구조와 규칙 안에서도 조각마다 서로 다른 색과 빛을 내는 자개의 성질은 제 작업에서 중요한 조형 언어입니다.</p>',
+    about_pull_quote:'저는 이를 통해 같은 사회와 규칙 안에서도 서로 다른 모습으로 살아가는 개인을 이야기합니다.',
+    about_body2:'<p>작품에는 제 페르소나인 캐릭터 \'얼빵해달(Eolbbang Haedal)\'이 등장하기도 합니다. 얼빵해달은 복잡한 법과 사회의 규칙을 관객의 일상 가까이 가져오는 매개이자, 그 안에서 살아가는 개인의 모습을 대신하는 존재입니다.</p>'
       + '<p>전통 나전칠기의 재료와 기술을 기반으로 평면 작업에서 오브제, 아트토이까지 작업 영역을 확장하고 있습니다.</p>',
     bio_role:'나전칠기 작가',
     bio_list:'<li>법학 전공</li><li>지식재산권법 석사</li><li>지식재산권법 박사과정 수료</li><li>국가유산수리기능자 — 칠공</li>',
@@ -203,8 +208,9 @@ var I18N = {
   en: {
     about_lede:'An artist who expresses the norms of law and society — and the individuals living within them — through mother-of-pearl lacquer.',
     about_body:'<p>I studied law and researched intellectual property law, and I draw on that experience of reading and interpreting legal texts to bring legal concepts and everyday contemporary life into my work. By connecting two very different fields — legal language and traditional craft — I visually unpack the relationship between the individual and the social rules that are familiar yet rarely made visible.</p>'
-      + '<p>My primary materials are natural mother-of-pearl and lacquer. The nature of mother-of-pearl — each fragment casting a different color and light even within a fixed structure and rule — is a key formal language in my work. Through it, I speak to how individuals live differently even within the same society and the same rules.</p>'
-      + '<p>My persona character, \'Eolbbang Haedal (Spaced-out Sea Otter),\' also appears in my work. It serves as a medium that brings the complex rules of law and society closer to the viewer\'s everyday life, standing in for the individual living within them.</p>'
+      + '<p>My primary materials are natural mother-of-pearl and lacquer. The nature of mother-of-pearl — each fragment casting a different color and light even within a fixed structure and rule — is a key formal language in my work.</p>',
+    about_pull_quote:'Through it, I speak to how individuals live differently even within the same society and the same rules.',
+    about_body2:'<p>My persona character, \'Eolbbang Haedal (Spaced-out Sea Otter),\' also appears in my work. It serves as a medium that brings the complex rules of law and society closer to the viewer\'s everyday life, standing in for the individual living within them.</p>'
       + '<p>Building on the traditional materials and techniques of mother-of-pearl lacquer, I\'m expanding my practice from flat work into objects and art toys.</p>',
     bio_role:'Najeonchilgi Artist',
     bio_list:'<li>Studied Law</li><li>M.A. in Intellectual Property Law</li><li>Ph.D. Coursework Completed, Intellectual Property Law</li><li>National Heritage Repair Technician — Lacquerware</li>',
