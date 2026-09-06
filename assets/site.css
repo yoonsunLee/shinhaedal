@@ -63,6 +63,3 @@ nav{
 .icon-btn:hover{opacity:1;}
 
 footer{border-top:1px solid rgba(245,240,230,.1); padding:30px 28px 44px; text-align:center; font-family:'Space Mono',monospace; font-size:11px; color:var(--ivory-faint);}
-footer .menu{margin-bottom:12px; display:flex; gap:20px; justify-content:center; flex-wrap:wrap;}
-footer .menu a{color:inherit; text-decoration:none;}
-footer .menu a:hover{color:var(--gold);}
