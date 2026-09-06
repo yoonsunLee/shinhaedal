@@ -237,6 +237,8 @@ def main():
             "note_public": s(e.get("note_public_ko")),
             "title_en": s(e.get("title_en")),
             "venue_en": s(e.get("venue_en")),
+            "poster_url": s(e.get("poster_url")),
+            "map_url": s(e.get("map_url")),
         })
     write_json(os.path.join(data_dir, "exhibitions.json"), ex_out)
     print("exhibitions.json: %d건" % len(ex_out))

@@ -76,8 +76,16 @@
     margin:0;
     color:var(--ivory);
   }
-  .statement .accent{ color:var(--gold); }
-  .hero-tagline{font-size:15px; color:var(--ivory-dim); font-weight:300; margin:18px 0 0;}
+  .statement .lead1{
+    font-size:.6em; display:block; margin-bottom:.25em;
+  }
+  .statement .accent{
+    background:linear-gradient(100deg,#ffb6d9,#9fe7ff,#c9b6ff,#ffd97a,#ffb6d9);
+    background-size:300% 100%;
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    animation:sheen 7s linear infinite;
+  }
+  @keyframes sheen{ to{ background-position:300% 0; } }
 
   .scroll-cue{
     display:flex; align-items:center; gap:8px; margin-top:36px;
@@ -90,11 +98,9 @@
 
   /* grid */
   .grid-section{max-width:1180px; margin:0 auto; padding:56px 32px 100px;}
-  .grid-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px;}
+  .grid-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:28px;}
   .grid-head h2{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:22px; margin:0;}
   .grid-head span{font-family:'Space Mono', monospace; font-size:12px; color:var(--ivory-faint);}
-  .grid-head-block{margin-bottom:28px;}
-  .grid-sub{font-size:13.5px; line-height:1.7; color:var(--ivory-faint); font-weight:300; margin:0;}
 
   /* artist statement */
   .statement-section{max-width:1180px; margin:0 auto; padding:20px 32px 120px;}
@@ -164,6 +170,20 @@
   .tile.loading span{font-family:'Space Mono',monospace; font-size:11px; color:var(--ivory-dim);}
   .tile-cap{padding-top:12px;}
   .tile-title{font-size:13px; color:var(--ivory-dim); font-weight:500; line-height:1.4;}
+  .tile-ex{
+    aspect-ratio:1/1; border-radius:2px; border:1px solid var(--gold-dim); background:var(--bg-2) center/cover no-repeat;
+    padding:20px 18px; display:flex; flex-direction:column; justify-content:center; gap:6px;
+  }
+  .tile-ex .ex-label{font-family:'Space Mono',monospace; font-size:11px; letter-spacing:1.5px; color:var(--gold);}
+  .tile-ex .ex-title{
+    font-family:'Black Han Sans',sans-serif; font-weight:400; font-size:18px; color:var(--ivory); line-height:1.35;
+    margin:8px 0 12px; padding-bottom:12px; border-bottom:1px solid rgba(245,240,230,.14);
+  }
+  .tile-ex .ex-meta{font-size:12.5px; color:var(--ivory-dim); line-height:1.6;}
+  .tile-ex .ex-links{display:flex; align-items:center; gap:10px; margin-top:12px; padding-top:12px; border-top:1px solid rgba(245,240,230,.14);}
+  .tile-ex .ex-links a{font-family:'Space Mono',monospace; font-size:11.5px; color:var(--ivory-dim); text-decoration:none; border-bottom:1px solid transparent;}
+  .tile-ex .ex-links a:hover{color:var(--gold); border-color:var(--gold);}
+  .tile-ex .ex-links .sep{color:var(--ivory-faint); font-size:11px;}
 
   .works-more{text-align:center; margin-top:30px;}
   .works-more a{
@@ -336,18 +356,14 @@
   <div class="vignette"></div>
 
   <div class="hero-inner">
-    <h1 class="statement" data-i="statement">쉽게 들어와서<br><span class="accent">오래 머무는</span> 작업</h1>
-    <p class="hero-tagline" data-i="hero_tagline">법과 사회의 규범을 나전칠기의 언어로 옮깁니다.</p>
+    <h1 class="statement" data-i="statement"><span class="lead1">쉽게 들어와서 오래 머무는 작업.</span><span class="accent">순서가 다를 뿐, 깊이는 같습니다.</span></h1>
     <div class="scroll-cue">SCROLL <span class="arrow">↓</span></div>
   </div>
 </header>
 
 <section class="grid-section" id="works">
-  <div class="grid-head-block">
-    <div class="grid-head">
-      <h2 id="gridTitle">Recent works</h2>
-    </div>
-    <p class="grid-sub" id="gridSub" data-i="grid_sub">최근의 작업을 소개합니다.</p>
+  <div class="grid-head">
+    <h2 id="gridTitle">Recent works</h2>
   </div>
   <div class="work-grid" id="workGrid">
     <div class="tile loading"><span data-i="loading">불러오는 중…</span></div>
@@ -419,9 +435,7 @@
 /* ---------- 언어 토글 (KO/EN) ---------- */
 var I18N = {
   ko: {
-    statement:'쉽게 들어와서<br><span class="accent">오래 머무는</span> 작업',
-    hero_tagline:'법과 사회의 규범을 나전칠기의 언어로 옮깁니다.',
-    grid_sub:'최근의 작업을 소개합니다.',
+    statement:'<span class="lead1">쉽게 들어와서 오래 머무는 작업.</span><span class="accent">순서가 다를 뿐, 깊이는 같습니다.</span>',
     loading:'불러오는 중…',
     empty:'등록된 작품이 아직 없어요',
     error:'작품을 불러오지 못했어요',
@@ -442,9 +456,7 @@ var I18N = {
       + '<p>어렵게 느껴질 수 있는 법과 사회의 이야기에 조금 더 쉽게 들어와, 작품 앞에서는 오래 머물 수 있기를 바랍니다.</p>'
   },
   en: {
-    statement:'Easy to walk into,<br><span class="accent">hard to walk away from</span>.',
-    hero_tagline:'I translate the norms of law and society into the language of mother-of-pearl lacquer.',
-    grid_sub:'A look at recent work.',
+    statement:'<span class="lead1">Easy to enter, hard to leave.</span><span class="accent">Different ways in, the same depth within.</span>',
     loading:'Loading…',
     empty:'No works registered yet',
     error:'Could not load works',
@@ -548,22 +560,35 @@ function pickActiveExhibition(list){
   }
   return null;
 }
+function exhibitionCardHtml(ex){
+  var title = LANG === 'en' ? (ex.title_en || ex.title) : ex.title;
+  var venue = LANG === 'en' ? (ex.venue_en || ex.venue) : ex.venue;
+  var mapHref = ex.map_url || (venue ? 'https://www.google.com/maps/search/' + encodeURIComponent(venue) : '');
+  var links = [];
+  if(ex.docent_url) links.push('<a href="' + esc(ex.docent_url) + '" target="_blank" rel="noopener">' + (LANG==='en'?'Exhibition info →':'전시 정보 →') + '</a>');
+  if(mapHref) links.push('<a href="' + esc(mapHref) + '" target="_blank" rel="noopener">' + (LANG==='en'?'Directions ↗':'찾아오는 길 ↗') + '</a>');
+  var bg = ex.poster_url
+    ? " style=\"background-image:linear-gradient(rgba(11,11,15,.88),rgba(11,11,15,.92)), url('" + esc(ex.poster_url) + "')\""
+    : '';
+  return '<div class="tile-ex"' + bg + '>' +
+    '<span class="ex-label">NOW ON VIEW</span>' +
+    '<span class="ex-title">' + esc(title||'') + '</span>' +
+    '<span class="ex-meta">' + esc(venue||'') + '<br>' + esc(formatDateRange(ex.start_date, ex.end_date)) + (ex.type ? '<br>' + esc(ex.type) : '') + '</span>' +
+    (links.length ? '<span class="ex-links">' + links.join('<span class="sep">|</span>') + '</span>' : '') +
+    '</div>';
+}
 function renderHomeGrid(){
   var titleEl = document.getElementById('gridTitle');
-  var subEl = document.getElementById('gridSub');
   if(HOME_STATE.mode === 'now' && HOME_STATE.exhibition){
-    var ex = HOME_STATE.exhibition;
-    var exTitle = LANG === 'en' ? (ex.title_en || ex.title) : ex.title;
-    var exVenue = LANG === 'en' ? (ex.venue_en || ex.venue) : ex.venue;
     titleEl.textContent = 'Now on View';
-    subEl.textContent = exTitle + ' · ' + exVenue + ' · ' + formatDateRange(ex.start_date, ex.end_date);
     HOME_LIST = HOME_STATE.works;
+    renderWorkTiles(HOME_LIST);
+    document.getElementById('workGrid').insertAdjacentHTML('afterbegin', exhibitionCardHtml(HOME_STATE.exhibition));
   }else{
     titleEl.textContent = LANG === 'en' ? 'Recent Works' : 'Recent works';
-    subEl.textContent = I18N[LANG].grid_sub;
     HOME_LIST = ALL_WORKS.slice(0, 6);
+    renderWorkTiles(HOME_LIST);
   }
-  renderWorkTiles(HOME_LIST);
 }
 function loadExhibitionAndRender(){
   return fetch(DATA_BASE + 'exhibitions.json')

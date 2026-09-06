@@ -80,11 +80,8 @@
   /* POOL — 캐릭터 프로필: 밤의 수영장, 타일 줄눈 + 은은한 수면 하이라이트 */
   .chapter--pool{
     background:
-      repeating-linear-gradient(0deg, rgba(159,231,255,.05) 0 1px, transparent 1px 64px),
-      repeating-linear-gradient(90deg, rgba(159,231,255,.05) 0 1px, transparent 1px 64px),
-      radial-gradient(circle at 18% 22%, rgba(159,231,255,.14), transparent 38%),
-      radial-gradient(circle at 78% 65%, rgba(159,231,255,.10), transparent 36%),
-      radial-gradient(circle at 45% 88%, rgba(159,231,255,.08), transparent 40%),
+      radial-gradient(circle at 18% 22%, rgba(159,231,255,.12), transparent 38%),
+      radial-gradient(circle at 78% 65%, rgba(159,231,255,.09), transparent 36%),
       linear-gradient(160deg, #081418 0%, #0a1a20 45%, #0c1e26 100%);
   }
 
@@ -139,7 +136,14 @@
   .hero .lockup{max-width:300px; margin:0 auto;}
   .hero .statement{font-family:'Black Han Sans',sans-serif; font-weight:400; font-size:clamp(20px,2.6vw,28px); line-height:1.4; margin:30px 0 0; color:var(--ink);}
   .hero .sub{max-width:540px; margin:18px auto 0; color:var(--ink-dim); line-height:1.85; font-weight:300;}
-  .hero .quote{margin:32px auto 0; font-family:'Black Han Sans',sans-serif; font-weight:400; font-size:clamp(22px,2.8vw,28px); color:var(--gold);}
+  .hero .quote{
+    margin:32px auto 0; font-family:'Black Han Sans',sans-serif; font-weight:400; font-size:clamp(22px,2.8vw,28px);
+    background:linear-gradient(100deg,#ffb6d9,#9fe7ff,#c9b6ff,#ffd97a,#ffb6d9);
+    background-size:300% 100%;
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    animation:sheen 7s linear infinite;
+  }
+  @keyframes sheen{ to{ background-position:300% 0; } }
   @media(min-width:860px){
     .hero{text-align:left;}
     .hero .wrap{display:flex; align-items:center; gap:64px;}
@@ -287,7 +291,7 @@
 <header class="hero chapter chapter--beach">
   <div class="wrap">
     <div class="hero-text">
-      <h1 class="sec-head hero-title" data-i="hero_tag">MEET EOLBBANG HAEDAL (Spaced-out Sea Otter)</h1>
+      <h1 class="sec-head hero-title" data-i="hero_tag">MEET SPACED-OUT SEA OTTER</h1>
       <p class="statement" data-i="hero_h1">수영을 못 하는 해달.<br>얼빵해달을 소개합니다.</p>
       <p class="sub" data-i="hero_sub">두 발로 걸어 이곳저곳 조개를 배달하는 조개배달부예요. 조개와 함께 사랑과 응원, 위로 같은 작은 마음도 전해요. 걸어서는 너무 느려서, 요즘은 동네 스포츠센터 아침 수영반에 다니고 있어요.</p>
       <p class="quote" data-i="hero_quote">“해달도 배워야 수영을 한다.”</p>
@@ -448,7 +452,7 @@
 <script>
 const I18N = {
   ko: {
-    hero_tag:'MEET EOLBBANG HAEDAL (Spaced-out Sea Otter)',
+    hero_tag:'MEET SPACED-OUT SEA OTTER',
     hero_h1:'수영을 못 하는 해달.<br>얼빵해달을 소개합니다.',
     hero_sub:'두 발로 걸어 이곳저곳 조개를 배달하는 조개배달부예요. 조개와 함께 사랑과 응원, 위로 같은 작은 마음도 전해요. 걸어서는 너무 느려서, 요즘은 동네 스포츠센터 아침 수영반에 다니고 있어요.',
     hero_quote:'“해달도 배워야 수영을 한다.”',
@@ -470,7 +474,7 @@ const I18N = {
     avail_cta:'LICENSING &amp; COLLABORATION →'
   },
   en: {
-    hero_tag:'MEET EOLBBANG HAEDAL (Spaced-out Sea Otter)',
+    hero_tag:'MEET SPACED-OUT SEA OTTER',
     hero_h1:'A sea otter who cannot swim.<br>Meet Eolbbang Haedal.',
     hero_sub:'A shell delivery worker who walks on two feet, carrying shells from place to place — along with little pieces of love, encouragement and comfort. Walking was way too slow, so these days it attends a morning swim class at the local sports center.',
     hero_quote:'“Even sea otters have to learn to swim.”',
