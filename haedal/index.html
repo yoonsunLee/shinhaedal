@@ -78,14 +78,17 @@
   .chapter--beach{
     background:
       radial-gradient(ellipse 80% 55% at 50% 105%, rgba(201,162,39,.16), transparent 62%),
-      linear-gradient(180deg, #0b0b0f 0%, #12100c 60%, #171208 100%);
+      url('assets/hero_pool_tile_bg.webp') center/cover no-repeat, #0b0b0f;
   }
 
-  /* POOL — 캐릭터 프로필: 밤의 수영장, 은은한 수면 하이라이트 */
+  /* POOL — 캐릭터 프로필: 밤의 수영장, 타일 줄눈 + 은은한 수면 하이라이트 */
   .chapter--pool{
     background:
-      radial-gradient(circle at 18% 22%, rgba(159,231,255,.12), transparent 38%),
-      radial-gradient(circle at 78% 65%, rgba(159,231,255,.09), transparent 36%),
+      repeating-linear-gradient(0deg, rgba(159,231,255,.05) 0 1px, transparent 1px 64px),
+      repeating-linear-gradient(90deg, rgba(159,231,255,.05) 0 1px, transparent 1px 64px),
+      radial-gradient(circle at 18% 22%, rgba(159,231,255,.14), transparent 38%),
+      radial-gradient(circle at 78% 65%, rgba(159,231,255,.10), transparent 36%),
+      radial-gradient(circle at 45% 88%, rgba(159,231,255,.08), transparent 40%),
       linear-gradient(160deg, #081418 0%, #0a1a20 45%, #0c1e26 100%);
   }
 
@@ -141,6 +144,14 @@
   .hero .statement{font-family:'Black Han Sans',sans-serif; font-weight:400; font-size:clamp(20px,2.6vw,28px); line-height:1.4; margin:30px 0 0; color:var(--ink);}
   .hero .sub{max-width:540px; margin:18px auto 0; color:var(--ink-dim); line-height:1.85; font-weight:300;}
   .hero .quote{margin:32px auto 0; font-family:'Space Mono',monospace; font-size:20px; font-weight:700;}
+  @media(min-width:860px){
+    .hero{text-align:left;}
+    .hero .wrap{display:flex; align-items:center; gap:64px;}
+    .hero .hero-text{flex:1 1 480px; min-width:0;}
+    .hero .lockup{flex:0 0 340px; max-width:340px; margin:0;}
+    .hero .sub{margin-left:0; margin-right:0;}
+    .hero .quote{margin-left:0;}
+  }
 
   /* ── S2 Naming (4p) ── */
   .name-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start;}
@@ -279,11 +290,13 @@
 <!-- S1 Character Intro (3p) — BEACH chapter -->
 <header class="hero chapter chapter--beach">
   <div class="wrap">
-    <h1 class="sec-head hero-title" data-i="hero_tag">MEET EOLBBANG HAEDAL (Spaced-out Sea Otter)</h1>
+    <div class="hero-text">
+      <h1 class="sec-head hero-title" data-i="hero_tag">MEET EOLBBANG HAEDAL (Spaced-out Sea Otter)</h1>
+      <p class="statement" data-i="hero_h1">수영을 못 하는 해달.<br>얼빵해달을 소개합니다.</p>
+      <p class="sub" data-i="hero_sub">두 발로 걸어 이곳저곳 조개를 배달하는 조개배달부예요. 조개와 함께 사랑과 응원, 위로 같은 작은 마음도 전해요. 걸어서는 너무 느려서, 요즘은 동네 스포츠센터 아침 수영반에 다니고 있어요.</p>
+      <p class="quote" data-i="hero_quote">“해달도 배워야 수영을 한다.”</p>
+    </div>
     <div class="lockup"><img src="assets/hero_face.webp" alt="얼빵해달"></div>
-    <p class="statement" data-i="hero_h1">수영을 못 하는 해달.<br>얼빵해달을 소개합니다.</p>
-    <p class="sub" data-i="hero_sub">두 발로 걸어 이곳저곳 조개를 배달하는 조개배달부예요. 조개와 함께 사랑과 응원, 위로 같은 작은 마음도 전해요. 걸어서는 너무 느려서, 요즘은 동네 스포츠센터 아침 수영반에 다니고 있어요.</p>
-    <p class="quote" data-i="hero_quote">“해달도 배워야 수영을 한다.”</p>
   </div>
 </header>
 
