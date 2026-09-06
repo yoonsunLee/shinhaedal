@@ -266,7 +266,6 @@ def main():
             "start_date": s(e.get("start_date")),
             "end_date": s(e.get("end_date")),
             "work_nos": ",".join(sorted(members.get(e["id"], []))),
-            "docent_url": s(e.get("docent_url")),
             "type": EX_TYPE_KO.get(s(e.get("type")), s(e.get("type"))),
             "type_en": EX_TYPE_EN.get(s(e.get("type")), s(e.get("type"))),
             "note_public": s(e.get("note_public_ko")),
