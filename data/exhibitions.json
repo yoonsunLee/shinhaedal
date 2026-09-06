@@ -13,7 +13,8 @@
   "venue_en": "Gallery VIV, Seoul, Korea",
   "poster_url": "assets/exhibitions/EX-2026-01/poster.webp",
   "map_url": "https://naver.me/5LQ10ta4",
-  "featured_work_nos": "HD-2026-011,HD-2026-009,HD-2025-002,HD-2026-008,HD-2026-001"
+  "featured_work_nos": "HD-2026-011,HD-2026-009,HD-2025-002,HD-2026-008,HD-2026-001",
+  "about_selected": true
  },
  {
   "id": "EX-2026-02",
@@ -29,7 +30,8 @@
   "venue_en": "",
   "poster_url": "",
   "map_url": "",
-  "featured_work_nos": ""
+  "featured_work_nos": "",
+  "about_selected": true
  },
  {
   "id": "EX-2026-03",
@@ -45,7 +47,8 @@
   "venue_en": "",
   "poster_url": "",
   "map_url": "",
-  "featured_work_nos": ""
+  "featured_work_nos": "",
+  "about_selected": true
  },
  {
   "id": "EX-2026-04",
@@ -61,7 +64,8 @@
   "venue_en": "",
   "poster_url": "",
   "map_url": "",
-  "featured_work_nos": ""
+  "featured_work_nos": "",
+  "about_selected": false
  },
  {
   "id": "EX-2026-05",
@@ -77,7 +81,8 @@
   "venue_en": "",
   "poster_url": "",
   "map_url": "",
-  "featured_work_nos": ""
+  "featured_work_nos": "",
+  "about_selected": false
  },
  {
   "id": "EX-2026-06",
@@ -93,7 +98,8 @@
   "venue_en": "",
   "poster_url": "",
   "map_url": "",
-  "featured_work_nos": ""
+  "featured_work_nos": "",
+  "about_selected": false
  },
  {
   "id": "EX-2026-07",
@@ -109,7 +115,8 @@
   "venue_en": "",
   "poster_url": "",
   "map_url": "",
-  "featured_work_nos": ""
+  "featured_work_nos": "",
+  "about_selected": false
  },
  {
   "id": "EX-2026-08",
@@ -125,7 +132,8 @@
   "venue_en": "",
   "poster_url": "",
   "map_url": "",
-  "featured_work_nos": ""
+  "featured_work_nos": "",
+  "about_selected": false
  },
  {
   "id": "EX-2026-09",
@@ -141,7 +149,8 @@
   "venue_en": "",
   "poster_url": "",
   "map_url": "",
-  "featured_work_nos": ""
+  "featured_work_nos": "",
+  "about_selected": false
  },
  {
   "id": "EX-2026-10",
@@ -157,7 +166,8 @@
   "venue_en": "",
   "poster_url": "",
   "map_url": "",
-  "featured_work_nos": ""
+  "featured_work_nos": "",
+  "about_selected": false
  },
  {
   "id": "EX-2026-11",
@@ -173,7 +183,8 @@
   "venue_en": "",
   "poster_url": "",
   "map_url": "",
-  "featured_work_nos": ""
+  "featured_work_nos": "",
+  "about_selected": false
  },
  {
   "id": "EX-2026-12",
@@ -182,14 +193,15 @@
   "start_date": "2026-03-20",
   "end_date": "2026-03-22",
   "work_nos": "HD-2025-002,HD-2025-004,HD-2026-001,HD-2026-002,HD-2026-003,HD-2026-004,HD-2026-005",
-  "type": "단체전",
-  "type_en": "Group Exhibition",
+  "type": "개인전",
+  "type_en": "Solo Exhibition",
   "note_public": "",
   "title_en": "",
   "venue_en": "",
   "poster_url": "",
   "map_url": "",
-  "featured_work_nos": ""
+  "featured_work_nos": "",
+  "about_selected": true
  },
  {
   "id": "EX-2026-13",
@@ -205,7 +217,8 @@
   "venue_en": "",
   "poster_url": "",
   "map_url": "",
-  "featured_work_nos": ""
+  "featured_work_nos": "",
+  "about_selected": false
  },
  {
   "id": "EX-2026-14",
@@ -221,6 +234,7 @@
   "venue_en": "",
   "poster_url": "",
   "map_url": "",
-  "featured_work_nos": ""
+  "featured_work_nos": "",
+  "about_selected": false
  }
 ]
