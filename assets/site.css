@@ -29,6 +29,7 @@ body{
   color:var(--ivory);
   font-family:'Noto Sans KR', sans-serif;
   -webkit-font-smoothing:antialiased;
+  word-break:keep-all;
 }
 
 /* nav */
