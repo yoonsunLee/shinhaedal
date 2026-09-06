@@ -5,7 +5,8 @@
   "title_en": "Shell Delivery Spaced-out Sea Otter",
   "year": 2026,
   "thumb": "assets/works/HD-2026-012/thumb.webp",
-  "has_audio": false
+  "has_audio": false,
+  "series_key": ""
  },
  {
   "id": "HD-2026-011",
@@ -13,7 +14,8 @@
   "title_en": "N-th Degree Derivative Works B",
   "year": 2026,
   "thumb": "assets/works/HD-2026-011/thumb.webp",
-  "has_audio": false
+  "has_audio": false,
+  "series_key": "n-th-derivative"
  },
  {
   "id": "HD-2026-010",
@@ -21,7 +23,8 @@
   "title_en": "POV : Paid Holiday",
   "year": 2026,
   "thumb": "assets/works/HD-2026-010/thumb.webp",
-  "has_audio": false
+  "has_audio": false,
+  "series_key": "pov"
  },
  {
   "id": "HD-2026-009",
@@ -29,7 +32,8 @@
   "title_en": "High Seas",
   "year": 2026,
   "thumb": "assets/works/HD-2026-009/thumb.webp",
-  "has_audio": false
+  "has_audio": false,
+  "series_key": "territory"
  },
  {
   "id": "HD-2026-008",
@@ -37,7 +41,8 @@
   "title_en": "The Bluebook",
   "year": 2026,
   "thumb": "assets/works/HD-2026-008/thumb.webp",
-  "has_audio": false
+  "has_audio": false,
+  "series_key": ""
  },
  {
   "id": "HD-2026-007",
@@ -45,7 +50,8 @@
   "title_en": "POV : Off Work",
   "year": 2026,
   "thumb": "assets/works/HD-2026-007/thumb.webp",
-  "has_audio": false
+  "has_audio": false,
+  "series_key": "pov"
  },
  {
   "id": "HD-2026-006",
@@ -53,7 +59,8 @@
   "title_en": "POV : Commute",
   "year": 2026,
   "thumb": "assets/works/HD-2026-006/thumb.webp",
-  "has_audio": false
+  "has_audio": false,
+  "series_key": "pov"
  },
  {
   "id": "HD-2026-005",
@@ -61,7 +68,8 @@
   "title_en": "Article 10 of the Constitution: The Right to Pursue Happiness*",
   "year": 2026,
   "thumb": "assets/works/HD-2026-005/thumb.webp",
-  "has_audio": false
+  "has_audio": false,
+  "series_key": ""
  },
  {
   "id": "HD-2026-004",
@@ -69,7 +77,8 @@
   "title_en": "Outer Space Treaty",
   "year": 2026,
   "thumb": "assets/works/HD-2026-004/thumb.webp",
-  "has_audio": false
+  "has_audio": false,
+  "series_key": "territory"
  },
  {
   "id": "HD-2026-003",
@@ -77,7 +86,8 @@
   "title_en": "POV : Working...",
   "year": 2026,
   "thumb": "assets/works/HD-2026-003/thumb.webp",
-  "has_audio": false
+  "has_audio": false,
+  "series_key": "pov"
  },
  {
   "id": "HD-2026-002",
@@ -85,7 +95,8 @@
   "title_en": "N-th Degree Derivative Works A",
   "year": 2026,
   "thumb": "assets/works/HD-2026-002/thumb.webp",
-  "has_audio": false
+  "has_audio": false,
+  "series_key": "n-th-derivative"
  },
  {
   "id": "HD-2026-001",
@@ -93,7 +104,8 @@
   "title_en": "Spaced-out Sea Otter: Invoked as a Neighboring Rights Holder in An Other World",
   "year": 2026,
   "thumb": "assets/works/HD-2026-001/thumb.webp",
-  "has_audio": false
+  "has_audio": false,
+  "series_key": ""
  },
  {
   "id": "HD-2025-004",
@@ -101,7 +113,8 @@
   "title_en": "nn-th Degree Derivative Works a",
   "year": 2025,
   "thumb": "assets/works/HD-2025-004/thumb.webp",
-  "has_audio": false
+  "has_audio": false,
+  "series_key": "n-th-derivative"
  },
  {
   "id": "HD-2025-002",
@@ -109,7 +122,8 @@
   "title_en": "HI! Bye! First Sale Doctrine",
   "year": 2025,
   "thumb": "assets/works/HD-2025-002/thumb.webp",
-  "has_audio": false
+  "has_audio": false,
+  "series_key": ""
  },
  {
   "id": "HD-2025-001",
@@ -117,6 +131,7 @@
   "title_en": "Accumulation of Rights: From 2D to 3D",
   "year": 2025,
   "thumb": "assets/works/HD-2025-001/thumb.webp",
-  "has_audio": false
+  "has_audio": false,
+  "series_key": ""
  }
 ]
