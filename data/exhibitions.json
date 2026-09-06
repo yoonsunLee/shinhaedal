@@ -3,14 +3,16 @@
   "id": "EX-2026-01",
   "title": "나전칠기로 아트하는 法",
   "venue": "갤러리 비브, 서울, 대한민국",
-  "start_date": "2026-11-23",
+  "start_date": "2026-09-05",
   "end_date": "2026-11-29",
   "work_nos": "HD-2025-002,HD-2026-001,HD-2026-008,HD-2026-009,HD-2026-011,HD-2026-012",
   "docent_url": "",
   "type": "개인전",
   "note_public": "",
   "title_en": "",
-  "venue_en": ""
+  "venue_en": "",
+  "poster_url": "",
+  "map_url": "https://naver.me/5LQ10ta4"
  },
  {
   "id": "EX-2026-02",
@@ -23,7 +25,9 @@
   "type": "아트페어",
   "note_public": "",
   "title_en": "",
-  "venue_en": ""
+  "venue_en": "",
+  "poster_url": "",
+  "map_url": ""
  },
  {
   "id": "EX-2026-03",
@@ -36,7 +40,9 @@
   "type": "아트페어",
   "note_public": "",
   "title_en": "",
-  "venue_en": ""
+  "venue_en": "",
+  "poster_url": "",
+  "map_url": ""
  },
  {
   "id": "EX-2026-04",
@@ -49,7 +55,9 @@
   "type": "단체전",
   "note_public": "",
   "title_en": "",
-  "venue_en": ""
+  "venue_en": "",
+  "poster_url": "",
+  "map_url": ""
  },
  {
   "id": "EX-2026-05",
@@ -62,7 +70,9 @@
   "type": "단체전",
   "note_public": "",
   "title_en": "",
-  "venue_en": ""
+  "venue_en": "",
+  "poster_url": "",
+  "map_url": ""
  },
  {
   "id": "EX-2026-06",
@@ -75,7 +85,9 @@
   "type": "아트페어",
   "note_public": "",
   "title_en": "",
-  "venue_en": ""
+  "venue_en": "",
+  "poster_url": "",
+  "map_url": ""
  },
  {
   "id": "EX-2026-07",
@@ -88,7 +100,9 @@
   "type": "단체전",
   "note_public": "",
   "title_en": "",
-  "venue_en": ""
+  "venue_en": "",
+  "poster_url": "",
+  "map_url": ""
  },
  {
   "id": "EX-2026-08",
@@ -101,7 +115,9 @@
   "type": "아트페어",
   "note_public": "",
   "title_en": "",
-  "venue_en": ""
+  "venue_en": "",
+  "poster_url": "",
+  "map_url": ""
  },
  {
   "id": "EX-2026-09",
@@ -114,7 +130,9 @@
   "type": "단체전",
   "note_public": "",
   "title_en": "",
-  "venue_en": ""
+  "venue_en": "",
+  "poster_url": "",
+  "map_url": ""
  },
  {
   "id": "EX-2026-10",
@@ -127,7 +145,9 @@
   "type": "아트페어",
   "note_public": "",
   "title_en": "",
-  "venue_en": ""
+  "venue_en": "",
+  "poster_url": "",
+  "map_url": ""
  },
  {
   "id": "EX-2026-11",
@@ -140,7 +160,9 @@
   "type": "단체전",
   "note_public": "",
   "title_en": "",
-  "venue_en": ""
+  "venue_en": "",
+  "poster_url": "",
+  "map_url": ""
  },
  {
   "id": "EX-2026-12",
@@ -153,7 +175,9 @@
   "type": "단체전",
   "note_public": "",
   "title_en": "",
-  "venue_en": ""
+  "venue_en": "",
+  "poster_url": "",
+  "map_url": ""
  },
  {
   "id": "EX-2026-13",
@@ -166,7 +190,9 @@
   "type": "단체전",
   "note_public": "",
   "title_en": "",
-  "venue_en": ""
+  "venue_en": "",
+  "poster_url": "",
+  "map_url": ""
  },
  {
   "id": "EX-2026-14",
@@ -179,6 +205,8 @@
   "type": "아트페어",
   "note_public": "",
   "title_en": "",
-  "venue_en": ""
+  "venue_en": "",
+  "poster_url": "",
+  "map_url": ""
  }
 ]
