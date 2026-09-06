@@ -573,6 +573,7 @@ function exhibitionCardHtml(ex){
   var venue = LANG === 'en' ? (ex.venue_en || ex.venue) : ex.venue;
   var mapHref = ex.map_url || (venue ? 'https://www.google.com/maps/search/' + encodeURIComponent(venue) : '');
   var links = [];
+  if(ex.poster_url) links.push('<a href="' + esc(ex.poster_url) + '" target="_blank" rel="noopener">' + (LANG==='en'?'View poster ↗':'포스터 보기 ↗') + '</a>');
   if(mapHref) links.push('<a href="' + esc(mapHref) + '" target="_blank" rel="noopener">' + (LANG==='en'?'Directions ↗':'찾아오는 길 ↗') + '</a>');
   var bg = ex.poster_url
     ? '<div class="ex-bg" style="background-image:url(\'' + esc(ex.poster_url) + '\')"></div>'
@@ -580,8 +581,8 @@ function exhibitionCardHtml(ex){
   return '<div class="tile-ex">' +
     bg +
     '<span class="ex-title">' + esc(title||'') + '</span>' +
-    '<span class="ex-meta">' + esc(venue||'') + '<br>' + esc(formatDateRange(ex.start_date, ex.end_date)) + (ex.type ? '<br>' + esc(ex.type) : '') + '</span>' +
-    (links.length ? '<span class="ex-links">' + links.join('<span class="sep">|</span>') + '</span>' : '') +
+    '<span class="ex-meta">' + esc(venue||'') + '<br>' + esc(formatDateRange(ex.start_date, ex.end_date)) + (ex.type ? '<br>' + esc(LANG==='en' ? (ex.type_en || ex.type) : ex.type) : '') + '</span>' +
+    (links.length ? '<span class="ex-links">' + links.join('<span class="sep">·</span>') + '</span>' : '') +
     '</div>';
 }
 function renderHomeGrid(){

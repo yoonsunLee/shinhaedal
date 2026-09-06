@@ -23,9 +23,11 @@ ASSETS_DIR = os.path.join(ROOT, "assets", "works")
 
 IMG_TIERS = {"thumb": 560, "detail": 1600, "large": 2400}
 
-# 전시 유형은 DB에 코드로 있고 홈페이지는 한국어를 쓴다.
+# 전시 유형은 DB에 코드로 있고 홈페이지는 한국어/영어를 각각 쓴다.
 EX_TYPE_KO = {"solo": "개인전", "group": "단체전", "curated": "기획전",
               "art_fair": "아트페어", "special": "특별전", "popup": "팝업"}
+EX_TYPE_EN = {"solo": "Solo Exhibition", "group": "Group Exhibition", "curated": "Curated Exhibition",
+              "art_fair": "Art Fair", "special": "Special Exhibition", "popup": "Pop-up"}
 
 
 def sb(path):
@@ -266,6 +268,7 @@ def main():
             "work_nos": ",".join(sorted(members.get(e["id"], []))),
             "docent_url": s(e.get("docent_url")),
             "type": EX_TYPE_KO.get(s(e.get("type")), s(e.get("type"))),
+            "type_en": EX_TYPE_EN.get(s(e.get("type")), s(e.get("type"))),
             "note_public": s(e.get("note_public_ko")),
             "title_en": s(e.get("title_en")),
             "venue_en": s(e.get("venue_en")),
