@@ -9,7 +9,9 @@
   "image": "https://www.issuemaker.kr/news/photo/202606/51514_52289_127.png",
   "title_en": "",
   "quote_en": "",
-  "note_public": "김갑찬 기자"
+  "note_public": "김갑찬 기자",
+  "link_type": "",
+  "linked_exhibition_id": ""
  },
  {
   "no": "PR-2026-002",
@@ -21,7 +23,9 @@
   "image": "https://cdn.branditmag.co.kr/news/photo/202507/415_618_413.jpg",
   "title_en": "",
   "quote_en": "",
-  "note_public": "BRANDIT 기자"
+  "note_public": "BRANDIT 기자",
+  "link_type": "brand_shop",
+  "linked_exhibition_id": ""
  },
  {
   "no": "PR-2026-003",
@@ -33,7 +37,9 @@
   "image": "https://newsx.ecn.cdn.infralab.net/www.thekorean.today/imgdata/smilestory_kr/202604/2026043015333141.jpg",
   "title_en": "",
   "quote_en": "",
-  "note_public": "김현수 기자"
+  "note_public": "김현수 기자",
+  "link_type": "",
+  "linked_exhibition_id": ""
  },
  {
   "no": "PR-2026-004",
@@ -45,7 +51,9 @@
   "image": "https://www.thekorean.today/imgdata/smilestory_kr/202604/2026040101196920.jpg",
   "title_en": "",
   "quote_en": "",
-  "note_public": "김현수 기자"
+  "note_public": "김현수 기자",
+  "link_type": "exhibition",
+  "linked_exhibition_id": "EX-2026-10"
  },
  {
   "no": "PR-2026-005",
@@ -57,7 +65,9 @@
   "image": "https://cdn.d-art.co.kr/news/photo/202605/5575_17735_1225.jpg",
   "title_en": "",
   "quote_en": "",
-  "note_public": "한이수 대표기자"
+  "note_public": "한이수 대표기자",
+  "link_type": "exhibition",
+  "linked_exhibition_id": "EX-2026-07"
  },
  {
   "no": "PR-2026-006",
@@ -69,6 +79,8 @@
   "image": "https://cdn.artkoreatv.com/news/photo/202607/103511_329860_4031.jpg",
   "title_en": "",
   "quote_en": "",
-  "note_public": "박귀연 기자"
+  "note_public": "박귀연 기자",
+  "link_type": "exhibition",
+  "linked_exhibition_id": "EX-2026-04"
  }
 ]
