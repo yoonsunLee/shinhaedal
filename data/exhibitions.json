@@ -9,10 +9,11 @@
   "docent_url": "",
   "type": "개인전",
   "note_public": "",
-  "title_en": "",
+  "title_en": "Art by Law, in Najeonchilgi",
   "venue_en": "Gallery VIV, Seoul, Korea",
   "poster_url": "assets/exhibitions/EX-2026-01/poster.webp",
-  "map_url": "https://naver.me/5LQ10ta4"
+  "map_url": "https://naver.me/5LQ10ta4",
+  "featured_work_nos": "HD-2026-011,HD-2026-009,HD-2025-002,HD-2026-008,HD-2026-001"
  },
  {
   "id": "EX-2026-02",
@@ -27,7 +28,8 @@
   "title_en": "",
   "venue_en": "",
   "poster_url": "",
-  "map_url": ""
+  "map_url": "",
+  "featured_work_nos": ""
  },
  {
   "id": "EX-2026-03",
@@ -42,7 +44,8 @@
   "title_en": "",
   "venue_en": "",
   "poster_url": "",
-  "map_url": ""
+  "map_url": "",
+  "featured_work_nos": ""
  },
  {
   "id": "EX-2026-04",
@@ -57,7 +60,8 @@
   "title_en": "",
   "venue_en": "",
   "poster_url": "",
-  "map_url": ""
+  "map_url": "",
+  "featured_work_nos": ""
  },
  {
   "id": "EX-2026-05",
@@ -72,7 +76,8 @@
   "title_en": "",
   "venue_en": "",
   "poster_url": "",
-  "map_url": ""
+  "map_url": "",
+  "featured_work_nos": ""
  },
  {
   "id": "EX-2026-06",
@@ -87,7 +92,8 @@
   "title_en": "",
   "venue_en": "",
   "poster_url": "",
-  "map_url": ""
+  "map_url": "",
+  "featured_work_nos": ""
  },
  {
   "id": "EX-2026-07",
@@ -102,7 +108,8 @@
   "title_en": "",
   "venue_en": "",
   "poster_url": "",
-  "map_url": ""
+  "map_url": "",
+  "featured_work_nos": ""
  },
  {
   "id": "EX-2026-08",
@@ -117,7 +124,8 @@
   "title_en": "",
   "venue_en": "",
   "poster_url": "",
-  "map_url": ""
+  "map_url": "",
+  "featured_work_nos": ""
  },
  {
   "id": "EX-2026-09",
@@ -132,7 +140,8 @@
   "title_en": "",
   "venue_en": "",
   "poster_url": "",
-  "map_url": ""
+  "map_url": "",
+  "featured_work_nos": ""
  },
  {
   "id": "EX-2026-10",
@@ -147,7 +156,8 @@
   "title_en": "",
   "venue_en": "",
   "poster_url": "",
-  "map_url": ""
+  "map_url": "",
+  "featured_work_nos": ""
  },
  {
   "id": "EX-2026-11",
@@ -162,7 +172,8 @@
   "title_en": "",
   "venue_en": "",
   "poster_url": "",
-  "map_url": ""
+  "map_url": "",
+  "featured_work_nos": ""
  },
  {
   "id": "EX-2026-12",
@@ -177,7 +188,8 @@
   "title_en": "",
   "venue_en": "",
   "poster_url": "",
-  "map_url": ""
+  "map_url": "",
+  "featured_work_nos": ""
  },
  {
   "id": "EX-2026-13",
@@ -192,7 +204,8 @@
   "title_en": "",
   "venue_en": "",
   "poster_url": "",
-  "map_url": ""
+  "map_url": "",
+  "featured_work_nos": ""
  },
  {
   "id": "EX-2026-14",
@@ -207,6 +220,7 @@
   "title_en": "",
   "venue_en": "",
   "poster_url": "",
-  "map_url": ""
+  "map_url": "",
+  "featured_work_nos": ""
  }
 ]
