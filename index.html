@@ -87,6 +87,13 @@
   }
   @keyframes sheen{ to{ background-position:300% 0; } }
 
+  .hero-about-cta{
+    display:inline-block; margin-top:28px;
+    font-family:'Space Mono', monospace; font-size:13px; letter-spacing:.5px;
+    color:var(--gold); text-decoration:none; border-bottom:1px solid transparent;
+    transition:color .2s ease, border-color .2s ease;
+  }
+  .hero-about-cta:hover{color:var(--ivory); border-color:var(--ivory);}
   .scroll-cue{
     display:flex; align-items:center; gap:8px; margin-top:36px;
     font-family:'Space Mono', monospace; font-size:11px; letter-spacing:1.5px;
@@ -103,11 +110,6 @@
   .grid-head span{font-family:'Space Mono', monospace; font-size:12px; color:var(--ivory-faint);}
 
   /* artist statement */
-  .statement-section{max-width:1180px; margin:0 auto; padding:20px 32px 120px;}
-  .statement-section .label{font-family:'Space Mono',monospace; font-size:12px; letter-spacing:2px; color:var(--ivory-faint); text-transform:uppercase; margin:0 0 24px;}
-  .statement-section .lede{font-family:'Black Han Sans',sans-serif; font-weight:400; font-size:clamp(21px,2.8vw,30px); line-height:1.55; margin:0 0 34px; max-width:720px;}
-  .statement-section .body p{font-size:16.5px; line-height:1.85; color:var(--ivory-dim); max-width:640px; margin:0 0 22px; font-weight:300;}
-  .statement-section .body p:last-child{margin-bottom:0;}
 
   /* IP teaser */
   .ip-teaser-wrap{max-width:1180px; margin:0 auto; padding:0 32px 120px;}
@@ -367,6 +369,7 @@
 
   <div class="hero-inner">
     <h1 class="statement" data-i="statement"><span class="lead1">쉽게 들어와서 오래 머무는 작업.</span><span class="accent">순서가 다를 뿐, 깊이는 같습니다.</span></h1>
+    <a class="hero-about-cta" href="about/" data-i="hero_about_cta">작가와 작업에 대해 →</a>
     <div class="scroll-cue">SCROLL <span class="arrow">↓</span></div>
   </div>
 </header>
@@ -380,18 +383,6 @@
   </div>
   <div class="works-more">
     <a href="works/" id="btnMoreWorks" data-i="browse_all" hidden>모든 작품 보기 →</a>
-  </div>
-</section>
-
-<section class="statement-section" id="statement">
-  <p class="label">Artist Statement</p>
-  <p class="lede" data-i="stmt_lede">독해하고, 해석하고, 번역하는 것.<br>저는 법을 읽고 의미를 찾아, 그것을 나전칠기의 언어로 옮깁니다.</p>
-  <div class="body" data-i="stmt_body">
-    <p>제 작업은 법과 사회의 규범 안에서 살아가는 개인에 대한 이야기입니다.</p>
-    <p>저에게 법은 차갑고 어려운 규칙에 머무는 것이 아니라, 사람들이 함께 살아가기 위해 만든 하나의 언어이자 사회의 질서입니다. 우리는 그 안에서 같은 규칙을 마주하지만, 각자 다른 방식으로 읽고 받아들이며 살아갑니다.</p>
-    <p>저는 법학적 개념과 현대인의 일상에서 발견한 장면을 전통 나전칠기의 재료와 방식으로 다시 해석합니다. 규칙과 질서는 반복되는 구조와 배경이 되고, 천연자개가 만들어내는 서로 다른 빛은 그 안을 살아가는 개인의 모습을 드러냅니다.</p>
-    <p>작품 속에는 저의 페르소나인 '얼빵해달'도 등장합니다. 얼빵해달은 법과 규칙을 완벽히 이해하는 존재가 아니라, 우리처럼 때로는 헤매고 부딪히면서도 그 안을 살아가는 평범한 개인입니다.</p>
-    <p>어렵게 느껴질 수 있는 법과 사회의 이야기에 조금 더 쉽게 들어와, 작품 앞에서는 오래 머물 수 있기를 바랍니다.</p>
   </div>
 </section>
 
@@ -461,12 +452,7 @@ var I18N = {
     ip_teaser_label:'MEET',
     ip_teaser_lede:'SPACED-OUT SEA OTTER',
     ip_teaser_cta:'만나러 가기 →',
-    stmt_lede:'독해하고, 해석하고, 번역하는 것.<br>저는 법을 읽고 의미를 찾아, 그것을 나전칠기의 언어로 옮깁니다.',
-    stmt_body:'<p>제 작업은 법과 사회의 규범 안에서 살아가는 개인에 대한 이야기입니다.</p>'
-      + '<p>저에게 법은 차갑고 어려운 규칙에 머무는 것이 아니라, 사람들이 함께 살아가기 위해 만든 하나의 언어이자 사회의 질서입니다. 우리는 그 안에서 같은 규칙을 마주하지만, 각자 다른 방식으로 읽고 받아들이며 살아갑니다.</p>'
-      + '<p>저는 법학적 개념과 현대인의 일상에서 발견한 장면을 전통 나전칠기의 재료와 방식으로 다시 해석합니다. 규칙과 질서는 반복되는 구조와 배경이 되고, 천연자개가 만들어내는 서로 다른 빛은 그 안을 살아가는 개인의 모습을 드러냅니다.</p>'
-      + '<p>작품 속에는 저의 페르소나인 \'얼빵해달\'도 등장합니다. 얼빵해달은 법과 규칙을 완벽히 이해하는 존재가 아니라, 우리처럼 때로는 헤매고 부딪히면서도 그 안을 살아가는 평범한 개인입니다.</p>'
-      + '<p>어렵게 느껴질 수 있는 법과 사회의 이야기에 조금 더 쉽게 들어와, 작품 앞에서는 오래 머물 수 있기를 바랍니다.</p>'
+    hero_about_cta:'작가와 작업에 대해 →',
   },
   en: {
     statement:'<span class="lead1">Easy to enter, hard to leave.</span><span class="accent">Different ways in, the same depth within.</span>',
@@ -483,12 +469,7 @@ var I18N = {
     ip_teaser_label:'MEET',
     ip_teaser_lede:'SPACED-OUT SEA OTTER',
     ip_teaser_cta:'SAY HELLO →',
-    stmt_lede:'To read, interpret, translate.<br>I read the law, search for its meaning, and carry it into the language of mother-of-pearl lacquer.',
-    stmt_body:'<p>My work is about the individual living within the norms of law and society.</p>'
-      + '<p>To me, law isn\'t just a cold, difficult set of rules — it\'s a language and an order people created so they could live together. We all face the same rules, yet each of us reads and accepts them in our own way.</p>'
-      + '<p>I reinterpret legal concepts and scenes from everyday contemporary life through the traditional materials and methods of mother-of-pearl lacquer. Rule and order become a repeating structure and backdrop, while the distinct light each piece of natural mother-of-pearl gives off reveals the individual living within it.</p>'
-      + '<p>My persona, Spaced-out Sea Otter, also appears in the work. It doesn\'t fully understand the law and its rules — like the rest of us, it\'s an ordinary individual who sometimes stumbles and struggles while still living within them.</p>'
-      + '<p>I hope these stories of law and society, which can feel difficult, become a little easier to step into — and that you might stay a while longer in front of the work.</p>'
+    hero_about_cta:'About the artist and the work →'
   }
 };
 var LANG = 'ko';
