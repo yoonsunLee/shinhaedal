@@ -54,7 +54,8 @@ jobs:
         run: |
           git config user.name "haedal-publish-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add data/ assets/works/
+          mkdir -p assets/exhibitions
+          git add data/ assets/works/ assets/exhibitions/
           if git diff --cached --quiet; then
             echo "No changes."
           else
