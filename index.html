@@ -112,12 +112,13 @@
   /* IP teaser */
   .ip-teaser-wrap{max-width:1180px; margin:0 auto; padding:0 32px 120px;}
   .ip-teaser{
-    position:relative; display:block; overflow:hidden; border-radius:8px;
-    aspect-ratio:21/9; text-decoration:none; isolation:isolate;
+    position:relative; display:flex; overflow:hidden; border-radius:8px;
+    aspect-ratio:21/9; text-decoration:none; isolation:isolate; background:#0d0d12;
     transition:transform .35s ease, box-shadow .35s ease;
   }
   .ip-teaser:hover{transform:translateY(-3px); box-shadow:0 20px 50px rgba(0,0,0,.35);}
   .ip-teaser:focus-visible{outline:2px solid var(--gold); outline-offset:4px;}
+  .ip-teaser-media{position:relative; flex:1 1 auto; overflow:hidden;}
   .ip-teaser-bg{
     position:absolute; inset:0; background-size:cover; background-position:center;
     transition:transform 1.2s ease;
@@ -125,10 +126,10 @@
   .ip-teaser:hover .ip-teaser-bg{transform:scale(1.03);}
   .ip-teaser-overlay{
     position:absolute; inset:0;
-    background:linear-gradient(100deg, rgba(5,5,10,.92) 0%, rgba(5,5,10,.6) 42%, rgba(5,5,10,.15) 100%);
+    background:linear-gradient(90deg, rgba(13,13,18,.7) 0%, rgba(13,13,18,0) 18%);
   }
   .ip-teaser-body{
-    position:relative; z-index:1; height:100%; max-width:480px;
+    position:relative; z-index:1; flex:0 0 42%; max-width:460px;
     display:flex; flex-direction:column; justify-content:center; gap:10px;
     padding:0 6%;
   }
@@ -137,8 +138,10 @@
   .ip-teaser-cta{font-family:'Space Mono',monospace; font-size:12px; letter-spacing:1px; color:var(--gold); transition:color .2s ease;}
   .ip-teaser:hover .ip-teaser-cta{color:var(--ivory);}
   @media(max-width:720px){
-    .ip-teaser{aspect-ratio:4/5;}
-    .ip-teaser-body{max-width:none; padding:0 24px;}
+    .ip-teaser{aspect-ratio:4/5; display:block; background:none;}
+    .ip-teaser-media{position:absolute; inset:0;}
+    .ip-teaser-overlay{background:linear-gradient(100deg, rgba(5,5,10,.92) 0%, rgba(5,5,10,.6) 42%, rgba(5,5,10,.15) 100%);}
+    .ip-teaser-body{position:relative; height:100%; flex:none; max-width:none; padding:0 24px;}
   }
 
   .work-grid{display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:34px 14px;}
@@ -393,12 +396,14 @@
 
 <div class="ip-teaser-wrap">
   <a class="ip-teaser" href="haedal/" aria-label="Explore the Haedal IP world">
-    <div class="ip-teaser-bg" style="background-image:url('haedal/assets/og_character.jpg')"></div>
-    <div class="ip-teaser-overlay"></div>
     <div class="ip-teaser-body">
-      <p class="ip-teaser-label" data-i="ip_teaser_label">MEET HAEDAL</p>
-      <p class="ip-teaser-lede" data-i="ip_teaser_lede">신해달의 페르소나, 조개배달부 얼빵해달.</p>
-      <span class="ip-teaser-cta" data-i="ip_teaser_cta">세계관 보기 →</span>
+      <p class="ip-teaser-label" data-i="ip_teaser_label">MEET</p>
+      <p class="ip-teaser-lede" data-i="ip_teaser_lede">SPACED-OUT SEA OTTER</p>
+      <span class="ip-teaser-cta" data-i="ip_teaser_cta">만나러 가기 →</span>
+    </div>
+    <div class="ip-teaser-media">
+      <div class="ip-teaser-bg" style="background-image:url('haedal/assets/og_character.jpg')"></div>
+      <div class="ip-teaser-overlay"></div>
     </div>
   </a>
 </div>
@@ -452,9 +457,9 @@ var I18N = {
     wm_ex_collapse:'접기',
     wm_view_larger:'크게 보기 ⛶',
     wm_ask_about:'이 작품에 대해 문의하기 →',
-    ip_teaser_label:'MEET HAEDAL',
-    ip_teaser_lede:'신해달의 페르소나, 조개배달부 얼빵해달.',
-    ip_teaser_cta:'세계관 보기 →',
+    ip_teaser_label:'MEET',
+    ip_teaser_lede:'SPACED-OUT SEA OTTER',
+    ip_teaser_cta:'만나러 가기 →',
     stmt_lede:'독해하고, 해석하고, 번역하는 것.<br>저는 법을 읽고 의미를 찾아, 그것을 나전칠기의 언어로 옮깁니다.',
     stmt_body:'<p>제 작업은 법과 사회의 규범 안에서 살아가는 개인에 대한 이야기입니다.</p>'
       + '<p>저에게 법은 차갑고 어려운 규칙에 머무는 것이 아니라, 사람들이 함께 살아가기 위해 만든 하나의 언어이자 사회의 질서입니다. 우리는 그 안에서 같은 규칙을 마주하지만, 각자 다른 방식으로 읽고 받아들이며 살아갑니다.</p>'
@@ -474,9 +479,9 @@ var I18N = {
     wm_ex_collapse:'Show less',
     wm_view_larger:'VIEW LARGER ⛶',
     wm_ask_about:'ASK ABOUT THIS WORK →',
-    ip_teaser_label:'MEET HAEDAL',
-    ip_teaser_lede:"Shin Haedal's persona, Eolbbang Haedal (Spaced-out Sea Otter), the shell courier.",
-    ip_teaser_cta:'EXPLORE THE IP WORLD →',
+    ip_teaser_label:'MEET',
+    ip_teaser_lede:'SPACED-OUT SEA OTTER',
+    ip_teaser_cta:'SAY HELLO →',
     stmt_lede:'To read, interpret, translate.<br>I read the law, search for its meaning, and carry it into the language of mother-of-pearl lacquer.',
     stmt_body:'<p>My work is about the individual living within the norms of law and society.</p>'
       + '<p>To me, law isn\'t just a cold, difficult set of rules — it\'s a language and an order people created so they could live together. We all face the same rules, yet each of us reads and accepts them in our own way.</p>'
