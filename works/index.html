@@ -403,10 +403,10 @@ var VISIBLE_WORKS = [];
 var EXHIBITIONS = [];
 var DETAIL_CACHE = {};
 
-// 제목 패턴으로 시리즈 판별: "POV : 출근"처럼 콜론으로 구분되거나, "저작물B"처럼
+// 제목 패턴으로 시리즈 판별(폴백 전용): "POV : 출근"처럼 콜론으로 구분되거나, "저작물B"처럼
 // 한글 바로 뒤에 알파벳 한 글자가 붙어 변주를 나타내는 제목만 시리즈로 묶는다.
-// 주의: 아카이브에 별도 series_id 필드가 없어 순전히 제목 텍스트로 추론한다 —
-// 시리즈 작품의 제목을 바꾸면(오타 수정 포함) 조율 없이 조용히 그룹이 깨진다.
+// 아카이브에 series_key가 채워진 작품은 seriesSiblings()가 이 함수를 거치지 않고
+// series_key로 바로 묶는다 — 이 추론은 series_key가 비어있는 옛 작품에만 적용된다.
 function seriesKey(title){
   title = String(title||'').trim();
   var key = null;
@@ -420,12 +420,17 @@ function seriesKey(title){
   // "N차적"/"nn차적"처럼 앞에 n이 반복되는 표기는 같은 시리즈로 취급
   return key.replace(/^[nN]+(?=차적)/, 'n');
 }
-// 제목 패턴만으로는 묶이지 않는 시리즈를 수동으로 지정 (예: "우주조약"/"무주의 바다"는
-// 공통 텍스트 패턴이 없어 seriesKey()로 못 잡음). 여기에 ID를 추가하면 된다.
+// 제목 패턴만으로는 묶이지 않는 시리즈를 수동으로 지정(폴백 전용 — 예: "우주조약"/
+// "무주의 바다"는 공통 텍스트 패턴이 없어 seriesKey()로 못 잡음). 아카이브에서 해당
+// 작품들의 series_key를 채우면 이 목록은 더 이상 필요 없어진다.
 var MANUAL_SERIES_GROUPS = [
   ["HD-2026-004", "HD-2026-009"]
 ];
 function seriesSiblings(meta){
+  if(meta.series_key){
+    var byKey = ALL_WORKS.filter(function(w){ return w.series_key === meta.series_key; });
+    return byKey.filter(function(w){ return w.id !== meta.id; });
+  }
   var manualGroup = MANUAL_SERIES_GROUPS.filter(function(ids){ return ids.indexOf(meta.id) !== -1; })[0];
   if(manualGroup){
     return ALL_WORKS.filter(function(w){ return manualGroup.indexOf(w.id) !== -1 && w.id !== meta.id; });

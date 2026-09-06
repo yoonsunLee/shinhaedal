@@ -210,6 +210,7 @@ def main():
             "year": detail["year"],
             "thumb": images.get("thumb", ""),
             "has_audio": bool(audio),
+            "series_key": s(w.get("series_key")),
         })
 
     write_json(os.path.join(data_dir, "works-index.json"), index_entries)
