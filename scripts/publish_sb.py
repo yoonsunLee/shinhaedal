@@ -243,6 +243,8 @@ def main():
 
     press_out = []
     for p in sorted(press, key=lambda x: s(x.get("press_no"))):
+        link_type = s(p.get("link_type"))
+        linked_ex = ex_by_id.get(p.get("linked_exhibition_id")) if link_type == "exhibition" else None
         press_out.append({
             "no": s(p.get("press_no")),
             "outlet": s(p.get("outlet_ko")),
@@ -254,6 +256,8 @@ def main():
             "title_en": s(p.get("title_en")),
             "quote_en": s(p.get("quote_en")),
             "note_public": s(p.get("byline")),
+            "link_type": link_type,
+            "linked_exhibition_id": s(linked_ex.get("exhibition_no")) if linked_ex else "",
         })
     write_json(os.path.join(data_dir, "press.json"), press_out)
     print("press.json: %d건" % len(press_out))

@@ -157,13 +157,21 @@ function safeUrl(v){
   return /^https:\/\//i.test(String(v||'').trim()) ? v : '';
 }
 var BRAND_SHOP_URL = 'https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product';
-// 주의: 아래 두 매칭 함수는 press.title 문자열에 브랜드명/전시명이 그대로 들어있는지로
-// 판단한다(전용 필드 없음) — 기사 제목이 브랜드/전시명을 그대로 안 쓰면(의역된 헤드라인 등)
-// 조용히 매칭에 실패해서 "전시 작품 보기"/"브랜드 샵" 링크가 안 뜬다.
+// 아카이브의 link_type/linked_exhibition_id가 있으면 그걸 그대로 쓴다.
+// 이 필드가 비어있는 옛 기사만 title 문자열 매칭으로 대체한다(의역된 헤드라인이면
+// 조용히 실패할 수 있는 폴백 방식 — link_type을 채우면 이 문제가 사라진다).
 function matchBrandShop(p){
+  if(p.link_type) return p.link_type === 'brand_shop' ? BRAND_SHOP_URL : null;
   return /해달자개/.test(String(p.title||'')) ? BRAND_SHOP_URL : null;
 }
 function matchExhibition(p){
+  if(p.link_type){
+    if(p.link_type !== 'exhibition' || !p.linked_exhibition_id) return null;
+    for(var j = 0; j < EXHIBITIONS.length; j++){
+      if(EXHIBITIONS[j].id === p.linked_exhibition_id) return EXHIBITIONS[j];
+    }
+    return null;
+  }
   var title = String(p.title||'');
   for(var i = 0; i < EXHIBITIONS.length; i++){
     var t = String(EXHIBITIONS[i].title||'').replace(/\s*(단체전|개인전|아트페어)$/,'').trim();
