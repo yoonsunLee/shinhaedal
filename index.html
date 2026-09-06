@@ -55,11 +55,6 @@
     position:absolute; inset:0; width:100%; height:100%; z-index:2;
     image-rendering:pixelated;
   }
-  .scanlines{
-    position:absolute; inset:0; z-index:3; pointer-events:none;
-    background-image:repeating-linear-gradient(rgba(0,0,0,0.22) 0px, rgba(0,0,0,0.22) 1px, transparent 1px, transparent 3px);
-    mix-blend-mode:multiply; opacity:0.45;
-  }
   .grain{
     position:absolute; inset:0; z-index:3; pointer-events:none;
     background-image:radial-gradient(circle, rgba(245,240,230,0.7) 1px, transparent 1.3px);
@@ -163,7 +158,7 @@
     .tile-media img{transition:transform .6s ease;}
     .tile:hover .tile-media img{transform:scale(1.03);}
     .tile-sheen{transition:opacity .5s ease, background-position 1.4s ease;}
-    .tile:hover .tile-sheen{opacity:.22; background-position:0 0, 100% 60%;}
+    .tile:hover .tile-sheen{opacity:.14; background-position:0 0, 100% 60%;}
   }
   .tile.loading{display:flex; align-items:center; justify-content:center; aspect-ratio:1/1; border-radius:2px; background:var(--bg-2); cursor:default;}
   .tile.loading span{font-family:'Space Mono',monospace; font-size:11px; color:var(--ivory-dim);}
@@ -337,7 +332,6 @@
   <div class="hero-bg" aria-hidden="true"></div>
   <div class="hero-overlay" aria-hidden="true"></div>
   <canvas id="bg-canvas" aria-hidden="true"></canvas>
-  <div class="scanlines"></div>
   <div class="grain"></div>
   <div class="vignette"></div>
 
