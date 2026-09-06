@@ -171,13 +171,19 @@
   .tile-cap{padding-top:12px;}
   .tile-title{font-size:13px; color:var(--ivory-dim); font-weight:500; line-height:1.4;}
   .tile-ex{
-    aspect-ratio:1/1; border-radius:2px; border:1px solid var(--gold-dim); background:var(--bg-2) center/cover no-repeat;
+    aspect-ratio:1/1; border-radius:2px; border:1px solid var(--gold-dim); background:var(--bg-2);
     padding:20px 18px; display:flex; flex-direction:column; justify-content:center; gap:6px;
+    position:relative; overflow:hidden;
   }
-  .tile-ex .ex-label{font-family:'Space Mono',monospace; font-size:11px; letter-spacing:1.5px; color:var(--gold);}
+  .tile-ex .ex-bg{
+    position:absolute; inset:-10px; background-size:cover; background-position:center;
+    filter:blur(10px); z-index:0;
+  }
+  .tile-ex .ex-bg::after{ content:''; position:absolute; inset:0; background:rgba(11,11,15,.8); }
+  .tile-ex > *{ position:relative; z-index:1; }
   .tile-ex .ex-title{
-    font-family:'Black Han Sans',sans-serif; font-weight:400; font-size:18px; color:var(--ivory); line-height:1.35;
-    margin:8px 0 12px; padding-bottom:12px; border-bottom:1px solid rgba(245,240,230,.14);
+    font-family:'Black Han Sans',sans-serif; font-weight:400; font-size:21px; color:var(--ivory); line-height:1.35;
+    margin:0 0 12px; padding-bottom:12px; border-bottom:1px solid rgba(245,240,230,.14);
   }
   .tile-ex .ex-meta{font-size:12.5px; color:var(--ivory-dim); line-height:1.6;}
   .tile-ex .ex-links{display:flex; align-items:center; gap:10px; margin-top:12px; padding-top:12px; border-top:1px solid rgba(245,240,230,.14);}
@@ -440,6 +446,7 @@ var I18N = {
     empty:'등록된 작품이 아직 없어요',
     error:'작품을 불러오지 못했어요',
     browse_all:'모든 작품 보기 →',
+    browse_ex:'이번 전시 작품 보기 →',
     wm_ex_label:'전시 이력',
     wm_ex_more:'전시 이력 더보기 ({n})',
     wm_ex_collapse:'접기',
@@ -461,6 +468,7 @@ var I18N = {
     empty:'No works registered yet',
     error:'Could not load works',
     browse_all:'Browse all works →',
+    browse_ex:'View exhibition works →',
     wm_ex_label:'Exhibitions',
     wm_ex_more:'Show more ({n})',
     wm_ex_collapse:'Show less',
@@ -565,13 +573,12 @@ function exhibitionCardHtml(ex){
   var venue = LANG === 'en' ? (ex.venue_en || ex.venue) : ex.venue;
   var mapHref = ex.map_url || (venue ? 'https://www.google.com/maps/search/' + encodeURIComponent(venue) : '');
   var links = [];
-  if(ex.docent_url) links.push('<a href="' + esc(ex.docent_url) + '" target="_blank" rel="noopener">' + (LANG==='en'?'Exhibition info →':'전시 정보 →') + '</a>');
   if(mapHref) links.push('<a href="' + esc(mapHref) + '" target="_blank" rel="noopener">' + (LANG==='en'?'Directions ↗':'찾아오는 길 ↗') + '</a>');
   var bg = ex.poster_url
-    ? " style=\"background-image:linear-gradient(rgba(11,11,15,.88),rgba(11,11,15,.92)), url('" + esc(ex.poster_url) + "')\""
+    ? '<div class="ex-bg" style="background-image:url(\'' + esc(ex.poster_url) + '\')"></div>'
     : '';
-  return '<div class="tile-ex"' + bg + '>' +
-    '<span class="ex-label">NOW ON VIEW</span>' +
+  return '<div class="tile-ex">' +
+    bg +
     '<span class="ex-title">' + esc(title||'') + '</span>' +
     '<span class="ex-meta">' + esc(venue||'') + '<br>' + esc(formatDateRange(ex.start_date, ex.end_date)) + (ex.type ? '<br>' + esc(ex.type) : '') + '</span>' +
     (links.length ? '<span class="ex-links">' + links.join('<span class="sep">|</span>') + '</span>' : '') +
@@ -579,15 +586,22 @@ function exhibitionCardHtml(ex){
 }
 function renderHomeGrid(){
   var titleEl = document.getElementById('gridTitle');
+  var moreBtn = document.getElementById('btnMoreWorks');
   if(HOME_STATE.mode === 'now' && HOME_STATE.exhibition){
     titleEl.textContent = 'Now on View';
     HOME_LIST = HOME_STATE.works;
     renderWorkTiles(HOME_LIST);
     document.getElementById('workGrid').insertAdjacentHTML('afterbegin', exhibitionCardHtml(HOME_STATE.exhibition));
+    moreBtn.href = 'works/?ex=' + encodeURIComponent(HOME_STATE.exhibition.id);
+    moreBtn.textContent = I18N[LANG].browse_ex;
+    moreBtn.hidden = false;
   }else{
     titleEl.textContent = LANG === 'en' ? 'Recent Works' : 'Recent works';
     HOME_LIST = ALL_WORKS.slice(0, 6);
     renderWorkTiles(HOME_LIST);
+    moreBtn.href = 'works/';
+    moreBtn.textContent = I18N[LANG].browse_all;
+    moreBtn.hidden = ALL_WORKS.length <= 6;
   }
 }
 function loadExhibitionAndRender(){
@@ -596,12 +610,16 @@ function loadExhibitionAndRender(){
     .then(function(list){
       var ex = pickActiveExhibition(list || []);
       if(ex){
-        var ids = String(ex.work_nos||'').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
-        var works = ids.map(function(id){ return ALL_WORKS.filter(function(w){ return w.id===id; })[0]; }).filter(Boolean);
-        if(works.length){
+        var allIds = String(ex.work_nos||'').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+        var allWorks = allIds.map(function(id){ return ALL_WORKS.filter(function(w){ return w.id===id; })[0]; }).filter(Boolean);
+        if(allWorks.length){
+          var featIds = String(ex.featured_work_nos||'').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+          var featured = featIds.length
+            ? featIds.map(function(id){ return allWorks.filter(function(w){ return w.id===id; })[0]; }).filter(Boolean)
+            : allWorks.slice(0, 5);
           HOME_STATE.mode = 'now';
           HOME_STATE.exhibition = ex;
-          HOME_STATE.works = works;
+          HOME_STATE.works = featured.slice(0, 5);
         }
       }
     })
@@ -613,7 +631,6 @@ function loadRecentWorks(){
     .then(function(res){ return res.json(); })
     .then(function(rows){
       ALL_WORKS = rows || [];
-      if(ALL_WORKS.length > 6) document.getElementById('btnMoreWorks').hidden = false;
       return loadExhibitionAndRender();
     })
     .then(function(){ openFromUrlIfPresent(); })

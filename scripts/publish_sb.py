@@ -271,6 +271,7 @@ def main():
             "venue_en": s(e.get("venue_en")),
             "poster_url": poster_asset,
             "map_url": s(e.get("map_url")),
+            "featured_work_nos": s(e.get("featured_work_nos")),
         })
     write_json(os.path.join(data_dir, "exhibitions.json"), ex_out)
     print("exhibitions.json: %d건" % len(ex_out))
