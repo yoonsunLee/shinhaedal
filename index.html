@@ -573,7 +573,7 @@ function exhibitionCardHtml(ex){
   var venue = LANG === 'en' ? (ex.venue_en || ex.venue) : ex.venue;
   var mapHref = ex.map_url || (venue ? 'https://www.google.com/maps/search/' + encodeURIComponent(venue) : '');
   var links = [];
-  if(ex.poster_url) links.push('<a href="' + esc(ex.poster_url) + '" target="_blank" rel="noopener">' + (LANG==='en'?'View poster ↗':'포스터 보기 ↗') + '</a>');
+  if(ex.poster_url) links.push('<a href="' + esc(ex.poster_url) + '" class="ex-poster-link">' + (LANG==='en'?'View poster ↗':'포스터 보기 ↗') + '</a>');
   if(mapHref) links.push('<a href="' + esc(mapHref) + '" target="_blank" rel="noopener">' + (LANG==='en'?'Directions ↗':'찾아오는 길 ↗') + '</a>');
   var bg = ex.poster_url
     ? '<div class="ex-bg" style="background-image:url(\'' + esc(ex.poster_url) + '\')"></div>'
@@ -593,6 +593,12 @@ function renderHomeGrid(){
     HOME_LIST = HOME_STATE.works;
     renderWorkTiles(HOME_LIST);
     document.getElementById('workGrid').insertAdjacentHTML('afterbegin', exhibitionCardHtml(HOME_STATE.exhibition));
+    var posterLink = document.querySelector('.tile-ex .ex-poster-link');
+    if(posterLink) posterLink.onclick = function(e){
+      e.preventDefault();
+      var title = LANG === 'en' ? (HOME_STATE.exhibition.title_en || HOME_STATE.exhibition.title) : HOME_STATE.exhibition.title;
+      openLargeView(HOME_STATE.exhibition.poster_url, title);
+    };
     moreBtn.href = 'works/?ex=' + encodeURIComponent(HOME_STATE.exhibition.id);
     moreBtn.textContent = I18N[LANG].browse_ex;
     moreBtn.hidden = false;
@@ -848,17 +854,20 @@ document.addEventListener('keydown', function(e){
 var lvOverlay = document.getElementById('largeView');
 var lvImg = document.getElementById('lvImg');
 var lvLastFocused = null;
+function openLargeView(src, alt){
+  lvLastFocused = document.activeElement;
+  lvImg.src = src;
+  lvImg.alt = alt || '';
+  lvOverlay.classList.add('open');
+  lvOverlay.setAttribute('aria-hidden', 'false');
+  document.getElementById('lvClose').focus();
+}
 document.getElementById('wmViewLarger').onclick = function(){
   var meta = HOME_LIST[wmIndex];
   var w = meta && DETAIL_CACHE[meta.id];
   var src = w && w.images && (w.images.large || w.images.detail);
   if(!src) return;
-  lvLastFocused = document.activeElement;
-  lvImg.src = ASSET_BASE + src;
-  lvImg.alt = document.getElementById('wmTitlePrimary').textContent;
-  lvOverlay.classList.add('open');
-  lvOverlay.setAttribute('aria-hidden', 'false');
-  document.getElementById('lvClose').focus();
+  openLargeView(ASSET_BASE + src, document.getElementById('wmTitlePrimary').textContent);
 };
 function closeLargeView(){
   lvOverlay.classList.remove('open');
