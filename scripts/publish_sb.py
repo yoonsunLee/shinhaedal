@@ -68,13 +68,17 @@ def fetch_image_bytes(image_file):
     if not fid:
         m = re.search(r"drive\.google\.com/(?:file/d/|open\?id=|uc\?id=)([\w-]+)", v)
         fid = m.group(1) if m else None
-    if not fid:
-        return None
     import requests
-    resp = requests.get("https://drive.google.com/uc?export=download&id=" + fid,
-                        timeout=120, headers={"User-Agent": "Mozilla/5.0"})
-    resp.raise_for_status()
-    return resp.content
+    if fid:
+        resp = requests.get("https://drive.google.com/uc?export=download&id=" + fid,
+                            timeout=120, headers={"User-Agent": "Mozilla/5.0"})
+        resp.raise_for_status()
+        return resp.content
+    if re.match(r"^https?://", v):
+        resp = requests.get(v, timeout=120, headers={"User-Agent": "Mozilla/5.0"})
+        resp.raise_for_status()
+        return resp.content
+    return None
 
 
 def make_image_tiers(no, image_file, out_root):
@@ -107,6 +111,28 @@ def make_image_tiers(no, image_file, out_root):
         im2.save(os.path.join(out_dir, tier + ".webp"), "WEBP", quality=quality)
         paths[tier] = "assets/works/%s/%s.webp" % (no, tier)
     return paths
+
+
+def make_poster(ex_id, poster_ref, assets_root):
+    """전시 포스터: Storage(sb:) 비공개 버킷 원본을 홈페이지가 바로 쓸 수 있는 정적 webp로 만든다."""
+    from io import BytesIO
+    from PIL import Image, ImageOps
+    raw = fetch_image_bytes(poster_ref)
+    if not raw:
+        return ""
+    im = Image.open(BytesIO(raw))
+    im = ImageOps.exif_transpose(im)
+    if im.mode not in ("RGB", "RGBA"):
+        im = im.convert("RGB")
+    out_dir = os.path.join(assets_root, "exhibitions", ex_id)
+    os.makedirs(out_dir, exist_ok=True)
+    w0, h0 = im.size
+    max_edge = 1600
+    scale = min(1.0, max_edge / max(w0, h0))
+    if scale < 1.0:
+        im = im.resize((max(1, int(w0 * scale)), max(1, int(h0 * scale))), Image.LANCZOS)
+    im.save(os.path.join(out_dir, "poster.webp"), "WEBP", quality=85)
+    return "assets/exhibitions/%s/poster.webp" % ex_id
 
 
 def make_audio(no, audio_master, out_root):
@@ -223,10 +249,16 @@ def main():
         n = no_by_id.get(l["work_id"])
         if n:
             members.setdefault(l["exhibition_id"], []).append(n)
+    ex_assets_root = os.path.dirname(assets_dir)
     ex_out = []
     for e in sorted(exhibitions, key=lambda x: s(x.get("exhibition_no"))):
+        ex_id = s(e.get("exhibition_no"))
+        poster_asset = ""
+        if not data_only and s(e.get("poster_url")):
+            print("포스터 처리 중: " + ex_id)
+            poster_asset = make_poster(ex_id, e.get("poster_url"), ex_assets_root)
         ex_out.append({
-            "id": s(e.get("exhibition_no")),
+            "id": ex_id,
             "title": s(e.get("title_ko")),
             "venue": s(e.get("venue_ko")),
             "start_date": s(e.get("start_date")),
@@ -237,7 +269,7 @@ def main():
             "note_public": s(e.get("note_public_ko")),
             "title_en": s(e.get("title_en")),
             "venue_en": s(e.get("venue_en")),
-            "poster_url": s(e.get("poster_url")),
+            "poster_url": poster_asset,
             "map_url": s(e.get("map_url")),
         })
     write_json(os.path.join(data_dir, "exhibitions.json"), ex_out)
@@ -277,6 +309,13 @@ def main():
                 if name not in current:
                     shutil.rmtree(os.path.join(assets_dir, name))
                     print("orphan 정리: assets/works/%s/" % name)
+        current_ex = {s(e.get("exhibition_no")) for e in exhibitions}
+        ex_assets_dir = os.path.join(ex_assets_root, "exhibitions")
+        if os.path.isdir(ex_assets_dir):
+            for name in os.listdir(ex_assets_dir):
+                if name not in current_ex:
+                    shutil.rmtree(os.path.join(ex_assets_dir, name))
+                    print("orphan 정리: assets/exhibitions/%s/" % name)
 
 
 if __name__ == "__main__":
