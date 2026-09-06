@@ -324,8 +324,14 @@ function renderExhibitions(rows){
   }).join('');
 
   var sorted = past.slice().sort(function(a, b){ return String(b.start_date||'').localeCompare(String(a.start_date||'')); });
-  var LIMIT = upcoming.length ? 2 : 3;
-  var picked = sorted.slice(0, LIMIT);
+  var selected = sorted.filter(function(r){ return r.about_selected; });
+  var picked;
+  if(selected.length){
+    picked = selected;
+  }else{
+    var LIMIT = upcoming.length ? 2 : 3;
+    picked = sorted.slice(0, LIMIT);
+  }
 
   if(!picked.length && !upcoming.length){
     document.getElementById('exList').innerHTML = '<p class="ex-empty">' + I18N[LANG].ex_empty + '</p>';
