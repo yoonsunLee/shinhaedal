@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Works — SHIN HAEDAL</title>
+<title>작품 — 신해달 나전칠기 아티스트</title>
 <meta name="description" content="같은 규칙 안에서 서로 다른 빛으로 살아가는 개인에 관한 작업입니다. 나전칠기로 옮긴 법과 사회, 그리고 개인의 이야기.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Works — SHIN HAEDAL">
+<meta property="og:title" content="작품 — 신해달 나전칠기 아티스트">
 <meta property="og:description" content="같은 규칙 안에서 서로 다른 빛으로 살아가는 개인에 관한 작업입니다. 나전칠기로 옮긴 법과 사회, 그리고 개인의 이야기.">
 <meta property="og:image" content="https://yoonsunlee.github.io/shinhaedal/ip/assets/og_character.jpg">
 <meta property="og:url" content="https://yoonsunlee.github.io/shinhaedal/works/">
@@ -344,7 +344,8 @@ var I18N = {
     wm_ex_collapse:'접기',
     wm_view_larger:'크게 보기 ⛶',
     wm_ask_about:'이 작품에 대해 문의하기 →',
-    wm_series_label:'시리즈 작품'
+    wm_series_label:'시리즈 작품',
+    page_title:'작품 — 신해달 나전칠기 아티스트'
   },
   en: {
     page_h:'Works',
@@ -361,7 +362,8 @@ var I18N = {
     wm_ex_collapse:'Show less',
     wm_view_larger:'VIEW LARGER ⛶',
     wm_ask_about:'ASK ABOUT THIS WORK →',
-    wm_series_label:'Series'
+    wm_series_label:'Series',
+    page_title:'Works — Shin Haedal, Najeonchilgi Artist'
   }
 };
 var LANG = 'ko';
@@ -382,6 +384,7 @@ function applyLang(l, opts){
     }catch(e){}
   }
   document.documentElement.lang = l;
+  document.title = I18N[l].page_title;
   document.querySelectorAll('[data-i]').forEach(function(el){
     var v = I18N[l][el.dataset.i];
     if(v!==undefined) el.innerHTML = v;

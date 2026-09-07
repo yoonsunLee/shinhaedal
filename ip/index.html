@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>얼빵해달 — 신해달</title>
+<title>IP — 얼빵해달</title>
 <meta name="description" content="수영 못 하는 해달, 조개배달부 얼빵해달. 신해달의 오리지널 캐릭터 세계관.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="얼빵해달 — 신해달">
+<meta property="og:title" content="IP — 얼빵해달">
 <meta property="og:description" content="수영 못 하는 해달, 조개배달부 얼빵해달. 신해달의 오리지널 캐릭터 세계관.">
 <meta property="og:image" content="https://yoonsunlee.github.io/shinhaedal/ip/assets/og_character.jpg">
 <meta property="og:url" content="https://yoonsunlee.github.io/shinhaedal/ip/">
@@ -466,7 +466,8 @@ const I18N = {
     band_close:'다섯 캐릭터, 다섯 역할, 다섯 상징 — 하나의 세계.',
     avail_h:'Licensing &amp; Collaboration', avail_sub:'얼빵해달과 일월오봉단은 다음과 같은 협업에 열려 있어요.',
     avail_1:'캐릭터 · 이미지 라이선싱', avail_2:'브랜드 협업', avail_3:'아트토이 · 제품 협업', avail_4:'전시 · 프로젝트 제안',
-    avail_cta:'LICENSING &amp; COLLABORATION →'
+    avail_cta:'LICENSING &amp; COLLABORATION →',
+    page_title:'IP — 얼빵해달'
   },
   en: {
     hero_tag:'MEET SPACED-OUT SEA OTTER',
@@ -488,7 +489,8 @@ const I18N = {
     band_close:'Five characters. Five roles. Five symbols. One world.',
     avail_h:'Licensing &amp; Collaboration', avail_sub:'Spaced-out Sea Otter and Ilwolobongdan are open to the following kinds of collaboration.',
     avail_1:'Character &amp; Image Licensing', avail_2:'Brand Collaboration', avail_3:'Art Toy / Product Collaboration', avail_4:'Exhibition / Project Proposal',
-    avail_cta:'LICENSING &amp; COLLABORATION →'
+    avail_cta:'LICENSING &amp; COLLABORATION →',
+    page_title:'IP — Spaced-out Sea Otter'
   }
 };
 function applyLang(l, opts){
@@ -502,6 +504,7 @@ function applyLang(l, opts){
     }catch(e){}
   }
   document.documentElement.lang = l==='ko' ? 'ko' : 'en';
+  document.title = I18N[l].page_title;
   document.querySelectorAll('[data-i]').forEach(el=>{
     const v=I18N[l][el.dataset.i];
     if(v===undefined)return;

@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Press — SHIN HAEDAL</title>
+<title>언론 보도 — 신해달 나전칠기 아티스트</title>
 <meta name="description" content="신해달의 작업이 다른 시선으로 읽히고 소개된 기록입니다.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Press — SHIN HAEDAL">
+<meta property="og:title" content="언론 보도 — 신해달 나전칠기 아티스트">
 <meta property="og:description" content="신해달의 작업이 다른 시선으로 읽히고 소개된 기록입니다.">
 <meta property="og:image" content="https://yoonsunlee.github.io/shinhaedal/ip/assets/og_character.jpg">
 <meta property="og:url" content="https://yoonsunlee.github.io/shinhaedal/press/">
@@ -128,8 +128,8 @@
 var PRESS_ITEMS = null; // null = 아직 로드 전
 
 var I18N = {
-  ko: { page_h:'Press', page_sub:'저의 작업이 다른 시선으로 읽히고 소개된 기록입니다.', press_link:'기사 원문 보기 ↗', ex_link:'전시 작품 보기 →', shop_link:'브랜드 샵 바로가기 ↗', loading:'불러오는 중…', empty:'아직 등록된 기사가 없어요', error:'기사를 불러오지 못했어요' },
-  en: { page_h:'Press', page_sub:'A record of my work, read and introduced through other eyes.', press_link:'Read the article ↗', ex_link:'See exhibited works →', shop_link:'Visit the brand shop ↗', loading:'Loading…', empty:'No press coverage yet', error:'Could not load press coverage' }
+  ko: { page_h:'Press', page_sub:'저의 작업이 다른 시선으로 읽히고 소개된 기록입니다.', press_link:'기사 원문 보기 ↗', ex_link:'전시 작품 보기 →', shop_link:'브랜드 샵 바로가기 ↗', loading:'불러오는 중…', empty:'아직 등록된 기사가 없어요', error:'기사를 불러오지 못했어요', page_title:'언론 보도 — 신해달 나전칠기 아티스트' },
+  en: { page_h:'Press', page_sub:'A record of my work, read and introduced through other eyes.', press_link:'Read the article ↗', ex_link:'See exhibited works →', shop_link:'Visit the brand shop ↗', loading:'Loading…', empty:'No press coverage yet', error:'Could not load press coverage', page_title:'Press — Shin Haedal, Najeonchilgi Artist' }
 };
 var LANG = 'ko';
 try{
@@ -245,6 +245,7 @@ function applyLang(l, opts){
     }catch(e){}
   }
   document.documentElement.lang = l;
+  document.title = I18N[l].page_title;
   document.querySelectorAll('[data-i]').forEach(function(el){
     var v = I18N[l][el.dataset.i];
     if(v!==undefined) el.innerHTML = v;

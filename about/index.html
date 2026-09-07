@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About — SHIN HAEDAL</title>
+<title>작가 소개 — 신해달 나전칠기 아티스트</title>
 <meta name="description" content="법과 사회의 규범, 그리고 그 안을 살아가는 개인의 이야기를 나전칠기로 표현하는 작가, 신해달 소개.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="About — SHIN HAEDAL">
+<meta property="og:title" content="작가 소개 — 신해달 나전칠기 아티스트">
 <meta property="og:description" content="법과 사회의 규범, 그리고 그 안을 살아가는 개인의 이야기를 나전칠기로 표현하는 작가, 신해달 소개.">
 <meta property="og:image" content="https://yoonsunlee.github.io/shinhaedal/ip/assets/og_character.jpg">
 <meta property="og:url" content="https://yoonsunlee.github.io/shinhaedal/about/">
@@ -239,7 +239,8 @@ var I18N = {
     ex_upcoming_solo:'예정된 개인전',
     ex_upcoming:'예정된 전시',
     about_contact_blurb:'작품에 관한 이야기부터 전시, 협업, IP 라이선싱까지. 함께 해보고 싶은 일이 있다면 편하게 연락해주세요.',
-    about_contact_cta:'Contact 페이지로 이동 →'
+    about_contact_cta:'Contact 페이지로 이동 →',
+    page_title:'작가 소개 — 신해달 나전칠기 아티스트'
   },
   en: {
     about_h1:'SHIN HAEDAL<span class="h1-sub">Najeonchilgi Artist</span>',
@@ -271,7 +272,8 @@ var I18N = {
     ex_upcoming_solo:'Upcoming Solo Exhibition',
     ex_upcoming:'Upcoming Exhibition',
     about_contact_blurb:'From artwork inquiries to exhibitions, collaborations, and IP licensing — if there\'s something you\'d like to do together, feel free to reach out.',
-    about_contact_cta:'Go to Contact →'
+    about_contact_cta:'Go to Contact →',
+    page_title:'About — Shin Haedal, Najeonchilgi Artist'
   }
 };
 var LANG = 'ko';
@@ -364,6 +366,7 @@ function applyLang(l, opts){
     }catch(e){}
   }
   document.documentElement.lang = l;
+  document.title = I18N[l].page_title;
   document.querySelectorAll('[data-i]').forEach(function(el){
     var v = I18N[l][el.dataset.i];
     if(v!==undefined) el.innerHTML = v;
