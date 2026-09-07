@@ -39,6 +39,7 @@
   }
   .about-hero-text{flex:1 1 auto; min-width:0; max-width:560px;}
   .about-hero-text h1{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:clamp(30px,4.4vw,46px); margin:0 0 20px;}
+  .about-hero-text h1 .h1-sub{display:inline-block; vertical-align:middle; font-family:'Space Mono','Noto Sans KR', monospace; font-weight:400; font-size:14px; letter-spacing:.5px; color:var(--ivory-dim); margin-left:14px;}
   .about-hero-text .lede{font-size:clamp(18px,2.3vw,22px); line-height:1.5; color:var(--ivory); font-weight:400; margin:0 0 26px;}
   .about-hero-text .body p{font-size:16px; line-height:1.85; color:var(--ivory-dim); font-weight:300; margin:0 0 20px;}
   .about-hero-text .body p:last-child{margin-bottom:0;}
@@ -54,20 +55,18 @@
     .about-hero-inner{flex-direction:column; gap:28px;}
     .about-portrait{flex-basis:auto; width:180px; margin:0 auto;}
     .about-hero-overlay{background:rgba(11,11,15,.95);}
+    .about-hero-text h1 .h1-sub{display:block; margin-left:0; margin-top:8px;}
   }
 
   .about-section{max-width:820px; margin:0 auto; padding:56px 32px;}
   .about-section + .about-section{border-top:1px solid rgba(245,240,230,.1);}
   .about-section h2{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:22px; margin:0 0 8px;}
-  .about-section .sub{font-family:'Space Mono', monospace; font-size:12px; color:var(--ivory-faint); margin:0 0 26px;}
+  .about-section .sub{font-family:'Space Mono','Noto Sans KR', monospace; font-size:12px; color:var(--ivory-faint); margin:0 0 26px;}
   .about-section .body{max-width:640px;}
   .about-section .body p{font-size:16px; line-height:1.85; color:var(--ivory-dim); font-weight:300; margin:0 0 20px;}
   .about-section .body p:last-child{margin-bottom:0;}
   .about-section .pull-quote{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:clamp(20px,2.6vw,25px); line-height:1.5; margin:0 0 28px;}
 
-  .bio-name{font-family:'Black Han Sans', sans-serif; font-size:20px; margin-bottom:6px;}
-  .bio-name .en{font-family:'Space Mono', monospace; font-size:12px; color:var(--ivory-faint); margin-left:10px; font-weight:400;}
-  .bio-role{color:var(--ivory-dim); font-size:14px; margin-bottom:20px;}
   .bio-list ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px;}
   .bio-list li{font-size:14px; color:var(--ivory-dim); position:relative; padding-left:16px;}
   .bio-list li::before{content:'—'; position:absolute; left:0; color:var(--ivory-faint);}
@@ -75,21 +74,21 @@
   .ex-upcoming{
     border:1px solid var(--gold-dim); border-radius:6px; padding:16px 18px; margin-bottom:26px;
   }
-  .ex-upcoming-label{font-family:'Space Mono', monospace; font-size:11px; letter-spacing:1.5px; color:var(--gold); text-transform:uppercase; margin-bottom:8px;}
+  .ex-upcoming-label{font-family:'Space Mono','Noto Sans KR', monospace; font-size:11px; letter-spacing:1.5px; color:var(--gold); text-transform:uppercase; margin-bottom:8px;}
   .ex-upcoming .ex-item{border-bottom:none; padding:2px 0;}
   .ex-year-group{margin-bottom:22px;}
   .ex-year-group:last-child{margin-bottom:0;}
-  .ex-year{font-family:'Space Mono', monospace; font-size:13px; color:var(--gold); margin-bottom:10px; letter-spacing:1px;}
+  .ex-year{font-family:'Space Mono','Noto Sans KR', monospace; font-size:13px; color:var(--gold); margin-bottom:10px; letter-spacing:1px;}
   .ex-item{display:flex; justify-content:space-between; align-items:baseline; gap:16px; padding:9px 0; border-bottom:1px dashed rgba(245,240,230,.14); font-size:14px;}
   .ex-item .ex-title{color:var(--ivory);}
-  .ex-item .ex-venue{color:var(--ivory-dim); font-family:'Space Mono', monospace; font-size:12px; text-align:right;}
+  .ex-item .ex-venue{color:var(--ivory-dim); font-family:'Space Mono','Noto Sans KR', monospace; font-size:12px; text-align:right;}
   @media(max-width:480px){
     .ex-item{flex-direction:column; align-items:flex-start; gap:3px;}
     .ex-item .ex-venue{text-align:left;}
   }
-  .ex-empty, .proj-empty{font-family:'Space Mono', monospace; font-size:12px; color:var(--ivory-faint);}
+  .ex-empty, .proj-empty{font-family:'Space Mono','Noto Sans KR', monospace; font-size:12px; color:var(--ivory-faint);}
 
-  .contact-cta{display:inline-block; margin-top:6px; font-family:'Space Mono', monospace; font-size:12px; color:var(--gold); text-decoration:underline; text-underline-offset:4px;}
+  .contact-cta{display:inline-block; margin-top:6px; font-family:'Space Mono','Noto Sans KR', monospace; font-size:12px; color:var(--gold); text-decoration:underline; text-underline-offset:4px;}
 </style>
 </head>
 <body>
@@ -144,7 +143,7 @@
       <img src="assets/artist-profile-1.webp" alt="신해달 작가" draggable="false">
     </div>
     <div class="about-hero-text">
-      <h1>SHIN HAEDAL</h1>
+      <h1 data-i="about_h1">신해달<span class="h1-sub">나전칠기 아티스트</span></h1>
       <p class="pull-quote nacre-text" data-i="about_lede">독해하고, 해석하고, 번역하는 것.<br>저는 법을 읽고 의미를 찾아, 그것을 나전칠기의 언어로 옮깁니다.</p>
       <div class="body" data-i="about_body">
         <p>오랫동안 법을 공부하고 가르치며 텍스트의 의미를 읽고 해석해왔습니다.</p>
@@ -158,8 +157,6 @@
 <section class="about-section" id="biography">
   <h2>Education &amp; Qualifications</h2>
   <div class="bio-list">
-    <div class="bio-name">신해달<span class="en">SHIN HAEDAL</span></div>
-    <div class="bio-role" data-i="bio_role">나전칠기 작가</div>
     <ul data-i="bio_list">
       <li>법학 전공</li>
       <li>지식재산권법 석사</li>
@@ -215,6 +212,7 @@ function esc(s){
 }
 var I18N = {
   ko: {
+    about_h1:'신해달<span class="h1-sub">나전칠기 아티스트</span>',
     about_lede:'독해하고, 해석하고, 번역하는 것.<br>저는 법을 읽고 의미를 찾아, 그것을 나전칠기의 언어로 옮깁니다.',
     about_body:'<p>오랫동안 법을 공부하고 가르치며 텍스트의 의미를 읽고 해석해왔습니다.</p>'
       + '<p>우연히 마주한 옻칠의 느리고 정직한 공정에 마음을 빼앗겼고, 텍스트 속에 살던 시간은 버려지는 대신 손의 시간과 하나로 이어졌습니다.</p>'
@@ -234,7 +232,6 @@ var I18N = {
       + '<p>얼빵해달이 귀여워서,<br>자개가 반짝여서 작품 앞에 멈춰 서도 좋습니다.</p>'
       + '<p>그 다음 제목을 읽고, 그 안에 법과 전통의 이야기가 있다는 것을 발견하고, 조금 더 오래바라보게 되기를 바랍니다.</p>'
       + '<p>그리고 작품을 떠날 때에는<br>사회 속의 자기 자신을 한 번쯤 다정하게 바라볼 수 있었으면 합니다.</p>',
-    bio_role:'나전칠기 작가',
     bio_list:'<li>법학 전공</li><li>지식재산권법 석사</li><li>지식재산권법 박사과정 수료</li><li>국가유산수리기능자 (칠공)</li>',
     ex_loading:'불러오는 중…',
     ex_error:'전시 이력을 불러오지 못했어요.',
@@ -245,6 +242,7 @@ var I18N = {
     about_contact_cta:'Contact 페이지로 이동 →'
   },
   en: {
+    about_h1:'SHIN HAEDAL<span class="h1-sub">Najeonchilgi Artist</span>',
     about_lede:'To read, interpret, and translate.<br>I read the law, seek out its meaning, and translate it into the language of najeonchilgi.',
     about_body:'<p>For many years, I studied and taught law, reading and interpreting the meanings held within texts.</p>'
       + '<p>Then, by chance, I encountered the slow and honest process of lacquerwork and was drawn to it. The years I had spent immersed in texts were not abandoned; they simply continued in another form, through the work of my hands.</p>'
@@ -266,7 +264,6 @@ var I18N = {
       + '<p>It is enough to stop in front of a work because Eolbbang Haedal catches your eye,<br>or because the mother-of-pearl shimmers.</p>'
       + '<p>Then perhaps you read the title, discover the stories of law and tradition within it, and stay with the work a little longer.</p>'
       + '<p>And when you leave the work, I hope you might look at yourself within society with a little more kindness.</p>',
-    bio_role:'Najeonchilgi Artist',
     bio_list:'<li>Studied Law</li><li>M.A. in Intellectual Property Law</li><li>Ph.D. Coursework Completed, Intellectual Property Law</li><li>National Heritage Repair Technician (Lacquerware)</li>',
     ex_loading:'Loading…',
     ex_error:'Could not load exhibitions.',
