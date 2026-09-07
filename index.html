@@ -108,6 +108,12 @@
   .grid-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:28px;}
   .grid-head h2{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:22px; margin:0;}
   .grid-head span{font-family:'Space Mono','Noto Sans KR', monospace; font-size:12px; color:var(--ivory-faint);}
+  .grid-head a{
+    font-family:'Space Mono','Noto Sans KR', monospace; font-size:12px; letter-spacing:.5px;
+    color:var(--ivory-dim); text-decoration:none; border-bottom:1px solid transparent;
+    transition:color .2s ease, border-color .2s ease;
+  }
+  .grid-head a:hover{color:var(--ivory); border-color:var(--ivory);}
 
   /* artist statement */
 
@@ -198,14 +204,6 @@
   .tile-ex .ex-links a:hover{color:var(--gold); border-color:var(--gold);}
   .tile-ex .ex-links .sep{color:var(--ivory-faint); font-size:11px;}
 
-  .works-more{text-align:center; margin-top:30px;}
-  .works-more a{
-    display:inline-block;
-    font-family:'Space Mono','Noto Sans KR', monospace; font-size:12px; letter-spacing:1.5px;
-    color:var(--ivory-dim); background:none; border:1px solid var(--ivory-faint);
-    border-radius:24px; padding:11px 26px; cursor:pointer; text-decoration:none;
-  }
-  .works-more a:hover{color:var(--ivory); border-color:var(--ivory-dim);}
 
   @media(max-width:900px){
     .work-grid{grid-template-columns:repeat(2, minmax(0, 1fr)); gap:26px 14px;}
@@ -387,12 +385,10 @@
 <section class="grid-section" id="works">
   <div class="grid-head">
     <h2 id="gridTitle">Recent works</h2>
+    <a href="works/" id="btnMoreWorks" data-i="browse_all" hidden>모든 작품 보기 →</a>
   </div>
   <div class="work-grid" id="workGrid">
     <div class="tile loading"><span data-i="loading">불러오는 중…</span></div>
-  </div>
-  <div class="works-more">
-    <a href="works/" id="btnMoreWorks" data-i="browse_all" hidden>모든 작품 보기 →</a>
   </div>
 </section>
 
