@@ -31,7 +31,7 @@
   "poster_url": "assets/exhibitions/EX-2026-02/poster.webp",
   "map_url": "",
   "featured_work_nos": "",
-  "about_selected": true
+  "about_selected": false
  },
  {
   "id": "EX-2026-03",
@@ -57,8 +57,8 @@
   "start_date": "2026-07-16",
   "end_date": "2026-07-23",
   "work_nos": "HD-2026-009,HD-2026-011",
-  "type": "개인전",
-  "type_en": "Solo Exhibition",
+  "type": "단체전",
+  "type_en": "Group Exhibition",
   "note_public": "",
   "title_en": "",
   "venue_en": "",
@@ -74,15 +74,15 @@
   "start_date": "2026-06-26",
   "end_date": "2026-06-29",
   "work_nos": "HD-2026-001,HD-2026-008,HD-2026-009,HD-2026-010,HD-2026-012",
-  "type": "개인전",
-  "type_en": "Solo Exhibition",
+  "type": "단체전",
+  "type_en": "Group Exhibition",
   "note_public": "",
   "title_en": "",
   "venue_en": "",
   "poster_url": "assets/exhibitions/EX-2026-05/poster.webp",
   "map_url": "",
   "featured_work_nos": "",
-  "about_selected": false
+  "about_selected": true
  },
  {
   "id": "EX-2026-06",
@@ -108,15 +108,15 @@
   "start_date": "2026-05-13",
   "end_date": "2026-05-18",
   "work_nos": "HD-2026-006,HD-2026-007",
-  "type": "개인전",
-  "type_en": "Solo Exhibition",
+  "type": "단체전",
+  "type_en": "Group Exhibition",
   "note_public": "",
   "title_en": "",
   "venue_en": "",
   "poster_url": "assets/exhibitions/EX-2026-07/poster.webp",
   "map_url": "",
   "featured_work_nos": "",
-  "about_selected": false
+  "about_selected": true
  },
  {
   "id": "EX-2026-08",
@@ -193,15 +193,15 @@
   "start_date": "2026-03-20",
   "end_date": "2026-03-22",
   "work_nos": "HD-2025-002,HD-2025-004,HD-2026-001,HD-2026-002,HD-2026-003,HD-2026-004,HD-2026-005",
-  "type": "개인전",
-  "type_en": "Solo Exhibition",
+  "type": "아트페어",
+  "type_en": "Art Fair",
   "note_public": "",
   "title_en": "",
   "venue_en": "",
   "poster_url": "assets/exhibitions/EX-2026-12/poster.webp",
   "map_url": "",
   "featured_work_nos": "",
-  "about_selected": true
+  "about_selected": false
  },
  {
   "id": "EX-2026-13",
@@ -210,8 +210,8 @@
   "start_date": "2026-02-05",
   "end_date": "2026-02-09",
   "work_nos": "HD-2025-001,HD-2025-002,HD-2025-004,HD-2026-001,HD-2026-002",
-  "type": "개인전",
-  "type_en": "Solo Exhibition",
+  "type": "단체전",
+  "type_en": "Group Exhibition",
   "note_public": "",
   "title_en": "",
   "venue_en": "",
