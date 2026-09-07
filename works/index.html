@@ -414,9 +414,9 @@ function exInfoCardHtml(ex){
   var venue = LANG === 'en' ? (ex.venue_en || ex.venue) : ex.venue;
   var mapHref = ex.map_url || (venue ? 'https://www.google.com/maps/search/' + encodeURIComponent(venue) : '');
   var links = [];
-  if(ex.poster_url) links.push('<a href="' + esc(ex.poster_url) + '" class="ex-poster-link">' + (LANG==='en'?'View poster ↗':'포스터 보기 ↗') + '</a>');
+  if(ex.poster_url) links.push('<a href="' + esc(ASSET_BASE + ex.poster_url) + '" class="ex-poster-link">' + (LANG==='en'?'View poster ↗':'포스터 보기 ↗') + '</a>');
   if(mapHref) links.push('<a href="' + esc(mapHref) + '" target="_blank" rel="noopener">' + (LANG==='en'?'Directions ↗':'찾아오는 길 ↗') + '</a>');
-  var bg = ex.poster_url ? '<div class="ex-bg" style="background-image:url(\'' + esc(ex.poster_url) + '\')"></div>' : '';
+  var bg = ex.poster_url ? '<div class="ex-bg" style="background-image:url(\'' + esc(ASSET_BASE + ex.poster_url) + '\')"></div>' : '';
   var typeText = ex.type ? esc(LANG==='en' ? (ex.type_en || ex.type) : ex.type) : '';
   return '<div class="ex-info-card">' + bg +
     '<span class="ex-title">' + esc(title||'') + '</span>' +
@@ -434,7 +434,7 @@ function renderExInfoCard(exId){
   if(posterLink) posterLink.onclick = function(e){
     e.preventDefault();
     var title = LANG === 'en' ? (ex.title_en || ex.title) : ex.title;
-    openLargeView(ex.poster_url, title);
+    openLargeView(ASSET_BASE + ex.poster_url, title);
   };
 }
 function renderWorkTiles(rows){
