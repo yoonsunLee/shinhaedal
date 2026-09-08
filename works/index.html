@@ -172,6 +172,21 @@
   .wm-action-btn:hover{color:var(--ivory); border-color:var(--ivory);}
   .wm-action-btn--gold{color:var(--gold);}
   .wm-action-btn--gold:hover{color:var(--gold); border-color:var(--gold);}
+  .wm-action-btn[hidden]{display:none;}
+
+  .docent-panel{display:none; flex-direction:column; gap:2px; margin-top:-2px;}
+  .docent-panel.open{display:flex;}
+  .docent-player{display:flex; align-items:center; gap:12px;}
+  .docent-play{
+    width:34px; height:34px; border-radius:50%; border:1px solid var(--gold-dim); background:none; color:var(--gold);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; flex:none; font-size:13px;
+    transition:border-color .2s ease, background .2s ease;
+  }
+  .docent-play:hover{border-color:var(--gold); background:rgba(201,162,39,.08);}
+  .docent-track{flex:1; height:2px; background:rgba(245,240,230,.14); position:relative; cursor:pointer;}
+  .docent-track b{position:absolute; left:0; top:0; height:100%; width:0%; background:var(--gold); display:block; pointer-events:none;}
+  .docent-time{font-family:'Space Mono','Noto Sans KR',monospace; font-size:10.5px; color:var(--ivory-faint); flex:none; min-width:64px; text-align:right;}
+  .docent-script{font-size:14.5px; line-height:1.8; color:var(--ivory-dim); max-height:200px; overflow-y:auto; padding-right:6px; margin-top:12px; white-space:pre-line;}
 
   .wm-series{border-top:1px solid var(--gold-dim); padding-top:16px;}
   .wm-series-label{font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; letter-spacing:1px; color:var(--ivory-dim); margin-bottom:10px; text-transform:uppercase;}
@@ -308,7 +323,16 @@
       </div>
       <div class="wm-actions">
         <button class="wm-action-btn" id="wmViewLarger" data-i="wm_view_larger">VIEW LARGER ⛶</button>
+        <button class="wm-action-btn" id="wmDocentToggle" hidden>🎧 도슨트 듣기</button>
         <a class="wm-action-btn wm-action-btn--gold" id="wmAskAbout" data-i="wm_ask_about" href="#">ASK ABOUT THIS WORK →</a>
+      </div>
+      <div class="docent-panel" id="wmDocentPanel">
+        <div class="docent-player">
+          <button class="docent-play" id="wmDocentPlay">▶</button>
+          <div class="docent-track" id="wmDocentTrack"><b id="wmDocentFill"></b></div>
+          <span class="docent-time" id="wmDocentTime">0:00 / 0:00</span>
+        </div>
+        <div class="docent-script" id="wmDocentScript"></div>
       </div>
       <div class="wm-series" id="wmSeries" hidden>
         <div class="wm-series-label" data-i="wm_series_label">시리즈 작품</div>
@@ -599,10 +623,102 @@ function fetchDetail(id){
     .then(function(res){ return res.json(); })
     .then(function(d){ DETAIL_CACHE[id] = d; return d; });
 }
+
+/* ---------- 도슨트 ---------- */
+var docentAudioEl = null;
+var docentPlaying = false;
+function fmtDocentTime(sec){
+  sec = Math.max(0, Math.round(sec || 0));
+  return Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0');
+}
+function stopDocent(){
+  docentPlaying = false;
+  var playBtn = document.getElementById('wmDocentPlay');
+  if(playBtn) playBtn.textContent = '▶';
+  if(docentAudioEl){ docentAudioEl.pause(); docentAudioEl = null; }
+  if(window.speechSynthesis) speechSynthesis.cancel();
+}
+function renderDocent(w){
+  stopDocent();
+  var toggleBtn = document.getElementById('wmDocentToggle');
+  var panel = document.getElementById('wmDocentPanel');
+  var scriptEl = document.getElementById('wmDocentScript');
+  var playBtn = document.getElementById('wmDocentPlay');
+  var track = document.getElementById('wmDocentTrack');
+  var fill = document.getElementById('wmDocentFill');
+  var timeEl = document.getElementById('wmDocentTime');
+  panel.classList.remove('open');
+
+  var transcript = (LANG === 'en' ? (String(w.transcript_en||'').trim() || String(w.transcript_ko||'').trim()) : String(w.transcript_ko||'').trim());
+  var hasAudio = !!(w.audio && w.audio.src);
+  if(!hasAudio && !transcript){ toggleBtn.hidden = true; return; }
+  toggleBtn.hidden = false;
+  scriptEl.textContent = transcript;
+  fill.style.width = '0%';
+
+  if(hasAudio){
+    docentAudioEl = new Audio(ASSET_BASE + w.audio.src);
+    var totalGuess = w.audio.duration || 0;
+    timeEl.textContent = '0:00 / ' + fmtDocentTime(totalGuess);
+    docentAudioEl.addEventListener('timeupdate', function(){
+      var d = docentAudioEl.duration || totalGuess || 0;
+      var ratio = d ? docentAudioEl.currentTime / d : 0;
+      fill.style.width = (ratio * 100) + '%';
+      timeEl.textContent = fmtDocentTime(docentAudioEl.currentTime) + ' / ' + fmtDocentTime(d);
+    });
+    docentAudioEl.addEventListener('ended', function(){ docentPlaying = false; playBtn.textContent = '▶'; });
+    playBtn.onclick = function(){
+      if(!docentAudioEl) return;
+      if(docentPlaying){ docentAudioEl.pause(); docentPlaying = false; playBtn.textContent = '▶'; }
+      else{ docentAudioEl.play(); docentPlaying = true; playBtn.textContent = '❚❚'; }
+    };
+    track.onclick = function(e){
+      if(!docentAudioEl) return;
+      var ratio = e.offsetX / track.clientWidth;
+      var d = docentAudioEl.duration || totalGuess || 0;
+      docentAudioEl.currentTime = ratio * d;
+    };
+  }else{
+    // 실제 도슨트 오디오가 아직 없을 때: 브라우저 음성합성으로 대본을 읽어주는 임시 재생
+    var sentences = transcript.split(/(?<=[.!?。])\s+|\n+/).map(function(s){ return s.trim(); }).filter(Boolean);
+    var estimatedTotal = transcript.length / 6.5;
+    var sIdx = 0;
+    timeEl.textContent = '0:00 / ' + fmtDocentTime(estimatedTotal);
+    function speakFrom(i){
+      if(i >= sentences.length){ docentPlaying = false; playBtn.textContent = '▶'; fill.style.width = '100%'; return; }
+      sIdx = i;
+      fill.style.width = (i / sentences.length * 100) + '%';
+      timeEl.textContent = fmtDocentTime(estimatedTotal * i / sentences.length) + ' / ' + fmtDocentTime(estimatedTotal);
+      var u = new SpeechSynthesisUtterance(sentences[i]);
+      u.lang = LANG === 'en' ? 'en-US' : 'ko-KR';
+      u.onend = function(){ if(docentPlaying) speakFrom(i + 1); };
+      speechSynthesis.speak(u);
+    }
+    playBtn.onclick = function(){
+      if(docentPlaying){ docentPlaying = false; playBtn.textContent = '▶'; speechSynthesis.cancel(); }
+      else{ docentPlaying = true; playBtn.textContent = '❚❚'; speakFrom(sIdx >= sentences.length ? 0 : sIdx); }
+    };
+    track.onclick = function(e){
+      var ratio = e.offsetX / track.clientWidth;
+      var i = Math.min(sentences.length - 1, Math.floor(ratio * sentences.length));
+      speechSynthesis.cancel();
+      sIdx = i;
+      fill.style.width = (i / sentences.length * 100) + '%';
+      timeEl.textContent = fmtDocentTime(estimatedTotal * i / sentences.length) + ' / ' + fmtDocentTime(estimatedTotal);
+      if(docentPlaying) speakFrom(i);
+    };
+  }
+}
+document.getElementById('wmDocentToggle').onclick = function(){
+  document.getElementById('wmDocentPanel').classList.toggle('open');
+};
+
 function renderWorkModal(){
   var meta = VISIBLE_WORKS[wmIndex];
   if(!meta) return;
   var requestIndex = wmIndex;
+  stopDocent();
+  document.getElementById('wmDocentToggle').hidden = true;
 
   var metaKo = String(meta.title||'').trim();
   var metaEn = String(meta.title_en||'').trim();
@@ -676,6 +792,8 @@ function renderWorkModal(){
     var img2 = document.getElementById('wmImg');
     img2.src = w.images && w.images.detail ? ASSET_BASE + w.images.detail : img2.src;
     img2.alt = primary;
+
+    renderDocent(w);
   }).catch(function(e){
     console.error('작품 상세를 불러오지 못했습니다:', e);
   });
@@ -747,6 +865,7 @@ document.getElementById('wmSeriesList').addEventListener('click', function(e){
   openWorkById(btn.dataset.workId);
 });
 function closeWorkModal(){
+  stopDocent();
   wmModal.classList.remove('open');
   wmModal.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';

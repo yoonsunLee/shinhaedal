@@ -209,7 +209,7 @@ def main():
         else:
             print("처리 중: " + no)
             images = make_image_tiers(no, w.get("image_file"), assets_dir)
-            audio = make_audio(no, w.get("audio_master"), assets_dir)
+            audio = make_audio(no, w.get("audio_master"), assets_dir) if w.get("docent_enabled") else None
 
         year = w.get("year")
         detail = {
