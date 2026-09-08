@@ -50,7 +50,6 @@ nav{
 .nav-menu a{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-dim); text-decoration:none;}
 .nav-menu a:hover, .nav-menu a.on{color:var(--ivory);}
 .nav-menu .soon{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-faint); cursor:default;}
-.menu-btn{display:none;}
 .nav-overlay{position:fixed; inset:0; background:rgba(6,7,12,.97); z-index:50; display:none; flex-direction:column; align-items:center; justify-content:center;}
 .nav-overlay.open{display:flex;}
 .overlay-close{position:absolute; top:22px; right:24px; font-size:20px;}
@@ -58,8 +57,9 @@ nav{
 .overlay-links a, .overlay-links .soon{font-family:'Black Han Sans',sans-serif; font-size:26px; color:var(--ivory); text-decoration:none; padding:6px 0;}
 .overlay-links .soon{color:var(--ivory-faint);}
 .overlay-links .overlay-ig{font-family:'Space Mono','Noto Sans KR',monospace; font-size:13px; color:var(--ivory-dim); margin-top:10px;}
-@media(max-width:900px){ .nav-menu{display:none;} .menu-btn{display:flex;} }
 .icon-btn{background:none; border:none; color:var(--ivory); cursor:pointer; display:flex; align-items:center; justify-content:center; width:44px; height:44px; margin:-12px; opacity:0.85;}
+.icon-btn.menu-btn{display:none;}
+@media(max-width:900px){ .nav-menu{display:none;} .icon-btn.menu-btn{display:flex;} }
 .icon-btn:hover{opacity:1;}
 
 footer{border-top:1px solid rgba(245,240,230,.1); padding:30px 28px 44px; text-align:center; font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; color:var(--ivory-faint);}
