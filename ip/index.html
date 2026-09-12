@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IP — 얼빵해달</title>
-<meta name="description" content="수영 못 하는 해달, 조개배달부 얼빵해달. 신해달의 오리지널 캐릭터 세계관.">
+<title>SPACED-OUT SEA OTTER — 얼빵해달 | SHIN HAEDAL</title>
+<meta name="description" content="멍때리다 수영을 못 배운 해달, 조개배달부 얼빵해달. 신해달의 오리지널 캐릭터 세계관.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="IP — 얼빵해달">
-<meta property="og:description" content="수영 못 하는 해달, 조개배달부 얼빵해달. 신해달의 오리지널 캐릭터 세계관.">
+<meta property="og:title" content="SPACED-OUT SEA OTTER — 얼빵해달">
+<meta property="og:description" content="멍때리다 수영을 못 배운 해달, 조개배달부 얼빵해달. 신해달의 오리지널 캐릭터 세계관.">
 <meta property="og:image" content="https://yoonsunlee.github.io/shinhaedal/ip/assets/og_character.jpg">
 <meta property="og:url" content="https://yoonsunlee.github.io/shinhaedal/ip/">
 <meta name="twitter:card" content="summary_large_image">
@@ -16,238 +16,10 @@
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <link rel="stylesheet" href="../assets/fonts.css">
-<style>
-  :root{
-    --pearl:#0b0b0f; --pearl-2:#14141c;
-    --ink:#f5f0e6; --ink-dim:rgba(245,240,230,.62); --ink-faint:rgba(245,240,230,.32);
-    --line:rgba(245,240,230,.14); --gold:#c9a227; --card:rgba(245,240,230,.05);
-  }
-  *{box-sizing:border-box;}
-  @media (prefers-reduced-motion: reduce){
-    *, *::before, *::after{
-      animation-duration:0.01ms !important;
-      animation-iteration-count:1 !important;
-      transition-duration:0.01ms !important;
-      scroll-behavior:auto !important;
-    }
-  }
-  body{margin:0; background:var(--pearl); color:var(--ink); font-family:'Noto Sans KR',sans-serif; -webkit-font-smoothing:antialiased; word-break:keep-all;}
-  .wrap{max-width:1040px; margin:0 auto; padding:0 28px;}
-  img{max-width:100%; display:block;}
-
-  /* nav — 메인 사이트와 동일 골격 */
-  nav{display:flex; align-items:flex-start; justify-content:space-between; padding:26px 32px; max-width:1180px; margin:0 auto;}
-  .logo-block{display:flex; flex-direction:column; gap:5px;}
-  .logo{font-family:'Black Han Sans',sans-serif; font-size:20px; letter-spacing:1px; color:var(--ink); text-decoration:none;}
-  .nav-right{display:flex; align-items:center; gap:16px; padding-top:2px;}
-  .lang{display:flex; align-items:center; gap:5px;}
-  .lang button{border:none; background:none; padding:11px 4px; margin:-11px -4px; cursor:pointer; color:var(--ink-faint); font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; font-weight:700; letter-spacing:.5px;}
-  .lang button:hover{color:var(--ink-dim);}
-  .lang button.on{color:var(--ink);}
-  .lang .lang-sep{color:var(--ink-faint); font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px;}
-  .nav-menu{display:flex; gap:24px; list-style:none; margin:0 8px 0 0; padding:0; align-items:center; font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px;}
-  .nav-menu a{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ink-dim); text-decoration:none;}
-  .nav-menu a:hover, .nav-menu a.on{color:var(--ink);}
-  .nav-menu .soon{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ink-faint); cursor:default;}
-  .nav-overlay{position:fixed; inset:0; background:rgba(11,11,15,.97); z-index:50; display:none; flex-direction:column; align-items:center; justify-content:center;}
-  .nav-overlay.open{display:flex;}
-  .overlay-close{position:absolute; top:22px; right:24px; font-size:20px;}
-  .overlay-links{display:flex; flex-direction:column; gap:26px; text-align:center;}
-  .overlay-links a, .overlay-links .soon{font-family:'Black Han Sans',sans-serif; font-size:26px; color:var(--ink); text-decoration:none;}
-  .overlay-links .soon{color:var(--ink-faint);}
-  .overlay-links .overlay-ig{font-family:'Space Mono','Noto Sans KR',monospace; font-size:13px; color:var(--ink-dim); margin-top:10px;}
-  .icon-btn{background:none; border:none; color:var(--ink); cursor:pointer; display:flex; align-items:center; justify-content:center; width:44px; height:44px; margin:-12px; opacity:.8;}
-  .icon-btn.menu-btn{display:none;}
-  @media(max-width:900px){ .nav-menu{display:none;} .icon-btn.menu-btn{display:flex;} }
-  .icon-btn:hover{opacity:1;}
-
-  .sec-head{font-family:'Black Han Sans',sans-serif; font-weight:400; font-size:clamp(24px,3.4vw,34px); margin:0 0 10px;}
-  .sec-head .title-sub{display:block; font-family:'Space Mono','Noto Sans KR',monospace; font-size:14px; font-weight:400; color:var(--ink-dim); letter-spacing:.3px; margin-top:6px;}
-  .sec-sub{color:var(--ink-dim); margin:0 0 40px; line-height:1.8; max-width:580px; font-weight:400;}
-  html[lang="en"] .sec-sub{line-height:1.65;}
-  .band-tag{font-family:'Space Mono','Noto Sans KR',monospace; font-size:14px; font-weight:700; color:var(--ink-dim); margin:0 0 28px; letter-spacing:.3px;}
-
-  /* ── 섹션 = 하나의 슬라이드처럼: 관대한 풀바이 챕터 + 테마 배경 (실사진 없이 CSS로 재해석) ── */
-  .chapter{position:relative; padding:100px 0; overflow:hidden;}
-  .chapter .wrap{position:relative; z-index:1;}
-
-  /* BEACH — 히어로: 조개배달부가 살아가는 세계의 출발점 (달빛 아래 해변) */
-  .chapter--beach{
-    background:
-      radial-gradient(ellipse 80% 55% at 50% 105%, rgba(201,162,39,.16), transparent 62%),
-      url('assets/hero_pool_tile_bg.webp') center/cover no-repeat, #0b0b0f;
-  }
-
-  /* POOL — 캐릭터 프로필: 밤의 수영장, 타일 줄눈 + 은은한 수면 하이라이트 */
-  .chapter--pool{
-    background:
-      radial-gradient(circle at 18% 22%, rgba(159,231,255,.12), transparent 38%),
-      radial-gradient(circle at 78% 65%, rgba(159,231,255,.09), transparent 36%),
-      linear-gradient(160deg, #081418 0%, #0a1a20 45%, #0c1e26 100%);
-  }
-
-  /* NACRE — 조개껍데기: 어두운 바탕 위 자개 특유의 은은한 무지갯빛 광택 */
-  .chapter--nacre{
-    background:
-      radial-gradient(ellipse 70% 60% at 20% 20%, rgba(255,182,217,.08), transparent 55%),
-      radial-gradient(ellipse 70% 60% at 80% 30%, rgba(159,231,255,.07), transparent 55%),
-      radial-gradient(ellipse 70% 60% at 50% 90%, rgba(201,182,255,.07), transparent 55%),
-      linear-gradient(160deg, #0d0b12 0%, #0b0f14 50%, #120d10 100%);
-    background-size:100% 100%, 100% 100%, 100% 100%, 260% 260%;
-    animation:nacreShift 28s ease-in-out infinite alternate;
-  }
-  @keyframes nacreShift{ from{background-position:0% 50%;} to{background-position:100% 50%;} }
-
-  /* SHOWCASE — 2D→3D: 다크 쇼케이스/스포트라이트 */
-  .chapter--showcase{
-    background:radial-gradient(ellipse 60% 50% at 50% 25%, rgba(255,255,255,.07), transparent 60%) , #15151c;
-    color:#f2f1ee;
-  }
-  .chapter--showcase .sec-head{color:#fff;}
-  .chapter--showcase .sec-sub{color:rgba(242,241,238,.62);}
-  .chapter--showcase .spec-table{background:rgba(255,255,255,.05); border-color:rgba(255,255,255,.14);}
-  .chapter--showcase .spec-row{border-bottom-color:rgba(255,255,255,.12);}
-  .chapter--showcase .spec-row dt{color:rgba(242,241,238,.45);}
-  .chapter--showcase .spec-row dd{color:#f2f1ee;}
-
-  /* CLIMAX — 일월오봉단: 일월오봉도를 현대적으로 재해석한 깊은 남색 + 금/적 악센트 */
-  .chapter--climax{
-    background:
-      radial-gradient(circle at 18% 12%, rgba(230,190,90,.17), transparent 42%),
-      radial-gradient(circle at 82% 8%, rgba(235,235,245,.10), transparent 36%),
-      radial-gradient(circle at 50% 100%, rgba(150,60,60,.14), transparent 45%),
-      linear-gradient(180deg,#12172c 0%,#171b30 55%,#1b1436 100%);
-    color:#f2f1ee;
-  }
-  .chapter--climax .sec-head{color:#fff;}
-  .chapter--climax .sec-sub{color:rgba(242,241,238,.62);}
-  .chapter--climax .band-tag{color:rgba(242,241,238,.72);}
-  .chapter--climax .member .kr{color:#fff;}
-  .chapter--climax .member .en, .chapter--climax .member .elem, .chapter--climax .member .sig{color:rgba(242,241,238,.55);}
-  .chapter--climax .member .role{color:#f2f1ee;}
-  .chapter--climax .band-close{color:#fff;}
-  .chapter--climax .sheet-dots span{background:rgba(255,255,255,.3);}
-  .chapter--climax .sheet-dots span.on{background:#fff;}
-  html[lang="en"] .chapter--climax .name-stack .kr{color:rgba(242,241,238,.55);}
-  html[lang="en"] .chapter--climax .name-stack .en{color:#fff;}
-
-  /* ── S1 캐릭터 히어로 (3p) ── */
-  .hero{padding-top:56px; padding-bottom:80px; text-align:center; border-top:none;}
-  .hero .hero-title{margin:0 0 30px; text-align:left;}
-  .hero .lockup{max-width:300px; margin:0 auto;}
-  .hero .statement{font-family:'Black Han Sans',sans-serif; font-weight:400; font-size:clamp(20px,2.6vw,28px); line-height:1.4; margin:30px 0 0; color:var(--ink);}
-  .hero .sub{max-width:540px; margin:18px auto 0; color:var(--ink-dim); line-height:1.85; font-weight:400;}
-  html[lang="en"] .hero .sub{line-height:1.7;}
-  .hero .quote{
-    margin:32px auto 0; font-family:'Black Han Sans',sans-serif; font-weight:400; font-size:clamp(22px,2.8vw,28px);
-    background:linear-gradient(100deg,#ffb6d9,#9fe7ff,#c9b6ff,#ffd97a,#ffb6d9);
-    background-size:300% 100%;
-    -webkit-background-clip:text; background-clip:text; color:transparent;
-    animation:sheen 7s linear infinite;
-  }
-  @keyframes sheen{ to{ background-position:300% 0; } }
-  @media(min-width:860px){
-    .hero{text-align:left;}
-    .hero .wrap{display:flex; align-items:center; gap:64px;}
-    .hero .hero-text{flex:1 1 480px; min-width:0;}
-    .hero .lockup{flex:0 0 340px; max-width:340px; margin:0;}
-    .hero .sub{margin-left:0; margin-right:0;}
-    .hero .quote{margin-left:0;}
-  }
-
-  /* ── S2 Naming (4p) ── */
-  .name-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start;}
-  .name-card{background:rgba(245,240,230,.03); border-radius:7px; padding:28px 26px; display:flex; flex-direction:column;}
-  .name-card .from-to{font-family:'Black Han Sans',sans-serif; font-size:22px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:16px;}
-  .name-card .mono{font-family:'Space Mono','Noto Sans KR',monospace; font-size:15px; font-weight:700;}
-  .name-card p{color:var(--ink-dim); line-height:1.75; font-size:15px; margin:0 0 16px; font-weight:400;}
-  html[lang="en"] .name-card p{line-height:1.62;}
-  .name-card .art{border-radius:10px; overflow:hidden; background:var(--pearl-2); display:flex; align-items:center; justify-content:center;}
-  .name-card .art img{width:100%;}
-
-  /* ── S3 Character Sheet (5p) ── */
-  .sheet-grid{display:grid; grid-template-columns:1.05fr 1fr; gap:26px; align-items:start;}
-  .scene{border-radius:16px; overflow:hidden; border:1px solid var(--line);}
-  .status-card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px 22px 22px;}
-  .status-head{display:flex; justify-content:space-between; align-items:center; font-family:'Press Start 2P',monospace; font-size:9px; letter-spacing:.5px; color:var(--ink-faint); margin-bottom:16px;}
-  .status-row{display:grid; grid-template-columns:112px 1fr; gap:6px 14px; padding:9px 0; border-bottom:1px dashed var(--line); align-items:baseline;}
-  .status-row:last-child{border-bottom:none;}
-  .status-row dt{font-family:'Space Mono','Noto Sans KR',monospace; font-size:10.5px; font-weight:700; color:var(--ink-faint); margin:0;}
-  .status-row dd{margin:0; font-size:14px; font-weight:500;}
-  .sheet-dots{display:none; justify-content:center; gap:8px; margin-top:14px;}
-  .sheet-dots span{width:7px; height:7px; border-radius:50%; background:var(--ink-faint); transition:background .25s;}
-  .sheet-dots span.on{background:var(--ink);}
-
-  /* ── S4 The Shell (6p) — 실제 4단 시퀀스 ── */
-  .shell-seq{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:8px 0 30px;}
-  .shell-seq figure{margin:0; text-align:center;}
-  .shell-seq .frame{border-radius:12px; overflow:hidden; border:1px solid var(--line); background:var(--card);}
-  .bridge-line{text-align:center; font-family:'Space Mono','Noto Sans KR',monospace; font-size:15px; margin:10px 0 26px;}
-
-  /* ── S5 Art Toy (8p) ── */
-  .toy-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:30px;}
-  @media(min-width:640px){ .toy-grid{grid-template-columns:repeat(4,1fr);} }
-  .toy-grid img{border-radius:12px; aspect-ratio:3/4; object-fit:cover;}
-  .spec-table{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:4px 24px; margin:0;}
-  .spec-row{display:grid; grid-template-columns:120px 1fr; gap:6px 14px; padding:13px 0; border-bottom:1px dashed var(--line); align-items:baseline;}
-  .spec-row:last-child{border-bottom:none;}
-  .spec-row dt{font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; font-weight:700; color:var(--ink-faint); margin:0;}
-  .spec-row dd{margin:0; font-size:13.5px; font-weight:500; line-height:1.6;}
-
-  /* ── S6 Ilwolobongdan (11-12p) ── */
-  .band-hero{text-align:center; margin-bottom:48px;}
-  .band-hero img{max-width:600px; width:100%; margin:0 auto; border-radius:20px; filter:drop-shadow(0 30px 70px rgba(0,0,0,.55));}
-  .band-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:12px; padding-top:24px; border-top:1px solid rgba(255,255,255,.12);}
-  .member{text-align:center; padding:6px 6px 0;}
-  .member .elem{font-family:'Space Mono','Noto Sans KR',monospace; font-size:9.5px; font-weight:700; letter-spacing:1.4px; color:var(--ink-faint); display:block; margin-bottom:10px;}
-  .member .portrait{height:150px; margin:0 auto 10px; display:flex; align-items:center; justify-content:center;}
-  .member .portrait img{width:auto; height:100%; object-fit:contain; margin:0; border-radius:6px;}
-  .name-stack{display:flex; flex-direction:column;}
-  .member .kr{font-family:'Black Han Sans',sans-serif; font-size:15px; display:block;}
-  .member .en{font-size:10px; color:var(--ink-dim); display:block; margin-top:3px; min-height:2.4em;}
-  html[lang="en"] .name-stack .kr{order:2; font-family:'Noto Sans KR',sans-serif; font-weight:400; font-size:10px; color:var(--ink-dim); margin-top:3px;}
-  html[lang="en"] .name-stack .en{order:1; font-family:'Black Han Sans',sans-serif; font-size:15px; color:var(--ink); margin-top:0; min-height:0;}
-  .member .role{font-size:11px; margin-top:8px; display:block; font-weight:500;}
-  .member .sig{font-family:'Space Mono','Noto Sans KR',monospace; font-size:9px; color:var(--ink-faint); display:block; margin-top:5px;}
-  .band-close{text-align:center; margin-top:32px; font-family:'Space Mono','Noto Sans KR',monospace; font-size:20px; font-weight:700;}
-
-  .available-section{border-top:1px solid var(--line); padding-top:70px;}
-  .avail-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-bottom:34px;}
-  @media(min-width:900px){ .avail-grid{grid-template-columns:repeat(4,1fr);} }
-  .avail-item{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:18px 16px; display:flex; flex-direction:column; gap:8px;}
-  .avail-label{font-family:'Space Mono','Noto Sans KR',monospace; font-size:10px; color:var(--ink-faint); letter-spacing:1px;}
-  .avail-item span:last-child{font-size:13.5px; font-weight:500;}
-  .avail-cta{display:inline-block; font-family:'Space Mono','Noto Sans KR',monospace; font-size:12.5px; letter-spacing:1px; color:var(--ink); border-bottom:1px solid var(--ink); padding-bottom:2px; text-decoration:none; transition:color .2s ease, border-color .2s ease;}
-  .avail-cta:hover{color:var(--gold); border-color:var(--gold);}
-  footer{border-top:1px solid var(--line); padding:30px 28px 44px; text-align:center; font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; color:var(--ink-faint);}
-
-  @media(max-width:820px){
-    .chapter{padding:76px 0;}
-    .name-grid{grid-template-columns:1fr;}
-    .sheet-grid{
-      display:flex; grid-template-columns:none;
-      overflow-x:auto; scroll-snap-type:x mandatory;
-      gap:12px; padding-bottom:4px;
-      -webkit-overflow-scrolling:touch;
-      scrollbar-width:none;
-    }
-    .sheet-grid::-webkit-scrollbar{display:none;}
-    .sheet-grid > *{flex:0 0 86%; scroll-snap-align:center;}
-    .sheet-dots{display:flex;}
-    .shell-seq{grid-template-columns:repeat(2,1fr);}
-    .band-grid{
-      display:flex; grid-template-columns:none;
-      overflow-x:auto; scroll-snap-type:x mandatory;
-      gap:10px; padding-bottom:4px;
-      -webkit-overflow-scrolling:touch;
-      scrollbar-width:none;
-    }
-    .band-grid::-webkit-scrollbar{display:none;}
-    .band-grid > *{flex:0 0 62%; scroll-snap-align:center;}
-  }
-</style>
+<link rel="stylesheet" href="ip-story.css">
 </head>
 <body>
+<a class="skip" href="#story">본문으로</a>
 
 <nav>
   <div class="logo-block">
@@ -268,6 +40,7 @@
       <span class="lang-sep" aria-hidden="true">/</span>
       <button id="langEn">EN</button>
     </div>
+    <button class="icon-btn" id="motion" aria-pressed="false" aria-label="움직임 멈추기">Ⅱ</button>
     <a class="icon-btn" aria-label="인스타그램" href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.4"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor"/></svg>
     </a>
@@ -291,212 +64,251 @@
   </nav>
 </div>
 
-<!-- S1 Character Intro (3p) — BEACH chapter -->
-<header class="hero chapter chapter--beach">
-  <div class="wrap">
-    <div class="hero-text">
-      <h1 class="sec-head hero-title" data-i="hero_tag">MEET SPACED-OUT SEA OTTER</h1>
-      <p class="statement" data-i="hero_h1">수영을 못 하는 해달.<br>얼빵해달을 소개합니다.</p>
-      <p class="sub" data-i="hero_sub">두 발로 걸어 이곳저곳 조개를 배달하는 조개배달부예요.<br>조개와 함께 사랑과 응원, 위로 같은 작은 마음도 전해요.<br>걸어서는 너무 느려서, 요즘은 동네 스포츠센터 아침 수영반에 다니고 있어요.</p>
-      <p class="quote" data-i="hero_quote">“해달도 배워야 수영을 한다.”</p>
+<main>
+<section class="hero" id="intro">
+  <div class="beach" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <p class="eyebrow">AN ORIGINAL CHARACTER BY SHIN HAEDAL</p>
+    <h1>SPACED-OUT<br>SEA OTTER<span class="title-dot">.</span></h1>
+    <p class="hero-name" data-i="hero_name">얼빵해달</p>
+    <div class="hero-character">
+      <img src="assets/hero_face.png" alt="조개를 안고 있는 얼빵해달" fetchpriority="high">
+      <span class="character-shadow"></span>
     </div>
-    <div class="lockup"><img src="assets/hero_face.webp" alt="얼빵해달"></div>
-  </div>
-</header>
-
-<!-- S2 Naming (4p) — 조용한 정보 비트 -->
-<section class="chapter">
-  <div class="wrap">
-    <h2 class="sec-head" data-i="name_h">이름의 비밀</h2>
-    <p class="sec-sub" data-i="name_sub">‘Spaced-out Sea Otter’는 단순히 이름만 옮긴 번역이 아니에요. 캐릭터 자체를 번역한 이름이에요.</p>
-    <div class="name-grid">
-      <div class="name-card">
-        <div class="from-to">얼빵 <span class="mono">→ SPACED-OUT</span></div>
-        <p data-i="name_c1">‘얼빵’을 소리 그대로 Eolbbang이라 쓰는 대신, 조금 얼빠져 있고 어딘가 엇박자지만 그래서 사랑스러운 느낌을 ‘Spaced-out’으로 옮겼어요. 이름 자체가 성격 소개가 되도록요.</p>
-        <div class="art"><img src="assets/hero_logo.png" alt="Spaced-out Sea Otter" loading="lazy" decoding="async"></div>
-      </div>
-      <div class="name-card">
-        <div class="from-to">해달 <span class="mono">→ SUN + MOON</span></div>
-        <p data-i="name_c2">‘해달’은 동물 해달이면서, 해(☀)와 달(☾)로도 읽혀요. 하나의 이름 안에 동물과 하늘, 두 겹의 의미가 함께 들어 있어요.</p>
-        <div class="art"><img src="assets/name_haedal.png" alt="해 · 달 · 자개행성" loading="lazy" decoding="async"></div>
-      </div>
-    </div>
+    <div class="hero-note"><p data-i="hero_note">멍때리다 수영을 배우지 못한 해달.<br>해변에서 만나요.</p></div>
+    <a class="scroll-link" href="#story"><span data-i="hero_scroll">얼빵해달의 이야기</span><span>↓</span></a>
+    <span class="hero-index">01 — MEET</span>
   </div>
 </section>
 
-<!-- S3 Character Sheet (5p) — POOL chapter: 수영을 배우는 얕은 물 -->
-<section class="chapter chapter--pool">
-  <div class="wrap">
-    <h2 class="sec-head" data-i="sheet_h">캐릭터 프로필</h2>
-    <p class="sec-sub" data-i="sheet_sub">처음 만나는 분들을 위한 얼빵해달 기본 정보.</p>
-    <div class="sheet-grid">
-      <div class="scene"><img src="assets/profile_scene.jpg" alt="조개배달부 얼빵해달" loading="lazy" decoding="async"></div>
-      <div class="status-card">
-        <div class="status-head"><span>CHARACTER STATUS</span></div>
-        <dl style="margin:0">
-          <div class="status-row"><dt>NAME</dt><dd data-i="sheet_name">얼빵해달 (Spaced-out Sea Otter)</dd></div>
-          <div class="status-row"><dt>SPECIES</dt><dd data-i="sheet_species">해달</dd></div>
-          <div class="status-row"><dt>JOB</dt><dd data-i="sheet_job">조개배달부</dd></div>
-          <div class="status-row"><dt>SIGNATURE</dt><dd data-i="sheet_sig">조개껍데기</dd></div>
-          <div class="status-row"><dt>DELIVERS</dt><dd data-i="sheet_del">사랑 · 응원 · 위로</dd></div>
-          <div class="status-row"><dt>CREATED</dt><dd>2020</dd></div>
-        </dl>
-      </div>
-    </div>
-    <div class="sheet-dots" id="sheetDots" aria-hidden="true"><span class="on"></span><span></span></div>
+<section id="story" class="story section">
+  <div class="section-top reveal">
+    <span class="eyebrow">01 / THE SHELL DELIVERY WORKER</span>
+    <h2 data-i="s1_h2">조개를 줍고,<br>작가님에게 건네요.</h2>
+  </div>
+  <div class="story-grid">
+    <article class="story-piece reveal">
+      <div class="comic-crop first"><img src="assets/story-collect.webp" alt="해변에서 조개를 줍는 얼빵해달" loading="lazy" decoding="async"></div>
+      <div class="caption"><span>01</span><div><h3 data-i="s1_h3a">수영 대신, 두 발로.</h3><p data-i="s1_pa">얼빵해달은 해변을 걸어 다니며 조개를 주워요.</p></div></div>
+    </article>
+    <article class="story-piece reveal second">
+      <div class="comic-crop next"><img src="assets/story-deliver.webp" alt="주워온 조개를 작가님에게 전달하는 얼빵해달" loading="lazy" decoding="async"></div>
+      <div class="caption"><span>02</span><div><h3 data-i="s1_h3b">직업은 조개배달부.</h3><p data-i="s1_pb">이렇게 주워온 조개를 작가님에게 가져다줘요. 그래서 조개배달부예요.</p></div></div>
+    </article>
+  </div>
+  <div class="delivery-meaning reveal">
+    <span class="eyebrow">DELIVERS: Love · Encouragement · Comfort</span>
+    <p data-i="s1_delivery">조개와 함께, 사랑·용기·위로를 배달해요.</p>
   </div>
 </section>
 
-<!-- S4 The Shell (6p) — NACRE chapter -->
-<section class="chapter chapter--nacre">
-  <div class="wrap">
-    <h2 class="sec-head" data-i="shell_h">조개 — 단순한 소품 그 이상</h2>
-    <p class="sec-sub" data-i="shell_sub">얼빵해달이 배달하는 조개는 캐릭터의 소품이면서, 신해달 작업 전체를 관통하는 재료이기도 해요.</p>
-
-    <div class="shell-seq">
-      <figure><div class="frame"><img src="assets/shell_1.png" alt="조개" loading="lazy" decoding="async"></div></figure>
-      <figure><div class="frame"><img src="assets/shell_2.png" alt="자개" loading="lazy" decoding="async"></div></figure>
-      <figure><div class="frame"><img src="assets/shell_3.png" alt="나전칠기 작품" loading="lazy" decoding="async"></div></figure>
-      <figure><div class="frame"><img src="assets/shell_4.png" alt="완성작" loading="lazy" decoding="async"></div></figure>
+<section class="pool section" id="pool">
+  <div class="pool-layout">
+    <div class="pool-copy reveal">
+      <span class="eyebrow">02 / MORNING SWIMMING</span>
+      <h2 data-i="pool_h2">더 많은 조개를<br>주울 수 있다면.</h2>
+      <p data-i="pool_p">수영을 배우면 더 빠르게, 더 많은 조개를 주울 수 있으니까.<br><br>얼빵해달은 현대사회스포츠센터에 등록했어요. 지금은 실내수영을 배우는 중이에요.</p>
+      <div class="pool-label">HYUNDAE SOCIAL SPORTS CENTER<br>MORNING SWIMMING / SEA OTTER</div>
     </div>
-
-    <p class="bridge-line" data-i="shell_quote">“만드는 이에게는 재료, 받는 이에게는 마음.”</p>
+    <div class="pool-art reveal">
+      <img class="swim-image" src="assets/swimming-hq.webp" alt="실내수영장에서 수영을 배우는 얼빵해달" loading="lazy" decoding="async">
+      <img class="membership" src="assets/membership.png" alt="현대사회스포츠센터 회원등록증" loading="lazy" decoding="async">
+    </div>
+  </div>
+  <div class="pool-quote reveal">
+    <h2 data-i="pool_quote_h2">해달도 배워야<br>수영을 한다.</h2>
+    <span>SPACED-OUT SEA OTTER</span>
   </div>
 </section>
 
-<!-- S5 Art Toy (8p) — SHOWCASE chapter: 다크 쇼케이스/스포트라이트 -->
-<section class="chapter chapter--showcase">
-  <div class="wrap">
-    <h2 class="sec-head" data-i="toy_h">2D에서 3D로</h2>
-    <p class="sec-sub" data-i="toy_sub">얼빵해달은 자개와 옻칠을 그대로 입힌 3D 콜렉터블 아트토이로도 만들어졌어요. 시그니처 조개는 자석으로 탈부착되는 부속으로 재현했어요.</p>
-    <div class="toy-grid">
-      <img src="assets/arttoy_1.jpg" alt="" loading="lazy" decoding="async"><img src="assets/arttoy_2.jpg" alt="" loading="lazy" decoding="async"><img src="assets/arttoy_3.jpg" alt="" loading="lazy" decoding="async"><img src="assets/arttoy_4.jpg" alt="" loading="lazy" decoding="async">
-    </div>
-    <dl class="spec-table">
-      <div class="spec-row"><dt>Material</dt><dd data-i="toy_mat">자개 · 옻칠 · 친환경 패각 레진</dd></div>
-      <div class="spec-row"><dt>Feature</dt><dd data-i="toy_feat">자석 탈부착 조개</dd></div>
-      <div class="spec-row"><dt>Year</dt><dd>2026</dd></div>
-      <div class="spec-row"><dt>Size</dt><dd>10 × 9 × 6 cm</dd></div>
+<section class="identity section" id="identity">
+  <div class="identity-head reveal">
+    <span class="eyebrow">03 / A LITTLE MORE ABOUT ME</span>
+    <h2 data-i="id_h2">이름에도, 성격이 있어요.</h2>
+    <p class="identity-subtitle" data-i="id_sub">Spaced-out Sea Otter는 이름을 옮긴 것만이 아니라, 캐릭터 자체를 옮긴 표현입니다.</p>
+  </div>
+  <div class="naming">
+    <article class="name-card reveal">
+      <img src="assets/hero_logo.png" alt="Spaced-out Sea Otter 공식 로고" loading="lazy" decoding="async">
+      <h3>얼빵 <span>→ SPACED-OUT</span></h3>
+      <p data-i="id_card1_p">'얼빵'을 Eolbbang으로 음역하는 대신, 조금 멍하고, 살짝 엇박자이며, 사랑스러운 'Spaced-out'으로 옮겼습니다. 이름 자체가 성격을 소개합니다.</p>
+    </article>
+    <article class="name-card reveal">
+      <img src="assets/name_haedal.png" alt="해와 달, 조개" loading="lazy" decoding="async">
+      <h3>해달 <span>→ SUN + MOON</span></h3>
+      <p data-i="id_card2_p">한국어 '해달'은 동물 sea otter를 뜻합니다. 하지만 해(sun) + 달(moon)로도 읽을 수 있습니다. 하나의 이름에 동물과 하늘이라는 두 겹의 의미가 담겨 있습니다.</p>
+    </article>
+  </div>
+  <details class="profile-details">
+    <summary><span data-i="id_profile">얼빵해달 프로필</span><span>＋</span></summary>
+    <dl>
+      <div><dt>NAME</dt><dd>SPACED-OUT SEA OTTER / 얼빵해달</dd></div>
+      <div><dt>SPECIES</dt><dd>Sea Otter</dd></div>
+      <div><dt>JOB</dt><dd><span data-i="id_job">조개배달부</span></dd></div>
+      <div><dt>DELIVERS</dt><dd><span data-i="id_delivers">사랑 · 용기 · 위로</span></dd></div>
+      <div><dt>SIGNATURE</dt><dd><span data-i="id_sig">조개</span></dd></div>
+      <div><dt>CREATED</dt><dd>2020</dd></div>
     </dl>
-  </div>
+  </details>
 </section>
 
-<!-- S6 Ilwolobongdan (11-12p) — CLIMAX chapter: 일월오봉도의 현대적 재해석 -->
-<section class="chapter chapter--climax">
-  <div class="wrap">
-    <h2 class="sec-head" data-i="band_h">일월오봉단<span class="title-sub">Ilwolobongdan</span></h2>
-    <p class="band-tag" data-i="band_tag">얼빵해달은 혼자가 아니에요</p>
-    <p class="sec-sub" data-i="band_sub">일월오봉단(日月五峯團)은 조선 왕실 그림 ‘일월오봉도’에서 출발한 신해달의 오리지널 캐릭터 그룹이에요. 학, 토끼, 호랑이, 사슴 — 한국 전통 도상 속 동물들이 각자의 직업을 갖고 살아가요.</p>
-
-    <div class="band-hero"><img src="assets/band_group.png" alt="일월오봉단" loading="lazy" decoding="async"></div>
-
-    <div class="band-grid">
-      <div class="member">
-        <span class="elem">SUN</span>
-        <div class="portrait"><img src="assets/Crane_Crane.png" alt="학두루미" loading="lazy" decoding="async"></div>
-        <div class="name-stack"><span class="kr">학두루미</span><span class="en">Crane Crane</span></div>
-        <span class="role" data-i="m1_role">경호원</span>
-        <span class="sig" data-i="m1_sig">Signature: ㅎ</span>
-      </div>
-      <div class="member">
-        <span class="elem">MOON</span>
-        <div class="portrait"><img src="assets/First-Moon_Rabbit.png" alt="정월토끼" loading="lazy" decoding="async"></div>
-        <div class="name-stack"><span class="kr">정월토끼</span><span class="en">First-Moon Rabbit</span></div>
-        <span class="role" data-i="m2_role">변장한 공주</span>
-        <span class="sig" data-i="m2_sig">Signature: 달맞이꽃</span>
-      </div>
-      <div class="member">
-        <span class="elem">MOUNTAIN</span>
-        <div class="portrait"><img src="assets/Gentle_Tiger.png" alt="선한백호" loading="lazy" decoding="async"></div>
-        <div class="name-stack"><span class="kr">선한백호</span><span class="en">Gentle Tiger</span></div>
-        <span class="role" data-i="m3_role">산지기</span>
-        <span class="sig" data-i="m3_sig">Signature: 곶감</span>
-      </div>
-      <div class="member">
-        <span class="elem">PINE</span>
-        <div class="portrait"><img src="assets/Blunt_Deer.png" alt="솔직사슴" loading="lazy" decoding="async"></div>
-        <div class="name-stack"><span class="kr">솔직사슴</span><span class="en">Blunt Deer</span></div>
-        <span class="role" data-i="m4_role">짐꾼</span>
-        <span class="sig" data-i="m4_sig">Signature: 솔방울</span>
-      </div>
-      <div class="member">
-        <span class="elem">SEA</span>
-        <div class="portrait"><img src="assets/Spaced-out_Sea_Otter.png" alt="얼빵해달" loading="lazy" decoding="async"></div>
-        <div class="name-stack"><span class="kr">얼빵해달</span><span class="en">Spaced-out Sea Otter</span></div>
-        <span class="role" data-i="m5_role">조개배달부</span>
-        <span class="sig" data-i="m5_sig">Signature: 자개</span>
-      </div>
+<section class="toy section" id="toy">
+  <div class="toy-heading reveal">
+    <span class="eyebrow">04 / FROM 2D TO 3D</span>
+    <h2 data-i="toy_h2">그림 밖에서<br>만난 얼빵해달.</h2>
+    <p data-i="toy_p">천연자개와 옻칠을 입힌 나전칠기 아트토이.<br>품에 안은 조개는 자석으로 떼고 붙일 수 있어요.</p>
+  </div>
+  <div class="toy-main reveal">
+    <button class="photo-open" data-photo="assets/arttoy_1.jpg" aria-label="아트토이 사진 크게 보기">
+      <img src="assets/arttoy_1.jpg" alt="조개배달부 얼빵해달 나전칠기 아트토이" loading="lazy" decoding="async"><span>VIEW ↗</span>
+    </button>
+  </div>
+  <div class="toy-bottom">
+    <div class="toy-spec">
+      <span>NAJEONCHILGI ART TOY</span>
+      <p>2026 · 10 × 9 × 6 cm</p>
+      <p data-i="toy_spec">천연자개 · 옻칠 · 굴패각 친환경 수지</p>
     </div>
-    <div class="sheet-dots" id="bandDots" aria-hidden="true"><span class="on"></span><span></span><span></span><span></span><span></span></div>
-
-    <p class="band-close" data-i="band_close">다섯 캐릭터, 다섯 역할, 다섯 상징 — 하나의 세계.</p>
-  </div>
-</section>
-
-<!-- Closing — 다시 조용하게 -->
-<section class="chapter available-section">
-  <div class="wrap">
-    <h2 class="sec-head" data-i="avail_h">Licensing &amp; Collaboration</h2>
-    <p class="sec-sub" data-i="avail_sub">얼빵해달과 일월오봉단은 다음과 같은 협업에 열려 있어요.</p>
-    <div class="avail-grid">
-      <div class="avail-item"><span class="avail-label">01 · LICENSING</span><span data-i="avail_1">캐릭터 · 이미지 라이선싱</span></div>
-      <div class="avail-item"><span class="avail-label">02 · BRAND</span><span data-i="avail_2">브랜드 협업</span></div>
-      <div class="avail-item"><span class="avail-label">03 · PRODUCT</span><span data-i="avail_3">아트토이 · 제품 협업</span></div>
-      <div class="avail-item"><span class="avail-label">04 · PROJECT</span><span data-i="avail_4">전시 · 프로젝트 제안</span></div>
+    <div class="toy-thumbs">
+      <button class="photo-open" data-photo="assets/arttoy_2.jpg" aria-label="아트토이 상세 사진 2"><img src="assets/arttoy_2.jpg" alt="아트토이 디테일" loading="lazy" decoding="async"></button>
+      <button class="photo-open" data-photo="assets/arttoy_3.jpg" aria-label="아트토이 상세 사진 3"><img src="assets/arttoy_3.jpg" alt="아트토이 디테일" loading="lazy" decoding="async"></button>
+      <button class="photo-open" data-photo="assets/arttoy_4.jpg" aria-label="아트토이 상세 사진 4"><img src="assets/arttoy_4.jpg" alt="아트토이 디테일" loading="lazy" decoding="async"></button>
     </div>
-    <a class="avail-cta" href="../contact/?type=licensing" data-i="avail_cta">LICENSING &amp; COLLABORATION →</a>
   </div>
 </section>
 
-<footer>© SHIN HAEDAL &nbsp;&nbsp;&nbsp;&nbsp; All rights reserved.</footer>
+<section class="friends section" id="friends">
+  <div class="friends-top">
+    <div class="reveal">
+      <span class="eyebrow">05 / ILWOLOBONGDAN</span>
+      <h2 data-i="fr_h2">혼자가 아니에요.</h2>
+      <p class="friends-lead" data-i="fr_lead">얼빵해달에게는<br>일월오봉단 친구들이 있어요.</p>
+      <p data-i="fr_p">해와 달, 산과 소나무, 물.<br>일월오봉도에서 출발한 다섯 캐릭터의 세계.</p>
+    </div>
+    <div class="group-art reveal"><img src="assets/friends.webp" alt="일월오봉단 다섯 친구들" loading="lazy" decoding="async"></div>
+  </div>
+  <div class="member-controls">
+    <span>MEET THE FIVE</span>
+    <div><button id="prev" aria-label="이전 친구">←</button><span id="member-count">1 / 5</span><button id="next" aria-label="다음 친구">→</button></div>
+  </div>
+  <div class="members" id="members">
+    <article class="member">
+      <span class="eyebrow">SUN</span>
+      <img src="assets/crane-cutout.webp" alt="학두루미" loading="lazy" decoding="async">
+      <h3 data-i="fr1_h3">학두루미</h3>
+      <p data-i="fr1_p">경호원</p>
+      <small>ㅎ</small>
+    </article>
+    <article class="member">
+      <span class="eyebrow">MOON</span>
+      <img src="assets/rabbit-cutout.webp" alt="정월토끼" loading="lazy" decoding="async">
+      <h3 data-i="fr2_h3">정월토끼</h3>
+      <p data-i="fr2_p">변장한 공주</p>
+      <small>달맞이꽃 / Evening Primrose</small>
+    </article>
+    <article class="member">
+      <span class="eyebrow">MOUNTAIN</span>
+      <img src="assets/tiger-cutout.webp" alt="선한백호" loading="lazy" decoding="async">
+      <h3 data-i="fr3_h3">선한백호</h3>
+      <p data-i="fr3_p">산지기</p>
+      <small>곶감 / Dried Persimmon</small>
+    </article>
+    <article class="member">
+      <span class="eyebrow">PINE</span>
+      <img src="assets/deer-cutout.webp" alt="솔직사슴" loading="lazy" decoding="async">
+      <h3 data-i="fr4_h3">솔직사슴</h3>
+      <p data-i="fr4_p">짐꾼</p>
+      <small>솔방울 / Pine Cone</small>
+    </article>
+    <article class="member">
+      <span class="eyebrow">SEA</span>
+      <img src="assets/otter-cutout.png" alt="얼빵해달" loading="lazy" decoding="async">
+      <h3 data-i="fr5_h3">얼빵해달</h3>
+      <p data-i="fr5_p">조개배달부</p>
+      <small>자개 / Mother-of-Pearl</small>
+    </article>
+  </div>
+</section>
+
+<section id="licensing" class="closing section">
+  <span class="eyebrow">LICENSING &amp; COLLABORATION</span>
+  <h2 data-i="close_h2">얼빵해달과 함께.</h2>
+  <p data-i="close_p">캐릭터 라이선싱 · 브랜드 협업 · 아트토이 · 전시 프로젝트</p>
+  <a class="contact-link" href="../contact/?type=licensing"><span data-i="close_cta">협업 문의</span><span>↗</span></a>
+</section>
+</main>
+
+<footer>
+  <a href="../">ⓒ SHIN HAEDAL</a>
+  <span>SPACED-OUT SEA OTTER</span>
+  <a href="#intro">BACK TO TOP ↑</a>
+</footer>
+
+<dialog id="viewer">
+  <button id="close-viewer" aria-label="사진 닫기">✕</button>
+  <img id="viewer-image" alt="얼빵해달 아트토이 상세">
+  <p>SHIN HAEDAL · NAJEONCHILGI ART TOY</p>
+</dialog>
 
 <script>
 const I18N = {
   ko: {
-    hero_tag:'MEET SPACED-OUT SEA OTTER',
-    hero_h1:'수영을 못 하는 해달.<br>얼빵해달을 소개합니다.',
-    hero_sub:'두 발로 걸어 이곳저곳 조개를 배달하는 조개배달부예요.<br>조개와 함께 사랑과 응원, 위로 같은 작은 마음도 전해요.<br>걸어서는 너무 느려서, 요즘은 동네 스포츠센터 아침 수영반에 다니고 있어요.',
-    hero_quote:'“해달도 배워야 수영을 한다.”',
-    name_h:'이름의 비밀', name_sub:'‘Spaced-out Sea Otter’는 단순히 이름만 옮긴 번역이 아니에요. 캐릭터 자체를 번역한 이름이에요.',
-    name_c1:'‘얼빵’을 소리 그대로 Eolbbang이라 쓰는 대신, 조금 얼빠져 있고 어딘가 엇박자지만 그래서 사랑스러운 느낌을 ‘Spaced-out’으로 옮겼어요. 이름 자체가 성격 소개가 되도록요.',
-    name_c2:'‘해달’은 동물 해달이면서, 해(☀)와 달(☾)로도 읽혀요. 하나의 이름 안에 동물과 하늘, 두 겹의 의미가 함께 들어 있어요.',
-    sheet_h:'캐릭터 프로필', sheet_sub:'처음 만나는 분들을 위한 얼빵해달 기본 정보.',
-    sheet_name:'얼빵해달 (Spaced-out Sea Otter)', sheet_species:'해달', sheet_job:'조개배달부', sheet_sig:'조개껍데기', sheet_del:'사랑 · 응원 · 위로',
-    shell_h:'조개 — 단순한 소품 그 이상', shell_sub:'얼빵해달이 배달하는 조개는 캐릭터의 소품이면서, 신해달 작업 전체를 관통하는 재료이기도 해요.',
-    shell_c1:'SHELL', shell_c4:'ARTWORK', shell_quote:'“만드는 이에게는 재료, 받는 이에게는 마음.”',
-    toy_h:'2D에서 3D로', toy_sub:'얼빵해달은 자개와 옻칠을 그대로 입힌 3D 콜렉터블 아트토이로도 만들어졌어요. 시그니처 조개는 자석으로 탈부착되는 부속으로 재현했어요.',
-    toy_mat:'자개 · 옻칠 · 친환경 패각 레진', toy_feat:'자석 탈부착 조개',
-    band_h:'일월오봉단<span class="title-sub">Ilwolobongdan</span>', band_tag:'얼빵해달은 혼자가 아니에요', band_sub:'일월오봉단(日月五峯團)은 조선 왕실 그림 ‘일월오봉도’에서 출발한 신해달의 오리지널 캐릭터 그룹이에요. 학, 토끼, 호랑이, 사슴 — 한국 전통 도상 속 동물들이 각자의 직업을 갖고 살아가요.',
-    m1_role:'경호원', m2_role:'변장한 공주', m3_role:'산지기', m4_role:'짐꾼', m5_role:'조개배달부',
-    m1_sig:'Signature: ㅎ', m2_sig:'Signature: 달맞이꽃', m3_sig:'Signature: 곶감', m4_sig:'Signature: 솔방울', m5_sig:'Signature: 자개',
-    band_close:'다섯 캐릭터, 다섯 역할, 다섯 상징 — 하나의 세계.',
-    avail_h:'Licensing &amp; Collaboration', avail_sub:'얼빵해달과 일월오봉단은 다음과 같은 협업에 열려 있어요.',
-    avail_1:'캐릭터 · 이미지 라이선싱', avail_2:'브랜드 협업', avail_3:'아트토이 · 제품 협업', avail_4:'전시 · 프로젝트 제안',
-    avail_cta:'LICENSING &amp; COLLABORATION →',
-    page_title:'IP — 얼빵해달'
+    hero_name:'얼빵해달',
+    hero_note:'멍때리다 수영을 배우지 못한 해달.<br>해변에서 만나요.',
+    hero_scroll:'얼빵해달의 이야기',
+    s1_h2:'조개를 줍고,<br>작가님에게 건네요.',
+    s1_h3a:'수영 대신, 두 발로.', s1_pa:'얼빵해달은 해변을 걸어 다니며 조개를 주워요.',
+    s1_h3b:'직업은 조개배달부.', s1_pb:'이렇게 주워온 조개를 작가님에게 가져다줘요. 그래서 조개배달부예요.',
+    s1_delivery:'조개와 함께, 사랑·용기·위로를 배달해요.',
+    pool_h2:'더 많은 조개를<br>주울 수 있다면.',
+    pool_p:'수영을 배우면 더 빠르게, 더 많은 조개를 주울 수 있으니까.<br><br>얼빵해달은 현대사회스포츠센터에 등록했어요. 지금은 실내수영을 배우는 중이에요.',
+    pool_quote_h2:'해달도 배워야<br>수영을 한다.',
+    id_h2:'이름에도, 성격이 있어요.',
+    id_sub:'Spaced-out Sea Otter는 이름을 옮긴 것만이 아니라, 캐릭터 자체를 옮긴 표현입니다.',
+    id_card1_p:'‘얼빵’을 Eolbbang으로 음역하는 대신, 조금 멍하고, 살짝 엇박자이며, 사랑스러운 ‘Spaced-out’으로 옮겼습니다. 이름 자체가 성격을 소개합니다.',
+    id_card2_p:'한국어 ‘해달’은 동물 sea otter를 뜻합니다. 하지만 해(sun) + 달(moon)로도 읽을 수 있습니다. 하나의 이름에 동물과 하늘이라는 두 겹의 의미가 담겨 있습니다.',
+    id_profile:'얼빵해달 프로필', id_job:'조개배달부', id_delivers:'사랑 · 용기 · 위로', id_sig:'조개',
+    toy_h2:'그림 밖에서<br>만난 얼빵해달.',
+    toy_p:'천연자개와 옻칠을 입힌 나전칠기 아트토이.<br>품에 안은 조개는 자석으로 떼고 붙일 수 있어요.',
+    toy_spec:'천연자개 · 옻칠 · 굴패각 친환경 수지',
+    fr_h2:'혼자가 아니에요.',
+    fr_lead:'얼빵해달에게는<br>일월오봉단 친구들이 있어요.',
+    fr_p:'해와 달, 산과 소나무, 물.<br>일월오봉도에서 출발한 다섯 캐릭터의 세계.',
+    fr1_h3:'학두루미', fr1_p:'경호원', fr2_h3:'정월토끼', fr2_p:'변장한 공주',
+    fr3_h3:'선한백호', fr3_p:'산지기', fr4_h3:'솔직사슴', fr4_p:'짐꾼', fr5_h3:'얼빵해달', fr5_p:'조개배달부',
+    close_h2:'얼빵해달과 함께.',
+    close_p:'캐릭터 라이선싱 · 브랜드 협업 · 아트토이 · 전시 프로젝트',
+    close_cta:'협업 문의',
+    page_title:'SPACED-OUT SEA OTTER — 얼빵해달 | SHIN HAEDAL'
   },
   en: {
-    hero_tag:'MEET SPACED-OUT SEA OTTER',
-    hero_h1:'A sea otter who cannot swim.<br>Meet Eolbbang Haedal.',
-    hero_sub:'A shell delivery worker who walks on two feet, carrying shells from place to place — along with little pieces of love, encouragement and comfort. Walking was way too slow, so these days it attends a morning swim class at the local sports center.',
-    hero_quote:'“Even sea otters have to learn to swim.”',
-    name_h:'What\'s in a Name?', name_sub:'Spaced-out Sea Otter is not only a translation of a name — it is a translation of the character itself.',
-    name_c1:'Rather than romanizing ‘얼빵’ as Eolbbang, it was translated as ‘Spaced-out’ — slightly absent-minded, a little offbeat, and endearing. The name itself introduces the personality.',
-    name_c2:'In Korean, ‘해달’ (haedal) means sea otter. But it can also be read as 해 (sun) + 달 (moon) — one name carrying two layers: the animal, and the sky.',
-    sheet_h:'Character Profile', sheet_sub:'The essentials, for those meeting Spaced-out Sea Otter for the first time.',
-    sheet_name:'Eolbbang Haedal (Spaced-out Sea Otter)', sheet_species:'Sea Otter', sheet_job:'Shell Delivery Worker', sheet_sig:'Shell', sheet_del:'Love · Encouragement · Comfort',
-    shell_h:'The Shell — more than an accessory', shell_sub:'The shell Spaced-out Sea Otter delivers is both a character prop and the very material running through all of Shin Haedal\'s work.',
-    shell_c1:'SHELL', shell_c4:'ARTWORK', shell_quote:'“For the creator, a material. For someone else, a message.”',
-    toy_h:'From 2D to 3D', toy_sub:'Spaced-out Sea Otter has been developed into a 3D collectible art toy finished in natural mother-of-pearl and lacquer, with a detachable magnetic shell.',
-    toy_mat:'Natural Mother-of-Pearl · Lacquer · Eco-friendly Oyster Shell Resin', toy_feat:'Detachable Magnetic Shell',
-    band_h:'Ilwolobongdan<span class="title-sub">일월오봉단</span>', band_tag:'Spaced-out Sea Otter is not alone', band_sub:'Ilwolobongdan (일월오봉단) is Shin Haedal\'s original character group inspired by Ilworobongdo, the traditional Korean royal painting of the sun, moon, five peaks, pine trees and water. Its members draw from Korean traditional motifs — crane, rabbit, tiger, deer — each living out an occupation of their own.',
-    m1_role:'Guard', m2_role:'Princess in Disguise', m3_role:'Mountain Keeper', m4_role:'Porter', m5_role:'Shell Delivery Worker',
-    m1_sig:'Signature: ㅎ (Hangeul)', m2_sig:'Signature: Evening Primrose', m3_sig:'Signature: Dried Persimmon', m4_sig:'Signature: Pine Cone', m5_sig:'Signature: Mother-of-Pearl',
-    band_close:'Five characters. Five roles. Five symbols. One world.',
-    avail_h:'Licensing &amp; Collaboration', avail_sub:'Spaced-out Sea Otter and Ilwolobongdan are open to the following kinds of collaboration.',
-    avail_1:'Character &amp; Image Licensing', avail_2:'Brand Collaboration', avail_3:'Art Toy / Product Collaboration', avail_4:'Exhibition / Project Proposal',
-    avail_cta:'LICENSING &amp; COLLABORATION →',
-    page_title:'IP — Spaced-out Sea Otter'
+    hero_name:'Meet Spaced-out Sea Otter',
+    hero_note:'An absent-minded sea otter who never learned to swim.<br>Meet it by the sea.',
+    hero_scroll:'THE STORY',
+    s1_h2:'A shell from the shore.<br>A delivery to the artist.',
+    s1_h3a:'On two feet.', s1_pa:'Spaced-out Sea Otter walks along the beach, picking up shells.',
+    s1_h3b:'A shell delivery worker.', s1_pb:'It brings the shells it finds to the artist. That is why it is a shell delivery worker.',
+    s1_delivery:'Along with shells, it delivers love, encouragement and comfort.',
+    pool_h2:'More shells.<br>A reason to learn.',
+    pool_p:'Swimming would help it collect more shells, faster.<br><br>So it signed up at Hyundae Social Sports Center. It is now learning to swim indoors.',
+    pool_quote_h2:'Even sea otters<br>have to learn to swim.',
+    id_h2:'A name with a personality.',
+    id_sub:'Spaced-out Sea Otter is not only a translation of a name — it is a translation of the character itself.',
+    id_card1_p:'Rather than romanizing ‘얼빵’ as Eolbbang, it was translated as ‘Spaced-out’ — slightly absent-minded, a little offbeat, and endearing. The name itself introduces the personality.',
+    id_card2_p:'In Korean, ‘해달’ (haedal) means sea otter. But it can also be read as 해 (sun) + 달 (moon) — one name carrying two layers: the animal, and the sky.',
+    id_profile:'CHARACTER PROFILE', id_job:'Shell Delivery Worker', id_delivers:'Love · Encouragement · Comfort', id_sig:'Shell',
+    toy_h2:'Meet it<br>off the page.',
+    toy_p:'An art toy finished in natural mother-of-pearl and lacquer.<br>The shell is a detachable magnetic piece.',
+    toy_spec:'Natural mother-of-pearl · Lacquer · Eco-friendly oyster shell resin',
+    fr_h2:'Not alone.',
+    fr_lead:'Meet the friends of<br>Ilwolobongdan.',
+    fr_p:'The sun, moon, mountains, pine trees and water.<br>A world of five characters inspired by Ilworobongdo.',
+    fr1_h3:'Crane Crane', fr1_p:'Guard', fr2_h3:'First-Moon Rabbit', fr2_p:'Princess in Disguise',
+    fr3_h3:'Gentle Tiger', fr3_p:'Mountain Keeper', fr4_h3:'Blunt Deer', fr4_p:'Porter', fr5_h3:'Spaced-out Sea Otter', fr5_p:'Shell Delivery Worker',
+    close_h2:'Together with<br>Spaced-out Sea Otter.',
+    close_p:'Character licensing · Brand collaboration · Art toys · Exhibition projects',
+    close_cta:'LET’S TALK',
+    page_title:'SPACED-OUT SEA OTTER | SHIN HAEDAL'
   }
 };
 function applyLang(l, opts){
@@ -515,22 +327,11 @@ function applyLang(l, opts){
     const v=I18N[l][el.dataset.i];
     if(v===undefined)return;
     el.innerHTML=v;
-    el.style.display = v==='' ? 'none' : '';
   });
   document.getElementById('langKo').classList.toggle('on', l==='ko');
   document.getElementById('langEn').classList.toggle('on', l==='en');
+  if(window.ipStorySetMotionLabel) window.ipStorySetMotionLabel();
 }
-function attachDots(gridSel, dotsSel){
-  var grid=document.querySelector(gridSel), dots=document.querySelectorAll(dotsSel+' span');
-  if(!grid||!dots.length)return;
-  grid.addEventListener('scroll', function(){
-    var max=grid.scrollWidth-grid.clientWidth;
-    var i=max>0?Math.round(grid.scrollLeft/max*(dots.length-1)):0;
-    dots.forEach(function(d,k){ d.classList.toggle('on', k===i); });
-  }, {passive:true});
-}
-attachDots('.sheet-grid','#sheetDots');
-attachDots('.band-grid','#bandDots');
 document.getElementById('langKo').onclick=()=>applyLang('ko');
 document.getElementById('langEn').onclick=()=>applyLang('en');
 (function(){
@@ -583,5 +384,6 @@ document.getElementById('langEn').onclick=()=>applyLang('en');
   });
 })();
 </script>
+<script src="ip-story.js"></script>
 </body>
 </html>
