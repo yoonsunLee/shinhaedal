@@ -40,6 +40,7 @@ nav{
 }
 .logo-block{display:flex; flex-direction:column; gap:5px;}
 .logo{font-family:'Black Han Sans', sans-serif; font-size:20px; letter-spacing:1px; color:var(--ivory); text-decoration:none;}
+.logo-tag{font-family:'Space Mono','Noto Sans KR',monospace; font-size:10.5px; letter-spacing:.5px; color:var(--ivory-faint); text-transform:uppercase;}
 .nav-icons{display:flex; align-items:center; gap:16px; padding-top:2px;}
 .lang{display:flex; align-items:center; gap:5px;}
 .lang button{border:none; background:none; padding:11px 4px; margin:-11px -4px; cursor:pointer; color:var(--ivory-dim); font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; font-weight:700; letter-spacing:.5px;}
