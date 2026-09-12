@@ -233,7 +233,6 @@ dialog p{text-align:center;font:12px 'Space Mono',monospace;padding-top:20px}
   .closing p{max-width:290px;margin:auto}
   .contact-link{font-size:18px}
   footer{flex-wrap:wrap;font-size:10px}
-  footer>span{display:none}
 }
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
