@@ -55,6 +55,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:26px 3
 .scroll-link{position:absolute;left:6%;bottom:48px;display:flex;align-items:center;gap:45px;border-bottom:1px solid #12354870;padding-bottom:10px;font-size:13px}
 .scroll-link span:last-child{font-size:25px}
 .hero-index{position:absolute;bottom:45px;right:6%;font:12px 'Space Mono',monospace}
+html.ip-incoming .hero{visibility:hidden}
 .section-top{display:flex;justify-content:space-between;align-items:flex-start;gap:30px;margin-bottom:70px}
 .section-top .eyebrow{padding-top:15px}
 .section-top h2{width:64%}
