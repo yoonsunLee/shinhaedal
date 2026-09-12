@@ -33,7 +33,8 @@
 
 <nav>
   <div class="logo-block">
-    <a class="logo" href="../">ⓒSHIN HAEDAL</a>
+    <a class="logo" href="../"><span class="logo-c">ⓒ</span><span class="logo-name">SHIN HAEDAL</span></a>
+    <span class="logo-tag" data-i="logo_tag">나전칠기 아티스트</span>
   </div>
   <div class="nav-right">
     <ul class="nav-menu">
@@ -207,35 +208,35 @@
       <img src="assets/crane-cutout.webp" alt="학두루미" loading="lazy" decoding="async">
       <h3 data-i="fr1_h3">학두루미</h3>
       <p data-i="fr1_p">경호원</p>
-      <small data-i="fr1_sig">시그니처: ㅎ</small>
+      <small data-i="fr1_sig">아이템: ㅎ</small>
     </article>
     <article class="member">
       <span class="eyebrow">MOON</span>
       <img src="assets/rabbit-cutout.webp" alt="정월토끼" loading="lazy" decoding="async">
       <h3 data-i="fr2_h3">정월토끼</h3>
       <p data-i="fr2_p">신분을 숨긴 공주</p>
-      <small data-i="fr2_sig">시그니처: 달맞이꽃</small>
+      <small data-i="fr2_sig">아이템: 달맞이꽃</small>
     </article>
     <article class="member">
       <span class="eyebrow">MOUNTAIN</span>
       <img src="assets/tiger-cutout.webp" alt="선한백호" loading="lazy" decoding="async">
       <h3 data-i="fr3_h3">선한백호</h3>
       <p data-i="fr3_p">산지기</p>
-      <small data-i="fr3_sig">시그니처: 곶감</small>
+      <small data-i="fr3_sig">아이템: 곶감</small>
     </article>
     <article class="member">
       <span class="eyebrow">PINE</span>
       <img src="assets/deer-cutout.webp" alt="솔직사슴" loading="lazy" decoding="async">
       <h3 data-i="fr4_h3">솔직사슴</h3>
       <p data-i="fr4_p">짐꾼</p>
-      <small data-i="fr4_sig">시그니처: 솔방울</small>
+      <small data-i="fr4_sig">아이템: 솔방울</small>
     </article>
     <article class="member">
       <span class="eyebrow">SEA</span>
       <img src="assets/otter-cutout.png" alt="얼빵해달" loading="lazy" decoding="async">
       <h3 data-i="fr5_h3">얼빵해달</h3>
       <p data-i="fr5_p">조개배달부</p>
-      <small data-i="fr5_sig">시그니처: 자개</small>
+      <small data-i="fr5_sig">아이템: 자개</small>
     </article>
   </div>
 </section>
@@ -286,14 +287,15 @@ const I18N = {
     fr_lead:'얼빵해달에게는<br>일월오봉단 친구들이 있어요.',
     fr_p:'일월오봉단은 조선 왕실과 깊이 연결된 전통 회화인 일월오봉도에서 영감을 받은 신해달 작가의 오리지널 캐릭터 그룹이에요. 해와 달, 다섯 봉우리, 소나무와 물이 그 세계의 출발점이에요.',
     fr_p2:'캐릭터와 이야기는 학·토끼·호랑이·사슴 등 한국의 전통적인 소재에서 출발했어요. 각자의 역할에는 신해달 작가가 존중하고 동경하는 직업과 삶의 방식을 담았어요.',
-    fr1_h3:'학두루미', fr1_p:'경호원', fr1_sig:'시그니처: ㅎ',
-    fr2_h3:'정월토끼', fr2_p:'신분을 숨긴 공주', fr2_sig:'시그니처: 달맞이꽃',
-    fr3_h3:'선한백호', fr3_p:'산지기', fr3_sig:'시그니처: 곶감',
-    fr4_h3:'솔직사슴', fr4_p:'짐꾼', fr4_sig:'시그니처: 솔방울',
-    fr5_h3:'얼빵해달', fr5_p:'조개배달부', fr5_sig:'시그니처: 자개',
+    fr1_h3:'학두루미', fr1_p:'경호원', fr1_sig:'아이템: ㅎ',
+    fr2_h3:'정월토끼', fr2_p:'신분을 숨긴 공주', fr2_sig:'아이템: 달맞이꽃',
+    fr3_h3:'선한백호', fr3_p:'산지기', fr3_sig:'아이템: 곶감',
+    fr4_h3:'솔직사슴', fr4_p:'짐꾼', fr4_sig:'아이템: 솔방울',
+    fr5_h3:'얼빵해달', fr5_p:'조개배달부', fr5_sig:'아이템: 자개',
     close_h2:'얼빵해달과 함께.',
     close_p:'캐릭터 라이선싱 · 브랜드 협업 · 아트토이 · 전시 프로젝트',
     close_cta:'협업 문의',
+    logo_tag:'나전칠기 아티스트',
     page_title:'SPACED-OUT SEA OTTER — 얼빵해달 | SHIN HAEDAL'
   },
   en: {
@@ -321,14 +323,15 @@ const I18N = {
     fr_lead:'Meet the friends of<br>Ilwolobongdan.',
     fr_p:'Ilwolobongdan (일월오봉단) is Shin Haedal’s original character group, inspired by Ilworobongdo (일월오봉도). This traditional Korean painting motif depicts the sun, moon, five mountain peaks, pine trees and water, and is closely associated with the royal court of the Joseon dynasty.',
     fr_p2:'Its characters and stories draw from traditional Korean motifs, including the crane, rabbit, tiger and deer. Their roles reflect occupations and ways of life that Shin Haedal personally respects and admires.',
-    fr1_h3:'Crane Crane', fr1_p:'Guard', fr1_sig:'Signature: ㅎ (Hangeul)',
-    fr2_h3:'First-Moon Rabbit', fr2_p:'Princess in Disguise', fr2_sig:'Signature: Evening Primrose',
-    fr3_h3:'Gentle Tiger', fr3_p:'Mountain Keeper', fr3_sig:'Signature: Dried Persimmon',
-    fr4_h3:'Blunt Deer', fr4_p:'Porter', fr4_sig:'Signature: Pine Cone',
-    fr5_h3:'Spaced-out Sea Otter', fr5_p:'Shell Delivery Worker', fr5_sig:'Signature: Mother-of-Pearl',
+    fr1_h3:'Crane Crane', fr1_p:'Guard', fr1_sig:'Item: ㅎ (Hangeul)',
+    fr2_h3:'First-Moon Rabbit', fr2_p:'Princess in Disguise', fr2_sig:'Item: Evening Primrose',
+    fr3_h3:'Gentle Tiger', fr3_p:'Mountain Keeper', fr3_sig:'Item: Dried Persimmon',
+    fr4_h3:'Blunt Deer', fr4_p:'Porter', fr4_sig:'Item: Pine Cone',
+    fr5_h3:'Spaced-out Sea Otter', fr5_p:'Shell Delivery Worker', fr5_sig:'Item: Mother-of-Pearl',
     close_h2:'Together with<br>Spaced-out Sea Otter.',
     close_p:'Character licensing · Brand collaboration · Art toys · Exhibition projects',
     close_cta:'LET’S TALK',
+    logo_tag:'Najeonchilgi Artist',
     page_title:'SPACED-OUT SEA OTTER | SHIN HAEDAL'
   }
 };

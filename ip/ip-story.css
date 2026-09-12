@@ -17,9 +17,12 @@ h3{font-size:24px;letter-spacing:-.04em}
 .skip:focus{top:0}
 
 /* ── site nav (실제 사이트 골격, IP 라이트 테마로 재배색) ── */
-nav{display:flex;align-items:center;justify-content:space-between;padding:26px 32px;position:relative;z-index:20;background:var(--paper);border-bottom:1px solid #12354816}
-.logo-block{display:flex;flex-direction:column;gap:5px}
-.logo{font-family:'Black Han Sans',sans-serif;font-weight:400;font-size:18px;letter-spacing:-.02em;color:var(--navy);text-decoration:none}
+nav{display:flex;align-items:flex-start;justify-content:space-between;padding:26px 32px;position:relative;z-index:20;background:var(--paper);border-bottom:1px solid #12354816}
+.logo-block{display:grid;grid-template-columns:auto 1fr;row-gap:1px}
+.logo{display:contents;text-decoration:none}
+.logo-c,.logo-name{font-family:'Black Han Sans',sans-serif;font-size:20px;letter-spacing:1px;color:var(--navy);line-height:1;align-self:center}
+.logo-name{grid-column:2}
+.logo-tag{grid-column:2;font-family:'Space Mono','Noto Sans KR',monospace;font-size:10.5px;letter-spacing:.5px;color:var(--muted);text-transform:uppercase}
 .nav-right{display:flex;align-items:center;gap:16px;padding-top:2px}
 .lang{display:flex;align-items:center;gap:5px}
 .lang button{border:none;background:none;padding:11px 4px;margin:-11px -4px;cursor:pointer;color:#12354855;font-family:'Space Mono','Noto Sans KR',monospace;font-size:12px;font-weight:700;letter-spacing:.5px}
@@ -138,9 +141,9 @@ summary::-webkit-details-marker{display:none}
 .member{flex:0 0 calc((100% - 88px)/5);scroll-snap-align:start;min-width:160px}
 .member .eyebrow{color:#A9D6CE}
 .member img{object-fit:contain;object-position:center bottom;height:260px;width:100%;margin:15px 0 20px}
-.member h3{font-size:20px;color:#F1F5F2}
-.member p{font-size:14px;margin:7px 0;color:#99B0B4}
-.member small{font:12px/1.6 'Space Mono','Noto Sans KR',sans-serif;color:#99B0B4}
+.member h3{font-size:20px;color:#F1F5F2;text-align:center}
+.member p{font-size:14px;margin:7px 0;color:#99B0B4;text-align:center}
+.member small{font:12px/1.6 'Space Mono','Noto Sans KR',sans-serif;color:#99B0B4;text-align:center;display:block}
 .closing{background:#EAF0F2;text-align:center}
 .closing h2{margin:27px 0;font-size:clamp(40px,6vw,80px);color:#183544}
 .closing p{font-size:15px;color:#4D6570}
@@ -181,7 +184,6 @@ dialog p{text-align:center;font:12px 'Space Mono',monospace;padding-top:20px}
 }
 @media(max-width:580px){
   nav{padding:0 6%;height:66px}
-  .logo{font-size:15px}
   .nav-menu{display:none}
   .lang{gap:3px}
   .hero{height:calc(100svh - 66px);min-height:710px;max-height:900px}
