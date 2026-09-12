@@ -120,6 +120,7 @@ summary::-webkit-details-marker{display:none}
 .friends h2{margin:30px 0}
 .friends-lead{font-size:27px;line-height:1.65;margin-bottom:25px}
 .friends-top p:not(.friends-lead){color:var(--muted)}
+.friends-top p:not(.friends-lead) + p{margin-top:16px}
 .group-art{max-width:510px;transform:rotate(2deg)}
 .group-art img{width:100%;box-shadow:20px 25px 0 #d6e1e2}
 .member-controls{display:flex;justify-content:space-between;align-items:center;margin:90px 0 25px;font:12px 'Space Mono',monospace}
