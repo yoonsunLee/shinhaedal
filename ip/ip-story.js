@@ -25,6 +25,23 @@ const dialog=document.getElementById('viewer'),large=document.getElementById('vi
 let opener;
 document.querySelectorAll('.photo-open').forEach(b=>b.onclick=()=>{opener=b;large.src=b.dataset.photo;dialog.showModal();body.style.overflow='hidden';document.getElementById('close-viewer').focus()});
 document.getElementById('close-viewer').onclick=()=>dialog.close();
-dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
+function insideVisibleImage(e){
+  const cw=large.clientWidth,ch=large.clientHeight,iw=large.naturalWidth,ih=large.naturalHeight;
+  if(!cw||!ch||!iw||!ih) return false;
+  const scale=Math.min(cw/iw,ch/ih);
+  const rw=iw*scale,rh=ih*scale;
+  const rect=large.getBoundingClientRect();
+  const left=rect.left+(cw-rw)/2, top=rect.top+(ch-rh)/2;
+  return e.clientX>=left && e.clientX<=left+rw && e.clientY>=top && e.clientY<=top+rh;
+}
+dialog.addEventListener('click',e=>{
+  if(!dialog.open) return;
+  if(e.target.closest('#close-viewer')) return;
+  if(e.target===large && insideVisibleImage(e)) return;
+  dialog.close();
+});
+dialog.addEventListener('keydown',e=>{
+  if(e.key==='Backspace'){ e.preventDefault(); dialog.close(); }
+});
 dialog.addEventListener('close',()=>{body.style.overflow='';large.removeAttribute('src');opener?.focus()});
 })();
