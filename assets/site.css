@@ -38,9 +38,11 @@ nav{
   display:flex; align-items:flex-start; justify-content:space-between;
   padding:26px 32px; max-width:1180px; margin:0 auto;
 }
-.logo-block{display:flex; flex-direction:column; gap:5px;}
-.logo{font-family:'Black Han Sans', sans-serif; font-size:20px; letter-spacing:1px; color:var(--ivory); text-decoration:none;}
-.logo-tag{font-family:'Space Mono','Noto Sans KR',monospace; font-size:10.5px; letter-spacing:.5px; color:var(--ivory-faint); text-transform:uppercase;}
+.logo-block{display:grid; grid-template-columns:auto 1fr; row-gap:5px;}
+.logo{display:contents; text-decoration:none;}
+.logo-c, .logo-name{font-family:'Black Han Sans', sans-serif; font-size:20px; letter-spacing:1px; color:var(--ivory);}
+.logo-name{grid-column:2;}
+.logo-tag{grid-column:2; font-family:'Space Mono','Noto Sans KR',monospace; font-size:10.5px; letter-spacing:.5px; color:var(--ivory-faint); text-transform:uppercase;}
 .nav-icons{display:flex; align-items:center; gap:16px; padding-top:2px;}
 .lang{display:flex; align-items:center; gap:5px;}
 .lang button{border:none; background:none; padding:11px 4px; margin:-11px -4px; cursor:pointer; color:var(--ivory-dim); font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; font-weight:700; letter-spacing:.5px;}
@@ -63,4 +65,6 @@ nav{
 @media(max-width:900px){ .nav-menu{display:none;} .icon-btn.menu-btn{display:flex;} }
 .icon-btn:hover{opacity:1;}
 
-footer{border-top:1px solid rgba(245,240,230,.1); padding:30px 28px 44px; text-align:center; font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; color:var(--ivory-faint);}
+footer{border-top:1px solid rgba(245,240,230,.1); padding:30px 28px 44px; display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; color:var(--ivory-faint);}
+footer a{color:var(--ivory-faint); text-decoration:none;}
+footer a:hover{color:var(--ivory);}
