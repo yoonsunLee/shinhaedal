@@ -27,7 +27,7 @@
   "note_public": "BRANDIT 기자",
   "link_type": "brand_shop",
   "linked_exhibition_id": "",
-  "featured": true
+  "featured": false
  },
  {
   "no": "PR-2026-003",
@@ -42,7 +42,7 @@
   "note_public": "김현수 기자",
   "link_type": "",
   "linked_exhibition_id": "",
-  "featured": true
+  "featured": false
  },
  {
   "no": "PR-2026-004",
