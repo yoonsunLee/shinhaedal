@@ -82,6 +82,7 @@ html.ip-incoming .hero{visibility:hidden}
 .pool-quote{text-align:center;margin-top:100px;padding-top:65px;border-top:1px solid #ffffff40}
 .pool-quote h2{font-size:clamp(40px,7vw,100px);line-height:1.2;letter-spacing:-.065em;color:#eff7ff}
 .pool-quote span{font:12px 'Space Mono',monospace;letter-spacing:.18em;display:block;margin-top:28px}
+.slogan-break{display:none}
 .identity{background:#f7f9fa}
 .identity-head .eyebrow{margin-bottom:22px}
 .identity-subtitle{max-width:800px;color:var(--muted);margin-top:25px}
@@ -101,6 +102,9 @@ summary::-webkit-details-marker{display:none}
 .toy{background:#101a26;color:#eef4f8;display:grid;grid-template-columns:1fr 1fr;gap:60px 9%;align-items:center}
 .toy-heading h2{margin:30px 0}
 .toy-heading p{color:#b6c2d0}
+.toy-link{display:inline-flex;align-items:center;gap:10px;margin-top:26px;font:13px 'Space Mono','Noto Sans KR',monospace;color:#eef4f8;border-bottom:1px solid #eef4f870;padding-bottom:6px}
+.toy-link span:last-child{font-size:15px}
+.toy-link:hover{color:#9fe7ff;border-color:#9fe7ff}
 .toy-main{max-width:530px}
 .photo-open{position:relative;border:0;background:none;padding:0;width:100%;display:block}
 .photo-open>span{position:absolute;bottom:20px;right:22px;font:12px 'Space Mono',monospace;background:#101a26d9;color:white;padding:12px 15px}
@@ -199,6 +203,7 @@ dialog p{text-align:center;font:12px 'Space Mono',monospace;padding-top:20px}
   .membership{width:52%;right:-7%}
   .pool-quote{margin-top:50px;padding-top:40px}
   .pool-quote h2{font-size:42px}
+  .slogan-break{display:block}
   .identity-subtitle{font-size:16px}
   .naming{grid-template-columns:1fr;gap:18px;margin-top:30px}
   .name-card{padding:25px}
