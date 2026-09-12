@@ -296,6 +296,7 @@ def main():
             "note_public": s(p.get("byline")),
             "link_type": link_type,
             "linked_exhibition_id": s(linked_ex.get("exhibition_no")) if linked_ex else "",
+            "featured": s(p.get("type")) == "feature",
         })
     write_json(os.path.join(data_dir, "press.json"), press_out)
     print("press.json: %d건" % len(press_out))
