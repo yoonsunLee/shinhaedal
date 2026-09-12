@@ -118,7 +118,7 @@ summary::-webkit-details-marker{display:none}
 .toy-thumbs img{width:100%;height:175px;object-fit:cover}
 .friends{
   background:
-    linear-gradient(180deg, transparent 0%, transparent 52%, #132125 76%, #132125 100%),
+    linear-gradient(180deg, rgba(11,20,22,.82) 0%, rgba(11,20,22,.82) 52%, #132125 76%, #132125 100%),
     url('assets/friends-bg.webp') center 26%/cover no-repeat,
     #0B1416;
   color:#BDCBCD;
