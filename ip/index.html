@@ -6,14 +6,9 @@
 <script>
 (function(){
   try{
-    var raw=sessionStorage.getItem('haedal_ip_nav');
-    sessionStorage.removeItem('haedal_ip_nav');
-    if(raw){
-      var d=JSON.parse(raw);
-      if(d && (Date.now()-d.t)<6000 && !matchMedia('(prefers-reduced-motion: reduce)').matches){
-        document.documentElement.classList.add('ip-incoming');
-        setTimeout(function(){ document.documentElement.classList.remove('ip-incoming'); }, 2500);
-      }
+    if(sessionStorage.getItem('haedal_ip_skip_arrive')){
+      sessionStorage.removeItem('haedal_ip_skip_arrive');
+      document.documentElement.classList.add('no-hero-arrive');
     }
   }catch(e){}
 })();
@@ -55,7 +50,6 @@
       <span class="lang-sep" aria-hidden="true">/</span>
       <button id="langEn">EN</button>
     </div>
-    <button class="icon-btn" id="motion" aria-pressed="false" aria-label="움직임 멈추기">Ⅱ</button>
     <a class="icon-btn" aria-label="인스타그램" href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.4"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor"/></svg>
     </a>
@@ -359,7 +353,6 @@ function applyLang(l, opts){
   });
   document.getElementById('langKo').classList.toggle('on', l==='ko');
   document.getElementById('langEn').classList.toggle('on', l==='en');
-  if(window.ipStorySetMotionLabel) window.ipStorySetMotionLabel();
 }
 document.getElementById('langKo').onclick=()=>applyLang('ko');
 document.getElementById('langEn').onclick=()=>applyLang('en');
@@ -414,19 +407,5 @@ document.getElementById('langEn').onclick=()=>applyLang('en');
 })();
 </script>
 <script src="ip-story.js"></script>
-<script src="transition.js"></script>
-<script>
-(function(){
-  function clear(){ document.documentElement.classList.remove('ip-incoming'); }
-  window.addEventListener('pageshow', function(e){ if(e.persisted) clear(); });
-  if(!document.documentElement.classList.contains('ip-incoming')) return;
-  if(!window.HaedalTransition){ clear(); return; }
-  HaedalTransition.play({
-    character:'assets/transition-character.png',
-    shell:'assets/transition-shell.png',
-    onReveal: clear
-  }).then(clear);
-})();
-</script>
 </body>
 </html>

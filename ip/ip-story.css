@@ -49,13 +49,13 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:26px 3
 .hero-name{font-size:26px;font-weight:700;margin-top:22px;letter-spacing:-.04em}
 .hero-character{position:absolute;width:clamp(250px,29vw,445px);right:10%;bottom:68px;transform:translateY(var(--char-y,0px));z-index:1}
 .hero-character img{position:relative;z-index:1;filter:drop-shadow(4px 12px 6px #58695514);animation:arrive 1.2s .25s both}
+html.no-hero-arrive .hero-character img{animation:none}
 .character-shadow{position:absolute;bottom:-5px;left:16%;width:75%;height:26px;border-radius:50%;background:#786b5940;filter:blur(11px);transform:rotate(-8deg)}
 .hero-note{position:absolute;left:6%;bottom:155px;max-width:380px}
 .hero-note p{font-size:18px;line-height:1.9}
 .scroll-link{position:absolute;left:6%;bottom:48px;display:flex;align-items:center;gap:45px;border-bottom:1px solid #12354870;padding-bottom:10px;font-size:13px}
 .scroll-link span:last-child{font-size:25px}
 .hero-index{position:absolute;bottom:45px;right:6%;font:12px 'Space Mono',monospace}
-html.ip-incoming .hero{visibility:hidden}
 .section-top{display:flex;justify-content:space-between;align-items:flex-start;gap:30px;margin-bottom:70px}
 .section-top .eyebrow{padding-top:15px}
 .section-top h2{width:64%}
@@ -146,8 +146,6 @@ dialog p{text-align:center;font:12px 'Space Mono',monospace;padding-top:20px}
 .reveal{opacity:1;transform:none}
 .motion-ready .reveal:not(.seen){opacity:0;transform:translateY(28px)}
 .motion-ready .reveal{transition:opacity .8s,transform .8s}
-.motion-off *{animation:none!important;transition:none!important}
-.motion-off .reveal{opacity:1!important;transform:none!important}
 @keyframes arrive{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
 @media(hover:hover) and (pointer:fine){
   .photo-open:hover>span{background:#fff;color:#123548}
