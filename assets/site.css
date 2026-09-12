@@ -38,9 +38,9 @@ nav{
   display:flex; align-items:flex-start; justify-content:space-between;
   padding:26px 32px; max-width:1180px; margin:0 auto;
 }
-.logo-block{display:grid; grid-template-columns:auto 1fr; row-gap:5px;}
+.logo-block{display:grid; grid-template-columns:auto 1fr; row-gap:1px;}
 .logo{display:contents; text-decoration:none;}
-.logo-c, .logo-name{font-family:'Black Han Sans', sans-serif; font-size:20px; letter-spacing:1px; color:var(--ivory);}
+.logo-c, .logo-name{font-family:'Black Han Sans', sans-serif; font-size:20px; letter-spacing:1px; color:var(--ivory); line-height:1; align-self:center;}
 .logo-name{grid-column:2;}
 .logo-tag{grid-column:2; font-family:'Space Mono','Noto Sans KR',monospace; font-size:10.5px; letter-spacing:.5px; color:var(--ivory-faint); text-transform:uppercase;}
 .nav-icons{display:flex; align-items:center; gap:16px; padding-top:2px;}
