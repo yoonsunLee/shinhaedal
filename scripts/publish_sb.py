@@ -115,6 +115,63 @@ def make_image_tiers(no, image_file, out_root):
     return paths
 
 
+def make_photo_tiers(no, idx, image_file, out_root):
+    """작품 상세 화면용 추가 사진(대표 이미지와 별개). photo0, photo1... 폴더에 같은 3단계 크기로 만든다."""
+    from io import BytesIO
+    from PIL import Image, ImageCms, ImageOps
+    raw = fetch_image_bytes(image_file)
+    if not raw:
+        return {}
+    im = Image.open(BytesIO(raw))
+    im = ImageOps.exif_transpose(im)
+    if im.mode not in ("RGB", "RGBA"):
+        im = im.convert("RGB")
+    icc = im.info.get("icc_profile")
+    if icc:
+        try:
+            im = ImageCms.profileToProfile(
+                im, ImageCms.ImageCmsProfile(BytesIO(icc)),
+                ImageCms.createProfile("sRGB"), outputMode="RGB")
+        except Exception:
+            pass
+    tag = "photo%d" % idx
+    out_dir = os.path.join(out_root, no, tag)
+    os.makedirs(out_dir, exist_ok=True)
+    w0, h0 = im.size
+    paths = {}
+    for tier, max_edge in IMG_TIERS.items():
+        scale = min(1.0, max_edge / max(w0, h0))
+        im2 = im.resize((max(1, int(w0 * scale)), max(1, int(h0 * scale))),
+                        Image.LANCZOS) if scale < 1.0 else im
+        quality = 90 if tier == "large" else (80 if tier == "thumb" else 85)
+        im2.save(os.path.join(out_dir, tier + ".webp"), "WEBP", quality=quality)
+        paths[tier] = "assets/works/%s/%s/%s.webp" % (no, tag, tier)
+    return paths
+
+
+def make_media_thumb(no, idx, thumb_file, out_root):
+    """영상/인스타그램 링크에 직접 올린 썸네일(선택). 단일 크기면 충분하다."""
+    from io import BytesIO
+    from PIL import Image, ImageOps
+    raw = fetch_image_bytes(thumb_file)
+    if not raw:
+        return ""
+    im = Image.open(BytesIO(raw))
+    im = ImageOps.exif_transpose(im)
+    if im.mode not in ("RGB", "RGBA"):
+        im = im.convert("RGB")
+    out_dir = os.path.join(out_root, no)
+    os.makedirs(out_dir, exist_ok=True)
+    w0, h0 = im.size
+    max_edge = 640
+    scale = min(1.0, max_edge / max(w0, h0))
+    if scale < 1.0:
+        im = im.resize((max(1, int(w0 * scale)), max(1, int(h0 * scale))), Image.LANCZOS)
+    fname = "media%d.webp" % idx
+    im.save(os.path.join(out_dir, fname), "WEBP", quality=82)
+    return "assets/works/%s/%s" % (no, fname)
+
+
 def make_poster(ex_id, poster_ref, assets_root):
     """전시 포스터: Storage(sb:) 비공개 버킷 원본을 홈페이지가 바로 쓸 수 있는 정적 webp로 만든다."""
     from io import BytesIO
@@ -172,6 +229,14 @@ def sort_key(r):
     return (int(m.group(1)), int(m.group(2))) if m else (0, 0)
 
 
+YOUTUBE_ID_RE = re.compile(r"(?:youtu\.be/|youtube\.com/(?:watch\?v=|embed/|shorts/))([\w-]{6,})")
+
+
+def youtube_id(url):
+    m = YOUTUBE_ID_RE.search(s(url))
+    return m.group(1) if m else None
+
+
 def main():
     args = sys.argv[1:]
     data_only = "--data-only" in args
@@ -187,6 +252,8 @@ def main():
     exhibitions = sb("exhibitions?select=*&deleted_at=is.null")
     links = sb("exhibition_works?select=exhibition_id,work_id")
     press = sb("press?select=*&deleted_at=is.null")
+    all_photos = sb("work_photos?select=*&is_public=eq.true&order=sort_order")
+    all_media = sb("work_media_links?select=*&is_public=eq.true&order=sort_order")
 
     if not works:
         sys.exit("공개 작품이 0건 — 반영 중단")
@@ -196,6 +263,13 @@ def main():
     for l in links:
         ex_of_work.setdefault(l["work_id"], []).append(ex_by_id.get(l["exhibition_id"]))
 
+    photos_of_work = {}
+    for p in all_photos:
+        photos_of_work.setdefault(p["work_id"], []).append(p)
+    media_of_work = {}
+    for m in all_media:
+        media_of_work.setdefault(m["work_id"], []).append(m)
+
     works.sort(key=sort_key, reverse=True)
 
     index_entries = []
@@ -204,12 +278,44 @@ def main():
         mine = [e for e in ex_of_work.get(w["id"], []) if e]
         mine.sort(key=lambda e: s(e.get("start_date")), reverse=True)
 
+        my_photos = sorted(photos_of_work.get(w["id"], []), key=lambda r: r.get("sort_order") or 0)
+        my_media = sorted(media_of_work.get(w["id"], []), key=lambda r: r.get("sort_order") or 0)
+
         if data_only:
             images, audio = {}, None
+            photos, media = [], []
         else:
             print("처리 중: " + no)
             images = make_image_tiers(no, w.get("image_file"), assets_dir)
             audio = make_audio(no, w.get("audio_master"), assets_dir) if w.get("docent_enabled") else None
+
+            photos = []
+            for i, p in enumerate(my_photos):
+                tiers = make_photo_tiers(no, i, p.get("image_file"), assets_dir)
+                if not tiers:
+                    continue
+                photos.append({
+                    "thumb": tiers.get("thumb", ""), "detail": tiers.get("detail", ""),
+                    "large": tiers.get("large", ""),
+                    "caption": s(p.get("caption_ko")), "caption_en": s(p.get("caption_en")),
+                    "alt": s(p.get("alt_text")),
+                })
+
+            media = []
+            for i, m in enumerate(my_media):
+                url = s(m.get("url"))
+                if not url:
+                    continue
+                thumb = make_media_thumb(no, i, m.get("thumb_file"), assets_dir) if s(m.get("thumb_file")) else ""
+                if not thumb:
+                    yid = youtube_id(url)
+                    if yid:
+                        thumb = "https://i.ytimg.com/vi/%s/hqdefault.jpg" % yid
+                media.append({
+                    "platform": s(m.get("platform")), "url": url, "thumb": thumb,
+                    "title": s(m.get("title_ko")), "title_en": s(m.get("title_en")),
+                    "duration": m.get("duration_seconds"),
+                })
 
         year = w.get("year")
         detail = {
@@ -229,6 +335,10 @@ def main():
         if audio:
             detail["transcript_ko"] = s(w.get("transcript_ko"))
             detail["transcript_en"] = s(w.get("transcript_en"))
+        if photos:
+            detail["photos"] = photos
+        if media:
+            detail["media"] = media
         write_json(os.path.join(data_dir, "works", no + ".json"), detail)
 
         index_entries.append({
