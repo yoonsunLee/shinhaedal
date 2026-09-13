@@ -45,3 +45,8 @@ dialog.addEventListener('keydown',e=>{
 });
 dialog.addEventListener('close',()=>{body.style.overflow='';large.removeAttribute('src');opener?.focus()});
 })();
+
+/* 캐릭터 이미지의 우클릭 저장 방지. 드래그 저장은 ip-story.css의 user-drag:none이 막는다. */
+document.addEventListener('contextmenu', function(e){
+  if(e.target.tagName === 'IMG') e.preventDefault();
+});

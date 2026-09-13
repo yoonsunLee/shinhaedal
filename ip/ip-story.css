@@ -1,7 +1,9 @@
 :root{--navy:#123548;--blue:#0649c8;--paper:#fffdf7;--muted:#526d77;--line:#ced5d4}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:85px}
-body{margin:0;color:var(--navy);background:var(--paper);font-family:'Noto Sans KR',sans-serif;-webkit-font-smoothing:antialiased}
+body{margin:0;color:var(--navy);background:var(--paper);font-family:'Noto Sans KR',sans-serif;-webkit-font-smoothing:antialiased;-webkit-user-select:none;-moz-user-select:none;user-select:none}
+input,textarea,select,[contenteditable]{-webkit-user-select:text;-moz-user-select:text;user-select:text}
+img{-webkit-user-drag:none;user-drag:none}
 a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit;cursor:pointer}
 button,a,summary{-webkit-tap-highlight-color:transparent}
