@@ -2,9 +2,11 @@
 (function(){
   var ov = document.getElementById('navOverlay');
   if(!ov) return;
+  var backdrop = document.getElementById('navBackdrop');
   var btnMenu = document.getElementById('btnMenu');
   var btnClose = document.getElementById('btnMenuClose');
   var lastFocused = null;
+  ov.inert = true; // 패널이 화면 밖으로 밀려나 있어도(display:none이 아니라 transform이라) 탭 포커스가 들어가지 않도록
 
   function getFocusable(){
     return Array.prototype.slice.call(
@@ -14,6 +16,8 @@
   function openMenu(){
     lastFocused = document.activeElement;
     ov.classList.add('open');
+    ov.inert = false;
+    if(backdrop) backdrop.classList.add('open');
     btnMenu.setAttribute('aria-expanded', 'true');
     document.body.style.overflow = 'hidden';
     var focusables = getFocusable();
@@ -21,6 +25,8 @@
   }
   function closeMenu(){
     ov.classList.remove('open');
+    ov.inert = true;
+    if(backdrop) backdrop.classList.remove('open');
     btnMenu.setAttribute('aria-expanded', 'false');
     document.body.style.overflow = '';
     if(lastFocused){ lastFocused.focus(); lastFocused = null; }
@@ -28,6 +34,7 @@
   }
   btnMenu.onclick = openMenu;
   btnClose.onclick = closeMenu;
+  if(backdrop) backdrop.onclick = closeMenu;
   ov.querySelectorAll('a').forEach(function(a){ a.onclick = closeMenu; });
   document.addEventListener('keydown', function(e){
     if(!ov.classList.contains('open')) return;

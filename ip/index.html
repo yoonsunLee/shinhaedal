@@ -60,6 +60,7 @@
   </div>
 </nav>
 
+<div class="nav-backdrop" id="navBackdrop"></div>
 <div class="nav-overlay" id="navOverlay">
   <button class="icon-btn overlay-close" id="btnMenuClose" aria-label="닫기" data-i-aria="aria_close_menu">✕</button>
   <nav class="overlay-links">
@@ -410,9 +411,11 @@ document.getElementById('langEn').onclick=()=>applyLang('en');
 <script>
 (function(){
   var ov=document.getElementById('navOverlay');
+  var backdrop=document.getElementById('navBackdrop');
   var btnMenu=document.getElementById('btnMenu');
   var btnClose=document.getElementById('btnMenuClose');
   var lastFocused=null;
+  ov.inert = true;
   function getFocusable(){
     return Array.prototype.slice.call(ov.querySelectorAll('a[href], button:not([disabled])'))
       .filter(function(el){ return el.offsetParent !== null; });
@@ -420,6 +423,8 @@ document.getElementById('langEn').onclick=()=>applyLang('en');
   function openMenu(){
     lastFocused=document.activeElement;
     ov.classList.add('open');
+    ov.inert = false;
+    if(backdrop) backdrop.classList.add('open');
     btnMenu.setAttribute('aria-expanded','true');
     document.body.style.overflow='hidden';
     var f=getFocusable();
@@ -427,12 +432,15 @@ document.getElementById('langEn').onclick=()=>applyLang('en');
   }
   function closeMenu(){
     ov.classList.remove('open');
+    ov.inert = true;
+    if(backdrop) backdrop.classList.remove('open');
     btnMenu.setAttribute('aria-expanded','false');
     document.body.style.overflow='';
     if(lastFocused){ lastFocused.focus(); lastFocused=null; } else btnMenu.focus();
   }
   btnMenu.onclick=openMenu;
   btnClose.onclick=closeMenu;
+  if(backdrop) backdrop.onclick=closeMenu;
   ov.querySelectorAll('a').forEach(function(a){ a.onclick=closeMenu; });
   document.addEventListener('keydown', function(e){
     if(!ov.classList.contains('open')) return;
