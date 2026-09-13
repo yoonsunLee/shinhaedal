@@ -205,14 +205,15 @@
   .ip-teaser{
     position:relative; display:flex; overflow:hidden; border-radius:8px;
     aspect-ratio:21/9; text-decoration:none; isolation:isolate;
-    background:linear-gradient(rgba(13,13,18,.86), rgba(13,13,18,.86)), url('assets/ip-teaser-bg.webp') center/cover no-repeat, #0d0d12;
+    background:#0d0d12;
     transition:transform .35s ease, box-shadow .35s ease;
   }
   .ip-teaser:hover{transform:translateY(-3px); box-shadow:0 20px 50px rgba(0,0,0,.35);}
   .ip-teaser:focus-visible{outline:2px solid var(--gold); outline-offset:4px;}
   .ip-teaser-media{position:relative; flex:1 1 auto; overflow:hidden;}
   .ip-teaser-bg{
-    position:absolute; inset:0; background-size:cover; background-position:center;
+    position:absolute; inset:0;
+    background:linear-gradient(rgba(13,13,18,.86), rgba(13,13,18,.86)), url('assets/ip-teaser-bg.webp') center/cover no-repeat;
     transition:transform 1.2s ease;
   }
   .ip-teaser:hover .ip-teaser-bg{transform:scale(1.03);}
@@ -242,11 +243,15 @@
   .ip-teaser-cta{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:1px; color:var(--gold); transition:color .2s ease;}
   .ip-teaser:hover .ip-teaser-cta{color:var(--ivory);}
   @media(max-width:720px){
-    .ip-teaser{aspect-ratio:4/5; display:block; background:none;}
+    .ip-teaser{aspect-ratio:4/5; display:block;}
     .ip-teaser-media{position:absolute; inset:0;}
-    .ip-teaser-overlay{background:linear-gradient(100deg, rgba(5,5,10,.92) 0%, rgba(5,5,10,.6) 42%, rgba(5,5,10,.15) 100%);}
-    .ip-teaser-character{height:56%;}
-    .ip-teaser-body{position:relative; height:100%; flex:none; max-width:none; padding:0 24px;}
+    .ip-teaser-overlay{background:linear-gradient(180deg, rgba(5,5,10,.9) 0%, rgba(5,5,10,.72) 32%, rgba(5,5,10,.1) 56%, rgba(5,5,10,.1) 100%);}
+    .ip-teaser-character{height:48%; top:70%;}
+    .ip-teaser-body{
+      position:relative; height:100%; flex:none; max-width:none;
+      justify-content:flex-start; align-items:flex-start;
+      padding:26px 24px 0;
+    }
     .ip-teaser-lede{white-space:normal;}
   }
 
