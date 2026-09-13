@@ -24,7 +24,7 @@ nav{display:flex;align-items:flex-start;justify-content:space-between;padding:26
 .logo{display:contents;text-decoration:none}
 .logo-c,.logo-name{font-family:'Black Han Sans',sans-serif;font-size:20px;letter-spacing:1px;color:var(--navy);line-height:1;align-self:center}
 .logo-name{grid-column:2}
-.logo-tag{grid-column:2;font-family:'Space Mono','Noto Sans KR',monospace;font-size:10.5px;letter-spacing:.5px;color:var(--muted);text-transform:uppercase}
+.logo-tag{grid-column:2;justify-self:center;text-align:center;font-family:'Space Mono','Noto Sans KR',monospace;font-size:10.5px;letter-spacing:.5px;color:var(--muted);text-transform:uppercase}
 .nav-right{display:flex;align-items:center;gap:16px;padding-top:2px}
 .lang{display:flex;align-items:center;gap:5px}
 .lang button{border:none;background:none;padding:11px 4px;margin:-11px -4px;cursor:pointer;color:#12354855;font-family:'Space Mono','Noto Sans KR',monospace;font-size:12px;font-weight:700;letter-spacing:.5px}
