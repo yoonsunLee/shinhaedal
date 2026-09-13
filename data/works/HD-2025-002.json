@@ -14,5 +14,31 @@
   "detail": "assets/works/HD-2025-002/detail.webp",
   "large": "assets/works/HD-2025-002/large.webp"
  },
- "audio": null
+ "audio": null,
+ "photos": [
+  {
+   "thumb": "assets/works/HD-2025-002/photo0/thumb.webp",
+   "detail": "assets/works/HD-2025-002/photo0/detail.webp",
+   "large": "assets/works/HD-2025-002/photo0/large.webp",
+   "caption": "",
+   "caption_en": "",
+   "alt": ""
+  },
+  {
+   "thumb": "assets/works/HD-2025-002/photo1/thumb.webp",
+   "detail": "assets/works/HD-2025-002/photo1/detail.webp",
+   "large": "assets/works/HD-2025-002/photo1/large.webp",
+   "caption": "",
+   "caption_en": "",
+   "alt": ""
+  },
+  {
+   "thumb": "assets/works/HD-2025-002/photo2/thumb.webp",
+   "detail": "assets/works/HD-2025-002/photo2/detail.webp",
+   "large": "assets/works/HD-2025-002/photo2/large.webp",
+   "caption": "",
+   "caption_en": "",
+   "alt": ""
+  }
+ ]
 }
