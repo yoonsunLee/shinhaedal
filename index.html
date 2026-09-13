@@ -117,6 +117,32 @@
 
   /* artist statement */
 
+  /* 스크롤 등장 모션: 절제된 일회성. 기본값은 항상 표시 상태이고, JS가 지원 + prefers-reduced-motion
+     미설정일 때만 숨김→등장으로 전환한다(About 페이지와 동일한 안전한 패턴). */
+  .reveal-photo.js-anim{opacity:.25; transform:translateY(12px); transition:opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1);}
+  .reveal-photo.js-anim.in{opacity:1; transform:translateY(0);}
+  .reveal-text.js-anim{opacity:.25; transform:translateY(12px); transition:opacity .7s cubic-bezier(.22,1,.36,1) .1s, transform .7s cubic-bezier(.22,1,.36,1) .1s;}
+  .reveal-text.js-anim.in{opacity:1; transform:translateY(0);}
+  @media(max-width:720px){
+    .reveal-photo.js-anim, .reveal-text.js-anim{transform:translateY(5px);}
+  }
+
+  /* About teaser */
+  .about-teaser-wrap{max-width:1180px; margin:0 auto; padding:0 32px 70px;}
+  .about-teaser{display:flex; align-items:center; gap:64px; text-decoration:none; color:inherit;}
+  .about-teaser-media{flex:0 0 220px;}
+  .about-teaser-media img{width:100%; height:auto; display:block; -webkit-user-select:none; user-select:none; -webkit-user-drag:none;}
+  .about-teaser-body{flex:1 1 auto; min-width:0;}
+  .about-teaser-label{font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; letter-spacing:2px; color:var(--ivory-faint); text-transform:uppercase; margin:0 0 12px;}
+  .about-teaser-lede{font-family:'Black Han Sans',sans-serif; font-weight:400; font-size:clamp(20px,2.6vw,28px); color:var(--ivory); line-height:1.4; margin:0 0 18px;}
+  .about-teaser-cta{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:1px; color:var(--gold); border-bottom:1px solid transparent; transition:color .2s ease, border-color .2s ease;}
+  .about-teaser:hover .about-teaser-cta{color:var(--ivory); border-color:var(--ivory);}
+  @media(max-width:720px){
+    .about-teaser-wrap{padding:0 32px 48px;}
+    .about-teaser{flex-direction:column; align-items:flex-start; gap:26px;}
+    .about-teaser-media{flex-basis:auto; width:160px;}
+  }
+
   /* IP teaser */
   .ip-teaser-wrap{max-width:1180px; margin:0 auto; padding:0 32px 120px;}
   .ip-teaser{
@@ -137,6 +163,18 @@
     position:absolute; inset:0;
     background:linear-gradient(90deg, rgba(13,13,18,.7) 0%, rgba(13,13,18,0) 18%);
   }
+  /* 캐릭터는 배경과 분리된 투명 이미지 — hover 시 캐릭터만 기울어지게 하기 위함 */
+  .ip-teaser-character{
+    position:absolute; bottom:0; left:50%;
+    width:auto; height:130%; max-width:none;
+    transform:translate(-50%, 0) rotate(0deg);
+    transform-origin:50% 100%;
+    pointer-events:none; -webkit-user-select:none; user-select:none;
+  }
+  @media (hover:hover) and (pointer:fine){
+    .ip-teaser-character{transition:transform .45s cubic-bezier(.22,1,.36,1);}
+    .ip-teaser:hover .ip-teaser-character{transform:translate(-50%, -5px) rotate(-2deg);}
+  }
   .ip-teaser-body{
     position:relative; z-index:1; flex:0 0 42%; max-width:460px;
     display:flex; flex-direction:column; justify-content:center; gap:10px;
@@ -150,6 +188,7 @@
     .ip-teaser{aspect-ratio:4/5; display:block; background:none;}
     .ip-teaser-media{position:absolute; inset:0;}
     .ip-teaser-overlay{background:linear-gradient(100deg, rgba(5,5,10,.92) 0%, rgba(5,5,10,.6) 42%, rgba(5,5,10,.15) 100%);}
+    .ip-teaser-character{height:78%;}
     .ip-teaser-body{position:relative; height:100%; flex:none; max-width:none; padding:0 24px;}
     .ip-teaser-lede{white-space:normal;}
   }
@@ -408,6 +447,19 @@
   </div>
 </section>
 
+<div class="about-teaser-wrap">
+  <a class="about-teaser" href="about/">
+    <div class="about-teaser-media reveal-photo" data-reveal>
+      <img src="about/assets/artist-profile-1.webp" alt="신해달 작가" width="700" height="1050" draggable="false">
+    </div>
+    <div class="about-teaser-body reveal-text" data-reveal>
+      <p class="about-teaser-label">About the artist</p>
+      <p class="about-teaser-lede" data-i="about_teaser_lede">독해하고, 해석하고, 번역하는 것.<br>저는 법을 읽고 의미를 찾아, 그것을 나전칠기의 언어로 옮깁니다.</p>
+      <span class="about-teaser-cta" data-i="about_teaser_cta">작가 소개 보기 →</span>
+    </div>
+  </a>
+</div>
+
 <div class="ip-teaser-wrap">
   <a class="ip-teaser" href="ip/" aria-label="Explore the Haedal IP world">
     <div class="ip-teaser-body">
@@ -416,8 +468,9 @@
       <span class="ip-teaser-cta" data-i="ip_teaser_cta">만나러 가기 →</span>
     </div>
     <div class="ip-teaser-media">
-      <div class="ip-teaser-bg" style="background-image:url('ip/assets/og_character.jpg')"></div>
+      <div class="ip-teaser-bg"></div>
       <div class="ip-teaser-overlay"></div>
+      <img class="ip-teaser-character" src="ip/assets/transition-character.png" alt="" draggable="false">
     </div>
   </a>
 </div>
@@ -495,6 +548,8 @@ var I18N = {
     ip_teaser_lede:'SPACED-OUT SEA OTTER',
     ip_teaser_cta:'만나러 가기 →',
     hero_about_cta:'작가와 작업에 대해 →',
+    about_teaser_lede:'독해하고, 해석하고, 번역하는 것.<br>저는 법을 읽고 의미를 찾아, 그것을 나전칠기의 언어로 옮깁니다.',
+    about_teaser_cta:'작가 소개 보기 →',
   },
   en: {
     logo_tag:'Najeonchilgi Artist',
@@ -513,7 +568,9 @@ var I18N = {
     ip_teaser_label:'MEET',
     ip_teaser_lede:'SPACED-OUT SEA OTTER',
     ip_teaser_cta:'SAY HELLO →',
-    hero_about_cta:'About the artist and the work →'
+    hero_about_cta:'About the artist and the work →',
+    about_teaser_lede:'To read, interpret, and translate.<br>I read the law, seek out its meaning, and translate it into the language of najeonchilgi.',
+    about_teaser_cta:'Meet the artist →'
   }
 };
 var LANG = 'ko';
@@ -1153,6 +1210,25 @@ document.addEventListener('contextmenu', function(e){
   window.addEventListener('scroll', function(){
     if(!ticking){ requestAnimationFrame(update); ticking = true; }
   }, {passive:true});
+})();
+</script>
+
+<script>
+/* ---------- 절제된 일회성 등장 모션(About teaser). reduced-motion이면 기본 CSS(항상 표시)를 그대로 둔다 ---------- */
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if(!('IntersectionObserver' in window)) return;
+  var targets = Array.prototype.slice.call(document.querySelectorAll('[data-reveal]'));
+  targets.forEach(function(el){ el.classList.add('js-anim'); });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.15});
+  targets.forEach(function(el){ io.observe(el); });
 })();
 </script>
 
