@@ -1263,7 +1263,21 @@ function stepWorkModal(delta){
 document.getElementById('wmClose').onclick = closeWorkModal;
 document.getElementById('wmPrev').onclick = function(){ stepWorkModal(-1); };
 document.getElementById('wmNext').onclick = function(){ stepWorkModal(1); };
-wmModal.addEventListener('click', function(e){ if(e.target === wmModal) closeWorkModal(); });
+function wmInsideVisibleImage(e){
+  var img = document.getElementById('wmImg');
+  var cw = img.clientWidth, ch = img.clientHeight, iw = img.naturalWidth, ih = img.naturalHeight;
+  if(!cw || !ch || !iw || !ih) return false;
+  var scale = Math.min(cw / iw, ch / ih);
+  var rw = iw * scale, rh = ih * scale;
+  var rect = img.getBoundingClientRect();
+  var left = rect.left + (cw - rw) / 2, top = rect.top + (ch - rh) / 2;
+  return e.clientX >= left && e.clientX <= left + rw && e.clientY >= top && e.clientY <= top + rh;
+}
+wmModal.addEventListener('click', function(e){
+  if(e.target === wmModal || e.target === document.getElementById('wmMedia') || e.target === document.getElementById('wmStage')) { closeWorkModal(); return; }
+  if(e.target === document.getElementById('wmImg') && !wmInsideVisibleImage(e)) { closeWorkModal(); return; }
+  if(e.target === document.getElementById('wmVideoEmbed')) { closeWorkModal(); return; }
+});
 document.getElementById('wmSeriesList').addEventListener('click', function(e){
   var btn = e.target.closest('.wm-series-item');
   if(!btn) return;
