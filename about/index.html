@@ -18,78 +18,111 @@
 <link rel="stylesheet" href="../assets/fonts.css">
 <link rel="stylesheet" href="../assets/site.css">
 <style>
-  /* about content */
-  .about-hero{position:relative; overflow:hidden; padding:56px 32px 46px;}
-  .about-hero-bg{
-    position:absolute; inset:0; z-index:0;
-    background-image:url('assets/artist-profile-2-bg.webp');
-    background-size:cover; background-position:center 30%;
+  /* about content — 작가 도록 톤으로 재구현. 이 스타일은 about/index.html 안에서만 적용된다. */
+  body{background:#111112;}
+  :root{
+    --ab-title:#EEEAE3;
+    --ab-body:#BBB9B6;
+    --ab-secondary:#999D9E;
+    --ab-link:#D4D6D2;
+    --ab-divider:rgba(255,255,255,.15);
   }
-  .about-hero-overlay{position:absolute; inset:0; z-index:1; background:rgba(11,11,15,.92);}
-  .about-hero-inner{
-    position:relative; z-index:2;
-    max-width:1000px; margin:0 auto;
-    display:flex; gap:44px; align-items:flex-start;
-  }
-  .about-portrait{flex:0 0 260px;}
-  .about-portrait img{
-    width:100%; display:block; border-radius:2px;
-    box-shadow:0 24px 60px rgba(0,0,0,.55);
-    -webkit-user-select:none; user-select:none; -webkit-user-drag:none;
-  }
-  .about-hero-text{flex:1 1 auto; min-width:0; max-width:560px;}
-  .about-hero-text h1{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:clamp(30px,4.4vw,46px); margin:0 0 20px;}
-  .about-hero-text h1 .h1-sub{display:inline-block; vertical-align:middle; font-family:'Space Mono','Noto Sans KR', monospace; font-weight:400; font-size:14px; letter-spacing:.5px; color:var(--ivory-dim); margin-left:14px;}
-  .about-hero-text .lede{font-size:clamp(18px,2.3vw,22px); line-height:1.5; color:var(--ivory); font-weight:400; margin:0 0 26px;}
-  .about-hero-text .body p{font-size:16px; line-height:1.85; color:var(--ivory-dim); font-weight:400; margin:0 0 20px;}
-  .about-hero-text .body p:last-child{margin-bottom:0;}
-  .about-hero-text .pull-quote{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:clamp(20px,2.6vw,25px); line-height:1.5; margin:6px 0 24px;}
-  .nacre-text{
-    background:linear-gradient(100deg,#ffb6d9,#9fe7ff,#c9b6ff,#ffd97a,#ffb6d9);
-    background-size:300% 100%;
-    -webkit-background-clip:text; background-clip:text; color:transparent;
-    animation:sheen 7s linear infinite;
-  }
-  @keyframes sheen{ to{ background-position:300% 0; } }
+
+  /* ---------- 1. 인물 사진 + 작가 소개 ---------- */
+  .ab-hero{max-width:1230px; margin:0 auto; padding:62px 5vw 105px; display:grid; grid-template-columns:1fr 1fr; column-gap:9%; align-items:start;}
+  .ab-portrait img{width:100%; height:auto; display:block; -webkit-user-select:none; user-select:none; -webkit-user-drag:none;}
+  .ab-hero-text{padding-top:12px;}
+  .ab-hero-text h1{font-family:'Noto Sans KR', sans-serif; font-weight:500; font-size:36px; color:var(--ab-title); margin:0;}
+  .ab-role{font-family:'Noto Sans KR', sans-serif; font-weight:400; font-size:14px; color:var(--ab-secondary); margin:6px 0 0;}
+  .ab-eng-name{font-family:'Space Mono','Noto Sans KR', monospace; font-weight:400; font-size:12px; letter-spacing:2px; color:var(--ab-secondary); margin:10px 0 32px;}
+  html[lang="en"] .ab-eng-name{display:none;}
+  .ab-lede{font-family:'Noto Sans KR', sans-serif; font-weight:400; font-size:21px; line-height:1.85; color:var(--ab-title); margin:0 0 24px;}
+  .ab-body p{font-family:'Noto Sans KR', sans-serif; font-weight:400; font-size:16px; line-height:1.95; color:var(--ab-body); margin:0 0 20px;}
+  .ab-body p:last-child{margin-bottom:0;}
+  html[lang="en"] .ab-hero-text .ab-body p, html[lang="en"] .ab-note .ab-body p{line-height:1.72;}
+
   @media(max-width:720px){
-    .about-hero-inner{flex-direction:column; gap:28px;}
-    .about-portrait{flex-basis:auto; width:180px; margin:0 auto;}
-    .about-hero-overlay{background:rgba(11,11,15,.95);}
-    .about-hero-text h1 .h1-sub{display:block; margin-left:0; margin-top:8px;}
+    .ab-hero{grid-template-columns:1fr; padding:48px 6vw 60px; row-gap:30px;}
+    .ab-hero-text{padding-top:0;}
+    .ab-hero-text h1{font-size:32px;}
+    .ab-lede{font-size:20px;}
+    .ab-hero-text .ab-body p{font-size:16px;}
   }
 
-  .about-section{max-width:820px; margin:0 auto; padding:56px 32px;}
-  .about-section + .about-section{border-top:1px solid rgba(245,240,230,.1);}
-  .about-section h2{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:22px; margin:0 0 8px;}
-  .about-section .sub{font-family:'Noto Sans KR',sans-serif; font-weight:400; font-size:14.5px; color:var(--ivory-dim); line-height:1.6; margin:0 0 26px;}
-  .about-section .body{max-width:640px;}
-  .about-section .body p{font-size:16px; line-height:1.85; color:var(--ivory-dim); font-weight:400; margin:0 0 20px;}
-  .about-section .body p:last-child{margin-bottom:0;}
-  html[lang="en"] .about-hero-text .body p, html[lang="en"] .about-section .body p{line-height:1.72;}
-  .about-section .pull-quote{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:clamp(20px,2.6vw,25px); line-height:1.5; margin:0 0 28px;}
+  /* ---------- 공통 섹션 소제목 ---------- */
+  .ab-section-title{font-family:'Space Mono','Noto Sans KR', monospace; font-weight:400; font-size:16px; letter-spacing:.5px; color:var(--ab-title); margin:0 0 20px;}
 
-  .bio-list ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px;}
-  .bio-list li{font-size:14px; color:var(--ivory-dim); position:relative; padding-left:16px;}
-  .bio-list li::before{content:'—'; position:absolute; left:0; color:var(--ivory-faint);}
-
-  .ex-upcoming{
-    border:1px solid var(--gold-dim); border-radius:6px; padding:16px 18px; margin-bottom:26px;
+  /* ---------- 2. Artist Note ---------- */
+  .ab-note{max-width:670px; margin:0 auto; padding:56px 5vw; border-top:1px solid var(--ab-divider);}
+  .ab-note-hook{font-family:'Noto Sans KR', sans-serif; font-weight:400; font-size:24px; line-height:1.75; color:var(--ab-title); text-align:left; margin:0 0 28px;}
+  .ab-note .ab-body p{font-size:17px; line-height:2; text-align:left; margin:0 0 26px;}
+  @media(max-width:720px){
+    .ab-note{padding:44px 6vw;}
+    .ab-note-hook{font-size:22px;}
+    .ab-note .ab-body p{font-size:16px; line-height:1.95;}
   }
-  .ex-upcoming-label{font-family:'Space Mono','Noto Sans KR', monospace; font-size:11px; letter-spacing:1.5px; color:var(--gold); text-transform:uppercase; margin-bottom:8px;}
-  .ex-upcoming .ex-item{border-bottom:none; padding:2px 0;}
-  .ex-year-group{margin-bottom:22px;}
-  .ex-year-group:last-child{margin-bottom:0;}
-  .ex-year{font-family:'Space Mono','Noto Sans KR', monospace; font-size:13px; color:var(--gold); margin-bottom:10px; letter-spacing:1px;}
-  .ex-item{display:flex; justify-content:space-between; align-items:baseline; gap:16px; padding:9px 0; border-bottom:1px dashed rgba(245,240,230,.14); font-size:14px;}
-  .ex-item .ex-title{color:var(--ivory);}
-  .ex-item .ex-venue{color:var(--ivory-dim); font-family:'Space Mono','Noto Sans KR', monospace; font-size:12px; text-align:right;}
+
+  /* ---------- 3. 작업 사진 (손 + 자개) ---------- */
+  .ab-photo{padding:0 5vw 100px;}
+  .ab-photo-inner{max-width:790px; margin:0 auto;}
+  .ab-photo-inner img{width:100%; height:auto; display:block; -webkit-user-select:none; user-select:none; -webkit-user-drag:none;}
+  @media(max-width:720px){
+    .ab-photo{padding:0 6vw 60px;}
+  }
+
+  /* ---------- 4. 학력·자격 + 전시 ---------- */
+  .ab-credentials{max-width:1050px; margin:0 auto; padding:46px 5vw 56px; border-top:1px solid var(--ab-divider); display:grid; grid-template-columns:1fr 1.55fr; column-gap:80px;}
+  .ab-edu ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px;}
+  .ab-edu li{font-family:'Noto Sans KR', sans-serif; font-size:15px; color:var(--ab-body); position:relative; padding-left:16px;}
+  .ab-edu li::before{content:'—'; position:absolute; left:0; color:var(--ab-secondary);}
+
+  .ab-ex-upcoming{margin-bottom:22px;}
+  .ab-ex-upcoming-label{font-family:'Space Mono','Noto Sans KR', monospace; font-size:12px; letter-spacing:1px; color:var(--ab-secondary); text-transform:uppercase; margin-bottom:8px;}
+  .ab-ex-year-group{margin-bottom:22px;}
+  .ab-ex-year-group:last-child{margin-bottom:0;}
+  .ab-ex-year{font-family:'Space Mono','Noto Sans KR', monospace; font-size:13px; color:var(--ab-secondary); margin-bottom:10px; letter-spacing:1px;}
+  .ab-ex-item{display:flex; justify-content:space-between; align-items:baseline; gap:16px; padding:9px 0; border-bottom:1px dashed var(--ab-divider); font-size:15px;}
+  .ab-ex-item .ab-ex-title{color:var(--ab-body); flex:1 1 auto; min-width:0;}
+  .ab-ex-item .ab-ex-venue{color:var(--ab-secondary); font-family:'Space Mono','Noto Sans KR', monospace; font-size:14px; text-align:right; flex-shrink:0;}
+  .ab-ex-empty{font-family:'Space Mono','Noto Sans KR', monospace; font-size:13px; color:var(--ab-secondary);}
   @media(max-width:480px){
-    .ex-item{flex-direction:column; align-items:flex-start; gap:3px;}
-    .ex-item .ex-venue{text-align:left;}
+    .ab-ex-item{flex-direction:column; align-items:flex-start; gap:3px;}
+    .ab-ex-item .ab-ex-venue{text-align:left;}
   }
-  .ex-empty, .proj-empty{font-family:'Space Mono','Noto Sans KR', monospace; font-size:12px; color:var(--ivory-faint);}
+  @media(max-width:720px){
+    .ab-credentials{grid-template-columns:1fr; row-gap:40px; padding:40px 6vw 48px;}
+  }
 
-  .contact-cta{display:inline-block; margin-top:6px; font-family:'Space Mono','Noto Sans KR', monospace; font-size:12px; color:var(--gold); text-decoration:underline; text-underline-offset:4px;}
+  /* ---------- 5. 하단 링크 ---------- */
+  .ab-links{max-width:1050px; margin:0 auto; padding:0 5vw 60px; display:flex; flex-wrap:wrap; gap:14px 32px;}
+  .ab-links a{font-family:'Noto Sans KR', sans-serif; font-size:15px; color:var(--ab-link); text-decoration:underline; text-underline-offset:4px; text-decoration-thickness:1px; transition:color .25s ease, text-decoration-thickness .25s ease;}
+  @media(hover:hover) and (pointer:fine){
+    .ab-links a:hover{color:var(--ab-title); text-decoration-thickness:2px;}
+  }
+  @media(max-width:720px){
+    .ab-links{padding:0 6vw 48px;}
+  }
+
+  /* ---------- 등장 모션: 절제된 일회성. 기본값은 항상 표시 상태이고, JS가 지원 + prefers-reduced-motion 미설정일 때만 숨김→등장으로 전환한다 ---------- */
+  .ab-anim-photo.js-anim{opacity:.25; transform:translateY(12px); transition:opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1);}
+  .ab-anim-photo.js-anim.in{opacity:1; transform:translateY(0);}
+  .ab-anim-text.js-anim{opacity:.25; transform:translateY(12px); transition:opacity .7s cubic-bezier(.22,1,.36,1) .1s, transform .7s cubic-bezier(.22,1,.36,1) .1s;}
+  .ab-anim-text.js-anim.in{opacity:1; transform:translateY(0);}
+  @media(max-width:720px){
+    .ab-anim-photo.js-anim, .ab-anim-text.js-anim{transform:translateY(5px);}
+  }
+  .ab-anim-title.js-anim{opacity:0; transition:opacity .55s cubic-bezier(.22,1,.36,1);}
+  .ab-anim-title.js-anim.in{opacity:1;}
+  .ab-anim-block.js-anim{opacity:0; transition:opacity .55s cubic-bezier(.22,1,.36,1);}
+  .ab-anim-block.js-anim.in{opacity:1;}
+  /* clip-path는 관찰 대상(.ab-clip)이 아니라 자식 img에 걸어야 한다 — clip-path로 면적이 0에 가까워진 요소는
+     Chromium의 IntersectionObserver가 교차 비율을 계산하지 못해 영원히 isIntersecting=false로 남는다. */
+  .ab-clip.js-anim img{clip-path:inset(0 0 100% 0); transition:clip-path .8s cubic-bezier(.22,1,.36,1);}
+  .ab-clip.js-anim.in img{clip-path:inset(0 0 0 0);}
+  @media(max-width:720px){
+    .ab-clip.js-anim img{clip-path:none; opacity:0; transition:opacity .55s cubic-bezier(.22,1,.36,1);}
+    .ab-clip.js-anim.in img{opacity:1;}
+  }
 </style>
 </head>
 <body>
@@ -131,47 +164,33 @@
       <a href="../ip/">IP</a>
       <a href="../press/">Press</a>
       <a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop</a>
-      <a href="../contact/">Contact</a>
+      <a href="./">Contact</a>
       <a href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener" class="overlay-ig">Instagram ↗</a>
     </nav>
   </div>
 </nav>
 
-<div class="about-hero">
-  <div class="about-hero-bg" aria-hidden="true"></div>
-  <div class="about-hero-overlay" aria-hidden="true"></div>
-  <div class="about-hero-inner">
-    <div class="about-portrait">
-      <img src="assets/artist-profile-1.webp" alt="신해달 작가" draggable="false">
-    </div>
-    <div class="about-hero-text">
-      <h1 data-i="about_h1">신해달<span class="h1-sub">나전칠기 아티스트</span></h1>
-      <p class="pull-quote nacre-text" data-i="about_lede">독해하고, 해석하고, 번역하는 것.<br>저는 법을 읽고 의미를 찾아, 그것을 나전칠기의 언어로 옮깁니다.</p>
-      <div class="body" data-i="about_body">
-        <p>오랫동안 법을 공부하고 가르치며 텍스트의 의미를 읽고 해석해왔습니다.</p>
-        <p>우연히 마주한 옻칠의 느리고 정직한 공정에 마음을 빼앗겼고, 텍스트 속에 살던 시간은 버려지는 대신 손의 시간과 하나로 이어졌습니다.</p>
-        <p>예전에는 법을 논문과 강의로 설명했다면, 지금은 옻칠과 자개로 이야기합니다.</p>
-      </div>
+<div class="ab-hero">
+  <div class="ab-portrait ab-anim-photo" data-reveal>
+    <img src="assets/artist-profile-1.webp" alt="신해달 작가" draggable="false">
+  </div>
+  <div class="ab-hero-text ab-anim-text" data-reveal>
+    <h1 data-i="about_h1">신해달</h1>
+    <p class="ab-role" data-i="about_role">나전칠기 아티스트</p>
+    <p class="ab-eng-name">SHIN HAEDAL</p>
+    <p class="ab-lede" data-i="about_lede">독해하고, 해석하고, 번역하는 것.<br>저는 법을 읽고 의미를 찾아, 그것을 나전칠기의 언어로 옮깁니다.</p>
+    <div class="ab-body" data-i="about_body">
+      <p>오랫동안 법을 공부하고 가르치며 텍스트의 의미를 읽고 해석해왔습니다.</p>
+      <p>우연히 마주한 옻칠의 느리고 정직한 공정에 마음을 빼앗겼고, 텍스트 속에 살던 시간은 버려지는 대신 손의 시간과 하나로 이어졌습니다.</p>
+      <p>예전에는 법을 논문과 강의로 설명했다면, 지금은 옻칠과 자개로 이야기합니다.</p>
     </div>
   </div>
 </div>
 
-<section class="about-section" id="biography">
-  <h2>Education &amp; Qualifications</h2>
-  <div class="bio-list">
-    <ul data-i="bio_list">
-      <li>법학 전공</li>
-      <li>지식재산권법 석사</li>
-      <li>지식재산권법 박사과정 수료</li>
-      <li>국가유산수리기능자 (칠공)</li>
-    </ul>
-  </div>
-</section>
-
-<section class="about-section" id="note">
-  <h2>Artist Note</h2>
-  <p class="pull-quote nacre-text" data-i="about_note_hook">쉽게 들어와서 오래 머무는 작업.<br>순서가 다를 뿐, 깊이는 같습니다.</p>
-  <div class="body" data-i="about_note_body">
+<section class="ab-note">
+  <h2 class="ab-section-title ab-anim-title" data-reveal>Artist Note</h2>
+  <p class="ab-note-hook" data-i="about_note_hook">쉽게 들어와서 오래 머무는 작업.<br>순서가 다를 뿐, 깊이는 같습니다.</p>
+  <div class="ab-body" data-i="about_note_body">
     <p>제 작업은 법과 사회의 규범 안에서 살아가는 개인에 대한 이야기입니다.</p>
     <p>저에게 법은 차갑고 어려운 규칙에 머무는 것이 아니라, 결국 사람을 위해 사람들이 만든 규칙입니다. 그리고 그 안을 살아가는 개인은 저마다 다른 모습과 빛깔을 지닙니다.</p>
     <p>그래서 작업은 이미지보다 먼저 법학적 개념과 텍스트에서 시작합니다.</p>
@@ -189,19 +208,31 @@
   </div>
 </section>
 
-<section class="about-section" id="exhibitions">
-  <h2>Selected Exhibitions</h2>
-  <div id="exList"><p class="ex-empty" data-i="ex_loading">불러오는 중…</p></div>
+<section class="ab-photo">
+  <div class="ab-photo-inner ab-clip" data-reveal>
+    <img src="assets/artist-profile-2-bg.webp" alt="자개를 만지는 손" draggable="false">
+  </div>
 </section>
 
-<section class="about-section" id="projects" hidden>
-  <h2>Projects &amp; Collaborations</h2>
+<section class="ab-credentials ab-anim-block" data-reveal>
+  <div class="ab-edu">
+    <h2 class="ab-section-title">Education &amp; Qualifications</h2>
+    <ul data-i="bio_list">
+      <li>법학 전공</li>
+      <li>지식재산권법 석사</li>
+      <li>지식재산권법 박사과정 수료</li>
+      <li>국가유산수리기능자 (칠공)</li>
+    </ul>
+  </div>
+  <div class="ab-ex">
+    <h2 class="ab-section-title">Selected Exhibitions</h2>
+    <div id="exList"><p class="ab-ex-empty" data-i="ex_loading">불러오는 중…</p></div>
+  </div>
 </section>
 
-<section class="about-section" id="contact-blurb">
-  <h2>Contact</h2>
-  <p class="sub" data-i="about_contact_blurb" style="font-family:'Noto Sans KR',sans-serif; font-size:14.5px; color:var(--ivory-dim); line-height:1.85;">작품에 관한 이야기부터 전시, 협업, IP 라이선싱까지. 함께 해보고 싶은 일이 있다면 편하게 연락해주세요.</p>
-  <a class="contact-cta" href="../contact/" data-i="about_contact_cta">Contact 페이지로 이동 →</a>
+<section class="ab-links">
+  <a href="../works/" data-i="link_works">작품 보기 ↗</a>
+  <a href="../contact/" data-i="link_contact">전시·협업 문의 ↗</a>
 </section>
 
 <footer>
@@ -218,7 +249,8 @@ function esc(s){
 var I18N = {
   ko: {
     logo_tag:'나전칠기 아티스트',
-    about_h1:'신해달<span class="h1-sub">나전칠기 아티스트</span>',
+    about_h1:'신해달',
+    about_role:'나전칠기 아티스트',
     about_lede:'독해하고, 해석하고, 번역하는 것.<br>저는 법을 읽고 의미를 찾아, 그것을 나전칠기의 언어로 옮깁니다.',
     about_body:'<p>오랫동안 법을 공부하고 가르치며 텍스트의 의미를 읽고 해석해왔습니다.</p>'
       + '<p>우연히 마주한 옻칠의 느리고 정직한 공정에 마음을 빼앗겼고, 텍스트 속에 살던 시간은 버려지는 대신 손의 시간과 하나로 이어졌습니다.</p>'
@@ -244,13 +276,14 @@ var I18N = {
     ex_empty:'등록된 전시가 없습니다.',
     ex_upcoming_solo:'예정된 개인전',
     ex_upcoming:'예정된 전시',
-    about_contact_blurb:'작품에 관한 이야기부터 전시, 협업, IP 라이선싱까지. 함께 해보고 싶은 일이 있다면 편하게 연락해주세요.',
-    about_contact_cta:'Contact 페이지로 이동 →',
+    link_works:'작품 보기 ↗',
+    link_contact:'전시·협업 문의 ↗',
     page_title:'작가 소개 — 신해달 나전칠기 아티스트'
   },
   en: {
     logo_tag:'Najeonchilgi Artist',
-    about_h1:'SHIN HAEDAL<span class="h1-sub">Najeonchilgi Artist</span>',
+    about_h1:'SHIN HAEDAL',
+    about_role:'Najeonchilgi Artist',
     about_lede:'To read, interpret, and translate.<br>I read the law, seek out its meaning, and translate it into the language of najeonchilgi.',
     about_body:'<p>For many years, I studied and taught law, reading and interpreting the meanings held within texts.</p>'
       + '<p>Then, by chance, I encountered the slow and honest process of lacquerwork and was drawn to it. The years I had spent immersed in texts were not abandoned; they simply continued in another form, through the work of my hands.</p>'
@@ -278,8 +311,8 @@ var I18N = {
     ex_empty:'No exhibitions registered yet.',
     ex_upcoming_solo:'Upcoming Solo Exhibition',
     ex_upcoming:'Upcoming Exhibition',
-    about_contact_blurb:'From artwork inquiries to exhibitions, collaborations, and IP licensing — if there\'s something you\'d like to do together, feel free to reach out.',
-    about_contact_cta:'Go to Contact →',
+    link_works:'Explore Works ↗',
+    link_contact:'Exhibition & collaboration inquiries ↗',
     page_title:'About — Shin Haedal, Najeonchilgi Artist'
   }
 };
@@ -300,7 +333,7 @@ function loadExhibitions(){
     })
     .catch(function(e){
       console.error('전시 이력을 불러오지 못했습니다:', e);
-      document.getElementById('exList').innerHTML = '<p class="ex-empty">' + I18N[LANG].ex_error + '</p>';
+      document.getElementById('exList').innerHTML = '<p class="ab-ex-empty">' + I18N[LANG].ex_error + '</p>';
     });
 }
 function formatDateRange(start, end){
@@ -326,9 +359,9 @@ function renderExhibitions(rows){
 
   var upcomingHtml = upcoming.map(function(r){
     var label = r.type === '개인전' ? I18N[LANG].ex_upcoming_solo : I18N[LANG].ex_upcoming;
-    return '<div class="ex-upcoming"><div class="ex-upcoming-label">' + esc(label) + '</div>' +
-      '<div class="ex-item"><span class="ex-title">' + esc(exTitle(r)) + '</span><span class="ex-venue">' + esc(exVenue(r)) + '</span></div>' +
-      '<div class="ex-item"><span class="ex-title">' + esc(formatDateRange(r.start_date, r.end_date)) + '</span></div></div>';
+    return '<div class="ab-ex-upcoming"><div class="ab-ex-upcoming-label">' + esc(label) + '</div>' +
+      '<div class="ab-ex-item"><span class="ab-ex-title">' + esc(exTitle(r)) + '</span><span class="ab-ex-venue">' + esc(exVenue(r)) + '</span></div>' +
+      '<div class="ab-ex-item"><span class="ab-ex-title">' + esc(formatDateRange(r.start_date, r.end_date)) + '</span></div></div>';
   }).join('');
 
   var sorted = past.slice().sort(function(a, b){ return String(b.start_date||'').localeCompare(String(a.start_date||'')); });
@@ -342,7 +375,7 @@ function renderExhibitions(rows){
   }
 
   if(!picked.length && !upcoming.length){
-    document.getElementById('exList').innerHTML = '<p class="ex-empty">' + I18N[LANG].ex_empty + '</p>';
+    document.getElementById('exList').innerHTML = '<p class="ab-ex-empty">' + I18N[LANG].ex_empty + '</p>';
     return;
   }
   var groups = {};
@@ -352,9 +385,9 @@ function renderExhibitions(rows){
   });
   var years = Object.keys(groups).sort(function(a, b){ return b.localeCompare(a); });
   document.getElementById('exList').innerHTML = upcomingHtml + years.map(function(y){
-    return '<div class="ex-year-group"><div class="ex-year">' + esc(y) + '</div>' +
+    return '<div class="ab-ex-year-group"><div class="ab-ex-year">' + esc(y) + '</div>' +
       groups[y].map(function(r){
-        return '<div class="ex-item"><span class="ex-title">' + esc(exTitle(r)) + '</span><span class="ex-venue">' + esc(exVenue(r)) + '</span></div>';
+        return '<div class="ab-ex-item"><span class="ab-ex-title">' + esc(exTitle(r)) + '</span><span class="ab-ex-venue">' + esc(exVenue(r)) + '</span></div>';
       }).join('') +
       '</div>';
   }).join('');
@@ -385,6 +418,25 @@ function applyLang(l, opts){
 document.getElementById('langKo').onclick = function(){ applyLang('ko'); };
 document.getElementById('langEn').onclick = function(){ applyLang('en'); };
 if(LANG!=='ko') applyLang(LANG, {skipUrl:true});
+</script>
+
+<script>
+/* ---------- 절제된 일회성 등장 모션. reduced-motion이면 아무것도 건드리지 않고 기본 CSS(항상 표시)를 그대로 둔다 ---------- */
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if(!('IntersectionObserver' in window)) return;
+  var targets = Array.prototype.slice.call(document.querySelectorAll('[data-reveal]'));
+  targets.forEach(function(el){ el.classList.add('js-anim'); });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.15});
+  targets.forEach(function(el){ io.observe(el); });
+})();
 </script>
 
 <script src="../assets/site.js"></script>
