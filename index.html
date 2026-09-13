@@ -270,10 +270,15 @@
   .wm-media{
     position:relative;
     flex:1 1 60%; background:#05050a;
-    display:flex; align-items:center; justify-content:center;
-    min-width:0; padding:40px;
+    display:flex; flex-direction:column;
+    min-width:0;
   }
-  .wm-media img{max-width:100%; max-height:100%; width:100%; height:100%; object-fit:contain;}
+  .wm-stage{
+    position:relative; flex:1 1 auto; min-height:0;
+    display:flex; align-items:center; justify-content:center;
+    padding:40px;
+  }
+  .wm-stage img{max-width:100%; max-height:100%; width:100%; height:100%; object-fit:contain;}
 
   .wm-counter{
     position:absolute; top:24px; left:32px; z-index:2;
@@ -290,6 +295,55 @@
   .wm-nav{top:50%; transform:translateY(-50%); width:48px; height:48px; font-size:28px;}
   .wm-prev{left:4px;} .wm-next{right:4px;}
   .wm-close:hover,.wm-nav:hover{color:var(--ivory);}
+
+  .wm-video-embed{position:absolute; inset:0; background:#000; display:flex; align-items:center; justify-content:center; z-index:1;}
+  .wm-video-embed[hidden]{display:none;}
+  .wm-video-embed iframe{width:100%; height:100%; border:0;}
+  .wm-video-embed .wm-video-fallback{color:var(--ivory-dim); font-family:'Space Mono','Noto Sans KR',monospace; font-size:13px; text-align:center; padding:20px; line-height:1.8;}
+  .wm-video-embed .wm-video-fallback a{color:var(--gold);}
+  .wm-video-extlink{
+    position:absolute; right:14px; bottom:14px; z-index:2;
+    font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; letter-spacing:.3px;
+    color:var(--ivory-dim); background:rgba(5,5,10,.6); padding:5px 10px; border-radius:20px;
+    text-decoration:none;
+  }
+  .wm-video-extlink:hover{color:var(--ivory);}
+  .wm-media-label{
+    position:absolute; left:32px; bottom:20px; z-index:2;
+    font-family:'Noto Sans KR',sans-serif; font-size:13px; color:var(--ivory);
+    background:rgba(5,5,10,.55); padding:5px 12px; border-radius:20px;
+  }
+  .wm-media-label[hidden]{display:none;}
+
+  /* 한 작품 안의 사진·영상 선택 줄. 이전/다음 '작품' 이동(.wm-nav)과는 다른 조작이다 */
+  .wm-rail{
+    flex:0 0 auto; display:flex; gap:8px; overflow-x:auto;
+    padding:0 24px 20px; scrollbar-width:thin;
+  }
+  .wm-rail[hidden]{display:none;}
+  .wm-rail-item{
+    position:relative; flex:0 0 auto; width:56px; height:56px;
+    border-radius:6px; overflow:hidden; border:2px solid transparent;
+    background:var(--bg-2); cursor:pointer; padding:0; opacity:.55;
+    transition:opacity .15s ease, border-color .15s ease;
+  }
+  .wm-rail-item:hover{opacity:.85;}
+  .wm-rail-item.is-active{opacity:1; border-color:var(--gold);}
+  .wm-rail-item img{width:100%; height:100%; object-fit:cover; display:block;}
+  .wm-rail-item--video .wm-rail-play{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#fff; font-size:13px; background:rgba(0,0,0,.32);
+  }
+  .wm-rail-item--video .wm-rail-duration{
+    position:absolute; right:3px; bottom:2px; z-index:2;
+    font-family:'Space Mono','Noto Sans KR',monospace; font-size:9px; color:#fff;
+    background:rgba(0,0,0,.65); padding:1px 4px; border-radius:3px; line-height:1.4;
+  }
+  .wm-rail-noThumb{position:absolute; inset:0; background:var(--bg-2);}
+  @media(max-width:820px){
+    .wm-rail{padding:0 16px 14px; gap:6px;}
+    .wm-rail-item{width:46px; height:46px;}
+  }
 
   .wm-info{
     flex:1 1 40%; min-width:0; max-width:460px;
@@ -371,7 +425,8 @@
       flex-direction:column;
       overflow-y:auto;
     }
-    .wm-media{flex:0 0 auto; height:46vh; padding:20px;}
+    .wm-media{flex:0 0 auto; height:46vh;}
+    .wm-stage{padding:20px;}
     .wm-counter{top:16px; left:20px;}
     .wm-close{top:16px; right:20px;}
     .wm-nav{width:40px; height:40px; font-size:24px;}
@@ -476,14 +531,19 @@
   </a>
 </div>
 
-<div class="work-modal-overlay" id="workModal" role="dialog" aria-modal="true" aria-hidden="true">
+<div class="work-modal-overlay" id="workModal" role="dialog" aria-modal="true" aria-hidden="true" inert>
   <div class="work-modal">
-    <div class="wm-media">
-      <img id="wmImg" alt="" draggable="false" onerror="this.style.visibility='hidden'" onload="this.style.visibility=''">
-      <span class="wm-counter" id="wmCounter"></span>
-      <button class="wm-close" id="wmClose" aria-label="닫기">✕</button>
-      <button class="wm-nav wm-prev" id="wmPrev" aria-label="이전 작품">‹</button>
-      <button class="wm-nav wm-next" id="wmNext" aria-label="다음 작품">›</button>
+    <div class="wm-media" id="wmMedia">
+      <div class="wm-stage" id="wmStage">
+        <img id="wmImg" alt="" draggable="false" onerror="this.style.visibility='hidden'" onload="this.style.visibility=''">
+        <div class="wm-video-embed" id="wmVideoEmbed" hidden></div>
+        <span class="wm-media-label" id="wmMediaLabel" hidden></span>
+        <span class="wm-counter" id="wmCounter"></span>
+        <button class="wm-close" id="wmClose" aria-label="닫기">✕</button>
+        <button class="wm-nav wm-prev" id="wmPrev" aria-label="이전 작품">‹</button>
+        <button class="wm-nav wm-next" id="wmNext" aria-label="다음 작품">›</button>
+      </div>
+      <div class="wm-rail" id="wmRail" hidden></div>
     </div>
     <div class="wm-info">
       <div>
@@ -518,7 +578,7 @@
   </div>
 </div>
 
-<div class="large-view-overlay" id="largeView" role="dialog" aria-modal="true" aria-hidden="true">
+<div class="large-view-overlay" id="largeView" role="dialog" aria-modal="true" aria-hidden="true" inert>
   <button class="lv-close" id="lvClose" aria-label="닫기">✕</button>
   <img id="lvImg" alt="" draggable="false">
 </div>
@@ -545,6 +605,7 @@ var I18N = {
     wm_view_larger:'크게 보기 ⛶',
     wm_ask_about:'이 작품에 대해 문의하기 →',
     wm_series_label:'시리즈 작품',
+    video_default:'영상으로 보기',
     ip_teaser_label:'MEET',
     ip_teaser_lede:'SPACED-OUT SEA OTTER',
     ip_teaser_cta:'만나러 가기 →',
@@ -566,6 +627,7 @@ var I18N = {
     wm_view_larger:'VIEW LARGER ⛶',
     wm_ask_about:'ASK ABOUT THIS WORK →',
     wm_series_label:'Series',
+    video_default:'Watch video',
     ip_teaser_label:'MEET',
     ip_teaser_lede:'SPACED-OUT SEA OTTER',
     ip_teaser_cta:'SAY HELLO →',
@@ -913,11 +975,128 @@ document.getElementById('wmDocentToggle').onclick = function(){
   document.getElementById('wmDocentPanel').classList.toggle('open');
 };
 
+/* ---------- 작품 상세의 추가 사진·영상 줄(rail). Works 페이지와 동일한 기능 ---------- */
+var RAIL_ITEMS = [];
+var railActiveIndex = 0;
+function youtubeId(url){
+  var m = String(url||'').match(/(?:youtu\.be\/|v=|embed\/)([\w-]{11})/);
+  return m ? m[1] : null;
+}
+function formatDuration(sec){
+  sec = Math.round(Number(sec) || 0);
+  if(sec <= 0) return '';
+  var m = Math.floor(sec / 60), s = sec % 60;
+  return m + ':' + (s < 10 ? '0' : '') + s;
+}
+function buildRailItems(w, fallbackAlt){
+  var items = [];
+  if(w.images && (w.images.detail || w.images.large || w.images.thumb)){
+    items.push({ type:'photo', thumb:w.images.thumb, detail:w.images.detail, large:w.images.large,
+      alt:fallbackAlt||'', caption:'', caption_en:'' });
+  }
+  (w.photos || []).forEach(function(p){
+    items.push({ type:'photo', thumb:p.thumb, detail:p.detail, large:p.large,
+      alt:p.alt || fallbackAlt || '', caption:p.caption || '', caption_en:p.caption_en || '' });
+  });
+  (w.media || []).forEach(function(m){
+    items.push({ type:'video', platform:m.platform, url:m.url, thumb:m.thumb,
+      title:m.title || '', title_en:m.title_en || '', duration:m.duration });
+  });
+  return items;
+}
+function renderRail(){
+  var rail = document.getElementById('wmRail');
+  if(RAIL_ITEMS.length <= 1){ rail.hidden = true; rail.innerHTML = ''; return; }
+  rail.hidden = false;
+  rail.innerHTML = RAIL_ITEMS.map(function(item, i){
+    if(item.type === 'photo'){
+      var src = item.thumb || item.detail || '';
+      var photoLabel = (i + 1) + ' / ' + RAIL_ITEMS.length;
+      return '<button type="button" class="wm-rail-item' + (i === railActiveIndex ? ' is-active' : '') + '" data-i="' + i + '" aria-label="' + esc(photoLabel) + '">'
+        + (src ? '<img src="' + esc(ASSET_BASE + src) + '" alt="" loading="lazy">' : '')
+        + '</button>';
+    }
+    var isExternal = item.platform !== 'youtube';
+    var durationLabel = !isExternal ? formatDuration(item.duration) : '';
+    var videoLabel = (isExternal ? (LANG==='en'?'View on Instagram':'인스타그램에서 보기') : ((LANG==='en'?(item.title_en||item.title):(item.title||item.title_en)) || I18N[LANG].video_default));
+    return '<button type="button" class="wm-rail-item wm-rail-item--video' + (i === railActiveIndex ? ' is-active' : '') + '" data-i="' + i + '" aria-label="' + esc(videoLabel) + '">'
+      + (item.thumb ? '<img src="' + esc(item.thumb.indexOf('http') === 0 ? item.thumb : ASSET_BASE + item.thumb) + '" alt="" loading="lazy">' : '<span class="wm-rail-noThumb"></span>')
+      + '<span class="wm-rail-play">' + (isExternal ? '↗' : '▶') + '</span>'
+      + (durationLabel ? '<span class="wm-rail-duration">' + durationLabel + '</span>' : '')
+      + '</button>';
+  }).join('');
+  rail.querySelectorAll('.wm-rail-item').forEach(function(btn){
+    btn.onclick = function(){ selectRailItem(+btn.dataset.i); };
+  });
+}
+function showPhoto(item){
+  var img = document.getElementById('wmImg');
+  img.hidden = false;
+  img.src = item.detail ? ASSET_BASE + item.detail : (item.thumb ? ASSET_BASE + item.thumb : '');
+  img.alt = (LANG === 'en' ? (item.caption_en || item.caption) : (item.caption || item.caption_en)) || item.alt || '';
+  document.getElementById('wmVideoEmbed').hidden = true;
+  document.getElementById('wmMediaLabel').hidden = true;
+  var vl = document.getElementById('wmViewLarger');
+  vl.hidden = false;
+  vl.onclick = function(){
+    var src = item.large || item.detail;
+    if(src) openLargeView(ASSET_BASE + src, document.getElementById('wmTitlePrimary').textContent);
+  };
+}
+function showVideo(item){
+  document.getElementById('wmImg').hidden = true;
+  var embed = document.getElementById('wmVideoEmbed');
+  var yid = youtubeId(item.url);
+  var extLabel = LANG === 'en' ? 'View on YouTube ↗' : 'YouTube에서 보기 ↗';
+  if(!yid){
+    embed.innerHTML = '<div class="wm-video-fallback"><a href="' + esc(item.url) + '" target="_blank" rel="noopener">' + esc(extLabel) + '</a></div>';
+  }else{
+    embed.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + yid + '?autoplay=1&rel=0" '
+      + 'allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen title="video"></iframe>'
+      + '<a class="wm-video-extlink" href="' + esc(item.url) + '" target="_blank" rel="noopener">' + esc(extLabel) + '</a>';
+  }
+  embed.hidden = false;
+  document.getElementById('wmViewLarger').hidden = true;
+  var label = document.getElementById('wmMediaLabel');
+  var title = LANG === 'en' ? (item.title_en || item.title) : (item.title || item.title_en);
+  label.textContent = title || I18N[LANG].video_default;
+  label.hidden = false;
+}
+function selectRailItem(i){
+  var item = RAIL_ITEMS[i];
+  if(!item) return;
+  if(item.type === 'video' && item.platform !== 'youtube'){
+    window.open(item.url, '_blank', 'noopener'); // 인스타그램: 새 탭으로만 이동, 현재 뷰어는 그대로 둔다
+    return;
+  }
+  stopVideo();
+  railActiveIndex = i;
+  renderRail();
+  if(item.type === 'photo') showPhoto(item); else showVideo(item);
+}
+function stopVideo(){
+  var embed = document.getElementById('wmVideoEmbed');
+  embed.hidden = true;
+  embed.innerHTML = '';
+  document.getElementById('wmImg').hidden = false;
+  document.getElementById('wmMediaLabel').hidden = true;
+}
+function setupMedia(w, fallbackAlt){
+  RAIL_ITEMS = buildRailItems(w, fallbackAlt);
+  railActiveIndex = 0;
+  renderRail();
+  if(RAIL_ITEMS.length) showPhoto(RAIL_ITEMS[0]);
+}
+
 function renderWorkModal(){
   var meta = HOME_LIST[wmIndex];
   if(!meta) return;
   var requestIndex = wmIndex;
   stopDocent();
+  stopVideo();
+  RAIL_ITEMS = [];
+  document.getElementById('wmRail').hidden = true;
+  document.getElementById('wmViewLarger').hidden = false;
   document.getElementById('wmDocentToggle').hidden = true;
 
   var metaKo = String(meta.title||'').trim();
@@ -959,12 +1138,14 @@ function renderWorkModal(){
     secEl.textContent = secondary;
     secEl.style.display = (secondary && secondary !== primary) ? '' : 'none';
 
+    var materialText = LANG === 'en' ? (String(w.material_en||'').trim() || String(w.material||'').trim()) : String(w.material||'').trim();
     var sizeText = String(w.size==null?'':w.size).trim();
     if(sizeText && !/cm/i.test(sizeText)) sizeText += ' cm';
-    var specParts = [w.material, sizeText, w.year].map(function(v){ return String(v==null?'':v).trim(); }).filter(Boolean);
+    var specParts = [materialText, sizeText, w.year].map(function(v){ return String(v==null?'':v).trim(); }).filter(Boolean);
     document.getElementById('wmSpec').textContent = specParts.join(' · ');
 
-    document.getElementById('wmCaption').textContent = cleanText(w.caption);
+    var captionText = LANG === 'en' ? (cleanText(w.caption_en) || cleanText(w.caption)) : cleanText(w.caption);
+    document.getElementById('wmCaption').textContent = captionText;
 
     var exWrap = document.getElementById('wmExhibitions');
     var exList = document.getElementById('wmExList');
@@ -987,11 +1168,8 @@ function renderWorkModal(){
       }
     }
 
-    var img2 = document.getElementById('wmImg');
-    img2.src = w.images && w.images.detail ? ASSET_BASE + w.images.detail : img2.src;
-    img2.alt = primary;
-
     renderDocent(w);
+    setupMedia(w, primary);
   }).catch(function(e){
     console.error('작품 상세를 불러오지 못했습니다:', e);
   });
@@ -1019,7 +1197,7 @@ function openWorkModal(idx){
   wmIndex = idx;
   renderWorkModal();
   wmModal.classList.add('open');
-  wmModal.setAttribute('aria-hidden', 'false');
+  wmModal.setAttribute('aria-hidden', 'false'); wmModal.inert = false;
   document.body.style.overflow = 'hidden';
   document.getElementById('wmClose').focus();
   try{
@@ -1030,8 +1208,9 @@ function openWorkModal(idx){
 }
 function closeWorkModal(){
   stopDocent();
+  stopVideo();
   wmModal.classList.remove('open');
-  wmModal.setAttribute('aria-hidden', 'true');
+  wmModal.setAttribute('aria-hidden', 'true'); wmModal.inert = true;
   document.body.style.overflow = '';
   try{
     var url = new URL(location.href);
@@ -1057,7 +1236,7 @@ function handlePopState(){
       if(!wmModal.classList.contains('open')){
         wmLastFocused = document.activeElement;
         wmModal.classList.add('open');
-        wmModal.setAttribute('aria-hidden', 'false');
+        wmModal.setAttribute('aria-hidden', 'false'); wmModal.inert = false;
         document.body.style.overflow = 'hidden';
       }
       return;
@@ -1065,7 +1244,7 @@ function handlePopState(){
   }
   if(wmModal.classList.contains('open')){
     wmModal.classList.remove('open');
-    wmModal.setAttribute('aria-hidden', 'true');
+    wmModal.setAttribute('aria-hidden', 'true'); wmModal.inert = true;
     document.body.style.overflow = '';
     if(wmLastFocused){ wmLastFocused.focus(); wmLastFocused = null; }
   }
@@ -1118,19 +1297,12 @@ function openLargeView(src, alt){
   lvImg.src = src;
   lvImg.alt = alt || '';
   lvOverlay.classList.add('open');
-  lvOverlay.setAttribute('aria-hidden', 'false');
+  lvOverlay.setAttribute('aria-hidden', 'false'); lvOverlay.inert = false;
   document.getElementById('lvClose').focus();
 }
-document.getElementById('wmViewLarger').onclick = function(){
-  var meta = HOME_LIST[wmIndex];
-  var w = meta && DETAIL_CACHE[meta.id];
-  var src = w && w.images && (w.images.large || w.images.detail);
-  if(!src) return;
-  openLargeView(ASSET_BASE + src, document.getElementById('wmTitlePrimary').textContent);
-};
 function closeLargeView(){
   lvOverlay.classList.remove('open');
-  lvOverlay.setAttribute('aria-hidden', 'true');
+  lvOverlay.setAttribute('aria-hidden', 'true'); lvOverlay.inert = true;
   lvImg.src = '';
   if(lvLastFocused){ lvLastFocused.focus(); lvLastFocused = null; }
 }

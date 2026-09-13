@@ -355,7 +355,7 @@
   </div>
 </section>
 
-<div class="work-modal-overlay" id="workModal" role="dialog" aria-modal="true" aria-hidden="true">
+<div class="work-modal-overlay" id="workModal" role="dialog" aria-modal="true" aria-hidden="true" inert>
   <div class="work-modal">
     <div class="wm-media" id="wmMedia">
       <div class="wm-stage" id="wmStage">
@@ -402,7 +402,7 @@
   </div>
 </div>
 
-<div class="large-view-overlay" id="largeView" role="dialog" aria-modal="true" aria-hidden="true">
+<div class="large-view-overlay" id="largeView" role="dialog" aria-modal="true" aria-hidden="true" inert>
   <button class="lv-close" id="lvClose" aria-label="닫기">✕</button>
   <img id="lvImg" alt="" draggable="false">
 </div>
@@ -426,6 +426,7 @@ var I18N = {
     filter_all:'전체 작품',
     filter_empty:'이 전시에는 등록된 작품이 없어요',
     filter_cleared_notice:'다른 전시의 작품이라 필터가 해제됐어요',
+    ex_upcoming:'예정',
     wm_ex_label:'전시 이력',
     wm_ex_more:'전시 이력 더보기',
     wm_ex_collapse:'접기',
@@ -446,6 +447,7 @@ var I18N = {
     filter_all:'All works',
     filter_empty:'No works registered for this exhibition',
     filter_cleared_notice:'Cleared the filter — this work is from a different exhibition',
+    ex_upcoming:'Upcoming',
     wm_ex_label:'Exhibitions',
     wm_ex_more:'Show more',
     wm_ex_collapse:'Show less',
@@ -683,6 +685,31 @@ function exhibitionLines(str){
   return cleanText(str).split('\n').map(function(s){
     return s.replace(/\t+/g, '   ').trim();
   }).filter(Boolean);
+}
+function todayKST(){
+  return new Intl.DateTimeFormat('en-CA', {timeZone:'Asia/Seoul'}).format(new Date());
+}
+/* 작품 상세의 전시 이력 — work.exhibitions(사전 포맷 텍스트) 대신 exhibitions.json의 구조화된
+   날짜를 기준으로 예정/지난 전시를 구분해서 보여준다. */
+function workExhibitionLines(workNo){
+  if(!workNo) return [];
+  var today = todayKST();
+  var rows = EXHIBITIONS.filter(function(e){
+    return String(e.work_nos||'').split(',').map(function(s){ return s.trim(); }).indexOf(workNo) >= 0;
+  });
+  var upcoming = rows.filter(function(e){ return String(e.start_date||'') > today; })
+    .sort(function(a,b){ return String(a.start_date||'').localeCompare(String(b.start_date||'')); });
+  var past = rows.filter(function(e){ return String(e.start_date||'') <= today; })
+    .sort(function(a,b){ return String(b.start_date||'').localeCompare(String(a.start_date||'')); });
+  function fmtLine(e, isUpcoming){
+    var title = LANG === 'en' ? (e.title_en || e.title) : e.title;
+    var venue = LANG === 'en' ? (e.venue_en || e.venue) : e.venue;
+    var dateStr = formatDateRange(e.start_date, e.end_date);
+    var prefix = isUpcoming ? '[' + I18N[LANG].ex_upcoming + '] ' : '';
+    return prefix + dateStr + '  ' + title + ', ' + venue;
+  }
+  return upcoming.map(function(e){ return fmtLine(e, true); })
+    .concat(past.map(function(e){ return fmtLine(e, false); }));
 }
 function fetchDetail(id){
   if(DETAIL_CACHE[id]) return Promise.resolve(DETAIL_CACHE[id]);
@@ -956,7 +983,8 @@ function renderWorkModal(){
     var exWrap = document.getElementById('wmExhibitions');
     var exList = document.getElementById('wmExList');
     var toggle = document.getElementById('wmExToggle');
-    var lines = exhibitionLines(w.exhibitions);
+    var lines = workExhibitionLines(w.no) ;
+    if(!lines.length) lines = exhibitionLines(w.exhibitions); // exhibitions.json에 연결이 안 된 옛 기록 대비 폴백
     var LIMIT = 3;
     if(!lines.length){
       exWrap.hidden = true;
@@ -1015,7 +1043,7 @@ function openWorkModal(idx){
   wmLastFocused = document.activeElement;
   setWorkIndex(idx, 'push');
   wmModal.classList.add('open');
-  wmModal.setAttribute('aria-hidden', 'false');
+  wmModal.setAttribute('aria-hidden', 'false'); wmModal.inert = false;
   document.body.style.overflow = 'hidden';
   document.getElementById('wmClose').focus();
 }
@@ -1050,7 +1078,7 @@ function closeWorkModal(){
   stopDocent();
   stopVideo();
   wmModal.classList.remove('open');
-  wmModal.setAttribute('aria-hidden', 'true');
+  wmModal.setAttribute('aria-hidden', 'true'); wmModal.inert = true;
   document.body.style.overflow = '';
   try{
     var url = new URL(location.href);
@@ -1078,7 +1106,7 @@ function openFromUrlIfPresent(){
   wmIndex = idx;
   renderWorkModal();
   wmModal.classList.add('open');
-  wmModal.setAttribute('aria-hidden', 'false');
+  wmModal.setAttribute('aria-hidden', 'false'); wmModal.inert = false;
   document.body.style.overflow = 'hidden';
   document.getElementById('wmClose').focus();
 }
@@ -1096,7 +1124,7 @@ function handlePopState(){
       if(!wmModal.classList.contains('open')){
         wmLastFocused = document.activeElement;
         wmModal.classList.add('open');
-        wmModal.setAttribute('aria-hidden', 'false');
+        wmModal.setAttribute('aria-hidden', 'false'); wmModal.inert = false;
         document.body.style.overflow = 'hidden';
       }
       return;
@@ -1107,7 +1135,7 @@ function handlePopState(){
     stopDocent();
     stopVideo();
     wmModal.classList.remove('open');
-    wmModal.setAttribute('aria-hidden', 'true');
+    wmModal.setAttribute('aria-hidden', 'true'); wmModal.inert = true;
     document.body.style.overflow = '';
     if(wmLastFocused){ wmLastFocused.focus(); wmLastFocused = null; }
   }
@@ -1159,13 +1187,13 @@ function openLargeView(src, alt){
   lvImg.src = src;
   lvImg.alt = alt || '';
   lvOverlay.classList.add('open');
-  lvOverlay.setAttribute('aria-hidden', 'false');
+  lvOverlay.setAttribute('aria-hidden', 'false'); lvOverlay.inert = false;
   document.getElementById('lvClose').focus();
 }
 /* wmViewLarger의 클릭 동작은 showPhoto()가 현재 선택된 사진에 맞춰 매번 다시 연결한다. */
 function closeLargeView(){
   lvOverlay.classList.remove('open');
-  lvOverlay.setAttribute('aria-hidden', 'true');
+  lvOverlay.setAttribute('aria-hidden', 'true'); lvOverlay.inert = true;
   lvImg.src = '';
   if(lvLastFocused){ lvLastFocused.focus(); lvLastFocused = null; }
 }
