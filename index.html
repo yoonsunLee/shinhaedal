@@ -1580,7 +1580,7 @@ document.addEventListener('contextmenu', function(e){
       posterEl.classList.add('is-hidden');
       if(!hvPaused){
         var p = videoEl.play();
-        if(p && p.catch) p.catch(function(){ posterEl.classList.remove('is-hidden'); updatePlayPauseUI(); });
+        if(p && p.catch) p.catch(function(){ hvPaused = true; posterEl.classList.remove('is-hidden'); updatePlayPauseUI(); });
       }
       updatePlayPauseUI();
     }
@@ -1611,13 +1611,16 @@ document.addEventListener('contextmenu', function(e){
     }, 2000);
   });
 
+  /* hvPaused(사용자가 껐는지)가 아니라 videoEl.paused(실제로 멈춰 있는지)를 기준으로 판단한다.
+     자동재생이 브라우저에 막혀 hvPaused=false인 채로 영상이 멈춰 있는 경우에도 한 번의 탭으로
+     바로 재생되게 하기 위함(막힌 자동재생 이후 두 번 눌러야 재생되던 버그의 원인). */
   playPauseBtn.onclick = function(){
-    if(hvPaused){
+    if(videoEl.paused){
       hvPaused = false;
       if(videoEl.ended){ goToNext(); }
       else{
         var p = videoEl.play();
-        if(p && p.catch) p.catch(function(){});
+        if(p && p.catch) p.catch(function(){ hvPaused = true; updatePlayPauseUI(); });
       }
     }else{
       hvPaused = true;
@@ -1640,7 +1643,7 @@ document.addEventListener('contextmenu', function(e){
             if(hvVisPaused && !hvPaused){
               hvVisPaused = false;
               var p = videoEl.play();
-              if(p && p.catch) p.catch(function(){});
+              if(p && p.catch) p.catch(function(){ hvVisPaused = true; updatePlayPauseUI(); });
             }
           }else if(!videoEl.paused){
             hvVisPaused = true;
@@ -1657,7 +1660,7 @@ document.addEventListener('contextmenu', function(e){
       }else if(hvVisPaused && !hvPaused && isHeroVisible()){
         hvVisPaused = false;
         var p = videoEl.play();
-        if(p && p.catch) p.catch(function(){});
+        if(p && p.catch) p.catch(function(){ hvVisPaused = true; updatePlayPauseUI(); });
       }
     });
   }
@@ -1667,7 +1670,7 @@ document.addEventListener('contextmenu', function(e){
     if(!e.persisted || !hvActive) return;
     if(!hvPaused && !hvVisPaused && isHeroVisible() && !document.hidden){
       var p = videoEl.play();
-      if(p && p.catch) p.catch(function(){});
+      if(p && p.catch) p.catch(function(){ hvVisPaused = true; updatePlayPauseUI(); });
     }
   });
 
@@ -1727,7 +1730,7 @@ document.addEventListener('contextmenu', function(e){
     updateWorkLink(HV_LIST[0]);
     applyTheme(HV_LIST[0]);
     var p = videoEl.play();
-    if(p && p.catch) p.catch(function(){ posterEl.classList.remove('is-hidden'); updatePlayPauseUI(); });
+    if(p && p.catch) p.catch(function(){ hvPaused = true; posterEl.classList.remove('is-hidden'); updatePlayPauseUI(); });
     updatePlayPauseUI();
     observeVisibility();
   }
