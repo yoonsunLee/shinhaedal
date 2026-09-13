@@ -102,26 +102,34 @@
   .scroll-cue .arrow{animation:bob 1.6s ease-in-out infinite;}
   @keyframes bob{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(4px);} }
 
-  /* ---------- 첫 화면 영상 모드. 영상이 공개되어 있을 때만 이미지 모드 대신 표시된다 ---------- */
-  .hero.is-video-mode{justify-content:center; min-height:0;}
+  /* ---------- 첫 화면 영상 모드. 영상이 공개되어 있을 때만 이미지 모드 대신 표시된다 ----------
+     이미지 히어로(hero-bg/hero-overlay/hero-inner)와 동일하게 header.hero 전체를 내비 밑까지
+     가득 채우는 배경형 레이아웃을 쓴다. 영상은 object-fit:contain으로 항상 잘리지 않게 하고
+     남는 여백은 영상별 bg_color로 채우며, 문구·배지는 그 위에 오버레이된다. */
   .hero-video-mode{
-    position:relative; z-index:4; width:100%; max-width:1180px; margin:0 auto;
-    padding:32px 32px 48px; display:flex; flex-direction:column; gap:14px;
+    position:absolute; inset:0; z-index:0; overflow:hidden;
+    display:flex; flex-direction:column; justify-content:flex-end;
   }
-  .hv-stage{
-    position:relative; width:100%; aspect-ratio:16/9; background:#000;
-    border-radius:4px; overflow:hidden;
+  .hv-bg{ position:absolute; inset:0; z-index:0; overflow:hidden; }
+  .hv-bg video, .hv-poster{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:contain; background:inherit; display:block;
   }
-  .hv-stage video, .hv-poster{
-    position:absolute; inset:0; width:100%; height:100%; object-fit:contain; background:#000; display:block;
-  }
-  .hv-stage video{z-index:1;}
+  .hv-bg video{z-index:1;}
   .hv-poster{z-index:2; transition:opacity .35s ease;}
   .hv-poster.is-hidden{opacity:0; pointer-events:none;}
+  /* 어떤 bg_color/영상이 오더라도 내비·문구 대비를 보장하는 고정 그라디언트 */
+  .hv-overlay{
+    position:absolute; inset:0; z-index:1; pointer-events:none;
+    background:linear-gradient(to bottom, rgba(5,6,10,.45) 0%, rgba(5,6,10,.05) 22%, rgba(5,6,10,.05) 52%, rgba(5,6,10,.88) 100%);
+  }
+  .hv-inner{
+    position:relative; z-index:2;
+    max-width:1180px; margin:0 auto; width:100%;
+    padding:0 32px 64px;
+  }
+  .hv-meta-row{ display:flex; align-items:center; gap:10px; margin-bottom:24px; }
   .hv-work-link{
-    position:absolute; left:16px; bottom:16px; z-index:3;
-    max-width:calc(100% - 90px);
-    display:flex; align-items:center; gap:8px; text-decoration:none;
+    display:flex; align-items:center; gap:8px; text-decoration:none; min-width:0;
     background:rgba(5,5,10,.55); padding:7px 14px; border-radius:20px;
     font-family:'Noto Sans KR',sans-serif; font-size:13px; color:var(--ivory);
     transition:background .2s ease;
@@ -131,28 +139,24 @@
   .hv-work-link .hv-work-cta{flex:0 0 auto; font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; color:var(--gold);}
   .hv-work-link[hidden]{display:none;}
   .hv-playpause{
-    position:absolute; right:14px; bottom:14px; z-index:3;
-    width:34px; height:34px; border-radius:50%; border:1px solid rgba(245,240,230,.3);
+    flex:0 0 auto; width:34px; height:34px; border-radius:50%; border:1px solid rgba(245,240,230,.3);
     background:rgba(5,5,10,.55); color:var(--ivory); display:flex; align-items:center; justify-content:center;
     cursor:pointer; font-size:12px; transition:background .2s ease;
   }
   .hv-playpause:hover{background:rgba(5,5,10,.8);}
-  .hv-progress{display:flex; gap:6px;}
-  .hv-progress[hidden]{display:none;}
-  .hv-progress-item{
-    flex:1 1 0; height:3px; border-radius:2px; background:rgba(245,240,230,.18);
-    border:none; padding:10px 0; margin:-10px 0; cursor:pointer; position:relative;
-  }
-  .hv-progress-item i{
-    position:absolute; left:0; top:10px; height:3px; width:0%; border-radius:2px;
-    background:var(--gold); display:block; pointer-events:none; font-style:normal;
-  }
-  .hv-progress-item[aria-current="true"]{background:rgba(245,240,230,.3);}
-  .hv-statement-wrap .statement{font-size:clamp(22px, 3.6vw, 40px);}
+  /* 밝은 배경 영상용 테마: 배지·버튼을 밝은 바탕 + 어두운 글자로 뒤집는다 */
+  .hero-video-mode.theme-light .hv-work-link{background:rgba(255,255,255,.82); color:#171717;}
+  .hero-video-mode.theme-light .hv-work-link:hover{background:rgba(255,255,255,.95);}
+  .hero-video-mode.theme-light .hv-work-link .hv-work-cta{color:#9a7a12;}
+  .hero-video-mode.theme-light .hv-playpause{background:rgba(255,255,255,.82); color:#171717; border-color:rgba(0,0,0,.15);}
+  .hero-video-mode.theme-light .hv-playpause:hover{background:rgba(255,255,255,.95);}
+  /* 영상 모드에서는 영상이 이미 시선을 끌기 때문에 문구를 원본 히어로보다 한 단계 낮춘다(과도한 축소는 아님) */
+  .hv-inner .statement{font-size:clamp(28px, 4.4vw, 54px);}
   @media(max-width:720px){
-    .hero-video-mode{padding:24px 20px 36px; gap:10px;}
-    .hv-work-link{left:10px; bottom:10px; padding:5px 11px; font-size:12px; max-width:calc(100% - 76px);}
-    .hv-playpause{right:10px; bottom:10px; width:30px; height:30px;}
+    .hv-inner{padding:0 20px 40px;}
+    .hv-meta-row{margin-bottom:16px;}
+    .hv-work-link{padding:5px 11px; font-size:12px;}
+    .hv-playpause{width:30px; height:30px;}
   }
 
 
@@ -517,6 +521,7 @@
     </button>
   </div>
 
+  <div class="nav-backdrop" id="navBackdrop"></div>
   <div class="nav-overlay" id="navOverlay">
     <button class="icon-btn overlay-close" id="btnMenuClose" aria-label="닫기">✕</button>
     <nav class="overlay-links">
@@ -548,17 +553,19 @@
   </div>
 
   <div class="hero-video-mode" id="heroVideoMode" hidden>
-    <div class="hv-stage" id="hvStage">
+    <div class="hv-bg" id="hvBg">
       <video id="hvVideo" muted playsinline preload="auto"></video>
       <img class="hv-poster" id="hvPoster" alt="" draggable="false">
-      <a class="hv-work-link" id="hvWorkLink" href="#" hidden>
-        <span class="hv-work-title" id="hvWorkTitle"></span>
-        <span class="hv-work-cta" data-i="hv_view_work">작품 보기 ↗</span>
-      </a>
-      <button class="hv-playpause" id="hvPlayPause" type="button" aria-label="일시정지">❚❚</button>
     </div>
-    <div class="hv-progress" id="hvProgress" hidden></div>
-    <div class="hv-statement-wrap">
+    <div class="hv-overlay" aria-hidden="true"></div>
+    <div class="hv-inner">
+      <div class="hv-meta-row">
+        <a class="hv-work-link" id="hvWorkLink" href="#" hidden>
+          <span class="hv-work-title" id="hvWorkTitle"></span>
+          <span class="hv-work-cta" data-i="hv_view_work">작품 보기 ↗</span>
+        </a>
+        <button class="hv-playpause" id="hvPlayPause" type="button" aria-label="일시정지">❚❚</button>
+      </div>
       <h1 class="statement" data-i="statement"><span class="lead1">쉽게 들어와서 오래 머무는 작업.</span><span class="accent">순서가 다를 뿐, 깊이는 같습니다.</span></h1>
     </div>
   </div>
@@ -1502,13 +1509,12 @@ document.addEventListener('contextmenu', function(e){
   var heroEl = document.getElementById('hero');
   var imageMode = document.getElementById('heroImageMode');
   var videoMode = document.getElementById('heroVideoMode');
-  var stage = document.getElementById('hvStage');
+  var hvBg = document.getElementById('hvBg');
   var videoEl = document.getElementById('hvVideo');
   var posterEl = document.getElementById('hvPoster');
   var workLink = document.getElementById('hvWorkLink');
   var workTitleEl = document.getElementById('hvWorkTitle');
   var playPauseBtn = document.getElementById('hvPlayPause');
-  var progressEl = document.getElementById('hvProgress');
   if(!heroEl || !videoMode) return;
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; // 기본값(이미지 모드)을 그대로 둔다
 
@@ -1534,31 +1540,17 @@ document.addEventListener('contextmenu', function(e){
     heroEl.classList.remove('is-video-mode');
   }
 
-  function renderProgress(){
-    if(HV_LIST.length <= 1){ progressEl.hidden = true; progressEl.innerHTML = ''; return; }
-    progressEl.hidden = false;
-    progressEl.innerHTML = HV_LIST.map(function(item, i){
-      return '<button type="button" class="hv-progress-item" data-i="' + i + '" aria-label="' + (i + 1) + ' / ' + HV_LIST.length + '" aria-current="' + (i === hvIndex ? 'true' : 'false') + '"><i></i></button>';
-    }).join('');
-    progressEl.querySelectorAll('.hv-progress-item').forEach(function(btn){
-      btn.onclick = function(){ clearHoldTimer(); switchTo(+btn.dataset.i); };
-    });
-  }
-  function setProgressFill(i, pct){
-    var btn = progressEl.querySelectorAll('.hv-progress-item')[i];
-    var fill = btn && btn.querySelector('i');
-    if(fill) fill.style.width = Math.max(0, Math.min(100, pct)) + '%';
-  }
-  function markActiveProgress(){
-    progressEl.querySelectorAll('.hv-progress-item').forEach(function(btn, i){
-      btn.setAttribute('aria-current', i === hvIndex ? 'true' : 'false');
-    });
-  }
   function updateWorkLink(item){
     if(!item.work){ workLink.hidden = true; return; }
     workLink.hidden = false;
     workLink.href = 'works/?w=' + encodeURIComponent(item.work.id);
     workTitleEl.textContent = curLang() === 'en' ? (item.work.title_en || item.work.title) : (item.work.title || item.work.title_en);
+  }
+  /* 영상별 주변 배경색 + 밝은/어두운 배지 테마. 영상 색감·배경은 절대 건드리지 않고,
+     레터박스 여백과 오버레이 배지의 대비만 영상에 맞춰 조정한다. */
+  function applyTheme(item){
+    hvBg.style.background = item.bg_color || '#000';
+    videoMode.classList.toggle('theme-light', item.ui_theme === 'light');
   }
   function updatePlayPauseUI(){
     var playing = !hvPaused && !videoEl.paused && !videoEl.ended;
@@ -1573,10 +1565,9 @@ document.addEventListener('contextmenu', function(e){
   /* 다른 슬라이드로 전환 — 항상 새로 로드하고, 뜰 때까지 포스터를 보여준다 */
   function switchTo(i){
     hvIndex = i;
-    markActiveProgress();
     var item = HV_LIST[i];
     updateWorkLink(item);
-    setProgressFill(i, 0);
+    applyTheme(item);
     posterEl.src = pickPoster(item) || '';
     posterEl.classList.remove('is-hidden');
     videoEl.pause();
@@ -1605,18 +1596,12 @@ document.addEventListener('contextmenu', function(e){
   function handleBrokenVideo(i){
     HV_LIST.splice(i, 1);
     if(!HV_LIST.length) return; // 포스터가 이미 떠 있는 상태 그대로 유지, 자동 전환만 중단
-    renderProgress();
     switchTo(i % HV_LIST.length);
   }
 
-  videoEl.addEventListener('timeupdate', function(){
-    if(!videoEl.duration) return;
-    setProgressFill(hvIndex, (videoEl.currentTime / videoEl.duration) * 100);
-  });
   videoEl.addEventListener('play', updatePlayPauseUI);
   videoEl.addEventListener('pause', updatePlayPauseUI);
   videoEl.addEventListener('ended', function(){
-    setProgressFill(hvIndex, 100);
     updatePlayPauseUI();
     if(hvPaused) return;
     clearHoldTimer();
@@ -1689,11 +1674,11 @@ document.addEventListener('contextmenu', function(e){
   /* 모바일 좌우 스와이프로 슬라이드 전환(세로 스크롤은 방해하지 않음) */
   (function(){
     var startX = 0, startY = 0, tracking = false;
-    stage.addEventListener('touchstart', function(e){
+    videoMode.addEventListener('touchstart', function(e){
       if(!e.touches || e.touches.length !== 1) return;
       startX = e.touches[0].clientX; startY = e.touches[0].clientY; tracking = true;
     }, {passive:true});
-    stage.addEventListener('touchend', function(e){
+    videoMode.addEventListener('touchend', function(e){
       if(!tracking) return;
       tracking = false;
       if(HV_LIST.length <= 1) return;
@@ -1740,7 +1725,7 @@ document.addEventListener('contextmenu', function(e){
     heroEl.classList.add('is-video-mode');
     posterEl.classList.add('is-hidden');
     updateWorkLink(HV_LIST[0]);
-    renderProgress();
+    applyTheme(HV_LIST[0]);
     var p = videoEl.play();
     if(p && p.catch) p.catch(function(){ posterEl.classList.remove('is-hidden'); updatePlayPauseUI(); });
     updatePlayPauseUI();
@@ -1768,11 +1753,12 @@ document.addEventListener('contextmenu', function(e){
         visible = visible.slice(0, 3);
         if(!visible.length){ useImageMode(); return; }
         Promise.all(visible.map(function(r){
-          if(!r.work_no) return Promise.resolve({video:r.video, video_mobile:r.video_mobile, poster:r.poster, poster_mobile:r.poster_mobile, work:null});
+          var base = {video:r.video, video_mobile:r.video_mobile, poster:r.poster, poster_mobile:r.poster_mobile, bg_color:r.bg_color, ui_theme:r.ui_theme};
+          if(!r.work_no) return Promise.resolve(Object.assign({}, base, {work:null}));
           return fetch(DATA_BASE + 'works/' + encodeURIComponent(r.work_no) + '.json')
             .then(function(res){ return res.json(); })
-            .then(function(w){ return {video:r.video, video_mobile:r.video_mobile, poster:r.poster, poster_mobile:r.poster_mobile, work:{id:r.work_no, title:w.title, title_en:w.title_en}}; })
-            .catch(function(){ return {video:r.video, video_mobile:r.video_mobile, poster:r.poster, poster_mobile:r.poster_mobile, work:null}; });
+            .then(function(w){ return Object.assign({}, base, {work:{id:r.work_no, title:w.title, title_en:w.title_en}}); })
+            .catch(function(){ return Object.assign({}, base, {work:null}); });
         })).then(function(enriched){
           attemptActivation(enriched, 0);
         });
