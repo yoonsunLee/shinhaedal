@@ -165,15 +165,15 @@
   }
   /* 캐릭터는 배경과 분리된 투명 이미지 — hover 시 캐릭터만 기울어지게 하기 위함 */
   .ip-teaser-character{
-    position:absolute; top:-8%; left:50%;
-    width:auto; height:159%; max-width:none;
-    transform:translate(-50%, 0) rotate(0deg);
-    transform-origin:50% 88%;
+    position:absolute; top:50%; left:50%;
+    width:auto; height:82%; max-width:none;
+    transform:translate(-50%, -50%) rotate(0deg);
+    transform-origin:50% 85%;
     pointer-events:none; -webkit-user-select:none; user-select:none;
   }
   @media (hover:hover) and (pointer:fine){
     .ip-teaser-character{transition:transform .45s cubic-bezier(.22,1,.36,1);}
-    .ip-teaser:hover .ip-teaser-character{transform:translate(-50%, -5px) rotate(-2deg);}
+    .ip-teaser:hover .ip-teaser-character{transform:translate(-50%, calc(-50% - 5px)) rotate(-2deg);}
   }
   .ip-teaser-body{
     position:relative; z-index:1; flex:0 0 42%; max-width:460px;
@@ -188,7 +188,7 @@
     .ip-teaser{aspect-ratio:4/5; display:block; background:none;}
     .ip-teaser-media{position:absolute; inset:0;}
     .ip-teaser-overlay{background:linear-gradient(100deg, rgba(5,5,10,.92) 0%, rgba(5,5,10,.6) 42%, rgba(5,5,10,.15) 100%);}
-    .ip-teaser-character{height:78%;}
+    .ip-teaser-character{height:56%;}
     .ip-teaser-body{position:relative; height:100%; flex:none; max-width:none; padding:0 24px;}
     .ip-teaser-lede{white-space:normal;}
   }
@@ -470,7 +470,7 @@
     <div class="ip-teaser-media">
       <div class="ip-teaser-bg"></div>
       <div class="ip-teaser-overlay"></div>
-      <img class="ip-teaser-character" src="ip/assets/transition-character.png" alt="" draggable="false">
+      <img class="ip-teaser-character" src="ip/assets/character-hero-transparent.png" alt="" draggable="false">
     </div>
   </a>
 </div>
