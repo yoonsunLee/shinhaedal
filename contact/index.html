@@ -192,6 +192,7 @@ var I18N = {
     c_categories:'작품 소장 · 전시 · 협업 · 라이선싱 · 기타 — 무엇이든 편하게 남겨주세요.',
     copy_email:'이메일 복사',
     copy_email_done:'복사됨',
+    copy_failed:'복사 실패 — 직접 선택해서 복사해주세요',
     form_h2:'문의 폼',
     lbl_type:'문의 유형',
     lbl_name:'성함 / 소속',
@@ -229,6 +230,7 @@ var I18N = {
     c_categories:'Artwork · Exhibition · Collaboration · Licensing · Other — anything is welcome.',
     copy_email:'Copy email',
     copy_email_done:'Copied',
+    copy_failed:'Copy failed — please select and copy manually',
     form_h2:'Contact Form',
     lbl_type:'Inquiry Type',
     lbl_name:'Name / Organization',
@@ -317,7 +319,9 @@ function clearAutoSubject(){
   if(subjectEl && subjectEl.value === lastAutoSubject) subjectEl.value = '';
   lastAutoSubject = '';
 }
+var selectWorkSeq = 0; // 연속으로 작품을 선택했을 때, 늦게 도착한 이전 요청의 응답이 최신 선택을 덮어쓰지 않도록 막는 순번
 function selectWork(workId){
+  var seq = ++selectWorkSeq;
   if(!workId){
     CURRENT_WORK = null;
     renderWorkInquiryCard();
@@ -329,6 +333,7 @@ function selectWork(workId){
     loadWorksIndex() /* 작품 상세와 병렬로 불러와, 딥링크 첫 진입에서도 썸네일 조회가 빈 목록에 걸리지 않게 함 */
   ])
     .then(function(results){
+      if(seq !== selectWorkSeq) return; // 그 사이 다른 작품을 선택했으면 이 응답은 무시
       var w = results[0];
       CURRENT_WORK = {
         id: workId,
@@ -392,7 +397,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e){
   var mailSubject = '[' + type + '] ' + subject;
   var body = 'Name/Organization: ' + name + '\nEmail: ' + email + '\n\n';
   if(CURRENT_WORK){
-    var workTitle = CURRENT_WORK.title_ko || CURRENT_WORK.title_en;
+    var workTitle = LANG === 'en' ? (CURRENT_WORK.title_en || CURRENT_WORK.title_ko) : (CURRENT_WORK.title_ko || CURRENT_WORK.title_en);
     body += 'Artwork: ' + CURRENT_WORK.id + ' — ' + workTitle + '\n'
       + 'https://yoonsunlee.github.io/shinhaedal/works/?w=' + encodeURIComponent(CURRENT_WORK.id) + '\n\n';
   }
@@ -415,14 +420,18 @@ document.getElementById('copyEmailBtn').addEventListener('click', function(){
   var btn = this;
   navigator.clipboard.writeText('haedarney@naver.com').then(function(){
     flashCopyFeedback(btn, I18N[LANG].copy_email_done);
-  }).catch(function(){});
+  }).catch(function(){
+    flashCopyFeedback(btn, I18N[LANG].copy_failed);
+  });
 });
 document.getElementById('copyBodyBtn').addEventListener('click', function(){
   var btn = this;
   var text = (LAST_MAIL_SUBJECT ? LAST_MAIL_SUBJECT + '\n\n' : '') + LAST_MAIL_BODY;
   navigator.clipboard.writeText(text).then(function(){
     flashCopyFeedback(btn, I18N[LANG].copy_content_done);
-  }).catch(function(){});
+  }).catch(function(){
+    flashCopyFeedback(btn, I18N[LANG].copy_failed);
+  });
 });
 
 function applyLang(l, opts){
