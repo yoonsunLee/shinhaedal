@@ -52,22 +52,20 @@
   /* ---------- 공통 섹션 소제목 ---------- */
   .ab-section-title{font-family:'Space Mono','Noto Sans KR', monospace; font-weight:400; font-size:16px; letter-spacing:.5px; color:var(--ab-title); margin:0 0 20px;}
 
-  /* ---------- 2. Artist Note ---------- */
-  .ab-note{max-width:670px; margin:0 auto; padding:56px 5vw; border-top:1px solid var(--ab-divider);}
+  /* ---------- 2. Artist Note + 3. 작업 사진 (손 + 자개) — PC에서는 나란히, 하단을 맞춤 ---------- */
+  .ab-note{max-width:1080px; margin:0 auto; padding:56px 5vw 100px; border-top:1px solid var(--ab-divider);}
+  .ab-note-layout{display:flex; align-items:flex-end; gap:60px;}
+  .ab-note-text{flex:1 1 auto; min-width:0; max-width:670px;}
   .ab-note-hook{font-family:'Noto Sans KR', sans-serif; font-weight:400; font-size:24px; line-height:1.75; color:var(--ab-title); text-align:left; margin:0 0 28px;}
   .ab-note .ab-body p{font-size:17px; line-height:2; text-align:left; margin:0 0 26px;}
-  @media(max-width:720px){
-    .ab-note{padding:44px 6vw;}
-    .ab-note-hook{font-size:22px;}
-    .ab-note .ab-body p{font-size:16px; line-height:1.95;}
-  }
-
-  /* ---------- 3. 작업 사진 (손 + 자개) ---------- */
-  .ab-photo{padding:0 5vw 100px;}
-  .ab-photo-inner{max-width:560px; margin:0 auto;}
+  .ab-photo-inner{flex:0 0 300px; margin:0;}
   .ab-photo-inner img{width:100%; height:auto; display:block; -webkit-user-select:none; user-select:none; -webkit-user-drag:none;}
   @media(max-width:720px){
-    .ab-photo{padding:0 6vw 60px;}
+    .ab-note{padding:44px 6vw 60px;}
+    .ab-note-layout{flex-direction:column; gap:36px;}
+    .ab-note-hook{font-size:22px;}
+    .ab-note .ab-body p{font-size:16px; line-height:1.95;}
+    .ab-photo-inner{flex-basis:auto; width:220px; margin:0 auto;}
   }
 
   /* ---------- 4. 학력·자격 + 전시 ---------- */
@@ -188,29 +186,30 @@
 </div>
 
 <section class="ab-note">
-  <h2 class="ab-section-title ab-anim-title" data-reveal>Artist Note</h2>
-  <p class="ab-note-hook" data-i="about_note_hook">쉽게 들어와서 오래 머무는 작업.<br>순서가 다를 뿐, 깊이는 같습니다.</p>
-  <div class="ab-body" data-i="about_note_body">
-    <p>제 작업은 법과 사회의 규범 안에서 살아가는 개인에 대한 이야기입니다.</p>
-    <p>저에게 법은 차갑고 어려운 규칙에 머무는 것이 아니라, 결국 사람을 위해 사람들이 만든 규칙입니다. 그리고 그 안을 살아가는 개인은 저마다 다른 모습과 빛깔을 지닙니다.</p>
-    <p>그래서 작업은 이미지보다 먼저 법학적 개념과 텍스트에서 시작합니다.</p>
-    <p>개념을 고르고, 제목과 서사를 먼저 씁니다.<br>그 이야기를 하나의 장면으로 구상한 뒤, 나전칠기의 시각언어로 번역합니다.</p>
-    <p>법학적 개념 → 제목과 서사 → 시각화.</p>
-    <p>논문을 쓰던 사고의 구조가 자연스럽게 작업의 구조로 이어진 셈입니다.</p>
-    <p>천연자개는 같은 조각도 빛과 바라보는 각도에 따라 다른 색을 보여줍니다. 작게 자르고 쪼개어도 고유의 영롱한 빛은 사라지지 않습니다.</p>
-    <p>저는 그 모습에서 사회의 규범 안에서도 저마다의 빛깔로 살아가는 개인을 떠올립니다.</p>
-    <p>옻칠은 여러 번 칠하고 말리고 갈아내며 깊이를 만듭니다. 옻칠의 깊이는 자개의 빛을돋보이게 하고, 자개의 영롱함은 다시 옻칠의 깊이를 드러냅니다.</p>
-    <p>그리고 그 이야기에는 현대인의 일상과 저의 페르소나인 '얼빵해달'이 함께 살아갑니다.어렵게 느껴질 수 있는 법도 얼빵해달의 이야기를 통하면 조금 더 친근하고 다정하게다가갈 수 있다고 생각합니다.</p>
-    <p>처음부터 어렵게 이해할 필요는 없습니다.</p>
-    <p>얼빵해달이 귀여워서,<br>자개가 반짝여서 작품 앞에 멈춰 서도 좋습니다.</p>
-    <p>그 다음 제목을 읽고, 그 안에 법과 전통의 이야기가 있다는 것을 발견하고, 조금 더 오래바라보게 되기를 바랍니다.</p>
-    <p>그리고 작품을 떠날 때에는<br>사회 속의 자기 자신을 한 번쯤 다정하게 바라볼 수 있었으면 합니다.</p>
-  </div>
-</section>
-
-<section class="ab-photo">
-  <div class="ab-photo-inner ab-clip" data-reveal>
-    <img src="assets/artist-profile-2-bg.webp" alt="자개를 만지는 손" width="845" height="1268" draggable="false">
+  <div class="ab-note-layout">
+    <div class="ab-note-text">
+      <h2 class="ab-section-title ab-anim-title" data-reveal>Artist Note</h2>
+      <p class="ab-note-hook" data-i="about_note_hook">쉽게 들어와서 오래 머무는 작업.<br>순서가 다를 뿐, 깊이는 같습니다.</p>
+      <div class="ab-body" data-i="about_note_body">
+        <p>제 작업은 법과 사회의 규범 안에서 살아가는 개인에 대한 이야기입니다.</p>
+        <p>저에게 법은 차갑고 어려운 규칙에 머무는 것이 아니라, 결국 사람을 위해 사람들이 만든 규칙입니다. 그리고 그 안을 살아가는 개인은 저마다 다른 모습과 빛깔을 지닙니다.</p>
+        <p>그래서 작업은 이미지보다 먼저 법학적 개념과 텍스트에서 시작합니다.</p>
+        <p>개념을 고르고, 제목과 서사를 먼저 씁니다.<br>그 이야기를 하나의 장면으로 구상한 뒤, 나전칠기의 시각언어로 번역합니다.</p>
+        <p>법학적 개념 → 제목과 서사 → 시각화.</p>
+        <p>논문을 쓰던 사고의 구조가 자연스럽게 작업의 구조로 이어진 셈입니다.</p>
+        <p>천연자개는 같은 조각도 빛과 바라보는 각도에 따라 다른 색을 보여줍니다. 작게 자르고 쪼개어도 고유의 영롱한 빛은 사라지지 않습니다.</p>
+        <p>저는 그 모습에서 사회의 규범 안에서도 저마다의 빛깔로 살아가는 개인을 떠올립니다.</p>
+        <p>옻칠은 여러 번 칠하고 말리고 갈아내며 깊이를 만듭니다. 옻칠의 깊이는 자개의 빛을돋보이게 하고, 자개의 영롱함은 다시 옻칠의 깊이를 드러냅니다.</p>
+        <p>그리고 그 이야기에는 현대인의 일상과 저의 페르소나인 '얼빵해달'이 함께 살아갑니다.어렵게 느껴질 수 있는 법도 얼빵해달의 이야기를 통하면 조금 더 친근하고 다정하게다가갈 수 있다고 생각합니다.</p>
+        <p>처음부터 어렵게 이해할 필요는 없습니다.</p>
+        <p>얼빵해달이 귀여워서,<br>자개가 반짝여서 작품 앞에 멈춰 서도 좋습니다.</p>
+        <p>그 다음 제목을 읽고, 그 안에 법과 전통의 이야기가 있다는 것을 발견하고, 조금 더 오래바라보게 되기를 바랍니다.</p>
+        <p>그리고 작품을 떠날 때에는<br>사회 속의 자기 자신을 한 번쯤 다정하게 바라볼 수 있었으면 합니다.</p>
+      </div>
+    </div>
+    <div class="ab-photo-inner ab-clip" data-reveal>
+      <img src="assets/artist-profile-2-bg.webp" alt="자개를 만지는 손" width="845" height="1268" draggable="false">
+    </div>
   </div>
 </section>
 
