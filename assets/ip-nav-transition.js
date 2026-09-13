@@ -29,7 +29,13 @@
     }
 
     var canvas,frame,timeout,done=false;
-    function finish(){ if(done) return; done=true; cancelAnimationFrame(frame); clearTimeout(timeout); }
+    function finish(){
+      if(done) return; done=true;
+      cancelAnimationFrame(frame); clearTimeout(timeout);
+      // 캔버스를 지우지 않으면, location.href로 이동한 뒤 IP 페이지에서 뒤로가기를 눌렀을 때
+      // 브라우저가 이 페이지를 bfcache에서 복원하면서 마지막 프레임(확대된 해변 장면)이 그대로 남아있게 된다.
+      if(canvas){ canvas.remove(); canvas=null; }
+    }
 
     Promise.race([
       Promise.all([load(assetsBase+'transition-character.png'), load(assetsBase+'transition-shell.png'), load(assetsBase+'beach.png')]),
@@ -55,6 +61,7 @@
       }
 
       canvas=document.createElement('canvas');
+      canvas.className='ip-transition-canvas';
       canvas.setAttribute('aria-hidden','true');
       Object.assign(canvas.style,{position:'fixed',inset:'0',width:'100%',height:'100%',zIndex:'2147483000',pointerEvents:'none'});
       document.body.appendChild(canvas);
@@ -130,16 +137,20 @@
         frame=requestAnimationFrame(draw);
       }
 
-      timeout=setTimeout(function(){ go(); finish(); if(canvas) canvas.remove(); }, duration+500);
+      timeout=setTimeout(function(){ go(); finish(); }, duration+500);
       frame=requestAnimationFrame(draw);
     }).catch(function(){
       finish();
-      if(canvas) canvas.remove();
       go();
     });
   }
 
-  window.addEventListener('pageshow', function(e){ if(e.persisted) running=false; });
+  window.addEventListener('pageshow', function(e){
+    if(!e.persisted) return;
+    running=false;
+    // 안전장치: 어떤 경로로든 캔버스가 지워지지 않은 채 bfcache에 들어갔다면 복원 시 정리한다.
+    document.querySelectorAll('.ip-transition-canvas').forEach(function(c){ c.remove(); });
+  });
 
   document.querySelectorAll('a[href="ip/"], a[href="../ip/"]').forEach(function(a){
     if(a.target==='_blank') return;
