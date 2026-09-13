@@ -1,0 +1,14 @@
+[
+  {
+    "id": "sample-1",
+    "name": "아트토이 자개 회전 샘플 (임시 테스트용)",
+    "public": true,
+    "order": 1,
+    "video": "assets/home-video/sample-1.mp4",
+    "video_mobile": "",
+    "poster": "assets/home-video/sample-1-poster.webp",
+    "poster_mobile": "",
+    "work_no": "HD-2026-001",
+    "mobile_image_fallback": false
+  }
+]
