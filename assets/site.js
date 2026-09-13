@@ -43,3 +43,11 @@
     }
   });
 })();
+
+/* 작품 이미지 외 일반 이미지(작가 사진 등)의 우클릭 저장 방지. 드래그 저장은 site.css의
+   user-drag:none이 이미 막는다 — 여기서는 컨텍스트 메뉴(다른 이름으로 저장)만 막는다. */
+(function(){
+  document.addEventListener('contextmenu', function(e){
+    if(e.target.tagName === 'IMG') e.preventDefault();
+  });
+})();

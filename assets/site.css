@@ -30,7 +30,12 @@ body{
   font-family:'Noto Sans KR', sans-serif;
   -webkit-font-smoothing:antialiased;
   word-break:keep-all;
+  -webkit-user-select:none; -moz-user-select:none; user-select:none;
 }
+input, textarea, select, [contenteditable]{
+  -webkit-user-select:text; -moz-user-select:text; user-select:text;
+}
+img{ -webkit-user-drag:none; user-drag:none; }
 
 /* nav */
 nav{
