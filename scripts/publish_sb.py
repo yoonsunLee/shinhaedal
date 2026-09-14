@@ -20,6 +20,7 @@ if not API or not KEY:
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(ROOT, "data")
 ASSETS_DIR = os.path.join(ROOT, "assets", "works")
+HOME_VIDEO_ASSETS_DIR = os.path.join(ROOT, "assets", "home-video")
 
 IMG_TIERS = {"thumb": 560, "detail": 1600, "large": 2400}
 
@@ -215,6 +216,49 @@ def make_audio(no, audio_master, out_root):
             "duration": round(float(probe.stdout.strip()))}
 
 
+def make_video(vid, video_master, out_root):
+    """홈 영상 하나: 마스터 원본 하나만 받아서 PC용(faststart 리먹스), 모바일용(저해상도
+    재인코딩), 포스터 프레임(첫 프레임 근처)까지 전부 자동으로 만든다.
+    작가가 모바일용을 따로 준비할 필요가 없게 하는 게 목적(2026-09-14 결정)."""
+    raw = fetch_image_bytes(video_master)
+    if not raw:
+        return None
+    out_dir = os.path.join(out_root, vid)
+    os.makedirs(out_dir, exist_ok=True)
+    src = os.path.join(out_dir, "_src_video")
+    with open(src, "wb") as f:
+        f.write(raw)
+
+    pc_out = os.path.join(out_dir, "video.mp4")
+    poster_out = os.path.join(out_dir, "poster.webp")
+    mobile_out = os.path.join(out_dir, "video_mobile.mp4")
+    try:
+        # PC용: 재인코딩 없이 moov atom만 앞으로 옮긴다(모바일 브라우저에서 전체를
+        # 받기 전엔 재생이 시작되지 않던 문제의 원인이었다 — 2026-09-14에 겪음).
+        subprocess.run(["ffmpeg", "-y", "-i", src, "-c", "copy", "-movflags", "+faststart", pc_out],
+                       check=True, capture_output=True)
+        # 포스터: 검은 프레임으로 시작하는 경우가 많아 0.3초 지점에서 한 장 뽑는다.
+        subprocess.run(["ffmpeg", "-y", "-ss", "0.3", "-i", src, "-frames:v", "1", poster_out],
+                       check=True, capture_output=True)
+        # 모바일용: 해상도·비트레이트를 낮춰서 재인코딩(작가가 따로 만들 필요 없음).
+        subprocess.run(["ffmpeg", "-y", "-i", src,
+                         "-vf", "scale='min(720,iw)':'-2'",
+                         "-c:v", "libx264", "-crf", "26", "-preset", "veryfast",
+                         "-c:a", "aac", "-b:a", "96k",
+                         "-movflags", "+faststart", mobile_out],
+                       check=True, capture_output=True)
+    finally:
+        if os.path.exists(src):
+            os.remove(src)
+
+    return {
+        "video": "assets/home-video/%s/video.mp4" % vid,
+        "video_mobile": "assets/home-video/%s/video_mobile.mp4" % vid,
+        "poster": "assets/home-video/%s/poster.webp" % vid,
+        "poster_mobile": "",
+    }
+
+
 def write_json(path, payload):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
@@ -253,6 +297,12 @@ def main():
     links = sb("exhibition_works?select=exhibition_id,work_id")
     press = sb("press?select=*&deleted_at=is.null")
     all_photos = sb("work_photos?select=*&is_public=eq.true&order=sort_order")
+    try:
+        home_videos = sb("home_videos?select=*&is_public=eq.true&deleted_at=is.null&order=sort_order")
+    except Exception as e:
+        # 스키마를 아직 안 만들었으면(Phase 2 도입 전) 조용히 건너뛴다.
+        print("home_videos 조회 건너뜀(테이블이 없으면 정상): %s" % e)
+        home_videos = []
     all_media = sb("work_media_links?select=*&is_public=eq.true&order=sort_order")
 
     if not works:
@@ -411,6 +461,36 @@ def main():
     write_json(os.path.join(data_dir, "press.json"), press_out)
     print("press.json: %d건" % len(press_out))
 
+    hv_no_by_id = {w["id"]: s(w["work_no"]) for w in works}
+    hv_assets_dir = os.path.join(os.path.dirname(assets_dir), "home-video")
+    hv_out = []
+    for v in home_videos[:3]:  # 홈페이지는 최대 3개까지만 쓴다
+        vid = s(v.get("id"))
+        if not vid:
+            continue
+        media = {"video": "", "video_mobile": "", "poster": "", "poster_mobile": ""}
+        if not data_only and s(v.get("video_master")):
+            print("영상 처리 중: " + (s(v.get("name")) or vid))
+            made = make_video(vid, v.get("video_master"), hv_assets_dir)
+            if made:
+                media = made
+        hv_out.append({
+            "id": vid,
+            "name": s(v.get("name")),
+            "public": True,  # is_public=eq.true로 이미 걸러서 가져왔으니 여기 온 건 전부 공개
+            "order": v.get("sort_order") or 0,
+            "video": media["video"],
+            "video_mobile": media["video_mobile"],
+            "poster": media["poster"],
+            "poster_mobile": media["poster_mobile"],
+            "work_no": hv_no_by_id.get(s(v.get("work_id")), ""),
+            "bg_color": s(v.get("bg_color")) or "#000000",
+            "ui_theme": s(v.get("ui_theme")) or "dark",
+            "mobile_image_fallback": bool(v.get("mobile_image_fallback")),
+        })
+    write_json(os.path.join(data_dir, "home-videos.json"), hv_out)
+    print("home-videos.json: %d건" % len(hv_out))
+
     if not dry and not data_only:
         current = {s(w["work_no"]) for w in works}
         wd = os.path.join(data_dir, "works")
@@ -431,6 +511,12 @@ def main():
                 if name not in current_ex:
                     shutil.rmtree(os.path.join(ex_assets_dir, name))
                     print("orphan 정리: assets/exhibitions/%s/" % name)
+        current_hv = {s(v["id"]) for v in hv_out}
+        if os.path.isdir(hv_assets_dir):
+            for name in os.listdir(hv_assets_dir):
+                if name not in current_hv:
+                    shutil.rmtree(os.path.join(hv_assets_dir, name))
+                    print("orphan 정리: assets/home-video/%s/" % name)
 
 
 if __name__ == "__main__":
