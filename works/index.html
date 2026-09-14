@@ -370,7 +370,7 @@
       </div>
       <div class="wm-rail" id="wmRail" hidden></div>
     </div>
-    <div class="wm-info">
+    <div class="wm-info" id="wmInfo">
       <div>
         <div class="wm-title-primary" id="wmTitlePrimary"></div>
         <div class="wm-title-secondary" id="wmTitleSecondary"></div>
@@ -1156,7 +1156,7 @@ function wmInsideVisibleImage(e){
   return e.clientX >= left && e.clientX <= left + rw && e.clientY >= top && e.clientY <= top + rh;
 }
 wmModal.addEventListener('click', function(e){
-  if(e.target === wmModal || e.target === document.getElementById('wmMedia') || e.target === document.getElementById('wmStage')) { closeWorkModal(); return; }
+  if(e.target === wmModal || e.target === document.getElementById('wmMedia') || e.target === document.getElementById('wmStage') || e.target === document.getElementById('wmInfo')) { closeWorkModal(); return; }
   if(e.target === document.getElementById('wmImg') && !wmInsideVisibleImage(e)) { closeWorkModal(); return; }
   if(e.target === document.getElementById('wmVideoEmbed')) { closeWorkModal(); return; }
 });
