@@ -48,16 +48,18 @@ nav{display:flex;align-items:flex-start;justify-content:space-between;padding:26
 }
 .nav-overlay.open{transform:translateX(0)}
 .overlay-close{position:absolute;top:22px;right:24px;font-size:20px}
-.overlay-links{display:flex;flex-direction:column;gap:26px;text-align:left}
+/* 헤더용 nav{padding/height} 규칙이 이 안의 <nav class="overlay-links">에도 걸리므로
+   메뉴 패널 안에서는 무시하고 패널 자체 padding(.nav-overlay)만 쓰도록 명시적으로 리셋 */
+.overlay-links{display:flex;flex-direction:column;gap:26px;text-align:left;padding:0;height:auto}
 @media(max-width:560px){ .nav-overlay{width:min(340px,84vw);padding:88px 28px 32px} }
 .overlay-links a{font-family:'Black Han Sans',sans-serif;font-size:26px;color:var(--navy);text-decoration:none}
 .overlay-links .overlay-ig{font-family:'Space Mono','Noto Sans KR',monospace;font-size:13px;color:var(--muted);margin-top:10px}
-.icon-btn{background:none;border:none;color:var(--navy);cursor:pointer;display:flex;align-items:center;justify-content:center;width:38px;height:38px;margin:-9px;opacity:.75;font-family:'Space Mono','Noto Sans KR',monospace;font-size:13px}
+.icon-btn{background:none;border:none;color:var(--navy);cursor:pointer;display:flex;align-items:center;justify-content:center;width:44px;height:44px;margin:-12px;opacity:.75;font-family:'Space Mono','Noto Sans KR',monospace;font-size:13px}
 .icon-btn:hover{opacity:1}
 .icon-btn.menu-btn{display:none}
-@media(max-width:900px){nav{padding:20px 32px}.nav-menu{display:none}.icon-btn.menu-btn{display:flex}}
+@media(max-width:900px){.nav-menu{display:none}.icon-btn.menu-btn{display:flex}}
 
-.hero{position:relative;isolation:isolate;overflow:hidden;min-height:760px;height:calc(100svh - 76px);max-height:1080px;background:#e7ede0}
+.hero{position:relative;isolation:isolate;overflow:hidden;min-height:760px;height:calc(100svh - 90px);max-height:1080px;background:#e7ede0}
 .beach{position:absolute;inset:-25px;background:url('assets/beach.png') center 44%/cover;z-index:-2;transform:translateY(var(--shore-y,0px));will-change:transform}
 .hero-inner{height:100%;position:relative;padding:55px 6%}
 .hero .eyebrow{margin-bottom:22px}
@@ -197,10 +199,9 @@ dialog p{text-align:center;font:12px 'Space Mono',monospace;padding-top:20px}
   .toy-thumbs img{height:130px}
 }
 @media(max-width:580px){
-  nav{padding:0 32px;height:66px}
   .nav-menu{display:none}
   .lang{gap:3px}
-  .hero{height:calc(100svh - 66px);min-height:710px;max-height:900px}
+  .hero{height:calc(100svh - 90px);min-height:710px;max-height:900px}
   .hero-inner{padding-top:34px}
   .hero .eyebrow{font-size:10px;letter-spacing:.075em;margin-bottom:20px}
   .hero h1{font-size:12.5vw;letter-spacing:-.065em;line-height:.96}
