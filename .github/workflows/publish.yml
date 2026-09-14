@@ -14,6 +14,7 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    timeout-minutes: 20  # 기본값(360분)까지 매달려 있지 않도록 — 평소엔 몇 분이면 끝남
     steps:
       - uses: actions/checkout@v4
 

@@ -206,12 +206,12 @@ def make_audio(no, audio_master, out_root):
     with open(srcp, "wb") as f:
         f.write(raw)
     subprocess.run(["ffmpeg", "-y", "-i", srcp, "-ac", "1", "-b:a", "96k", mp3],
-                   check=True, capture_output=True)
+                   check=True, capture_output=True, timeout=120)
     os.remove(srcp)
     probe = subprocess.run(
         ["ffprobe", "-v", "error", "-show_entries", "format=duration",
          "-of", "default=noprint_wrappers=1:nokey=1", mp3],
-        check=True, capture_output=True, text=True)
+        check=True, capture_output=True, text=True, timeout=60)
     return {"src": "assets/works/%s/audio.mp3" % no,
             "duration": round(float(probe.stdout.strip()))}
 
@@ -236,17 +236,24 @@ def make_video(vid, video_master, out_root):
         # PC용: 재인코딩 없이 moov atom만 앞으로 옮긴다(모바일 브라우저에서 전체를
         # 받기 전엔 재생이 시작되지 않던 문제의 원인이었다 — 2026-09-14에 겪음).
         subprocess.run(["ffmpeg", "-y", "-i", src, "-c", "copy", "-movflags", "+faststart", pc_out],
-                       check=True, capture_output=True)
+                       check=True, capture_output=True, timeout=300)
         # 포스터: 검은 프레임으로 시작하는 경우가 많아 0.3초 지점에서 한 장 뽑는다.
         subprocess.run(["ffmpeg", "-y", "-ss", "0.3", "-i", src, "-frames:v", "1", poster_out],
-                       check=True, capture_output=True)
+                       check=True, capture_output=True, timeout=60)
         # 모바일용: 해상도·비트레이트를 낮춰서 재인코딩(작가가 따로 만들 필요 없음).
         subprocess.run(["ffmpeg", "-y", "-i", src,
                          "-vf", "scale='min(720,iw)':'-2'",
                          "-c:v", "libx264", "-crf", "26", "-preset", "veryfast",
                          "-c:a", "aac", "-b:a", "96k",
                          "-movflags", "+faststart", mobile_out],
-                       check=True, capture_output=True)
+                       check=True, capture_output=True, timeout=300)
+    except Exception:
+        # 셋 중 하나라도 실패하면 절반만 만들어진 산출물을 남기지 않는다
+        # (다음 발행 때 헷갈리지 않도록 폴더를 깨끗한 상태로 되돌린다).
+        for p in (pc_out, poster_out, mobile_out):
+            if os.path.exists(p):
+                os.remove(p)
+        raise
     finally:
         if os.path.exists(src):
             os.remove(src)
@@ -471,7 +478,13 @@ def main():
         media = {"video": "", "video_mobile": "", "poster": "", "poster_mobile": ""}
         if not data_only and s(v.get("video_master")):
             print("영상 처리 중: " + (s(v.get("name")) or vid))
-            made = make_video(vid, v.get("video_master"), hv_assets_dir)
+            try:
+                made = make_video(vid, v.get("video_master"), hv_assets_dir)
+            except Exception as e:
+                # 영상 하나가 깨졌다고 작품·전시·Press 발행까지 전부 막으면 안 된다.
+                # 이 영상만 건너뛰고(다음 발행 때 다시 시도됨) 나머지는 정상 진행한다.
+                print("영상 처리 실패, 이 영상은 건너뜀(%s): %s" % (vid, e))
+                continue
             if made:
                 media = made
         hv_out.append({
