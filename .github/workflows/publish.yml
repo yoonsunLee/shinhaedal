@@ -48,7 +48,16 @@ jobs:
           missing = [r['id'] for r in idx if not r.get('thumb')]
           if missing:
               sys.exit('썸네일 없는 작품: %s — 발행 중단' % missing)
-          print('검사 통과: 작품 %d건, 전시 %d건' % (len(idx), len(ex)))
+          # 홈 영상은 0건이어도 정상(이미지 히어로로 폴백)이라 개수는 안 막는다.
+          # 대신 공개(public)인데 영상 파일이 비어있는 건 깨진 상태이므로 막는다.
+          try:
+              hv = json.load(open('data/home-videos.json', encoding='utf-8'))
+          except FileNotFoundError:
+              hv = []
+          broken = [r['id'] for r in hv if r.get('public') and not r.get('video')]
+          if broken:
+              sys.exit('영상 파일 없는 공개 홈 영상: %s — 발행 중단' % broken)
+          print('검사 통과: 작품 %d건, 전시 %d건, 홈 영상 %d건' % (len(idx), len(ex), len(hv)))
           PY
 
       - name: Commit if changed

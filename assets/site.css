@@ -86,7 +86,7 @@ nav{
 .overlay-links .overlay-ig{font-family:'Space Mono','Noto Sans KR',monospace; font-size:13px; color:var(--ivory-dim); margin-top:10px;}
 .icon-btn{background:none; border:none; color:var(--ivory); cursor:pointer; display:flex; align-items:center; justify-content:center; width:44px; height:44px; margin:-12px; opacity:0.85;}
 .icon-btn.menu-btn{display:none;}
-@media(max-width:900px){ .nav-menu{display:none;} .icon-btn.menu-btn{display:flex;} }
+@media(max-width:900px){ .nav-menu{display:none;} .icon-btn.menu-btn{display:flex;} .nav-icons{gap:20px;} }
 .icon-btn:hover{opacity:1;}
 
 footer{border-top:1px solid rgba(245,240,230,.1); padding:30px 28px 44px; display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; color:var(--ivory-faint);}
