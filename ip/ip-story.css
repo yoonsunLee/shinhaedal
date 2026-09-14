@@ -19,7 +19,9 @@ h3{font-size:24px;letter-spacing:-.04em}
 .skip:focus{top:0}
 
 /* ── site nav (실제 사이트 골격, IP 라이트 테마로 재배색) ── */
-nav{display:flex;align-items:flex-start;justify-content:space-between;padding:26px 32px;position:relative;z-index:20;background:var(--paper);border-bottom:1px solid #12354816}
+/* 배경/구분선은 화면 끝까지 채우되, 안쪽 콘텐츠는 다른 5개 페이지(max-width:1180px 중앙정렬)와
+   동일한 위치에 오도록 padding으로 맞춘다 — PC 와이드 화면에서 로고가 화면 끝에 붙지 않게. */
+nav{display:flex;align-items:flex-start;justify-content:space-between;padding:26px max(32px, calc((100% - 1180px) / 2 + 32px));position:relative;z-index:20;background:var(--paper);border-bottom:1px solid #12354816}
 .logo-block{display:grid;grid-template-columns:auto 1fr;row-gap:1px}
 .logo{display:contents;text-decoration:none}
 .logo-c,.logo-name{font-family:'Black Han Sans',sans-serif;font-size:20px;letter-spacing:1px;color:var(--navy);line-height:1;align-self:center}
@@ -53,7 +55,7 @@ nav{display:flex;align-items:flex-start;justify-content:space-between;padding:26
 .icon-btn{background:none;border:none;color:var(--navy);cursor:pointer;display:flex;align-items:center;justify-content:center;width:38px;height:38px;margin:-9px;opacity:.75;font-family:'Space Mono','Noto Sans KR',monospace;font-size:13px}
 .icon-btn:hover{opacity:1}
 .icon-btn.menu-btn{display:none}
-@media(max-width:900px){nav{padding:20px 6%}.nav-menu{display:none}.icon-btn.menu-btn{display:flex}}
+@media(max-width:900px){nav{padding:20px 32px}.nav-menu{display:none}.icon-btn.menu-btn{display:flex}}
 
 .hero{position:relative;isolation:isolate;overflow:hidden;min-height:760px;height:calc(100svh - 76px);max-height:1080px;background:#e7ede0}
 .beach{position:absolute;inset:-25px;background:url('assets/beach.png') center 44%/cover;z-index:-2;transform:translateY(var(--shore-y,0px));will-change:transform}
@@ -195,7 +197,7 @@ dialog p{text-align:center;font:12px 'Space Mono',monospace;padding-top:20px}
   .toy-thumbs img{height:130px}
 }
 @media(max-width:580px){
-  nav{padding:0 6%;height:66px}
+  nav{padding:0 32px;height:66px}
   .nav-menu{display:none}
   .lang{gap:3px}
   .hero{height:calc(100svh - 66px);min-height:710px;max-height:900px}
