@@ -37,14 +37,17 @@
 
   .ex-info-wrap{max-width:1180px; margin:0 auto; padding:22px 32px 0;}
   .ex-info-card{
-    display:flex; align-items:stretch; overflow:hidden; border-radius:2px; border:1px solid rgba(201,162,39,.18);
+    display:flex; align-items:center; overflow:hidden; border-radius:2px; border:1px solid rgba(201,162,39,.18);
     background:var(--bg-2);
   }
   .ex-info-card.no-media{display:block;}
   .ex-info-body{flex:1 1 auto; min-width:0; padding:22px 26px;}
   .ex-info-card.no-media .ex-info-body{padding:22px 26px;}
-  .ex-info-media{flex:0 0 36%; max-width:340px; min-height:220px; position:relative; overflow:hidden;}
-  .ex-info-media img{width:100%; height:100%; object-fit:cover; display:block;}
+  /* 포스터는 세로 비율이라, 카드 높이를 포스터에 맞춰 늘이면(align-items:stretch)
+     텍스트 쪽만 텅 빈 채로 같이 늘어난다. 포스터 쪽 크기를 직접 고정하고
+     align-items:center로 두 컬럼 높이를 분리한다. */
+  .ex-info-media{flex:0 0 auto; width:230px; aspect-ratio:3/4; position:relative; overflow:hidden; margin:16px 16px 16px 0;}
+  .ex-info-media img{width:100%; height:100%; object-fit:contain; display:block;} /* 포스터는 대부분 세로 비율이라 cover로 자르면 제목/하단 정보가 잘려나간다 */
   .ex-info-media button.ex-poster-link{display:block; width:100%; height:100%; border:none; margin:0; padding:0; background:none; cursor:pointer;}
   .ex-info-media::before{
     content:''; position:absolute; inset:0; z-index:1; pointer-events:none;
@@ -60,8 +63,8 @@
   .ex-info-card .ex-links a:hover, .ex-info-card .ex-links button.ex-poster-link:hover{color:var(--gold);}
   .ex-info-card .ex-links .sep{color:var(--ivory-faint); font-size:11px;}
   @media(max-width:720px){
-    .ex-info-card{flex-direction:column;}
-    .ex-info-media{flex:none; max-width:none; width:100%; min-height:0; aspect-ratio:16/9;}
+    .ex-info-card{flex-direction:column; align-items:stretch;} /* row에서 center는 가로 정렬용이지만 column에서는 세로줄 정렬이 돼버려 텍스트가 좁게 오그라든다 — 세로 배치에선 원래대로 꽉 채운다 */
+    .ex-info-media{flex:none; max-width:none; width:100%; min-height:0; aspect-ratio:3/4; margin:0;}
     .ex-info-media::before{background:linear-gradient(180deg, var(--bg-2) 0%, rgba(0,0,0,0) 18%);}
   }
 
