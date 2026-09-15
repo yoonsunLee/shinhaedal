@@ -20,33 +20,33 @@
    "thumb": "assets/works/HD-2025-004/photo0/thumb.webp",
    "detail": "assets/works/HD-2025-004/photo0/detail.webp",
    "large": "assets/works/HD-2025-004/photo0/large.webp",
-   "caption": "",
-   "caption_en": "",
-   "alt": ""
+   "caption": "모자이크 표면 가장자리 클로즈업",
+   "caption_en": "Close-up of the mosaic surface's edge",
+   "alt": "모자이크 표면 가장자리 클로즈업"
   },
   {
    "thumb": "assets/works/HD-2025-004/photo1/thumb.webp",
    "detail": "assets/works/HD-2025-004/photo1/detail.webp",
    "large": "assets/works/HD-2025-004/photo1/large.webp",
-   "caption": "",
-   "caption_en": "",
-   "alt": ""
+   "caption": "작품 위쪽 모서리 디테일",
+   "caption_en": "Detail of the upper corner",
+   "alt": "작품 위쪽 모서리 디테일"
   },
   {
    "thumb": "assets/works/HD-2025-004/photo2/thumb.webp",
    "detail": "assets/works/HD-2025-004/photo2/detail.webp",
    "large": "assets/works/HD-2025-004/photo2/large.webp",
-   "caption": "",
-   "caption_en": "",
-   "alt": ""
+   "caption": "동전과 나란히 놓아 본 크기",
+   "caption_en": "Shown next to a coin for scale",
+   "alt": "동전과 나란히 놓아 본 크기"
   },
   {
    "thumb": "assets/works/HD-2025-004/photo3/thumb.webp",
    "detail": "assets/works/HD-2025-004/photo3/detail.webp",
    "large": "assets/works/HD-2025-004/photo3/large.webp",
-   "caption": "",
-   "caption_en": "",
-   "alt": ""
+   "caption": "바다를 배경으로",
+   "caption_en": "Set against the sea",
+   "alt": "바다를 배경으로"
   }
  ]
 }
