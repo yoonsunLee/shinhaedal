@@ -259,7 +259,7 @@
     .ip-teaser-lede{white-space:normal;}
   }
 
-  .work-grid{display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:34px 14px;}
+  .work-grid{display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:34px 32px;}
   .tile{
     display:block; width:100%; margin:0;
     cursor:pointer; border:none; background:none; padding:0; text-align:left;
@@ -268,8 +268,7 @@
   }
   .tile:focus-visible{outline:2px solid var(--gold); outline-offset:4px; border-radius:2px;}
   .tile-media{position:relative; aspect-ratio:1/1; overflow:hidden; border-radius:2px; background:var(--bg-2);}
-  .tile-media img{width:100%; height:100%; object-fit:cover; display:block;}
-  .tile-media img.is-portrait{object-fit:contain;} /* 세로로 긴 사진은 정사각형 타일 안에서 위아래를 자르지 않고 레터박스로 보여준다 */
+  .tile-media img{width:100%; height:100%; object-fit:contain; display:block;} /* 작품 원본 비율·전체 외곽을 보존 — 크롭으로 촬영 여백을 억지로 없애지 않는다 */
   .tile-sheen{
     position:absolute; inset:0; opacity:0;
     background:
@@ -287,8 +286,8 @@
   }
   .tile.loading{display:flex; align-items:center; justify-content:center; aspect-ratio:1/1; border-radius:2px; background:var(--bg-2); cursor:default;}
   .tile.loading span{font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; color:var(--ivory-dim);}
-  .tile-cap{padding-top:12px;}
-  .tile-title{font-size:13px; color:var(--ivory-dim); font-weight:500; line-height:1.4;}
+  .tile-cap{padding-top:16px;}
+  .tile-title{font-size:14px; color:var(--ivory-dim); font-weight:500; line-height:1.4;}
   .tile-ex{
     aspect-ratio:1/1; border-radius:2px; border:1px solid rgba(201,162,39,.18); background:var(--bg-2);
     padding:20px 18px; display:flex; flex-direction:column; justify-content:center; gap:6px;
@@ -312,7 +311,7 @@
 
 
   @media(max-width:900px){
-    .work-grid{grid-template-columns:repeat(2, minmax(0, 1fr)); gap:26px 14px;}
+    .work-grid{grid-template-columns:repeat(2, minmax(0, 1fr)); gap:26px 24px;}
   }
 
   /* work modal — fullscreen editorial viewer */
@@ -818,7 +817,7 @@ function renderWorkTiles(rows){
   }
   grid.innerHTML = rows.map(function(r, i){
     var img = r.thumb ? ASSET_BASE + r.thumb : '';
-    var media = img ? '<img src="' + img.replace(/"/g,'&quot;') + '" alt="" loading="lazy" draggable="false" onerror="this.style.visibility=\'hidden\'" onload="if(this.naturalHeight>this.naturalWidth*1.15)this.classList.add(\'is-portrait\')">' : '';
+    var media = img ? '<img src="' + img.replace(/"/g,'&quot;') + '" alt="" loading="lazy" draggable="false" onerror="this.style.visibility=\'hidden\'">' : '';
     var title = primaryTitle(r);
     return '<a class="tile" href="?w=' + encodeURIComponent(r.id) + '" data-idx="' + i + '" aria-label="' + esc(title) + '">' +
       '<div class="tile-media">' + media + '<div class="tile-sheen"></div></div>' +
