@@ -14,7 +14,25 @@
   var ctx = canvas.getContext('2d');
   var W, H, DPR;
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var paused = document.hidden;
+
+  // 페이지가 <script> 태그 전에 window.STARFIELD_CONFIG를 심어두면 이 캔버스만
+  // 속도/마우스 반응을 조절할 수 있다 (다른 페이지는 설정이 없으니 기본값 그대로).
+  var CFG = window.STARFIELD_CONFIG || {};
+  var speedScale = typeof CFG.speedScale === 'number' ? CFG.speedScale : 1;
+  var parallaxScale = typeof CFG.parallaxScale === 'number' ? CFG.parallaxScale : 1;
+
+  var hiddenPaused = document.hidden;
+  var apiPaused = false;
+  var paused = hiddenPaused || apiPaused;
+  function updatePaused(){
+    var was = paused;
+    paused = hiddenPaused || apiPaused;
+    if (was && !paused){ lastT = performance.now(); requestAnimationFrame(frame); }
+  }
+  window.__starfield = {
+    pause: function(){ apiPaused = true; updatePaused(); },
+    resume: function(){ apiPaused = false; updatePaused(); }
+  };
 
   function resize(){
     DPR = Math.min(window.devicePixelRatio || 1, 2);
@@ -27,8 +45,8 @@
   resize();
 
   document.addEventListener('visibilitychange', function(){
-    paused = document.hidden;
-    if (!paused) { lastT = performance.now(); requestAnimationFrame(frame); }
+    hiddenPaused = document.hidden;
+    updatePaused();
   });
 
   // ---- nebula blobs (very low opacity, slow drift) ----
@@ -84,8 +102,8 @@
 
     mouseX += (targetX - mouseX) * 0.03;
     mouseY += (targetY - mouseY) * 0.03;
-    var parX = (mouseX - 0.5) * 24;
-    var parY = (mouseY - 0.5) * 16;
+    var parX = (mouseX - 0.5) * 24 * parallaxScale;
+    var parY = (mouseY - 0.5) * 16 * parallaxScale;
     var scrollY = window.scrollY || window.pageYOffset || 0;
 
     // background base gradient
@@ -95,11 +113,13 @@
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, W, H);
 
-    // nebulae
+    // nebulae — reduced-motion에서는 표류를 멈춘다(t=0 고정). 그 외엔 매 프레임 자동으로
+    // 움직이는 요소라 별 반짝임·유성과 같은 기준으로 취급해야 한다.
     ctx.globalCompositeOperation = 'lighter';
+    var tNeb = reduceMotion ? 0 : t;
     nebulae.forEach(function(n){
-      var nx = n.x * W + Math.sin(t * 0.05 + n.phase) * 40;
-      var ny = n.y * H + Math.cos(t * 0.04 + n.phase) * 30;
+      var nx = n.x * W + Math.sin(tNeb * 0.05 + n.phase) * 40;
+      var ny = n.y * H + Math.cos(tNeb * 0.04 + n.phase) * 30;
       var r = n.r * Math.max(W, H);
       var ng = ctx.createRadialGradient(nx, ny, 0, nx, ny, r);
       ng.addColorStop(0, 'rgba(' + n.color + ',0.10)');
@@ -112,9 +132,9 @@
     // stars — scroll drifts them upward at a depth-scaled rate, wrapping
     // seamlessly so a long scroll (Works grid) feels like passing through space.
     stars.forEach(function(s){
-      var tw = reduceMotion ? 1 : (0.55 + 0.45 * Math.sin(t * s.speed + s.phase));
+      var tw = reduceMotion ? 1 : (0.55 + 0.45 * Math.sin(t * s.speed * speedScale + s.phase));
       var px = s.x * W + parX * s.depth;
-      var rawY = s.y * H + parY * s.depth - scrollY * (0.04 + s.depth * 0.10);
+      var rawY = s.y * H + parY * s.depth - scrollY * (0.04 + s.depth * 0.10) * speedScale;
       var py = ((rawY % H) + H) % H;
       var alpha = (0.15 + 0.7 * s.depth) * tw;
       ctx.beginPath();

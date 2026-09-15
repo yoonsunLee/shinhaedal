@@ -67,7 +67,7 @@
 
   /* grid */
   .grid-section{max-width:1180px; margin:0 auto; padding:36px 32px 100px;}
-  .work-grid{display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:34px 14px;}
+  .work-grid{display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:34px 32px;}
   .tile{
     display:block; width:100%; margin:0;
     cursor:pointer; border:none; background:none; padding:0; text-align:left;
@@ -76,8 +76,7 @@
   }
   .tile:focus-visible{outline:2px solid var(--gold); outline-offset:4px; border-radius:2px;}
   .tile-media{position:relative; aspect-ratio:1/1; overflow:hidden; border-radius:2px; background:var(--bg-2);}
-  .tile-media img{width:100%; height:100%; object-fit:cover; display:block;}
-  .tile-media img.is-portrait{object-fit:contain;} /* 세로로 긴 사진은 정사각형 타일 안에서 위아래를 자르지 않고 레터박스로 보여준다 */
+  .tile-media img{width:100%; height:100%; object-fit:contain; display:block;} /* 작품 원본 비율·전체 외곽을 보존 — 크롭으로 촬영 여백을 억지로 없애지 않는다 */
   .tile-sheen{
     position:absolute; inset:0; opacity:0;
     background:
@@ -96,15 +95,14 @@
   }
   .tile.loading{display:flex; align-items:center; justify-content:center; aspect-ratio:1/1; border-radius:2px; background:var(--bg-2); cursor:default;}
   .tile.loading span{font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; color:var(--ivory-dim);}
-  .tile-cap{padding-top:12px;}
-  .tile-title{font-size:13px; color:var(--ivory-dim); font-weight:500; line-height:1.4;}
+  .tile-cap{padding-top:16px;}
+  .tile-title{font-size:14px; color:var(--ivory-dim); font-weight:500; line-height:1.4;}
 
   @media(max-width:900px){
-    .work-grid{grid-template-columns:repeat(2, minmax(0, 1fr)); gap:26px 14px;}
+    .work-grid{grid-template-columns:repeat(2, minmax(0, 1fr)); gap:26px 24px;}
   }
   @media(max-width:480px){
     .work-grid{grid-template-columns:1fr; gap:30px;}
-    .tile-title{font-size:14px;}
   }
 
   /* work modal — fullscreen editorial viewer */
@@ -291,6 +289,7 @@
 </style>
 </head>
 <body>
+<script>window.STARFIELD_CONFIG = { speedScale: 0.45, parallaxScale: 0.35 };</script>
 <script src="../assets/starfield.js"></script>
 
 <nav>
@@ -557,7 +556,7 @@ function renderWorkTiles(rows){
   }
   grid.innerHTML = rows.map(function(r, i){
     var img = r.thumb ? ASSET_BASE + r.thumb : '';
-    var media = img ? '<img src="' + img.replace(/"/g,'&quot;') + '" alt="" loading="lazy" draggable="false" onerror="this.style.visibility=\'hidden\'" onload="if(this.naturalHeight>this.naturalWidth*1.15)this.classList.add(\'is-portrait\')">' : '';
+    var media = img ? '<img src="' + img.replace(/"/g,'&quot;') + '" alt="" loading="lazy" draggable="false" onerror="this.style.visibility=\'hidden\'">' : '';
     var title = primaryTitle(r);
     return '<a class="tile" href="?w=' + encodeURIComponent(r.id) + '" data-idx="' + i + '" aria-label="' + esc(title) + '">' +
       '<div class="tile-media">' + media + '<div class="tile-sheen"></div></div>' +
@@ -679,6 +678,16 @@ document.getElementById('workGrid').addEventListener('click', function(e){
 /* ---------- 작품 상세 팝업 ---------- */
 var wmModal = document.getElementById('workModal');
 var wmIndex = -1;
+
+// 팝업이 열려있는 동안은 뒤쪽 별 배경 애니메이션을 정지한다. 팝업 열고/닫는
+// 코드 경로가 여러 곳(openWorkModal/handlePopState/closeWorkModal 등)이라
+// 각 지점에 훅을 심는 대신, open 클래스 변화를 관찰해서 한 곳에서만 처리한다.
+if (window.__starfield){
+  new MutationObserver(function(){
+    if (wmModal.classList.contains('open')) window.__starfield.pause();
+    else window.__starfield.resume();
+  }).observe(wmModal, { attributes: true, attributeFilter: ['class'] });
+}
 
 function cleanText(s){
   return String(s==null?'':s).replace(/[\r]/g, '\n');
