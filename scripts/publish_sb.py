@@ -272,6 +272,17 @@ def write_json(path, payload):
         json.dump(payload, f, ensure_ascii=False, indent=1)
 
 
+def _remove_orphan(path, label):
+    # 정리 대상 폴더엔 원래 작품/전시/영상별 하위 디렉터리만 있어야 하지만,
+    # 테스트 등으로 낱개 파일이 섞여 들어가면 shutil.rmtree가 NotADirectoryError로 죽는다.
+    if os.path.isdir(path):
+        shutil.rmtree(path)
+        print("orphan 정리: %s/" % label)
+    elif os.path.exists(path):
+        os.remove(path)
+        print("orphan 정리(파일): %s" % label)
+
+
 ID_RE = re.compile(r"^[A-Z]+-(\d{4})-(\d+)$", re.I)
 
 
@@ -515,21 +526,18 @@ def main():
         if os.path.isdir(assets_dir):
             for name in os.listdir(assets_dir):
                 if name not in current:
-                    shutil.rmtree(os.path.join(assets_dir, name))
-                    print("orphan 정리: assets/works/%s/" % name)
+                    _remove_orphan(os.path.join(assets_dir, name), "assets/works/%s" % name)
         current_ex = {s(e.get("exhibition_no")) for e in exhibitions}
         ex_assets_dir = os.path.join(ex_assets_root, "exhibitions")
         if os.path.isdir(ex_assets_dir):
             for name in os.listdir(ex_assets_dir):
                 if name not in current_ex:
-                    shutil.rmtree(os.path.join(ex_assets_dir, name))
-                    print("orphan 정리: assets/exhibitions/%s/" % name)
+                    _remove_orphan(os.path.join(ex_assets_dir, name), "assets/exhibitions/%s" % name)
         current_hv = {s(v["id"]) for v in hv_out}
         if os.path.isdir(hv_assets_dir):
             for name in os.listdir(hv_assets_dir):
                 if name not in current_hv:
-                    shutil.rmtree(os.path.join(hv_assets_dir, name))
-                    print("orphan 정리: assets/home-video/%s/" % name)
+                    _remove_orphan(os.path.join(hv_assets_dir, name), "assets/home-video/%s" % name)
 
 
 if __name__ == "__main__":
