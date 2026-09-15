@@ -50,3 +50,12 @@ dialog.addEventListener('close',()=>{body.style.overflow='';large.removeAttribut
 document.addEventListener('contextmenu', function(e){
   if(e.target.tagName === 'IMG') e.preventDefault();
 });
+
+/* 상단 메뉴 글자를 span으로 감싸 호버 시 자개빛 스침 효과(ip-story.css)의 대상으로 삼는다. */
+document.querySelectorAll('.nav-menu a').forEach(function(a){
+  var span = document.createElement('span');
+  span.className = 'nav-sweep';
+  span.textContent = a.textContent;
+  a.textContent = '';
+  a.appendChild(span);
+});

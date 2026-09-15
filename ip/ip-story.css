@@ -1,4 +1,4 @@
-:root{--navy:#123548;--blue:#0649c8;--paper:#fffdf7;--muted:#526d77;--line:#ced5d4}
+:root{--navy:#123548;--blue:#0649c8;--paper:#fffdf7;--muted:#526d77;--line:#ced5d4;--sweep-teal:#1E93A6;--sweep-violet:#5B4FA6}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:85px}
 body{margin:0;color:var(--navy);background:var(--paper);font-family:'Noto Sans KR',sans-serif;-webkit-font-smoothing:antialiased;-webkit-user-select:none;-moz-user-select:none;user-select:none}
@@ -36,6 +36,25 @@ nav{display:flex;align-items:flex-start;justify-content:space-between;padding:26
 .nav-menu{display:flex;gap:24px;list-style:none;margin:0 8px 0 0;padding:0;align-items:center;font-family:'Space Mono','Noto Sans KR',monospace;font-size:12px}
 .nav-menu a{font-family:'Space Mono','Noto Sans KR',monospace;font-size:12px;letter-spacing:.5px;color:var(--muted);text-decoration:none}
 .nav-menu a:hover,.nav-menu a.on{color:var(--navy)}
+/* 메뉴 글자에 자개빛이 한 번 스치는 호버 효과 — 다른 5개 페이지와 같은 구조(site.css 참고)지만,
+   밝은 배경에 맞춰 옅은 파스텔 대신 중간 명도의 청록·남보라를 쓴다(기존 헤더용 밝은 색 재사용 금지). */
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion: no-preference){
+  .nav-menu a:not([aria-current="page"]) .nav-sweep{
+    background-image:linear-gradient(90deg,
+      #0867ba 0%, #0867ba 33%,
+      var(--sweep-violet) 40%, #0867ba 47%, var(--sweep-teal) 54%,
+      var(--muted) 67%, var(--muted) 100%);
+    background-size:300% 100%;
+    background-position:100% 0;
+    -webkit-background-clip:text; background-clip:text;
+    color:var(--muted); -webkit-text-fill-color:transparent;
+    transition:background-position .3s ease, color .3s ease;
+  }
+  .nav-menu a:not([aria-current="page"]):hover .nav-sweep{
+    background-position:0% 0;
+    color:#0867ba;
+  }
+}
 .nav-backdrop{position:fixed;inset:0;z-index:49;background:rgba(20,20,10,.25);opacity:0;pointer-events:none;transition:opacity .3s ease}
 .nav-backdrop.open{opacity:1;pointer-events:auto}
 .nav-overlay{

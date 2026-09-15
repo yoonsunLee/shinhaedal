@@ -58,3 +58,15 @@
     if(e.target.tagName === 'IMG') e.preventDefault();
   });
 })();
+
+/* 상단 메뉴 글자를 span으로 감싸 호버 시 자개빛 스침 효과(site.css)의 대상으로 삼는다.
+   href·클릭·이벤트는 <a>에 그대로 남아있어 링크 동작에는 영향이 없다. */
+(function(){
+  document.querySelectorAll('.nav-menu a').forEach(function(a){
+    var span = document.createElement('span');
+    span.className = 'nav-sweep';
+    span.textContent = a.textContent;
+    a.textContent = '';
+    a.appendChild(span);
+  });
+})();

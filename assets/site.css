@@ -13,6 +13,7 @@
   --status-ok-bg:#1f4d3a; --status-ok-fg:#8fe0b8;
   --status-done-bg:#5c2323; --status-done-fg:#f0a6a6;
   --status-nfs-bg:#4a3a22; --status-nfs-fg:#e0c48f;
+  --sweep-teal:#BFE9F2; --sweep-pearl:#E8E6E0; --sweep-lavender:#C9BEED;
 }
 *{box-sizing:border-box;}
 @media (prefers-reduced-motion: reduce){
@@ -58,6 +59,33 @@ nav{
 .nav-menu a{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-dim); text-decoration:none;}
 .nav-menu a:hover, .nav-menu a.on{color:var(--ivory);}
 .nav-menu .soon{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-faint); cursor:default;}
+/* 메뉴 글자에 자개빛이 한 번 스치는 호버 효과. 포인터가 있는 PC 환경 +
+   모션을 줄이지 않은 경우에만 적용 — 터치·모션감소에서는 기존의 단순한
+   color 전환(위 :hover 규칙)만 그대로 동작한다.
+   구현: 실제 글자색을 바꾸는 대신 background-clip:text로 그라디언트를
+   글자 안에만 채우고, background-position을 하나의 transition으로
+   슬라이드시킨다(반복 재생 없음, 호버 유지 중엔 끝난 자리에 멈춰 있음).
+   그라디언트는 "밝음 → 청록 → 진주색 → 라벤더 → 어두움" 순으로 정의하고
+   시작 위치를 100%(밝은 쪽 끝)로 잡아 호버 시 0%로 옮기는데, 이렇게 해야
+   (background-size:300%에서 position이 커질수록 내용물은 화면상 왼쪽으로
+   흐른다는 성질 때문에) 실제로는 왼쪽에서 오른쪽으로 스치는 것처럼 보인다. */
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion: no-preference){
+  .nav-menu a:not([aria-current="page"]) .nav-sweep{
+    background-image:linear-gradient(90deg,
+      var(--ivory) 0%, var(--ivory) 33%,
+      var(--sweep-lavender) 40%, var(--sweep-pearl) 47%, var(--sweep-teal) 54%,
+      var(--ivory-dim) 67%, var(--ivory-dim) 100%);
+    background-size:300% 100%;
+    background-position:100% 0;
+    -webkit-background-clip:text; background-clip:text;
+    color:var(--ivory-dim); -webkit-text-fill-color:transparent;
+    transition:background-position .3s ease, color .3s ease;
+  }
+  .nav-menu a:not([aria-current="page"]):hover .nav-sweep{
+    background-position:0% 0;
+    color:var(--ivory);
+  }
+}
 /* 오른쪽에서 슬라이드로 나오는 메뉴 패널. 태블릿에서는 화면 오른쪽에 붙은 폭 좁은 패널로,
    모바일에서는 더 넓은 비율로 나오되 항상 같은 오른쪽 슬라이드 모션을 쓴다. */
 .nav-backdrop{
