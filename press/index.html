@@ -192,20 +192,9 @@ function matchExhibition(p){
   }
   return null;
 }
-// 사이트에서 지어낸 "N인의 참여작가 중 한 명으로 이름을 올리다" 류의 정형 문구는
-// 기사 원문에 없는 요약일 뿐 직접 인용이 아니므로 목록에서 굳이 반복하지 않는다.
-function isGenericMention(q){
-  return /중\s*한\s*명으로\s*이름을\s*올리다/.test(q||'');
-}
-function isRedundantWithTitle(q, t){
-  return !!(q && t && String(t).indexOf(q) !== -1);
-}
-function dekFor(p, title){
-  var q = LANG === 'en' ? (p.quote_en||'') : (p.quote||'');
-  if(!q) return '';
-  if(isGenericMention(q)) return '';
-  if(isRedundantWithTitle(q, title)) return '';
-  return q;
+// 인용구는 아카이브에 입력된 기사에만 보여준다(자동으로 숨기거나 지어내지 않음)
+function dekFor(p){
+  return String((LANG === 'en' ? p.quote_en : p.quote) || '').trim();
 }
 function langFlag(p){
   return (LANG === 'en' && !p.title_en) ? '<span class="press-lang-flag">' + esc(I18N.en.ko_flag) + '</span>' : '';
@@ -236,7 +225,7 @@ function renderFeatured(p){
   var title = LANG === 'en' ? (p.title_en || p.title) : p.title;
   var articleUrl = safeUrl(p.url);
   var titleHtml = articleUrl ? '<a href="' + esc(articleUrl) + '" target="_blank" rel="noopener">' + esc(title) + '</a>' : esc(title);
-  var dek = dekFor(p, title);
+  var dek = dekFor(p);
   var media = img ? '<div class="press-feature-media"><img src="' + esc(img) + '" alt="" onerror="onMediaError(this)"></div>' : '';
   return '<div class="press-feature-grid reveal-once' + (img ? '' : ' no-media') + '">' +
     media +
@@ -251,7 +240,7 @@ function renderFeatured(p){
 function renderRow(p){
   var img = archiveImgUrl(p.image);
   var title = LANG === 'en' ? (p.title_en || p.title) : p.title;
-  var dek = dekFor(p, title);
+  var dek = dekFor(p);
   var media = img ? '<div class="press-row-media"><img src="' + esc(img) + '" alt="" loading="lazy" onerror="onMediaError(this)"></div>' : '';
   return '<article class="press-row' + (img ? '' : ' no-media') + '">' +
     media +

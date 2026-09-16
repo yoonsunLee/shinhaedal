@@ -93,8 +93,18 @@
     .tile:hover{transform:translateY(-3px);}
     .tile-media img{transition:transform .6s ease;}
     .tile:hover .tile-media img{transform:scale(1.03);}
-    .tile-sheen{transition:opacity .5s ease, background-position 1.4s ease;}
-    .tile:hover .tile-sheen{opacity:.14; background-position:0 0, 100% 60%;}
+    .tile:hover .tile-title, .tile:focus-visible .tile-title{color:var(--ivory);}
+  }
+  /* 작품 사진 색은 건드리지 않고, 제목에만 메뉴 호버와 같은 자개빛 스침을 준다 */
+  @media (hover:hover) and (pointer:fine) and (prefers-reduced-motion: no-preference){
+    .tile-title{
+      background-image:linear-gradient(90deg, var(--ivory) 0%, var(--ivory) 33%, var(--sweep-lavender) 40%, var(--sweep-pearl) 47%, var(--sweep-teal) 54%, var(--ivory-dim) 67%, var(--ivory-dim) 100%);
+      background-size:300% 100%; background-position:100% 0;
+      -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+      -webkit-box-decoration-break:clone; box-decoration-break:clone;
+      transition:background-position .7s ease;
+    }
+    .tile:hover .tile-title, .tile:focus-visible .tile-title{background-position:0 0;}
   }
   .tile.loading{display:flex; align-items:center; justify-content:center; aspect-ratio:1/1; border-radius:2px; background:var(--bg-2); cursor:default;}
   .tile.loading span{font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; color:var(--ivory-dim);}
@@ -288,7 +298,9 @@
     .wm-media{flex:0 0 auto; height:46vh;}
     .wm-stage{padding:20px;}
     .wm-counter{top:16px; left:20px;}
-    .wm-close{top:10px; right:14px;}
+    /* 창 전체가 스크롤되므로 닫기 버튼은 화면에 고정. transform이 남아 있으면 fixed 기준이 창으로 바뀌어 같이 스크롤된다 */
+    .work-modal-overlay.open .work-modal{transform:none;}
+    .wm-close{position:fixed; top:calc(10px + env(safe-area-inset-top, 0px)); right:14px; z-index:6; background:rgba(5,5,10,.6); border-radius:50%;}
     .wm-nav{width:40px; height:40px; font-size:24px;}
     .wm-info{max-width:none; flex:1 1 auto; padding:24px 24px 48px; overflow-y:visible;}
     .wm-rail{padding:0 16px 14px; gap:6px;}
@@ -450,7 +462,7 @@ var I18N = {
     wm_share_native:'공유하기',
     wm_share_copy:'작품 링크 복사',
     wm_share_copied:'복사됨',
-    wm_share_failed:'복사 실패 — 직접 선택해서 복사해주세요',
+    wm_share_failed:'링크를 복사하지 못했어요. 아래 주소를 복사해 주세요.',
     wm_ask_about:'이 작품에 대해 문의하기 →',
     wm_series_label:'시리즈 작품',
     video_default:'영상으로 보기',
@@ -475,7 +487,7 @@ var I18N = {
     wm_share_native:'Share',
     wm_share_copy:'Copy work link',
     wm_share_copied:'Copied',
-    wm_share_failed:'Copy failed — please select and copy manually',
+    wm_share_failed:'Couldn’t copy the link. Please copy the address below.',
     wm_ask_about:'ASK ABOUT THIS WORK →',
     wm_series_label:'Series',
     video_default:'Watch video',
@@ -1147,7 +1159,10 @@ function hideWorkModal(){
   wmModal.classList.remove('open');
   wmModal.setAttribute('aria-hidden', 'true'); wmModal.inert = true;
   document.body.style.overflow = '';
-  if(wmLastFocused){ wmLastFocused.focus(); wmLastFocused = null; }
+  // 링크로 바로 들어와 연 창이면 돌아갈 곳이 없으니 그 작품의 타일로 포커스를 보낸다
+  var back = wmLastFocused || document.querySelector('#workGrid .tile[data-idx="' + wmIndex + '"]');
+  if(back){ back.focus({preventScroll:true}); }
+  wmLastFocused = null;
 }
 function closeWorkModal(){
   hideWorkModal();
@@ -1232,14 +1247,30 @@ document.getElementById('wmShareCopy').addEventListener('click', function(){
   }
   var label = btn.querySelector('span');
   var original = I18N[LANG].wm_share_copy;
-  navigator.clipboard.writeText(url).then(function(){
+  copyText(url).then(function(){
     label.textContent = I18N[LANG].wm_share_copied;
     setTimeout(function(){ label.textContent = original; }, 2200);
   }).catch(function(){
-    label.textContent = I18N[LANG].wm_share_failed;
-    setTimeout(function(){ label.textContent = original; }, 2200);
+    // 복사가 막힌 환경이면 주소를 직접 선택할 수 있게 띄운다
+    window.prompt(I18N[LANG].wm_share_failed, url);
   });
 });
+function legacyCopy(text){
+  var ta = document.createElement('textarea');
+  ta.value = text; ta.setAttribute('readonly', '');
+  ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;user-select:text;-webkit-user-select:text;';
+  document.body.appendChild(ta); ta.select();
+  var ok = false;
+  try{ ok = document.execCommand('copy'); }catch(e){}
+  ta.remove();
+  return ok;
+}
+function copyText(text){
+  if(navigator.clipboard && window.isSecureContext){
+    return navigator.clipboard.writeText(text).catch(function(){ if(!legacyCopy(text)) throw new Error('copy failed'); });
+  }
+  return legacyCopy(text) ? Promise.resolve() : Promise.reject(new Error('copy failed'));
+}
 function wmInsideVisibleImage(e){
   var img = document.getElementById('wmImg');
   var cw = img.clientWidth, ch = img.clientHeight, iw = img.naturalWidth, ih = img.naturalHeight;

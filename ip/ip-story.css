@@ -82,7 +82,7 @@ nav{display:flex;align-items:flex-start;justify-content:space-between;padding:26
 .beach{position:absolute;inset:-25px;background:url('assets/beach.webp') center 44%/cover;z-index:-2;transform:translateY(var(--shore-y,0px));will-change:transform}
 .hero-inner{height:100%;position:relative;padding:55px 6%}
 .hero .eyebrow{margin-bottom:22px}
-.hero h1{font-family:Arial,Helvetica,sans-serif;font-weight:900;font-size:clamp(64px,8.7vw,142px);line-height:.89;letter-spacing:-.065em;position:relative;z-index:2;max-width:1000px}
+.hero h1{font-family:'Noto Sans KR',sans-serif;font-weight:900;font-size:clamp(64px,8.7vw,142px);line-height:.89;letter-spacing:-.05em;position:relative;z-index:2;max-width:1000px}
 .title-dot{color:#dc7495}
 .hero-name{font-size:26px;font-weight:700;margin-top:22px;letter-spacing:-.04em}
 .hero-character{position:absolute;width:clamp(250px,29vw,445px);right:10%;bottom:68px;transform:translateY(var(--char-y,0px));z-index:1}
