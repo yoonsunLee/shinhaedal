@@ -387,6 +387,7 @@
       </div>
       <div class="wm-actions">
         <button class="wm-action-btn" id="wmViewLarger" data-i="wm_view_larger">VIEW LARGER ⛶</button>
+        <button class="wm-action-btn" id="wmShareCopy" data-i="wm_share_copy" hidden>🔗 작품 링크 복사</button>
         <button class="wm-action-btn" id="wmDocentToggle" hidden>🎧 도슨트 듣기</button>
         <a class="wm-action-btn wm-action-btn--gold" id="wmAskAbout" data-i="wm_ask_about" href="#">ASK ABOUT THIS WORK →</a>
       </div>
@@ -435,6 +436,9 @@ var I18N = {
     wm_ex_more:'전시 이력 더보기',
     wm_ex_collapse:'접기',
     wm_view_larger:'크게 보기 ⛶',
+    wm_share_copy:'🔗 작품 링크 복사',
+    wm_share_copied:'복사됨',
+    wm_share_failed:'복사 실패 — 직접 선택해서 복사해주세요',
     wm_ask_about:'이 작품에 대해 문의하기 →',
     wm_series_label:'시리즈 작품',
     video_default:'영상으로 보기',
@@ -456,6 +460,9 @@ var I18N = {
     wm_ex_more:'Show more',
     wm_ex_collapse:'Show less',
     wm_view_larger:'VIEW LARGER ⛶',
+    wm_share_copy:'🔗 Copy work link',
+    wm_share_copied:'Copied',
+    wm_share_failed:'Copy failed — please select and copy manually',
     wm_ask_about:'ASK ABOUT THIS WORK →',
     wm_series_label:'Series',
     video_default:'Watch video',
@@ -505,6 +512,9 @@ if(LANG!=='ko') applyLang(LANG, {skipUrl:true});
 /* ---------- 해달아카이브 발행 데이터 연동 (정적 JSON, 브라우저는 더 이상 Apps Script를 직접 호출하지 않음) ---------- */
 var DATA_BASE = '../data/';
 var ASSET_BASE = '../';
+/* 작품별 og:image 공유 스텁 파일럿 — 지금은 HD-2026-009 한 건만 생성해뒀다.
+   전체 작품으로 자동화할지는 이 결과를 보고 별도로 결정한다. */
+var SHARE_STUB_WORKS = { 'HD-2026-009': 'w/HD-2026-009/' };
 
 function esc(s){
   return String(s==null?'':s).replace(/[&<>"']/g, function(c){
@@ -945,6 +955,10 @@ function renderWorkModal(){
   document.getElementById('wmRail').hidden = true;
   document.getElementById('wmViewLarger').hidden = false;
   document.getElementById('wmDocentToggle').hidden = true;
+  var shareStub = SHARE_STUB_WORKS[meta.id];
+  var shareBtn = document.getElementById('wmShareCopy');
+  shareBtn.hidden = !shareStub;
+  shareBtn.dataset.shareUrl = shareStub ? 'https://yoonsunlee.github.io/shinhaedal/works/' + shareStub : '';
 
   var metaKo = String(meta.title||'').trim();
   var metaEn = String(meta.title_en||'').trim();
@@ -1158,6 +1172,19 @@ window.addEventListener('popstate', handlePopState);
 document.getElementById('wmClose').onclick = closeWorkModal;
 document.getElementById('wmPrev').onclick = function(){ stepWorkModal(-1); };
 document.getElementById('wmNext').onclick = function(){ stepWorkModal(1); };
+document.getElementById('wmShareCopy').addEventListener('click', function(){
+  var btn = this;
+  var url = btn.dataset.shareUrl;
+  if(!url) return;
+  var original = I18N[LANG].wm_share_copy;
+  navigator.clipboard.writeText(url).then(function(){
+    btn.textContent = I18N[LANG].wm_share_copied;
+    setTimeout(function(){ btn.textContent = original; }, 2200);
+  }).catch(function(){
+    btn.textContent = I18N[LANG].wm_share_failed;
+    setTimeout(function(){ btn.textContent = original; }, 2200);
+  });
+});
 function wmInsideVisibleImage(e){
   var img = document.getElementById('wmImg');
   var cw = img.clientWidth, ch = img.clientHeight, iw = img.naturalWidth, ih = img.naturalHeight;
