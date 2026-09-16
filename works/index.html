@@ -387,7 +387,7 @@
       </div>
       <div class="wm-actions">
         <button class="wm-action-btn" id="wmViewLarger" data-i="wm_view_larger">VIEW LARGER ⛶</button>
-        <button class="wm-action-btn" id="wmShareCopy" data-i="wm_share_copy" hidden>🔗 작품 링크 복사</button>
+        <button class="wm-action-btn" id="wmShareCopy" type="button" hidden></button>
         <button class="wm-action-btn" id="wmDocentToggle" hidden>🎧 도슨트 듣기</button>
         <a class="wm-action-btn wm-action-btn--gold" id="wmAskAbout" data-i="wm_ask_about" href="#">ASK ABOUT THIS WORK →</a>
       </div>
@@ -436,6 +436,7 @@ var I18N = {
     wm_ex_more:'전시 이력 더보기',
     wm_ex_collapse:'접기',
     wm_view_larger:'크게 보기 ⛶',
+    wm_share_native:'공유하기',
     wm_share_copy:'🔗 작품 링크 복사',
     wm_share_copied:'복사됨',
     wm_share_failed:'복사 실패 — 직접 선택해서 복사해주세요',
@@ -460,6 +461,7 @@ var I18N = {
     wm_ex_more:'Show more',
     wm_ex_collapse:'Show less',
     wm_view_larger:'VIEW LARGER ⛶',
+    wm_share_native:'Share',
     wm_share_copy:'🔗 Copy work link',
     wm_share_copied:'Copied',
     wm_share_failed:'Copy failed — please select and copy manually',
@@ -515,6 +517,10 @@ var ASSET_BASE = '../';
 /* 작품별 og:image 공유 스텁 파일럿 — 지금은 HD-2026-009 한 건만 생성해뒀다.
    전체 작품으로 자동화할지는 이 결과를 보고 별도로 결정한다. */
 var SHARE_STUB_WORKS = { 'HD-2026-009': 'w/HD-2026-009/' };
+/* 모바일 브라우저는 대부분 Web Share API를 지원해서, 누르면 OS 공유 시트가 뜨고
+   카카오톡 등에서 og:image 미리보기가 바로 보인다. 미지원 환경(대부분 데스크탑)은
+   클립보드 복사로 폴백 — 버튼 라벨도 실제 동작에 맞춰 렌더링 시점에 정해진다. */
+var CAN_NATIVE_SHARE = typeof navigator !== 'undefined' && typeof navigator.share === 'function';
 
 function esc(s){
   return String(s==null?'':s).replace(/[&<>"']/g, function(c){
@@ -955,15 +961,20 @@ function renderWorkModal(){
   document.getElementById('wmRail').hidden = true;
   document.getElementById('wmViewLarger').hidden = false;
   document.getElementById('wmDocentToggle').hidden = true;
-  var shareStub = SHARE_STUB_WORKS[meta.id];
-  var shareBtn = document.getElementById('wmShareCopy');
-  shareBtn.hidden = !shareStub;
-  shareBtn.dataset.shareUrl = shareStub ? 'https://yoonsunlee.github.io/shinhaedal/works/' + shareStub : '';
 
   var metaKo = String(meta.title||'').trim();
   var metaEn = String(meta.title_en||'').trim();
   var metaPrimary = LANG === 'en' ? (metaEn || metaKo) : (metaKo || metaEn);
   document.getElementById('wmTitlePrimary').textContent = metaPrimary;
+
+  var shareStub = SHARE_STUB_WORKS[meta.id];
+  var shareBtn = document.getElementById('wmShareCopy');
+  shareBtn.hidden = !shareStub;
+  if(shareStub){
+    shareBtn.dataset.shareUrl = 'https://yoonsunlee.github.io/shinhaedal/works/' + shareStub;
+    shareBtn.dataset.shareTitle = metaPrimary;
+    shareBtn.textContent = I18N[LANG][CAN_NATIVE_SHARE ? 'wm_share_native' : 'wm_share_copy'];
+  }
   document.getElementById('wmCounter').textContent = (wmIndex + 1) + ' / ' + VISIBLE_WORKS.length;
   document.getElementById('wmCaption').textContent = I18N[LANG].loading;
   var imgEl = document.getElementById('wmImg');
@@ -1176,6 +1187,10 @@ document.getElementById('wmShareCopy').addEventListener('click', function(){
   var btn = this;
   var url = btn.dataset.shareUrl;
   if(!url) return;
+  if(CAN_NATIVE_SHARE){
+    navigator.share({ title: btn.dataset.shareTitle || '', url: url }).catch(function(){});
+    return;
+  }
   var original = I18N[LANG].wm_share_copy;
   navigator.clipboard.writeText(url).then(function(){
     btn.textContent = I18N[LANG].wm_share_copied;
