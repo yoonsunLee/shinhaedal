@@ -38,7 +38,7 @@
     }
 
     Promise.race([
-      Promise.all([load(assetsBase+'transition-character.png'), load(assetsBase+'transition-shell.png'), load(assetsBase+'beach.png')]),
+      Promise.all([load(assetsBase+'transition-character.webp'), load(assetsBase+'transition-shell.webp'), load(assetsBase+'beach.webp')]),
       new Promise(function(_,reject){ timeout=setTimeout(function(){ reject(new Error('asset timeout')); }, 1800); })
     ]).then(function(assets){
       clearTimeout(timeout);

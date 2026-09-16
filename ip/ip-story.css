@@ -79,7 +79,7 @@ nav{display:flex;align-items:flex-start;justify-content:space-between;padding:26
 @media(max-width:900px){.nav-menu{display:none}.icon-btn.menu-btn{display:flex}.nav-right{gap:20px}}
 
 .hero{position:relative;isolation:isolate;overflow:hidden;min-height:760px;height:calc(100svh - 90px);max-height:1080px;background:#e7ede0}
-.beach{position:absolute;inset:-25px;background:url('assets/beach.png') center 44%/cover;z-index:-2;transform:translateY(var(--shore-y,0px));will-change:transform}
+.beach{position:absolute;inset:-25px;background:url('assets/beach.webp') center 44%/cover;z-index:-2;transform:translateY(var(--shore-y,0px));will-change:transform}
 .hero-inner{height:100%;position:relative;padding:55px 6%}
 .hero .eyebrow{margin-bottom:22px}
 .hero h1{font-family:Arial,Helvetica,sans-serif;font-weight:900;font-size:clamp(64px,8.7vw,142px);line-height:.89;letter-spacing:-.065em;position:relative;z-index:2;max-width:1000px}

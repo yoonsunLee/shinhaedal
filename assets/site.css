@@ -10,6 +10,7 @@
   --ivory:#f5f0e6;
   --ivory-dim:rgba(245,240,230,0.62);
   --ivory-faint:rgba(245,240,230,0.32);
+  --ivory-muted:rgba(245,240,230,0.55); /* 작은 글씨용: 어두운 배경 대비 5.6:1 (faint는 2.6:1이라 본문성 텍스트에 쓰면 안 됨) */
   --status-ok-bg:#1f4d3a; --status-ok-fg:#8fe0b8;
   --status-done-bg:#5c2323; --status-done-fg:#f0a6a6;
   --status-nfs-bg:#4a3a22; --status-nfs-fg:#e0c48f;
@@ -48,7 +49,7 @@ nav{
 .logo{display:contents; text-decoration:none;}
 .logo-c, .logo-name{font-family:'Black Han Sans', sans-serif; font-size:20px; letter-spacing:1px; color:var(--ivory); line-height:1; align-self:center;}
 .logo-name{grid-column:2;}
-.logo-tag{grid-column:2; justify-self:center; text-align:center; font-family:'Space Mono','Noto Sans KR',monospace; font-size:10.5px; letter-spacing:.5px; color:var(--ivory-faint); text-transform:uppercase;}
+.logo-tag{grid-column:2; justify-self:center; text-align:center; font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; letter-spacing:.5px; color:var(--ivory-muted); text-transform:uppercase;}
 .nav-icons{display:flex; align-items:center; gap:16px; padding-top:2px;}
 .lang{display:flex; align-items:center; gap:5px;}
 .lang button{border:none; background:none; padding:11px 4px; margin:-11px -4px; cursor:pointer; color:var(--ivory-dim); font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; font-weight:700; letter-spacing:.5px;}
@@ -117,6 +118,6 @@ nav{
 @media(max-width:900px){ .nav-menu{display:none;} .icon-btn.menu-btn{display:flex;} .nav-icons{gap:20px;} }
 .icon-btn:hover{opacity:1;}
 
-footer{border-top:1px solid rgba(245,240,230,.1); padding:30px 28px 44px; display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; color:var(--ivory-faint);}
-footer a{color:var(--ivory-faint); text-decoration:none;}
+footer{border-top:1px solid rgba(245,240,230,.1); padding:30px 28px 44px; display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; color:var(--ivory-muted);}
+footer a{color:var(--ivory-muted); text-decoration:none;}
 footer a:hover{color:var(--ivory);}
