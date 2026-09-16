@@ -52,7 +52,7 @@
   // ---- nebula blobs (very low opacity, slow drift) ----
   var nebulae = [
     { x:0.2, y:0.3, r:0.55, color:'27,42,74',   phase:0 },
-    { x:0.8, y:0.6, r:0.5,  color:'201,162,39', phase:2.1 },
+    { x:0.8, y:0.6, r:0.5,  color:'134,182,232', phase:2.1 },
     { x:0.5, y:0.85,r:0.6,  color:'17,20,32',   phase:4.2 }
   ];
 
@@ -68,7 +68,7 @@
       r: 0.4 + depth * 1.6,
       phase: Math.random() * Math.PI * 2,
       speed: 0.6 + Math.random() * 1.2,
-      gold: Math.random() < 0.18
+      accent: Math.random() < 0.18
     });
   }
 
@@ -139,8 +139,8 @@
       var alpha = (0.15 + 0.7 * s.depth) * tw;
       ctx.beginPath();
       ctx.arc(px, py, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = s.gold
-        ? 'rgba(201,162,39,' + alpha + ')'
+      ctx.fillStyle = s.accent
+        ? 'rgba(134,182,232,' + alpha + ')'
         : 'rgba(245,240,230,' + alpha + ')';
       ctx.fill();
       if (s.depth > 0.75){

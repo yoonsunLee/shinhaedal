@@ -52,10 +52,11 @@
   @media(max-width:720px){
     .hero-overlay{ background:linear-gradient(to bottom, rgba(5,6,10,.5) 0%, rgba(5,6,10,.08) 18%, rgba(5,6,10,.2) 32%, rgba(5,6,10,.72) 52%, rgba(5,6,10,.95) 100%); }
   }
-  #bg-canvas{
-    position:absolute; inset:0; width:100%; height:100%; z-index:2;
-    image-rendering:pixelated;
+  /* 작품 색은 그대로 두고 화면만 아주 천천히 숨 쉬게(26초 왕복). 스크롤 시 JS가 transform을 쓰므로 scale/translate 속성으로 겹친다 */
+  @media (prefers-reduced-motion: no-preference){
+    .hero-bg{transform-origin:52% 38%; animation:heroBreath 26s ease-in-out infinite alternate;}
   }
+  @keyframes heroBreath{ from{ scale:1; translate:0 0; } to{ scale:1.08; translate:-1.2% -1%; } }
   .hero-inner{
     position:relative; z-index:4;
     max-width:1180px; margin:0 auto; width:100%;
@@ -88,7 +89,7 @@
   .hero-about-cta{
     display:inline-block; margin-top:28px;
     font-family:'Space Mono','Noto Sans KR', monospace; font-size:13px; letter-spacing:.5px;
-    color:var(--gold); text-decoration:none; border-bottom:1px solid transparent;
+    color:var(--accent); text-decoration:none; border-bottom:1px solid transparent;
     transition:color .2s ease, border-color .2s ease;
   }
   .hero-about-cta:hover{color:var(--ivory); border-color:var(--ivory);}
@@ -138,7 +139,7 @@
   }
   .hv-work-link:hover{background:rgba(5,5,10,.78);}
   .hv-work-link .hv-work-title{overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0;}
-  .hv-work-link .hv-work-cta{flex:0 0 auto; font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; color:var(--gold);}
+  .hv-work-link .hv-work-cta{flex:0 0 auto; font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; color:var(--accent);}
   .hv-work-link[hidden]{display:none;}
   .hv-playpause{
     flex:0 0 auto; width:34px; height:34px; border-radius:50%; border:1px solid rgba(245,240,230,.3);
@@ -149,7 +150,7 @@
   /* 밝은 배경 영상용 테마: 배지·버튼을 밝은 바탕 + 어두운 글자로 뒤집는다 */
   .hero-video-mode.theme-light .hv-work-link{background:rgba(255,255,255,.82); color:#171717;}
   .hero-video-mode.theme-light .hv-work-link:hover{background:rgba(255,255,255,.95);}
-  .hero-video-mode.theme-light .hv-work-link .hv-work-cta{color:#9a7a12;}
+  .hero-video-mode.theme-light .hv-work-link .hv-work-cta{color:#2f5f9a;}
   .hero-video-mode.theme-light .hv-playpause{background:rgba(255,255,255,.82); color:#171717; border-color:rgba(0,0,0,.15);}
   .hero-video-mode.theme-light .hv-playpause:hover{background:rgba(255,255,255,.95);}
   /* 영상 모드에서는 영상이 이미 시선을 끌기 때문에 문구를 원본 히어로보다 한 단계 낮춘다(과도한 축소는 아님) */
@@ -194,7 +195,7 @@
   .about-teaser-body{flex:1 1 auto; min-width:0;}
   .about-teaser-label{font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; letter-spacing:2px; color:var(--ivory-faint); text-transform:uppercase; margin:0 0 12px;}
   .about-teaser-lede{font-family:'Black Han Sans',sans-serif; font-weight:400; font-size:clamp(20px,2.6vw,28px); color:var(--ivory); line-height:1.4; margin:0 0 18px;}
-  .about-teaser-cta{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:1px; color:var(--gold); border-bottom:1px solid transparent; transition:color .2s ease, border-color .2s ease;}
+  .about-teaser-cta{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:1px; color:var(--accent); border-bottom:1px solid transparent; transition:color .2s ease, border-color .2s ease;}
   .about-teaser:hover .about-teaser-cta{color:var(--ivory); border-color:var(--ivory);}
   @media(max-width:720px){
     .about-teaser-wrap{padding:0 32px 48px;}
@@ -211,7 +212,7 @@
     transition:transform .35s ease, box-shadow .35s ease;
   }
   .ip-teaser:hover{transform:translateY(-3px); box-shadow:0 20px 50px rgba(0,0,0,.35);}
-  .ip-teaser:focus-visible{outline:2px solid var(--gold); outline-offset:4px;}
+  .ip-teaser:focus-visible{outline:2px solid var(--accent); outline-offset:4px;}
   .ip-teaser-media{position:relative; flex:1 1 auto; overflow:hidden;}
   .ip-teaser-bg{
     position:absolute; inset:0;
@@ -242,7 +243,7 @@
   }
   .ip-teaser-label{font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; letter-spacing:2px; color:var(--ivory-faint); text-transform:uppercase; margin:0;}
   .ip-teaser-lede{font-family:'Black Han Sans',sans-serif; font-weight:400; font-size:clamp(20px,2.6vw,28px); color:var(--ivory); line-height:1.4; margin:0; white-space:nowrap;}
-  .ip-teaser-cta{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:1px; color:var(--gold); transition:color .2s ease;}
+  .ip-teaser-cta{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:1px; color:var(--accent); transition:color .2s ease;}
   .ip-teaser:hover .ip-teaser-cta{color:var(--ivory);}
   @media(max-width:720px){
     .ip-teaser{aspect-ratio:4/5; display:block;}
@@ -264,7 +265,7 @@
     text-decoration:none; color:inherit;
     transition:transform .3s ease;
   }
-  .tile:focus-visible{outline:2px solid var(--gold); outline-offset:4px; border-radius:2px;}
+  .tile:focus-visible{outline:2px solid var(--accent); outline-offset:4px; border-radius:2px;}
   .tile-media{position:relative; aspect-ratio:1/1; overflow:hidden; border-radius:2px; background:var(--bg-2);}
   .tile-media img{width:100%; height:100%; object-fit:contain; display:block;} /* 작품 원본 비율·전체 외곽을 보존 — 크롭으로 촬영 여백을 억지로 없애지 않는다 */
   .tile-sheen{
@@ -297,7 +298,7 @@
   .tile-cap{padding-top:16px;}
   .tile-title{font-size:14px; color:var(--ivory-dim); font-weight:500; line-height:1.4;}
   .tile-ex{
-    aspect-ratio:1/1; border-radius:2px; border:1px solid rgba(201,162,39,.18); background:var(--bg-2);
+    aspect-ratio:1/1; border-radius:2px; border:1px solid rgba(134,182,232,.18); background:var(--bg-2);
     padding:20px 18px; display:flex; flex-direction:column; justify-content:center; gap:6px;
     position:relative; overflow:hidden;
   }
@@ -314,7 +315,7 @@
   .tile-ex .ex-meta{font-size:12.5px; color:var(--ivory-dim); line-height:1.6;}
   .tile-ex .ex-links{display:flex; align-items:center; gap:10px; margin-top:12px; padding-top:12px; border-top:1px solid rgba(245,240,230,.14);}
   .tile-ex .ex-links a{font-family:'Space Mono','Noto Sans KR',monospace; font-size:11.5px; color:var(--ivory-dim); text-decoration:none; border-bottom:1px solid transparent;}
-  .tile-ex .ex-links a:hover{color:var(--gold); border-color:var(--gold);}
+  .tile-ex .ex-links a:hover{color:var(--accent); border-color:var(--accent);}
   .tile-ex .ex-links .sep{color:var(--ivory-faint); font-size:11px;}
 
 
@@ -373,7 +374,7 @@
   .wm-video-embed[hidden]{display:none;}
   .wm-video-embed iframe{width:100%; height:100%; border:0;}
   .wm-video-embed .wm-video-fallback{color:var(--ivory-dim); font-family:'Space Mono','Noto Sans KR',monospace; font-size:13px; text-align:center; padding:20px; line-height:1.8;}
-  .wm-video-embed .wm-video-fallback a{color:var(--gold);}
+  .wm-video-embed .wm-video-fallback a{color:var(--accent);}
   .wm-video-extlink{
     position:absolute; right:14px; bottom:14px; z-index:2;
     font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; letter-spacing:.3px;
@@ -401,7 +402,7 @@
     transition:opacity .15s ease, border-color .15s ease;
   }
   .wm-rail-item:hover{opacity:.85;}
-  .wm-rail-item.is-active{opacity:1; border-color:var(--gold);}
+  .wm-rail-item.is-active{opacity:1; border-color:var(--accent);}
   .wm-rail-item img{width:100%; height:100%; object-fit:cover; display:block;}
   .wm-rail-item--video .wm-rail-play{
     position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
@@ -427,12 +428,12 @@
   .wm-title-secondary{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; color:var(--ivory-dim); margin-top:6px;}
   .wm-spec{font-family:'Space Mono','Noto Sans KR',monospace; font-size:11.5px; color:var(--ivory-dim); letter-spacing:.3px;}
   .wm-caption{font-size:15.5px; line-height:1.75; color:var(--ivory-dim); margin:0; white-space:pre-line;}
-  .wm-exhibitions{border-top:1px solid var(--gold-dim); padding-top:16px;}
+  .wm-exhibitions{border-top:1px solid var(--accent-dim); padding-top:16px;}
   .wm-ex-label{font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; letter-spacing:1px; color:var(--ivory-dim); margin-bottom:8px; text-transform:uppercase;}
   .wm-ex-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px;}
   .wm-ex-list li{font-size:12.5px; color:var(--ivory-dim); line-height:1.5;}
-  .wm-ex-toggle{margin-top:10px; background:none; border:none; padding:0; color:var(--gold); font-family:'Space Mono','Noto Sans KR',monospace; font-size:11.5px; cursor:pointer; text-decoration:underline; text-underline-offset:3px;}
-  .wm-actions{border-top:1px solid var(--gold-dim); padding-top:16px; display:flex; gap:24px; flex-wrap:wrap;}
+  .wm-ex-toggle{margin-top:10px; background:none; border:none; padding:0; color:var(--accent); font-family:'Space Mono','Noto Sans KR',monospace; font-size:11.5px; cursor:pointer; text-decoration:underline; text-underline-offset:3px;}
+  .wm-actions{border-top:1px solid var(--accent-dim); padding-top:16px; display:flex; gap:24px; flex-wrap:wrap;}
   .wm-action-btn{
     font-family:'Space Mono','Noto Sans KR',monospace; font-size:11.5px; letter-spacing:.5px; color:var(--ivory-dim);
     background:none; border:none; border-bottom:1px solid transparent; padding:0 0 2px; margin:0;
@@ -440,8 +441,8 @@
     text-decoration:none; display:inline-flex; align-items:center; gap:7px;
   }
   .wm-action-btn:hover{color:var(--ivory); border-color:var(--ivory);}
-  .wm-action-btn--gold{color:var(--gold);}
-  .wm-action-btn--gold:hover{color:var(--gold); border-color:var(--gold);}
+  .wm-action-btn--accent{color:var(--accent);}
+  .wm-action-btn--accent:hover{color:var(--accent); border-color:var(--accent);}
   .wm-action-btn[hidden]{display:none;}
   .wm-action-btn{position:relative;}
   /* 보이는 크기는 그대로 두고 손가락 터치 영역만 44px 이상으로 넓힌다 */
@@ -453,17 +454,17 @@
   .docent-panel.open{display:flex;}
   .docent-player{display:flex; align-items:center; gap:12px;}
   .docent-play{
-    width:34px; height:34px; border-radius:50%; border:1px solid var(--gold-dim); background:none; color:var(--gold);
+    width:34px; height:34px; border-radius:50%; border:1px solid var(--accent-dim); background:none; color:var(--accent);
     display:flex; align-items:center; justify-content:center; cursor:pointer; flex:none; font-size:13px;
     transition:border-color .2s ease, background .2s ease;
   }
-  .docent-play:hover{border-color:var(--gold); background:rgba(201,162,39,.08);}
+  .docent-play:hover{border-color:var(--accent); background:rgba(134,182,232,.08);}
   .docent-track{flex:1; height:2px; background:rgba(245,240,230,.14); position:relative; cursor:pointer;}
-  .docent-track b{position:absolute; left:0; top:0; height:100%; width:0%; background:var(--gold); display:block; pointer-events:none;}
+  .docent-track b{position:absolute; left:0; top:0; height:100%; width:0%; background:var(--accent); display:block; pointer-events:none;}
   .docent-time{font-family:'Space Mono','Noto Sans KR',monospace; font-size:10.5px; color:var(--ivory-faint); flex:none; min-width:64px; text-align:right;}
   .docent-script{font-size:14.5px; line-height:1.8; color:var(--ivory-dim); max-height:200px; overflow-y:auto; padding-right:6px; margin-top:12px; white-space:pre-line;}
 
-  .wm-series{border-top:1px solid var(--gold-dim); padding-top:16px;}
+  .wm-series{border-top:1px solid var(--accent-dim); padding-top:16px;}
   .wm-series-label{font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; letter-spacing:1px; color:var(--ivory-dim); margin-bottom:10px; text-transform:uppercase;}
   .wm-series-list{display:flex; gap:10px; flex-wrap:wrap;}
   .wm-series-item{
@@ -565,7 +566,6 @@
   <div class="hero-image-mode" id="heroImageMode">
     <div class="hero-bg" aria-hidden="true"></div>
     <div class="hero-overlay" aria-hidden="true"></div>
-    <canvas id="bg-canvas" aria-hidden="true"></canvas>
 
     <div class="hero-inner">
       <h1 class="statement" data-i="statement"><span class="lead1">쉽게 들어와서 오래 머무는 작업.</span><span class="accent">순서가 다를 뿐, 깊이는 같습니다.</span></h1>
@@ -667,7 +667,7 @@
           <svg class="wm-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 13v-1a8 8 0 0116 0v1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><rect x="2.5" y="13" width="4" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="17.5" y="13" width="4" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/></svg>
           <span>도슨트 듣기</span>
         </button>
-        <a class="wm-action-btn wm-action-btn--gold" id="wmAskAbout" data-i="wm_ask_about" href="#">이 작품에 대해 문의하기 →</a>
+        <a class="wm-action-btn wm-action-btn--accent" id="wmAskAbout" data-i="wm_ask_about" href="#">이 작품에 대해 문의하기 →</a>
       </div>
       <div class="docent-panel" id="wmDocentPanel">
         <div class="docent-player">
@@ -1538,59 +1538,6 @@ lvOverlay.addEventListener('click', function(e){ if(e.target === lvOverlay) clos
 document.addEventListener('contextmenu', function(e){
   if(e.target.closest('.tile-media img, #wmImg, #lvImg')) e.preventDefault();
 });
-</script>
-
-<script>
-(function(){
-  var canvas = document.getElementById('bg-canvas');
-  var ctx = canvas.getContext('2d');
-  var hero = document.querySelector('.hero');
-  var SCALE = 6; // internal render scale-down -> CSS upscales with pixelated rendering for a retro low-res feel
-  var w, h, particles;
-  var colors = ['#c9a227','#c9a227','#f5f0e6','#f5f0e6','#ffb6d9','#9fe7ff','#c9b6ff'];
-
-  function resize(){
-    w = Math.max(60, Math.floor(hero.clientWidth / SCALE));
-    h = Math.max(40, Math.floor(hero.clientHeight / SCALE));
-    canvas.width = w; canvas.height = h;
-  }
-  function initParticles(){
-    particles = [];
-    var count = 80;
-    for(var i=0;i<count;i++){
-      particles.push({
-        x: Math.random()*w,
-        y: Math.random()*h,
-        size: Math.random()<0.18 ? 2 : 1,
-        speed: 0.03 + Math.random()*0.07,
-        drift: Math.random()*Math.PI*2,
-        color: colors[Math.floor(Math.random()*colors.length)]
-      });
-    }
-  }
-  function tick(t){
-    ctx.clearRect(0,0,w,h); // 배경 작품 이미지가 파티클 사이로 비치도록 투명하게 지움
-
-    for(var i=0;i<particles.length;i++){
-      var p = particles[i];
-      p.y -= p.speed;
-      p.x += Math.sin((t/1800)+p.drift)*0.03;
-      if(p.y < -2){ p.y = h+2; p.x = Math.random()*w; }
-      ctx.fillStyle = p.color;
-      ctx.fillRect(Math.round(p.x), Math.round(p.y), p.size, p.size);
-    }
-    if(!reduceMotion) requestAnimationFrame(tick);
-  }
-  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  window.addEventListener('resize', resize);
-  resize();
-  initParticles();
-  if(reduceMotion){
-    tick(0); // 정지된 상태로 한 번만 그림 (연속 애니메이션 없이)
-  }else{
-    requestAnimationFrame(tick);
-  }
-})();
 </script>
 
 <script>

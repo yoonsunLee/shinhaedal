@@ -5,8 +5,8 @@
   --bg:#0b0b0f;
   --bg-2:#111420;
   --navy:#1b2a4a;
-  --gold:#c9a227;
-  --gold-dim:rgba(201,162,39,0.35);
+  --accent:#86b6e8;              /* 전복 블루: 전복 자개의 푸른빛. 어두운 배경 대비 9.2:1 */
+  --accent-dim:rgba(134,182,232,0.35);
   --ivory:#f5f0e6;
   --ivory-dim:rgba(245,240,230,0.62);
   --ivory-faint:rgba(245,240,230,0.32);
