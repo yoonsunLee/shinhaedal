@@ -30,9 +30,11 @@ Publish는 `.github/workflows/publish.yml`이 실행한다. 트리거는 세 가
 - Actions 탭에서 수동 실행 (`workflow_dispatch`)
 - 매일 자정(UTC) 자동 실행 (`schedule`)
 
-작품 수가 0건이거나 급감하면 publish 자체가 중단되고 기존 파일이 유지된다
-(워크플로의 "Sanity check before commit" 단계). 전시/Press 데이터도 API 호출이
-실패하면 빈 값으로 덮어쓰지 않고 마지막 정상본을 유지한다. 홈 영상은 0건이어도
+작품 수가 0건이거나 직전 발행의 절반 미만으로 급감하면(직전 4건 이상일 때), 전시가
+0건이거나 Press가 0건으로 바뀌면 publish 자체가 중단되고 기존 파일이 유지된다
+(워크플로의 "Sanity check before commit" 단계). 일부러 대량 비공개·삭제한 경우에는
+Actions 탭에서 "Publish archive data"를 수동 실행하며 `allow_shrink`를 체크하면 된다.
+작품·전시·Press 모두 아카이브의 `publish_web`이 true인 항목만 발행된다. 홈 영상은 0건이어도
 정상(이미지 히어로로 자동 폴백)이라 개수로는 안 막고, 대신 공개(public)인데
 영상 파일이 비어있는 깨진 상태만 막는다.
 

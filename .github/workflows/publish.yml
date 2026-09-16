@@ -3,7 +3,12 @@ name: Publish archive data
 on:
   repository_dispatch:
     types: [archive-publish]
-  workflow_dispatch: {}   # Actions 탭에서 수동 실행
+  workflow_dispatch:      # Actions 탭에서 수동 실행
+    inputs:
+      allow_shrink:
+        description: '작품 수 급감·Press 0건이어도 발행 (일부러 대량 비공개/삭제했을 때만 체크)'
+        type: boolean
+        default: false
   schedule:
     # 매일 09:00 KST (= 00:00 UTC) — 발행 버튼을 못 눌렀을 때 대비한 백업
     - cron: '0 0 * * *'
@@ -36,15 +41,34 @@ jobs:
       # 발행물이 비었으면 커밋하지 않는다. 일시적 실패로 살아있는 공개 데이터를
       # 빈 배열로 덮어쓰는 사고를 막는다.
       - name: Sanity check before commit
+        env:
+          ALLOW_SHRINK: ${{ github.event.inputs.allow_shrink }}
         run: |
           python - <<'PY'
-          import json, sys
+          import json, os, subprocess, sys
+          allow_shrink = os.environ.get('ALLOW_SHRINK') == 'true'
+
+          def prev_count(path):
+              # 직전 커밋(= 지금 공개 중인 데이터)의 건수. 파일이 없던 최초 발행이면 None.
+              try:
+                  return len(json.loads(subprocess.check_output(['git', 'show', 'HEAD:' + path])))
+              except Exception:
+                  return None
+
           idx = json.load(open('data/works-index.json', encoding='utf-8'))
           ex  = json.load(open('data/exhibitions.json', encoding='utf-8'))
+          pr  = json.load(open('data/press.json', encoding='utf-8'))
           if len(idx) == 0:
               sys.exit('작품이 0건 — 발행 중단')
           if len(ex) == 0:
               sys.exit('전시가 0건 — 발행 중단')
+          hint = ' 일부러 줄인 거라면 Actions 탭에서 allow_shrink를 체크하고 수동 실행하세요.'
+          prev_works = prev_count('data/works-index.json')
+          if not allow_shrink and prev_works and prev_works >= 4 and len(idx) < prev_works * 0.5:
+              sys.exit('작품 수 급감(%d → %d건) — 발행 중단.%s' % (prev_works, len(idx), hint))
+          prev_press = prev_count('data/press.json')
+          if not allow_shrink and prev_press and len(pr) == 0:
+              sys.exit('Press가 0건(직전 %d건) — 발행 중단.%s' % (prev_press, hint))
           missing = [r['id'] for r in idx if not r.get('thumb')]
           if missing:
               sys.exit('썸네일 없는 작품: %s — 발행 중단' % missing)
@@ -57,7 +81,7 @@ jobs:
           broken = [r['id'] for r in hv if r.get('public') and not r.get('video')]
           if broken:
               sys.exit('영상 파일 없는 공개 홈 영상: %s — 발행 중단' % broken)
-          print('검사 통과: 작품 %d건, 전시 %d건, 홈 영상 %d건' % (len(idx), len(ex), len(hv)))
+          print('검사 통과: 작품 %d건, 전시 %d건, Press %d건, 홈 영상 %d건' % (len(idx), len(ex), len(pr), len(hv)))
           PY
 
       # 공개 작품마다 공유용 og:image + works/w/ID/ 스텁을 다시 만든다.

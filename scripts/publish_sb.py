@@ -311,9 +311,9 @@ def main():
     assets_dir = os.path.join(dry, "assets", "works") if dry else ASSETS_DIR
 
     works = sb("works?select=*&publish_web=eq.true&deleted_at=is.null")
-    exhibitions = sb("exhibitions?select=*&deleted_at=is.null")
+    exhibitions = sb("exhibitions?select=*&publish_web=eq.true&deleted_at=is.null")
     links = sb("exhibition_works?select=exhibition_id,work_id")
-    press = sb("press?select=*&deleted_at=is.null")
+    press = sb("press?select=*&publish_web=eq.true&deleted_at=is.null")
     all_photos = sb("work_photos?select=*&is_public=eq.true&order=sort_order")
     try:
         home_videos = sb("home_videos?select=*&is_public=eq.true&deleted_at=is.null&order=sort_order")
