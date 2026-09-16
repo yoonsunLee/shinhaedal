@@ -780,9 +780,12 @@ if(LANG!=='ko') applyLang(LANG, {skipUrl:true});
 /* ---------- 해달아카이브 발행 데이터 연동 (정적 JSON, 브라우저는 더 이상 Apps Script를 직접 호출하지 않음) ---------- */
 var DATA_BASE = 'data/';
 var ASSET_BASE = '';
-/* 작품별 og:image 공유 스텁 파일럿 — works/index.html과 같은 작품 모달을 쓰므로 홈에서도
-   동일하게 노출한다. 지금은 HD-2026-009 한 건만 생성해뒀다. */
-var SHARE_STUB_WORKS = { 'HD-2026-009': 'w/HD-2026-009/' };
+/* 발행 스크립트(scripts/gen_work_share.py)가 매 발행 때마다 공개 작품 전부에
+   works/w/ID/ 스텁 + og:image를 만들어두므로, 공개 목록에 있는 작품이면
+   항상 스텁이 존재한다고 보고 id로 바로 경로를 계산한다. */
+function shareStubPath(workId){
+  return 'w/' + encodeURIComponent(workId) + '/';
+}
 /* 모바일·태블릿에서는 OS 공유 시트(카톡 등에서 og:image 미리보기)를 띄우고,
    PC에서는 같은 화면폭에서 내비가 햄버거로 바뀌는 기준(max-width:900px)을 그대로 써서
    "링크 복사"로 보여준다. Web Share API 자체를 지원하지 않는 기기라면 이 폭 안에서도
@@ -1226,7 +1229,7 @@ function renderWorkModal(){
   var metaPrimary = LANG === 'en' ? (metaEn || metaKo) : (metaKo || metaEn);
   document.getElementById('wmTitlePrimary').textContent = metaPrimary;
 
-  var shareStub = SHARE_STUB_WORKS[meta.id];
+  var shareStub = shareStubPath(meta.id);
   var shareBtn = document.getElementById('wmShareCopy');
   shareBtn.hidden = !shareStub;
   if(shareStub){
