@@ -41,6 +41,17 @@ def first_line(s):
     return str(s or "").strip().split("\n", 1)[0].strip()
 
 
+DESCRIPTION_LIMIT = 110  # 카톡·페북 모두 대략 150~200자에서 잘라버리니, 문장 중간에 끊기지 않도록 미리 짧게 자른다.
+
+
+def truncate(s, limit=DESCRIPTION_LIMIT):
+    s = str(s or "").strip()
+    if len(s) <= limit:
+        return s
+    cut = s[:limit].rsplit(" ", 1)[0].rstrip(" .,;:—-")
+    return cut + "…"
+
+
 def load_detail(work_id):
     return json.loads((ROOT / "data" / "works" / f"{work_id}.json").read_text(encoding="utf-8"))
 
@@ -81,6 +92,9 @@ STUB_TEMPLATE = """<!DOCTYPE html>
 <meta property="og:image:height" content="630">
 <meta property="og:url" content="{site_base}/works/w/{id}/">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{title} — 신해달">
+<meta name="twitter:description" content="{description}">
+<meta name="twitter:image" content="{site_base}/assets/works/{id}/og.jpg">
 <!-- 이 페이지는 공유 미리보기 전용 스텁이다(scripts/gen_work_share.py가 발행 때마다 생성).
      실제 작품 인터랙션은 works/?w={id} 하나뿐이라 canonical은 그쪽을 가리키고,
      og:url만 이 스텁 주소를 쓴다. -->
@@ -107,7 +121,7 @@ STUB_TEMPLATE = """<!DOCTYPE html>
 
 def gen_stub_html(work_id, detail):
     title = esc_attr(str(detail.get("title") or work_id).strip())
-    description = esc_attr(first_line(detail.get("caption")))
+    description = esc_attr(truncate(first_line(detail.get("caption"))))
     html = STUB_TEMPLATE.format(title=title, description=description, id=work_id, site_base=SITE_BASE)
     out_path = ROOT / "works" / "w" / work_id / "index.html"
     out_path.parent.mkdir(parents=True, exist_ok=True)
