@@ -219,12 +219,13 @@
     font-family:'Space Mono','Noto Sans KR',monospace; font-size:11.5px; letter-spacing:.5px; color:var(--ivory-dim);
     background:none; border:none; border-bottom:1px solid transparent; padding:0 0 2px; margin:0;
     cursor:pointer; transition:color .2s ease, border-color .2s ease;
-    text-decoration:none; display:inline-block;
+    text-decoration:none; display:inline-flex; align-items:center; gap:7px;
   }
   .wm-action-btn:hover{color:var(--ivory); border-color:var(--ivory);}
   .wm-action-btn--gold{color:var(--gold);}
   .wm-action-btn--gold:hover{color:var(--gold); border-color:var(--gold);}
   .wm-action-btn[hidden]{display:none;}
+  .wm-icon{width:15px; height:15px; flex:0 0 auto; display:block;}
 
   .docent-panel{display:none; flex-direction:column; gap:2px; margin-top:-2px;}
   .docent-panel.open{display:flex;}
@@ -386,9 +387,15 @@
         <button class="wm-ex-toggle" id="wmExToggle" hidden></button>
       </div>
       <div class="wm-actions">
-        <button class="wm-action-btn" id="wmViewLarger" data-i="wm_view_larger">VIEW LARGER ⛶</button>
+        <button class="wm-action-btn" id="wmViewLarger" type="button">
+          <svg class="wm-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span data-i="wm_view_larger">크게 보기</span>
+        </button>
         <button class="wm-action-btn" id="wmShareCopy" type="button" hidden></button>
-        <button class="wm-action-btn" id="wmDocentToggle" hidden>🎧 도슨트 듣기</button>
+        <button class="wm-action-btn" id="wmDocentToggle" type="button" hidden>
+          <svg class="wm-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 13v-1a8 8 0 0116 0v1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><rect x="2.5" y="13" width="4" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="17.5" y="13" width="4" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/></svg>
+          <span>도슨트 듣기</span>
+        </button>
         <a class="wm-action-btn wm-action-btn--gold" id="wmAskAbout" data-i="wm_ask_about" href="#">ASK ABOUT THIS WORK →</a>
       </div>
       <div class="docent-panel" id="wmDocentPanel">
@@ -435,9 +442,9 @@ var I18N = {
     wm_ex_label:'전시 이력',
     wm_ex_more:'전시 이력 더보기',
     wm_ex_collapse:'접기',
-    wm_view_larger:'크게 보기 ⛶',
+    wm_view_larger:'크게 보기',
     wm_share_native:'공유하기',
-    wm_share_copy:'🔗 작품 링크 복사',
+    wm_share_copy:'작품 링크 복사',
     wm_share_copied:'복사됨',
     wm_share_failed:'복사 실패 — 직접 선택해서 복사해주세요',
     wm_ask_about:'이 작품에 대해 문의하기 →',
@@ -460,9 +467,9 @@ var I18N = {
     wm_ex_label:'Exhibitions',
     wm_ex_more:'Show more',
     wm_ex_collapse:'Show less',
-    wm_view_larger:'VIEW LARGER ⛶',
+    wm_view_larger:'VIEW LARGER',
     wm_share_native:'Share',
-    wm_share_copy:'🔗 Copy work link',
+    wm_share_copy:'Copy work link',
     wm_share_copied:'Copied',
     wm_share_failed:'Copy failed — please select and copy manually',
     wm_ask_about:'ASK ABOUT THIS WORK →',
@@ -517,10 +524,18 @@ var ASSET_BASE = '../';
 /* 작품별 og:image 공유 스텁 파일럿 — 지금은 HD-2026-009 한 건만 생성해뒀다.
    전체 작품으로 자동화할지는 이 결과를 보고 별도로 결정한다. */
 var SHARE_STUB_WORKS = { 'HD-2026-009': 'w/HD-2026-009/' };
-/* 모바일 브라우저는 대부분 Web Share API를 지원해서, 누르면 OS 공유 시트가 뜨고
-   카카오톡 등에서 og:image 미리보기가 바로 보인다. 미지원 환경(대부분 데스크탑)은
-   클립보드 복사로 폴백 — 버튼 라벨도 실제 동작에 맞춰 렌더링 시점에 정해진다. */
+/* 모바일·태블릿에서는 OS 공유 시트(카톡 등에서 og:image 미리보기)를 띄우고,
+   PC에서는 같은 화면폭에서 내비가 햄버거로 바뀌는 기준(max-width:900px)을 그대로 써서
+   "링크 복사"로 보여준다. Web Share API 자체를 지원하지 않는 기기라면 이 폭 안에서도
+   복사로 폴백한다 — 버튼 라벨·동작은 매번 렌더링 시점에 다시 판단한다. */
 var CAN_NATIVE_SHARE = typeof navigator !== 'undefined' && typeof navigator.share === 'function';
+function shouldUseNativeShare(){
+  return CAN_NATIVE_SHARE && window.matchMedia('(max-width:900px)').matches;
+}
+/* wm-action-btn 아이콘들과 같은 선 굵기(1.4)·currentColor 단색 라인 스타일.
+   공유(세 점이 연결된 모양)와 복사(겹친 문서)는 의미가 다른 동작이라 아이콘도 다르게 쓴다. */
+var ICON_SHARE = '<svg class="wm-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="18" cy="5" r="2.4" stroke="currentColor" stroke-width="1.4"/><circle cx="6" cy="12" r="2.4" stroke="currentColor" stroke-width="1.4"/><circle cx="18" cy="19" r="2.4" stroke="currentColor" stroke-width="1.4"/><path d="M8.2 10.8L15.8 6.2M8.2 13.2L15.8 17.8" stroke="currentColor" stroke-width="1.4"/></svg>';
+var ICON_COPY = '<svg class="wm-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="1.6" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 15.5H4.6A1.6 1.6 0 013 13.9V4.6A1.6 1.6 0 014.6 3h9.3a1.6 1.6 0 011.6 1.6v1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>';
 
 function esc(s){
   return String(s==null?'':s).replace(/[&<>"']/g, function(c){
@@ -971,9 +986,12 @@ function renderWorkModal(){
   var shareBtn = document.getElementById('wmShareCopy');
   shareBtn.hidden = !shareStub;
   if(shareStub){
+    var useNativeShare = shouldUseNativeShare();
     shareBtn.dataset.shareUrl = 'https://yoonsunlee.github.io/shinhaedal/works/' + shareStub;
     shareBtn.dataset.shareTitle = metaPrimary;
-    shareBtn.textContent = I18N[LANG][CAN_NATIVE_SHARE ? 'wm_share_native' : 'wm_share_copy'];
+    shareBtn.dataset.useNativeShare = useNativeShare ? '1' : '';
+    shareBtn.innerHTML = (useNativeShare ? ICON_SHARE : ICON_COPY) +
+      '<span>' + esc(I18N[LANG][useNativeShare ? 'wm_share_native' : 'wm_share_copy']) + '</span>';
   }
   document.getElementById('wmCounter').textContent = (wmIndex + 1) + ' / ' + VISIBLE_WORKS.length;
   document.getElementById('wmCaption').textContent = I18N[LANG].loading;
@@ -1187,17 +1205,18 @@ document.getElementById('wmShareCopy').addEventListener('click', function(){
   var btn = this;
   var url = btn.dataset.shareUrl;
   if(!url) return;
-  if(CAN_NATIVE_SHARE){
+  if(btn.dataset.useNativeShare === '1'){
     navigator.share({ title: btn.dataset.shareTitle || '', url: url }).catch(function(){});
     return;
   }
+  var label = btn.querySelector('span');
   var original = I18N[LANG].wm_share_copy;
   navigator.clipboard.writeText(url).then(function(){
-    btn.textContent = I18N[LANG].wm_share_copied;
-    setTimeout(function(){ btn.textContent = original; }, 2200);
+    label.textContent = I18N[LANG].wm_share_copied;
+    setTimeout(function(){ label.textContent = original; }, 2200);
   }).catch(function(){
-    btn.textContent = I18N[LANG].wm_share_failed;
-    setTimeout(function(){ btn.textContent = original; }, 2200);
+    label.textContent = I18N[LANG].wm_share_failed;
+    setTimeout(function(){ label.textContent = original; }, 2200);
   });
 });
 function wmInsideVisibleImage(e){
