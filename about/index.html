@@ -89,7 +89,8 @@
     .ab-links{padding:0 32px 72px;}
   }
 
-  /* ---------- 등장 모션: 절제된 일회성. 기본값은 항상 표시 상태이고, JS가 지원 + prefers-reduced-motion 미설정일 때만 숨김→등장으로 전환한다 ---------- */
+  /* ---------- 등장 모션: 절제된 일회성. 기본값은 항상 표시 상태이고, JS가 지원 + prefers-reduced-motion 미설정일 때만 숨김→등장으로 전환한다.
+     사진 등장은 사이트 공통(홈 작가 소개·Press 대표 기사와 같음): 옅게 → 선명, 12px(폰 5px) 아래에서 제자리로, 0.7초 ---------- */
   .ab-anim-photo.js-anim{opacity:.25; transform:translateY(12px); transition:opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1);}
   .ab-anim-photo.js-anim.in{opacity:1; transform:translateY(0);}
   .ab-anim-text.js-anim{opacity:.25; transform:translateY(12px); transition:opacity .7s cubic-bezier(.22,1,.36,1) .1s, transform .7s cubic-bezier(.22,1,.36,1) .1s;}
@@ -101,14 +102,6 @@
   .ab-anim-title.js-anim.in{opacity:1;}
   .ab-anim-block.js-anim{opacity:0; transition:opacity .55s cubic-bezier(.22,1,.36,1);}
   .ab-anim-block.js-anim.in{opacity:1;}
-  /* clip-path는 관찰 대상(.ab-clip)이 아니라 자식 img에 걸어야 한다 — clip-path로 면적이 0에 가까워진 요소는
-     Chromium의 IntersectionObserver가 교차 비율을 계산하지 못해 영원히 isIntersecting=false로 남는다. */
-  .ab-clip.js-anim img{clip-path:inset(0 0 100% 0); transition:clip-path .8s cubic-bezier(.22,1,.36,1);}
-  .ab-clip.js-anim.in img{clip-path:inset(0 0 0 0);}
-  @media(max-width:720px){
-    .ab-clip.js-anim img{clip-path:none; opacity:0; transition:opacity .55s cubic-bezier(.22,1,.36,1);}
-    .ab-clip.js-anim.in img{opacity:1;}
-  }
 </style>
 </head>
 <body>
@@ -197,7 +190,7 @@
         <p>그리고 작품을 떠날 때에는<br>사회 속의 자기 자신을 한 번쯤 다정하게 바라볼 수 있었으면 합니다.</p>
       </div>
     </div>
-    <div class="ab-photo-inner ab-clip" data-reveal>
+    <div class="ab-photo-inner ab-anim-photo" data-reveal>
       <img src="assets/artist-profile-2-bg.webp" alt="자개를 만지는 손" width="845" height="1268" draggable="false">
     </div>
   </div>

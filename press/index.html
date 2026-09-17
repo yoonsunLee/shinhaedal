@@ -55,8 +55,11 @@
 
   /* 대표 기사에만 적용하는 짧은 1회 등장 효과 */
   .reveal-once{opacity:1; transform:none;}
-  .motion-ready .reveal-once{animation:pressReveal .6s ease both;}
-  @keyframes pressReveal{from{opacity:0; transform:translateY(16px);} to{opacity:1; transform:none;}}
+  /* 사진 등장은 사이트 공통(홈 작가 소개·About 사진과 같음): 옅게 → 선명, 12px(폰 5px) 아래에서 제자리로, 0.7초 */
+  .motion-ready .reveal-once{animation:pressReveal .7s cubic-bezier(.22,1,.36,1) both;}
+  @keyframes pressReveal{from{opacity:.25; transform:translateY(12px);} to{opacity:1; transform:none;}}
+  @keyframes pressRevealMobile{from{opacity:.25; transform:translateY(5px);} to{opacity:1; transform:none;}}
+  @media(max-width:720px){ .motion-ready .reveal-once{animation-name:pressRevealMobile;} }
   @media(prefers-reduced-motion:reduce){
     .motion-ready .reveal-once{animation:none; opacity:1; transform:none;}
   }
