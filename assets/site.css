@@ -101,10 +101,11 @@ nav{
   display:flex; flex-direction:column; align-items:flex-start; justify-content:flex-start;
   padding:96px 40px 40px; overflow-y:auto;
   transform:translateX(100%);
-  transition:transform .38s cubic-bezier(.32,.72,0,1);
-  box-shadow:-24px 0 60px rgba(0,0,0,.35);
+  /* 닫힌 패널이 화면 바로 밖에 있어 그림자가 화면 안으로 새므로, 닫히면 숨기고 그림자도 연 뒤에만 */
+  visibility:hidden; box-shadow:none;
+  transition:transform .38s cubic-bezier(.32,.72,0,1), box-shadow .38s ease, visibility 0s linear .38s;
 }
-.nav-overlay.open{transform:translateX(0);}
+.nav-overlay.open{transform:translateX(0); visibility:visible; box-shadow:-24px 0 60px rgba(0,0,0,.35); transition:transform .38s cubic-bezier(.32,.72,0,1), box-shadow .38s ease, visibility 0s;}
 .overlay-close{position:absolute; top:22px; right:24px; font-size:20px;}
 .overlay-links{display:flex; flex-direction:column; gap:26px; text-align:left;}
 @media(max-width:560px){
