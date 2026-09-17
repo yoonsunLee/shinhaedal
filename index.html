@@ -46,7 +46,8 @@
             mask-image:linear-gradient(to bottom, #000 0%, #000 70%, transparent 100%);
   }
   .hero-bg{
-    position:absolute; top:-70px; left:0; right:0; bottom:0; z-index:0;
+    /* 좌우 24px 여유: 마우스를 따라 배경이 옆으로 움직여도 가장자리가 드러나지 않게 */
+    position:absolute; top:-70px; left:-24px; right:-24px; bottom:0; z-index:0;
     background-image:url('assets/landing/hero-bg.webp');
     background-size:cover; background-position:center 25%;
     will-change:transform;
@@ -1565,20 +1566,52 @@ document.addEventListener('contextmenu', function(e){
 </script>
 
 <script>
-/* ---------- Hero 배경 아주 미세한 depth motion (배경이 스크롤보다 살짝 느리게, 최대 60px) ---------- */
+/* ---------- Hero 배경 depth motion ----------
+   1) 스크롤: 배경이 스크롤보다 살짝 느리게(최대 60px)
+   2) 마우스(PC만): 포인터 반대쪽으로 최대 가로 14px·세로 9px, 천천히 따라가서 멈춘다.
+      문구는 움직이지 않고 작품 이미지만 움직여 깊이감만 준다. 줌(scale/translate 속성)과는 따로 겹친다.
+   움직임 줄이기 설정이면 둘 다 끈다. */
 (function(){
   var bg = document.querySelector('.hero-bg');
-  if(!bg) return;
+  var hero = document.querySelector('header.hero');
+  if(!bg || !hero) return;
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var ticking = false;
-  function update(){
-    var y = Math.min(window.scrollY || window.pageYOffset || 0, 400);
-    bg.style.transform = 'translateY(' + Math.round(y * 0.15) + 'px)';
-    ticking = false;
+  var MAX_X = 14, MAX_Y = 9, EASE = 0.06;
+  var scrollOffset = 0, tx = 0, ty = 0, cx = 0, cy = 0, running = false;
+  function render(){
+    bg.style.transform = 'translate3d(' + cx.toFixed(2) + 'px,' + (scrollOffset + cy).toFixed(2) + 'px,0)';
   }
+  function loop(){
+    cx += (tx - cx) * EASE;
+    cy += (ty - cy) * EASE;
+    if(Math.abs(tx - cx) < 0.05 && Math.abs(ty - cy) < 0.05){ cx = tx; cy = ty; running = false; render(); return; }
+    render();
+    requestAnimationFrame(loop);
+  }
+  function kick(){ if(!running){ running = true; requestAnimationFrame(loop); } }
+
+  var ticking = false;
   window.addEventListener('scroll', function(){
-    if(!ticking){ requestAnimationFrame(update); ticking = true; }
+    if(ticking) return;
+    ticking = true;
+    requestAnimationFrame(function(){
+      scrollOffset = Math.round(Math.min(window.scrollY || window.pageYOffset || 0, 400) * 0.15);
+      render();
+      ticking = false;
+    });
   }, {passive:true});
+
+  if(!window.matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+  window.addEventListener('mousemove', function(e){
+    // 첫 화면이 거의 지나갔으면 계산하지 않는다
+    if(hero.getBoundingClientRect().bottom < 0) return;
+    var nx = e.clientX / window.innerWidth * 2 - 1;
+    var ny = e.clientY / window.innerHeight * 2 - 1;
+    tx = -nx * MAX_X;
+    ty = -ny * MAX_Y;
+    kick();
+  }, {passive:true});
+  document.documentElement.addEventListener('mouseleave', function(){ tx = 0; ty = 0; kick(); });
 })();
 </script>
 
