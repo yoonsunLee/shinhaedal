@@ -23,8 +23,8 @@
     max-width:460px; margin:0 auto; padding:24px 32px 72px;
   }
   .nf-code{
-    font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px;
-    letter-spacing:2px; color:var(--ivory-faint); margin:0 0 22px;
+    font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px;
+    letter-spacing:1px; color:var(--ivory-muted); margin:0 0 22px;
   }
   .nf-character{width:clamp(150px,34vw,200px); margin:0 0 22px;}
   .nf-character img{
@@ -46,15 +46,15 @@
     font-family:'Black Han Sans',sans-serif; font-weight:400;
     font-size:clamp(21px,3.4vw,26px); line-height:1.4; margin:4px 0 14px; color:var(--ivory);
   }
-  .nf-guide{font-size:15.5px; line-height:1.8; color:var(--ivory-dim); margin:0 0 4px;}
-  .nf-sub{font-size:14px; line-height:1.7; color:var(--ivory-faint); margin:0 0 30px;}
+  .nf-guide{font-size:16px; line-height:1.8; color:var(--ivory-dim); margin:0 0 4px;}
+  .nf-sub{font-size:14px; line-height:1.7; color:var(--ivory-muted); margin:0 0 30px;}
   .nf-links{display:flex; align-items:center; gap:26px; flex-wrap:wrap; justify-content:center;}
   .nf-link-primary{
-    font-family:'Space Mono','Noto Sans KR',monospace; font-size:13px; font-weight:700; letter-spacing:.5px;
+    font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px;
     color:var(--accent); text-decoration:none; border-bottom:1px solid transparent; padding-bottom:3px;
     transition:color .2s ease, border-color .2s ease;
   }
-  .nf-link-primary:hover, .nf-link-primary:focus-visible{color:#a9ccf0; border-color:var(--accent);}
+  .nf-link-primary:hover, .nf-link-primary:focus-visible{border-color:var(--accent);}
   .nf-link-secondary{
     font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px;
     color:var(--ivory-dim); text-decoration:none; border-bottom:1px solid transparent; padding-bottom:2px;
@@ -121,7 +121,7 @@
   <p class="nf-guide" data-i="guide">찾으신 페이지가 없거나 주소가 바뀌었어요.</p>
   <p class="nf-sub" data-i="sub">얼빵해달과 함께 다른 곳으로 가볼까요?</p>
   <div class="nf-links">
-    <a class="nf-link-primary" href="/shinhaedal/works/" data-i="link_primary">작품 보러 가기 ↗</a>
+    <a class="nf-link-primary" href="/shinhaedal/works/" data-i="link_primary">작품 보러 가기 →</a>
     <a class="nf-link-secondary" href="/shinhaedal/" data-i="link_secondary">홈으로 돌아가기 →</a>
   </div>
 </main>
@@ -135,7 +135,7 @@ var I18N = {
     title:'어라, 여기가 아닌가 봐요.',
     guide:'찾으신 페이지가 없거나 주소가 바뀌었어요.',
     sub:'얼빵해달과 함께 다른 곳으로 가볼까요?',
-    link_primary:'작품 보러 가기 ↗',
+    link_primary:'작품 보러 가기 →',
     link_secondary:'홈으로 돌아가기 →'
   },
   en: {
@@ -145,7 +145,7 @@ var I18N = {
     title:'Oh. This doesn’t look like the right place.',
     guide:'This page couldn’t be found. It may have moved.',
     sub:'Let’s find another way with Spaced-out Sea Otter.',
-    link_primary:'Explore works ↗',
+    link_primary:'Explore works →',
     link_secondary:'Back to home →'
   }
 };

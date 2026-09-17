@@ -11,6 +11,9 @@
   --ivory-dim:rgba(245,240,230,0.62);
   --ivory-faint:rgba(245,240,230,0.32);
   --ivory-muted:rgba(245,240,230,0.55); /* 작은 글씨용: 어두운 배경 대비 5.6:1 (faint는 2.6:1이라 본문성 텍스트에 쓰면 안 됨) */
+  /* 글자색은 사이트 전체에서 세 단계만: 제목 --ivory · 본문 --ivory-dim · 날짜·출처 같은 보조 --ivory-muted */
+  --field-line:rgba(245,240,230,.2);  /* 입력칸·선택칸 테두리. 바탕은 --bg-2, 포커스는 --accent */
+  --line:rgba(245,240,230,.12);        /* 구분선은 이 한 가지. 작품 정보 안의 강조선만 --accent-dim */
   --status-ok-bg:#1f4d3a; --status-ok-fg:#8fe0b8;
   --status-done-bg:#5c2323; --status-done-fg:#f0a6a6;
   --status-nfs-bg:#4a3a22; --status-nfs-fg:#e0c48f;
@@ -113,12 +116,23 @@ nav{
 }
 .overlay-links a, .overlay-links .soon{font-family:'Black Han Sans',sans-serif; font-size:26px; color:var(--ivory); text-decoration:none; padding:6px 0;}
 .overlay-links .soon{color:var(--ivory-faint);}
-.overlay-links .overlay-ig{font-family:'Space Mono','Noto Sans KR',monospace; font-size:13px; color:var(--ivory-dim); margin-top:10px;}
+.overlay-links .overlay-ig{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-dim); margin-top:10px;}
 .icon-btn{background:none; border:none; color:var(--ivory); cursor:pointer; display:flex; align-items:center; justify-content:center; width:44px; height:44px; margin:-12px; opacity:0.85;}
 .icon-btn.menu-btn{display:none;}
 @media(max-width:900px){ .nav-menu{display:none;} .icon-btn.menu-btn{display:flex;} .nav-icons{gap:20px;} }
 .icon-btn:hover{opacity:1;}
 
-footer{border-top:1px solid rgba(245,240,230,.1); padding:30px 28px 44px; display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; color:var(--ivory-muted);}
+/* 텍스트 링크는 두 가지뿐.
+   ① .link-go  다른 페이지로 이동(→) — 전복 블루, 올리면 밑줄
+   ② .link-sub 밖으로 나가거나(↗) 복사처럼 보조 동작 — 아이보리 62%, 늘 밑줄 */
+.link-go, .link-sub{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; text-underline-offset:5px; text-decoration-thickness:1px;}
+.link-go{color:var(--accent); text-decoration:none;}
+.link-go:focus-visible{text-decoration:underline;}
+@media (hover:hover){ .link-go:hover{text-decoration:underline;} }
+.link-sub{color:var(--ivory-dim); text-decoration:underline; transition:color .2s ease;}
+.link-sub:hover, .link-sub:focus-visible{color:var(--ivory);}
+button.link-go, button.link-sub{background:none; border:none; padding:0; margin:0; cursor:pointer;}
+
+footer{border-top:1px solid var(--line); padding:30px max(32px, calc((100% - 1180px) / 2 + 32px)) 44px; /* 선은 화면 끝까지, 글자는 로고와 같은 선에서 시작 */ display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-muted);}
 footer a{color:var(--ivory-muted); text-decoration:none;}
 footer a:hover{color:var(--ivory);}

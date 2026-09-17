@@ -24,18 +24,17 @@
   .contact-hero h1{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:clamp(34px,4.4vw,48px); line-height:1.2; margin:0 0 24px;}
   .contact-hero p{font-size:16px; line-height:1.85; color:var(--ivory-dim); font-weight:400; margin:0 0 18px;}
   html[lang="en"] .contact-hero p{line-height:1.72;}
-  .contact-quick{font-size:13.5px !important; color:var(--ivory-faint) !important; line-height:1.7 !important;}
+  .contact-quick{font-size:14px !important; color:var(--ivory-muted) !important; line-height:1.7 !important;}
 
-  .direct-inline{display:flex; flex-wrap:wrap; align-items:center; gap:8px 18px; margin:22px 0 0; padding-top:22px; border-top:1px solid rgba(245,240,230,.1);}
-  .direct-inline .direct-email{color:var(--ivory); font-size:15px; text-decoration:none;}
+  .direct-inline{display:flex; flex-wrap:wrap; align-items:center; gap:8px 18px; margin:22px 0 0; padding-top:22px; border-top:1px solid var(--line);}
+  .direct-inline .direct-email{color:var(--ivory); font-size:16px; text-decoration:none;}
   .direct-inline .direct-email:hover{text-decoration:underline;}
-  .direct-inline .direct-ig{color:var(--ivory-dim); font-size:13px; text-decoration:none;}
-  .direct-inline .direct-ig:hover{color:var(--ivory);}
-  .copy-btn{font-family:'Space Mono','Noto Sans KR', monospace; font-size:11px; letter-spacing:.5px; color:var(--accent); background:none; border:none; text-decoration:underline; text-underline-offset:3px; cursor:pointer; padding:0;}
-  .copy-btn:hover{color:#a9ccf0;}
 
   .contact-section{max-width:820px; margin:0 auto 0 max(0px, calc((100% - 1180px) / 2)); padding:56px 32px;}
-  .contact-section + .contact-section{border-top:1px solid rgba(245,240,230,.1);}
+  .contact-section + .contact-section{border-top:1px solid var(--line);}
+  /* 페이지 끝 여백은 사이트 공통 96px(폰 72px) */
+  #contact-form-section{padding-bottom:96px;}
+  @media(max-width:720px){ #contact-form-section{padding-bottom:72px;} }
   .contact-section h2{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:22px; margin:0 0 26px;}
 
   .work-inquiry-card{
@@ -45,39 +44,39 @@
   }
   .work-inquiry-card[hidden]{display:none;}
   .work-inquiry-card img{width:56px; height:56px; object-fit:cover; border-radius:4px; flex-shrink:0; -webkit-user-select:none; user-select:none;}
-  .wic-label{font-family:'Space Mono','Noto Sans KR', monospace; font-size:10.5px; letter-spacing:.5px; color:var(--accent); text-transform:uppercase; margin-bottom:4px;}
+  .wic-label{font-family:'Space Mono','Noto Sans KR', monospace; font-size:11px; letter-spacing:1px; color:var(--accent); text-transform:uppercase; margin-bottom:4px;}
   .wic-title{font-size:14px; color:var(--ivory); line-height:1.4;}
 
   .contact-form{display:flex; flex-direction:column; gap:18px;}
   .contact-form[hidden]{display:none;}
-  .cf-row label{display:block; font-family:'Space Mono','Noto Sans KR', monospace; font-size:13px; letter-spacing:1px; color:var(--ivory-dim); text-transform:uppercase; margin-bottom:8px;}
+  .cf-row label{display:block; font-family:'Space Mono','Noto Sans KR', monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-dim); text-transform:uppercase; margin-bottom:8px;}
   .cf-row label .req-mark{color:var(--accent); margin-left:2px;}
   .cf-row input, .cf-row select, .cf-row textarea{
-    width:100%; background:#14191F; border:1px solid #39434C; border-radius:6px;
+    width:100%; background:var(--bg-2); border:1px solid var(--field-line); border-radius:6px;
     color:var(--ivory); font-family:'Noto Sans KR',sans-serif; font-size:16px; padding:12px 13px;
   }
   .cf-row input:focus, .cf-row select:focus, .cf-row textarea:focus{outline:none; border-color:var(--accent);}
   .cf-row textarea{min-height:120px; resize:vertical; font-family:inherit;}
-  .cf-row .hint{font-size:12.5px; color:var(--ivory-dim); margin-top:8px; line-height:1.6;}
+  .cf-row .hint{font-size:13px; color:var(--ivory-dim); margin-top:8px; line-height:1.6;}
   .type-hint{font-size:13px; color:var(--ivory-dim); margin:10px 0 0; line-height:1.6;}
   .cf-submit{
     align-self:flex-start; margin-top:6px;
-    font-family:'Space Mono','Noto Sans KR', monospace; font-size:12px; letter-spacing:1.5px;
+    font-family:'Space Mono','Noto Sans KR', monospace; font-size:12px; letter-spacing:.5px;
     color:var(--bg); background:var(--ivory); border:none; border-radius:24px;
     padding:13px 32px; cursor:pointer;
   }
   .cf-submit:hover{opacity:.9;}
-  .cf-note{font-size:12.5px; color:var(--ivory-dim); margin-top:14px;}
-  .cf-fallback{margin-top:10px; padding-top:16px; border-top:1px solid rgba(245,240,230,.1);}
+  .cf-note{font-size:13px; color:var(--ivory-dim); margin-top:14px;}
+  .cf-fallback{margin-top:10px; padding-top:16px; border-top:1px solid var(--line);}
   .cf-fallback[hidden]{display:none;}
-  .cf-fallback p{font-size:12.5px; color:var(--ivory-dim); line-height:1.6; margin:0 0 8px;}
-  .cf-fallback a{color:var(--accent); font-size:13px; margin-right:18px;}
+  .cf-fallback p{font-size:13px; color:var(--ivory-dim); line-height:1.6; margin:0 0 8px;}
+  .cf-fallback a{margin-right:18px;}
 
   .cf-direct{display:flex; flex-direction:column; gap:10px;}
   .cf-direct[hidden]{display:none;}
-  .cf-consent{display:flex; align-items:flex-start; gap:10px; font-size:14.5px; line-height:1.6; color:var(--ivory); cursor:pointer;}
+  .cf-consent{display:flex; align-items:flex-start; gap:10px; font-size:14px; line-height:1.6; color:var(--ivory); cursor:pointer;}
   .cf-consent input{width:18px; height:18px; margin:3px 0 0; flex:none; accent-color:var(--accent);}
-  .cf-consent-detail{font-size:12.5px; line-height:1.6; color:var(--ivory-dim); margin:0 0 4px 28px;}
+  .cf-consent-detail{font-size:13px; line-height:1.6; color:var(--ivory-dim); margin:0 0 4px 28px;}
   #cfTurnstile{min-height:65px;}
   /* 봇만 채우는 숨은 칸. display:none이면 일부 봇이 건너뛰므로 화면 밖으로만 뺀다 */
   .cf-hp{position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden;}
@@ -85,7 +84,7 @@
   .cf-note.is-error{color:#f0a6a6;}
   .cf-done{padding:8px 0 4px; outline:none;}
   .cf-done-title{font-family:'Black Han Sans', sans-serif; font-size:24px; color:var(--ivory); margin:0 0 10px;}
-  .cf-done-body{font-size:15.5px; line-height:1.8; color:var(--ivory-dim); margin:0;}
+  .cf-done-body{font-size:16px; line-height:1.8; color:var(--ivory-dim); margin:0;}
 </style>
 </head>
 <body>
@@ -141,8 +140,8 @@
   <p class="contact-quick" data-i="c_categories">작품 소장 · 전시 · 협업 · 라이선싱 · 기타 — 무엇이든 편하게 남겨주세요.</p>
   <div class="direct-inline">
     <a class="direct-email" href="mailto:haedarney@naver.com">haedarney@naver.com</a>
-    <button type="button" class="copy-btn" id="copyEmailBtn" data-i="copy_email">이메일 복사</button>
-    <a class="direct-ig" href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener">Instagram ↗</a>
+    <button type="button" class="copy-btn link-sub" id="copyEmailBtn" data-i="copy_email">이메일 복사</button>
+    <a class="direct-ig link-sub" href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener">Instagram ↗</a>
   </div>
 </div>
 
@@ -206,7 +205,7 @@
     <p class="cf-note" id="cfNote" role="status" aria-live="polite"></p>
     <div class="cf-fallback" id="cfFallback" hidden>
       <p data-i="fallback_note">메일 앱이 열리지 않았다면, 아래 버튼으로 문의 내용을 복사해서 메일이나 웹메일에 붙여넣어 보내주세요.</p>
-      <button type="button" class="copy-btn" id="copyBodyBtn" data-i="copy_content">문의 내용 복사</button>
+      <button type="button" class="copy-btn link-sub" id="copyBodyBtn" data-i="copy_content">문의 내용 복사</button>
     </div>
   </form>
   <div class="cf-done" id="cfDone" tabindex="-1" hidden>
@@ -489,6 +488,7 @@ function showMailFallback(){
   if(!link){
     link = document.createElement('a');
     link.id = 'cfMailtoLink';
+    link.className = 'link-sub';
     fb.insertBefore(link, document.getElementById('copyBodyBtn'));
   }
   link.textContent = I18N[LANG].mailto_link;

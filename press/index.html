@@ -21,39 +21,37 @@
   /* press intro — 간결한 제목 영역 (기존 대형 Hero 대체) */
   .press-intro{max-width:1180px; margin:0 auto; padding:48px 32px 8px;}
   .press-intro h1{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:clamp(34px,4.4vw,48px); line-height:1.2; margin:0; color:var(--ivory);}
-  .press-intro p{font-family:'Noto Sans KR',sans-serif; font-size:14.5px; color:#B8BDC4; line-height:1.7; margin:10px 0 0; max-width:560px;}
-  .press-en-note{font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; color:#919AA4; margin-top:14px;}
+  .press-intro p{font-family:'Noto Sans KR',sans-serif; font-size:14px; color:var(--ivory-dim); line-height:1.7; margin:10px 0 0; max-width:560px;}
+  .press-en-note{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-muted); margin-top:14px;}
 
   /* 대표 기사 */
-  .press-feature{max-width:1180px; margin:0 auto; padding:36px 32px 56px; border-bottom:1px solid rgba(245,240,230,.12);}
+  .press-feature{max-width:1180px; margin:0 auto; padding:36px 32px 56px; border-bottom:1px solid var(--line);}
   .press-feature-grid{display:grid; grid-template-columns:1.05fr 1fr; gap:52px; align-items:center;}
   .press-feature-grid.no-media{grid-template-columns:1fr;}
   .press-feature-media img{width:100%; height:auto; max-height:560px; object-fit:contain; display:block; margin:0 auto;}
   .press-feature-body{display:flex; flex-direction:column; gap:14px;}
-  .press-feature-meta{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:#919AA4; display:flex; align-items:center; gap:9px; text-transform:uppercase; margin:0;}
-  .press-feature-meta .dot{width:3px; height:3px; border-radius:50%; background:#919AA4; flex:none;}
+  .press-feature-meta{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-muted); display:flex; align-items:center; gap:9px; text-transform:uppercase; margin:0;}
+  .press-feature-meta .dot{width:3px; height:3px; border-radius:50%; background:var(--ivory-muted); flex:none;}
   .press-feature-title{font-family:'Noto Sans KR',sans-serif; font-weight:700; font-size:clamp(22px,2.6vw,32px); line-height:1.4; color:var(--ivory); margin:0;}
   .press-feature-title a{color:inherit; text-decoration:none;}
   .press-feature-title a:hover{text-decoration:underline; text-underline-offset:4px;}
-  .press-lang-flag{font-family:'Space Mono','Noto Sans KR',monospace; font-size:10.5px; letter-spacing:.5px; color:#919AA4; border:1px solid rgba(245,240,230,.24); border-radius:20px; padding:2px 9px; margin-left:8px; white-space:nowrap; vertical-align:middle;}
-  .press-feature-dek{font-family:'Noto Sans KR',sans-serif; font-size:15.5px; line-height:1.75; color:#B8BDC4; margin:0;}
+  .press-lang-flag{font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; letter-spacing:1px; color:var(--ivory-muted); border:1px solid rgba(245,240,230,.24); border-radius:20px; padding:2px 9px; margin-left:8px; white-space:nowrap; vertical-align:middle;}
+  .press-feature-dek{font-family:'Noto Sans KR',sans-serif; font-size:16px; line-height:1.75; color:var(--ivory-dim); margin:0;}
   .press-feature-links{display:flex; gap:20px; margin-top:4px;}
-  .press-link{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12.5px; color:#D4D6D2; text-decoration:underline; text-underline-offset:4px; transition:color .15s ease;}
-  .press-link:hover{color:#EEEAE3;}
 
   /* 나머지 기사 목록 */
-  .press-list{max-width:1180px; margin:0 auto; padding:8px 32px 120px;}
-  .press-row{display:grid; grid-template-columns:76px 1fr auto; gap:24px; align-items:center; padding:26px 0; border-bottom:1px solid rgba(245,240,230,.12);}
+  .press-list{max-width:1180px; margin:0 auto; padding:8px 32px 96px;}
+  .press-row{display:grid; grid-template-columns:76px 1fr auto; gap:24px; align-items:center; padding:26px 0; border-bottom:1px solid var(--line);}
   .press-row.no-media{grid-template-columns:1fr auto;}
   .press-row-media{width:76px; height:76px; display:flex; align-items:center; justify-content:center; overflow:hidden;}
   .press-row-media img{max-width:100%; max-height:100%; object-fit:contain; display:block;}
   .press-row-text{min-width:0;}
-  .press-row-meta{font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; letter-spacing:.5px; color:#919AA4; display:flex; align-items:center; gap:8px; text-transform:uppercase; margin:0 0 6px;}
-  .press-row-meta .dot{width:3px; height:3px; border-radius:50%; background:#919AA4; flex:none;}
-  .press-row-title{font-family:'Noto Sans KR',sans-serif; font-weight:500; font-size:16.5px; line-height:1.5; color:var(--ivory); margin:0;}
-  .press-row-dek{font-family:'Noto Sans KR',sans-serif; font-size:14px; color:#B8BDC4; line-height:1.6; margin:6px 0 0;}
+  .press-row-meta{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-muted); display:flex; align-items:center; gap:8px; text-transform:uppercase; margin:0 0 6px;}
+  .press-row-meta .dot{width:3px; height:3px; border-radius:50%; background:var(--ivory-muted); flex:none;}
+  .press-row-title{font-family:'Noto Sans KR',sans-serif; font-weight:500; font-size:16px; line-height:1.5; color:var(--ivory); margin:0;}
+  .press-row-dek{font-family:'Noto Sans KR',sans-serif; font-size:14px; color:var(--ivory-dim); line-height:1.6; margin:6px 0 0;}
   .press-row-links{display:flex; flex-direction:column; gap:6px; align-items:flex-end; white-space:nowrap;}
-  .press-empty{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; color:#919AA4; text-align:center; padding:60px 0;}
+  .press-empty{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-muted); text-align:center; padding:60px 0;}
 
   /* 대표 기사에만 적용하는 짧은 1회 등장 효과 */
   .reveal-once{opacity:1; transform:none;}
@@ -67,7 +65,7 @@
     .press-intro{padding:36px 32px 4px;}
     .press-feature{padding:28px 32px 40px;}
     .press-feature-grid{grid-template-columns:1fr; gap:22px;}
-    .press-list{padding:4px 32px 90px;}
+    .press-list{padding:4px 32px 72px;}
     .press-row, .press-row.no-media{grid-template-columns:1fr; gap:12px; padding:22px 0;}
     .press-row-media{width:88px; height:88px;}
     .press-row-links{flex-direction:row; align-items:center; gap:16px; white-space:normal;}
@@ -204,9 +202,9 @@ function linksFor(p){
   var ex = shop ? null : matchExhibition(p);
   var links = [];
   var articleUrl = safeUrl(p.url);
-  if(articleUrl) links.push('<a class="press-link" href="' + esc(articleUrl) + '" target="_blank" rel="noopener">' + esc(I18N[LANG].press_link) + '</a>');
-  if(shop) links.push('<a class="press-link" href="' + esc(safeUrl(shop)) + '" target="_blank" rel="noopener">' + esc(I18N[LANG].shop_link) + '</a>');
-  else if(ex) links.push('<a class="press-link" href="../works/?ex=' + encodeURIComponent(ex.id) + '">' + esc(I18N[LANG].ex_link) + '</a>');
+  if(articleUrl) links.push('<a class="press-link link-sub" href="' + esc(articleUrl) + '" target="_blank" rel="noopener">' + esc(I18N[LANG].press_link) + '</a>');
+  if(shop) links.push('<a class="press-link link-sub" href="' + esc(safeUrl(shop)) + '" target="_blank" rel="noopener">' + esc(I18N[LANG].shop_link) + '</a>');
+  else if(ex) links.push('<a class="press-link link-go" href="../works/?ex=' + encodeURIComponent(ex.id) + '">' + esc(I18N[LANG].ex_link) + '</a>');
   return links;
 }
 function pickFeatured(items){
