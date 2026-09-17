@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""해달아카이브(Supabase) → shinhaedal.art 발행
+"""해달아카이브(Supabase) → shinhaedal.com 발행
 
 기존 publish.py의 Supabase 버전. 출력물의 모양은 그대로 유지해서
 홈페이지 코드를 건드리지 않는다.

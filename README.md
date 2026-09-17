@@ -1,4 +1,4 @@
-# shinhaedal.art — 홈페이지
+# shinhaedal.com — 홈페이지
 
 신해달 작가 공식 홈페이지 (정적 사이트, GitHub Pages).
 현재 배포 주소: https://yoonsunlee.github.io/shinhaedal/ (커스텀 도메인 연결 전)
@@ -75,7 +75,7 @@ Home / About / Works / IP / Press / Brand Shop(외부 링크, 아이디어스) /
   차단되며, 애초에 이 repo에 존재하지 않는다.
 
 ## 남은 것
-- 커스텀 도메인(shinhaedal.art) 연결 — 구매 후 진행 예정. 연결 시 6페이지 메타·`robots.txt`와
-  `scripts/gen_work_share.py`의 `SITE_BASE`를 `shinhaedal.art`로 바꾼 뒤 `--all`로 작품 페이지·
+- 커스텀 도메인 연결 — 메인 shinhaedal.com, 보조 shinhaedal.art(.com으로 넘김). 연결 시 6페이지 메타·`robots.txt`와
+  `scripts/gen_work_share.py`의 `SITE_BASE`를 `https://shinhaedal.com`으로 바꾼 뒤 `--all`로 작품 페이지·
   sitemap을 다시 생성해야 함(스크립트를 먼저 고치지 않으면 다음 발행 때 옛 주소로 되돌아감).
 - Audio Guide — 우선순위 최후순위로 보류 중.
