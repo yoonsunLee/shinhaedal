@@ -36,7 +36,14 @@
     display:flex; flex-direction:column; justify-content:flex-end;
     margin-top:-86px; /* let canvas run behind nav too */
     padding-top:86px;
-    background:#05050a;
+    background:transparent; /* 아래쪽이 뒤의 별 배경으로 녹아들도록 투명 */
+  }
+  /* 작품 이미지와 검정 막만 아래 30% 구간에서 서서히 투명해져, 첫 화면과 아래 목록이 하나의 밤하늘로 이어진다.
+     줌(scale)이 걸린 .hero-bg에 직접 마스크를 걸면 확대될 때 마스크도 같이 밀려 경계가 다시 생기므로, 변형 없는 감싸개에 건다 */
+  .hero-media{
+    position:absolute; inset:0; z-index:0;
+    -webkit-mask-image:linear-gradient(to bottom, #000 0%, #000 70%, transparent 100%);
+            mask-image:linear-gradient(to bottom, #000 0%, #000 70%, transparent 100%);
   }
   .hero-bg{
     position:absolute; top:-70px; left:0; right:0; bottom:0; z-index:0;
@@ -175,8 +182,10 @@
 
   /* grid */
   .grid-section{max-width:1180px; margin:0 auto; padding:56px 32px 100px;}
-  .grid-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:28px;}
-  .grid-head h2{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:22px; margin:0;}
+  /* 영문처럼 제목+링크가 폰 폭보다 길면 글자가 꺾이는 대신 링크만 다음 줄로 내려간다 */
+  .grid-head{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:baseline; gap:6px 16px; margin-bottom:28px;}
+  .grid-head h2{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:22px; margin:0; white-space:nowrap;}
+  .grid-head a{white-space:nowrap;}
   .grid-head span{font-family:'Space Mono','Noto Sans KR', monospace; font-size:12px; color:var(--ivory-faint);}
   .grid-head a{
     font-family:'Space Mono','Noto Sans KR', monospace; font-size:12px; letter-spacing:.5px;
@@ -574,8 +583,10 @@
 
 <header class="hero" id="hero">
   <div class="hero-image-mode" id="heroImageMode">
-    <div class="hero-bg" aria-hidden="true"></div>
-    <div class="hero-overlay" aria-hidden="true"></div>
+    <div class="hero-media" aria-hidden="true">
+      <div class="hero-bg"></div>
+      <div class="hero-overlay"></div>
+    </div>
 
     <div class="hero-inner">
       <h1 class="statement" data-i="statement"><span class="lead1">쉽게 들어와서 오래 머무는 작업.</span><span class="accent">순서가 다를 뿐, 깊이는 같습니다.</span></h1>

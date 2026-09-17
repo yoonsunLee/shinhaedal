@@ -52,7 +52,7 @@
   // ---- nebula blobs (very low opacity, slow drift) ----
   var nebulae = [
     { x:0.2, y:0.3, r:0.55, color:'27,42,74',   phase:0 },
-    { x:0.8, y:0.6, r:0.5,  color:'134,182,232', phase:2.1 },
+    { x:0.8, y:0.6, r:0.5,  color:'232,230,224', alpha:0.05, phase:2.1 },
     { x:0.5, y:0.85,r:0.6,  color:'17,20,32',   phase:4.2 }
   ];
 
@@ -122,7 +122,7 @@
       var ny = n.y * H + Math.cos(tNeb * 0.04 + n.phase) * 30;
       var r = n.r * Math.max(W, H);
       var ng = ctx.createRadialGradient(nx, ny, 0, nx, ny, r);
-      ng.addColorStop(0, 'rgba(' + n.color + ',0.10)');
+      ng.addColorStop(0, 'rgba(' + n.color + ',' + (n.alpha || 0.10) + ')');
       ng.addColorStop(1, 'rgba(' + n.color + ',0)');
       ctx.fillStyle = ng;
       ctx.fillRect(0, 0, W, H);
