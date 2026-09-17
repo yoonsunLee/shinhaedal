@@ -164,9 +164,15 @@ summary::-webkit-details-marker{display:none}
 .toy-thumbs{display:flex;gap:14px;width:45%}
 .toy-thumbs button{flex:1;min-width:0}
 .toy-thumbs img{width:100%;height:175px;object-fit:cover}
+/* 일월오봉도는 섹션 끝까지 보이게 두고(해·달이 잘리지 않는 위치 26% 유지), 아래 라이선싱의 밝은 회청색으로
+   넘어가는 곳만 그라데이션으로 잇는다. 가운데가 탁한 회색 띠로 보이지 않게 처음엔 천천히, 끝에서 빠르게 밝아진다.
+   그라데이션이 캐릭터 이름 글자에 걸리지 않도록 그만큼 아래 여백을 늘렸다 */
 .friends{
+  --fade:200px;
+  padding-bottom:calc(110px + 80px);
   background:
-    linear-gradient(180deg, rgba(11,20,22,.82) 0%, rgba(11,20,22,.82) 52%, #132125 76%, #132125 100%),
+    linear-gradient(180deg, rgba(234,240,242,0) calc(100% - var(--fade)), rgba(234,240,242,.1) calc(100% - var(--fade) * .72), rgba(234,240,242,.42) calc(100% - var(--fade) * .42), rgba(234,240,242,.84) calc(100% - var(--fade) * .14), #EAF0F2 100%),
+    linear-gradient(rgba(11,20,22,.82), rgba(11,20,22,.82)),
     url('assets/friends-bg.webp') center 26%/cover no-repeat,
     #0B1416;
   color:#BDCBCD;
@@ -214,6 +220,7 @@ dialog p{text-align:center;font:12px 'Space Mono',monospace;padding-top:20px}
 @media(min-width:1600px){.section{padding-left:max(6vw,calc((100vw - 1380px)/2));padding-right:max(6vw,calc((100vw - 1380px)/2))}}
 @media(max-width:850px){
   .section{padding:75px 6%}
+  .friends{--fade:160px;padding-bottom:calc(75px + 70px)}
   .hero{min-height:calc(750px + var(--nav-h));max-height:calc(950px + var(--nav-h))}
   .hero h1{font-size:10vw}
   .hero-character{width:35%;right:8%;bottom:90px}
