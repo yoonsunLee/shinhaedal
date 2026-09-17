@@ -81,6 +81,10 @@ nav{display:flex;align-items:flex-start;justify-content:space-between;padding:26
 @media(max-width:900px){.nav-menu{display:none}.icon-btn.menu-btn{display:flex}.nav-right{gap:20px}}
 
 .hero{position:relative;isolation:isolate;overflow:hidden;min-height:760px;height:calc(100svh - 90px);max-height:1080px;background:#e7ede0}
+/* 해변 → 이야기: 모래색(#FDEABB)과 다음 배경색을 먼저 맞추고 경계만 짧게 푼다.
+   해변 그림은 스크롤에 따라 움직이므로 움직이지 않는 쪽(섹션)에 건다 */
+.hero::after{content:'';position:absolute;left:0;right:0;bottom:0;height:36px;background:linear-gradient(to bottom,rgba(253,234,187,0),#fdeabb);z-index:-1;pointer-events:none}
+.story{background:linear-gradient(to bottom,#fdeabb 0,var(--paper) 140px)}
 .beach{position:absolute;inset:-25px;background:url('assets/beach.webp') center 44%/cover;z-index:-2;transform:translateY(var(--shore-y,0px));will-change:transform}
 .hero-inner{height:100%;position:relative;padding:55px 6%}
 .hero .eyebrow{margin-bottom:22px}
