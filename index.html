@@ -52,12 +52,15 @@
     will-change:transform;
   }
   /* 작품이 보이도록 가운데는 비우고, 위(내비)와 아래(문구)에만 어둠을 깐다 */
+  /* 첫 화면 작품 위에 얹히는 메뉴 글자·언어 버튼에 옅은 그림자를 깔아 밝은 자개 조각 위에서도 경계가 흐려지지 않게 */
+  body > nav .nav-icons{filter:drop-shadow(0 1px 6px rgba(5,6,10,.7));}
   .hero-overlay{
     position:absolute; inset:0; z-index:1;
-    background:linear-gradient(to bottom, rgba(5,6,10,.45) 0%, rgba(5,6,10,0) 20%, rgba(5,6,10,0) 38%, rgba(5,6,10,.55) 66%, rgba(5,6,10,.92) 100%);
+    /* 맨 위는 메뉴 글자가 밝은 자개 조각 위에서도 읽히도록 조금 더 어둡게 */
+    background:linear-gradient(to bottom, rgba(5,6,10,.62) 0%, rgba(5,6,10,.3) 9%, rgba(5,6,10,0) 20%, rgba(5,6,10,0) 38%, rgba(5,6,10,.55) 66%, rgba(5,6,10,.92) 100%);
   }
   @media(max-width:720px){
-    .hero-overlay{ background:linear-gradient(to bottom, rgba(5,6,10,.5) 0%, rgba(5,6,10,.08) 18%, rgba(5,6,10,.2) 32%, rgba(5,6,10,.72) 52%, rgba(5,6,10,.95) 100%); }
+    .hero-overlay{ background:linear-gradient(to bottom, rgba(5,6,10,.62) 0%, rgba(5,6,10,.3) 8%, rgba(5,6,10,.08) 18%, rgba(5,6,10,.2) 32%, rgba(5,6,10,.72) 52%, rgba(5,6,10,.95) 100%); }
   }
   /* 작품 색은 그대로 두고 화면만 아주 천천히 숨 쉬게(26초 왕복). 스크롤 시 JS가 transform을 쓰므로 scale/translate 속성으로 겹친다 */
   @media (prefers-reduced-motion: no-preference){
@@ -278,7 +281,7 @@
     .ip-teaser-lede{white-space:normal;}
   }
 
-  .work-grid{display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:34px 32px;}
+  .work-grid{display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:64px 40px;} /* 제목 아래와 다음 줄 작품 사이를 넉넉히 */
   .tile{
     display:block; width:100%; margin:0;
     cursor:pointer; border:none; background:none; padding:0; text-align:left;
@@ -341,7 +344,7 @@
 
 
   @media(max-width:900px){
-    .work-grid{grid-template-columns:repeat(2, minmax(0, 1fr)); gap:26px 24px;}
+    .work-grid{grid-template-columns:repeat(2, minmax(0, 1fr)); gap:48px 28px;}
   }
 
   /* work modal — fullscreen editorial viewer */

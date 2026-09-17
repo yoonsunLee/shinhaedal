@@ -1,4 +1,4 @@
-:root{--nav-h:90px;--navy:#123548;--blue:#0649c8;--paper:#fffdf7;--muted:#526d77;--line:#ced5d4;--sweep-teal:#1E93A6;--sweep-violet:#5B4FA6}
+:root{--nav-h:90px;--nav-ink:#35505c;--navy:#123548;--blue:#0649c8;--paper:#fffdf7;--muted:#526d77;--line:#ced5d4;--sweep-teal:#1E93A6;--sweep-violet:#5B4FA6}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:85px}
 body{margin:0;color:var(--navy);background:var(--paper);font-family:'Noto Sans KR',sans-serif;-webkit-font-smoothing:antialiased;-webkit-user-select:none;-moz-user-select:none;user-select:none}
@@ -29,12 +29,13 @@ nav{display:flex;align-items:flex-start;justify-content:space-between;padding:26
 .logo-tag{grid-column:2;justify-self:center;text-align:center;font-family:'Space Mono','Noto Sans KR',monospace;font-size:10.5px;letter-spacing:.5px;color:var(--muted);text-transform:uppercase}
 .nav-right{display:flex;align-items:center;gap:16px;padding-top:2px}
 .lang{display:flex;align-items:center;gap:5px}
-.lang button{border:none;background:none;padding:11px 4px;margin:-11px -4px;cursor:pointer;color:#12354855;font-family:'Space Mono','Noto Sans KR',monospace;font-size:12px;font-weight:700;letter-spacing:.5px}
-.lang button:hover{color:var(--muted)}
+.lang button{border:none;background:none;padding:11px 4px;margin:-11px -4px;cursor:pointer;color:var(--muted);font-family:'Space Mono','Noto Sans KR',monospace;font-size:12px;font-weight:700;letter-spacing:.5px}
+.lang button:hover{color:var(--navy)}
 .lang button.on{color:var(--navy)}
 .lang .lang-sep{color:#12354840;font-family:'Space Mono','Noto Sans KR',monospace;font-size:12px}
 .nav-menu{display:flex;gap:24px;list-style:none;margin:0 8px 0 0;padding:0;align-items:center;font-family:'Space Mono','Noto Sans KR',monospace;font-size:12px}
-.nav-menu a{font-family:'Space Mono','Noto Sans KR',monospace;font-size:12px;letter-spacing:.5px;color:var(--muted);text-decoration:none}
+/* 메뉴 글자는 해변 그림 위에 얹히므로 본문 보조색(--muted)보다 한 단계 진한 --nav-ink */
+.nav-menu a{font-family:'Space Mono','Noto Sans KR',monospace;font-size:12px;letter-spacing:.5px;color:var(--nav-ink);text-decoration:none}
 .nav-menu a:hover,.nav-menu a.on{color:var(--navy)}
 /* 메뉴 글자에 자개빛이 한 번 스치는 호버 효과 — 다른 5개 페이지와 같은 구조(site.css 참고)지만,
    밝은 배경에 맞춰 옅은 파스텔 대신 중간 명도의 청록·남보라를 쓴다(기존 헤더용 밝은 색 재사용 금지). */
@@ -43,11 +44,11 @@ nav{display:flex;align-items:flex-start;justify-content:space-between;padding:26
     background-image:linear-gradient(90deg,
       #0867ba 0%, #0867ba 33%,
       var(--sweep-violet) 40%, #0867ba 47%, var(--sweep-teal) 54%,
-      var(--muted) 67%, var(--muted) 100%);
+      var(--nav-ink) 67%, var(--nav-ink) 100%);
     background-size:300% 100%;
     background-position:100% 0;
     -webkit-background-clip:text; background-clip:text;
-    color:var(--muted); -webkit-text-fill-color:transparent;
+    color:var(--nav-ink); -webkit-text-fill-color:transparent;
     transition:background-position .3s ease, color .3s ease;
   }
   .nav-menu a:not([aria-current="page"]):hover .nav-sweep{
@@ -297,6 +298,8 @@ html:has(#viewer[open]){overscroll-behavior-x:none}
   .pool{background:linear-gradient(180deg,#0847c2 0%,rgba(8,71,194,.9) 36%,rgba(8,71,194,.38) 56%,rgba(8,71,194,.5) 100%),url('assets/pool-tile-bg.webp') center/cover no-repeat,#0847c2}
   .nav-menu{display:none}
   .lang{gap:3px}
+  /* 폰에서 섹션 제목은 한 크기로(마무리 표어 두 개는 따로 크게) */
+  h2{font-size:34px}
   .hero{height:100svh;min-height:calc(710px + var(--nav-h));max-height:calc(900px + var(--nav-h))}
   .hero-inner{padding-top:calc(34px + var(--nav-h))}
   .hero .eyebrow{font-size:10px;letter-spacing:.075em;margin-bottom:20px}
@@ -321,7 +324,7 @@ html:has(#viewer[open]){overscroll-behavior-x:none}
   .delivery-meaning{margin-top:38px;padding-top:30px}
   .delivery-meaning .eyebrow{font-size:12px;letter-spacing:0}
   .pool-layout{grid-template-columns:1fr;gap:42px}
-  .pool-copy h2{font-size:40px}
+  .pool-copy h2{font-size:34px}
   .pool-art{width:85%;margin:0 auto}
   .membership{width:52%;right:-7%}
   .pool-quote{margin-top:50px;padding-top:40px}
@@ -340,7 +343,7 @@ html:has(#viewer[open]){overscroll-behavior-x:none}
   .profile-name{font-size:28px}
   .profile-sheet .profile-delivers-text{font-size:20px}
   .toy{grid-template-columns:1fr}
-  .toy-heading h2{font-size:43px}
+  .toy-heading h2{font-size:34px}
   .toy-bottom{display:block}
   .toy-thumbs{width:100%;margin-top:25px}
   .toy-thumbs img{height:170px}
