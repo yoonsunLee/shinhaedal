@@ -1,0 +1,56 @@
+/* 작품 개별 페이지(works/w/ID/) 전용. 페이지 자체는 scripts/gen_work_share.py가 발행 때마다 만든다.
+   한/영 문구가 둘 다 HTML에 들어 있고, html[lang]에 맞는 쪽만 보인다(검색엔진은 둘 다 읽음). */
+html[lang="en"] .t-ko{display:none !important;}
+html:not([lang="en"]) .t-en{display:none !important;}
+
+.wp{max-width:1180px; margin:0 auto; padding:16px 32px 96px;}
+.wp img{-webkit-user-select:none; user-select:none; -webkit-touch-callout:none;}
+
+.wp-back{display:inline-block; padding:12px 0; margin-bottom:14px; font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-dim); text-decoration:none;}
+.wp-back:hover{color:var(--ivory);}
+
+.wp-work{display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); gap:56px; align-items:start;}
+.wp-media{margin:0; background:#05050a; border-radius:2px; padding:32px; display:flex; align-items:center; justify-content:center;}
+.wp-media img{display:block; width:auto; height:auto; max-width:100%; max-height:76vh; object-fit:contain;}
+
+.wp-info{display:flex; flex-direction:column; gap:18px; padding-top:6px;}
+.wp-title{font-family:'Noto Sans KR',sans-serif; font-weight:700; font-size:clamp(24px,2.5vw,32px); line-height:1.35; color:var(--ivory); margin:0; word-break:keep-all;}
+.wp-title-sub{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12.5px; line-height:1.6; color:var(--ivory-dim); margin:8px 0 0;}
+.wp-spec{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.3px; line-height:1.7; color:var(--ivory-dim); margin:0;}
+.wp-caption{font-size:16px; line-height:1.85; color:var(--ivory-dim); margin:0; white-space:pre-line; max-width:62ch;}
+
+.wp-ex, .wp-actions{border-top:1px solid var(--accent-dim); padding-top:16px;}
+.wp-ex h2, .wp-photos h2, .wp-series h2{font-family:'Space Mono','Noto Sans KR',monospace; font-weight:400; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--ivory-muted); margin:0 0 12px;}
+.wp-ex ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:7px;}
+.wp-ex li{font-size:13px; line-height:1.55; color:var(--ivory-dim);}
+
+.wp-actions{display:flex; flex-wrap:wrap; gap:4px 28px;}
+.wp-action{display:inline-flex; align-items:center; min-height:44px; font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-dim); text-decoration:none;}
+.wp-action:hover{color:var(--ivory); text-decoration:underline; text-underline-offset:4px;}
+.wp-action--accent, .wp-action--accent:hover{color:var(--accent);}
+
+.wp-photos, .wp-series{margin-top:72px;}
+.wp-photo-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:20px;}
+.wp-photo-grid figure{margin:0; display:flex; flex-direction:column; gap:8px;}
+.wp-photo-grid img{display:block; width:100%; height:auto; aspect-ratio:1/1; object-fit:contain; background:#05050a; border-radius:2px;}
+.wp-photo-grid figcaption{font-size:12.5px; line-height:1.5; color:var(--ivory-dim);}
+
+.wp-series-list{display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:16px;}
+.wp-series-item{display:flex; flex-direction:column; gap:8px; text-decoration:none; color:var(--ivory-dim); font-size:13px; line-height:1.45;}
+.wp-series-item img{display:block; width:100%; aspect-ratio:1/1; object-fit:contain; background:#05050a; border-radius:2px;}
+.wp-series-item:hover{color:var(--ivory);}
+
+.wp-pager{margin-top:72px; padding-top:20px; border-top:1px solid rgba(245,240,230,.1); display:flex; justify-content:space-between; gap:24px;}
+.wp-pager a{display:flex; flex-direction:column; gap:6px; max-width:48%; padding:6px 0; text-decoration:none; color:var(--ivory-dim);}
+.wp-pager a:hover .ttl{color:var(--ivory);}
+.wp-pager .wp-next{margin-left:auto; text-align:right; align-items:flex-end;}
+.wp-pager .lab{font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; letter-spacing:.5px; color:var(--ivory-muted);}
+.wp-pager .ttl{font-size:14px; line-height:1.45; color:var(--ivory-dim); transition:color .2s ease;}
+
+@media (max-width:820px){
+  .wp-work{grid-template-columns:minmax(0,1fr); gap:28px;}
+  .wp-media{padding:16px;}
+  .wp-media img{max-height:70vh;}
+  .wp-photos, .wp-series, .wp-pager{margin-top:56px;}
+  .wp-photo-grid{grid-template-columns:repeat(2, minmax(0,1fr)); gap:12px;}
+}

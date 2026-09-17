@@ -48,6 +48,7 @@ Actions 탭에서 "Publish archive data"를 수동 실행하며 `allow_shrink`�
 index.html            Home — Recent Works / Now on View 자동 전환, 홈 영상 히어로
 about/                 About — 작가 소개, 학력, Selected Exhibitions
 works/                 Works — 작품 아카이브, 전시별 필터, 작품 상세 모달
+works/w/<id>/          작품 개별 페이지(검색·공유용 정적 HTML). gen_work_share.py가 발행 때 생성
 ip/                    IP — 얼빵해달/일월오봉단 세계관 (KO/EN, 별도 CSS/JS)
 press/                 Press — 매체 기사
 contact/                Contact — 문의 폼 (mailto 연동)
@@ -57,6 +58,7 @@ data/                  publish_sb.py가 생성하는 공개 정적 JSON
 assets/works/<id>/     작품별 thumb/detail/large WebP + (있으면) audio.mp3
 assets/home-video/<id>/  홈 영상별 video.mp4/video_mobile.mp4/poster.webp
 scripts/publish_sb.py   Archive(Supabase) → Publish 스크립트
+scripts/gen_work_share.py  작품 개별 페이지 + 공유용 og.jpg + sitemap.xml 생성
 .github/workflows/     publish 자동화 워크플로
 ```
 
@@ -65,13 +67,15 @@ Home / About / Works / IP / Press / Brand Shop(외부 링크, 아이디어스) /
 
 ## 원칙
 - 작품·전시·Press 데이터는 해달아카이브에서만 관리한다 — 이 repo의 `data/*.json`을
-  직접 편집하지 않는다(다음 자동 publish 때 덮어써짐).
+  직접 편집하지 않는다(다음 자동 publish 때 덮어써짐). `works/w/*`와 `sitemap.xml`도
+  발행 때 다시 만들어지므로 모양을 바꾸려면 `scripts/gen_work_share.py`와
+  `assets/work-page.css`를 고친다.
 - 디자인/카피는 이 repo에서 직접 관리한다.
 - 민감정보(실거래가·소장자·결제방식 등)는 `publish_sb.py`의 whitelist 단계에서
   차단되며, 애초에 이 repo에 존재하지 않는다.
 
 ## 남은 것
-- 커스텀 도메인(shinhaedal.art) 연결 — 구매 후 진행 예정. 연결 시 6페이지 +
-  `sitemap.xml`/`robots.txt`의 `og:url`/`canonical` 등을 `yoonsunlee.github.io/shinhaedal`
-  에서 `shinhaedal.art`로 일괄 변경해야 함.
+- 커스텀 도메인(shinhaedal.art) 연결 — 구매 후 진행 예정. 연결 시 6페이지 메타·`robots.txt`와
+  `scripts/gen_work_share.py`의 `SITE_BASE`를 `shinhaedal.art`로 바꾼 뒤 `--all`로 작품 페이지·
+  sitemap을 다시 생성해야 함(스크립트를 먼저 고치지 않으면 다음 발행 때 옛 주소로 되돌아감).
 - Audio Guide — 우선순위 최후순위로 보류 중.

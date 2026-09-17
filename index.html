@@ -886,7 +886,7 @@ function renderWorkTiles(rows){
     var img = r.thumb ? ASSET_BASE + r.thumb : '';
     var media = img ? '<img src="' + img.replace(/"/g,'&quot;') + '" alt="" loading="lazy" draggable="false" onerror="this.style.visibility=\'hidden\'">' : '';
     var title = primaryTitle(r);
-    return '<a class="tile" href="?w=' + encodeURIComponent(r.id) + '" data-idx="' + i + '" aria-label="' + esc(title) + '">' +
+    return '<a class="tile" href="works/w/' + encodeURIComponent(r.id) + '/" data-idx="' + i + '" aria-label="' + esc(title) + '">' +
       '<div class="tile-media">' + media + '<div class="tile-sheen"></div></div>' +
       '<span class="tile-cap"><span class="tile-title">' + esc(title) + '</span></span>' +
       '</a>';

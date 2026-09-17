@@ -84,9 +84,9 @@ jobs:
           print('검사 통과: 작품 %d건, 전시 %d건, Press %d건, 홈 영상 %d건' % (len(idx), len(ex), len(pr), len(hv)))
           PY
 
-      # 공개 작품마다 공유용 og:image + works/w/ID/ 스텁을 다시 만든다.
-      # 목록에서 빠진(비공개·삭제) 작품의 스텁도 여기서 같이 정리된다.
-      - name: Generate work share pages (og:image + stub)
+      # 공개 작품마다 개별 작품 페이지(works/w/ID/) + 공유용 og:image를 다시 만들고 sitemap.xml을 갱신한다.
+      # 목록에서 빠진(비공개·삭제) 작품의 페이지도 여기서 같이 정리된다.
+      - name: Generate work pages (page + og:image + sitemap)
         run: python scripts/gen_work_share.py --all
 
       - name: Commit if changed
@@ -94,7 +94,7 @@ jobs:
           git config user.name "haedal-publish-bot"
           git config user.email "actions@users.noreply.github.com"
           mkdir -p assets/exhibitions assets/home-video
-          git add data/ assets/works/ assets/exhibitions/ assets/home-video/ works/w/
+          git add data/ assets/works/ assets/exhibitions/ assets/home-video/ works/w/ sitemap.xml
           if git diff --cached --quiet; then
             echo "No changes."
           else
