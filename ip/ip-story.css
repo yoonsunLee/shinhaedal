@@ -107,8 +107,10 @@ html.no-hero-arrive .hero-character img{animation:none}
 .section-top{display:flex;justify-content:space-between;align-items:flex-start;gap:30px;margin-bottom:70px}
 .section-top .eyebrow{padding-top:15px}
 .section-top h2{width:64%}
-.story-grid{display:grid;grid-template-columns:1fr 1fr;gap:7%}
+.story-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px 7%}
 .story-piece.second{margin-top:130px}
+/* 4컷이 지그재그로 이어지게: 두 번째 줄 왼쪽(03)은 어긋난 만큼 끌어올리고, 오른쪽(04)은 줄 시작에 둔다 */
+.story-piece.third{margin-top:-130px}
 .comic-crop{position:relative;aspect-ratio:1;overflow:hidden;background:transparent}
 .comic-crop img{position:static;width:100%;height:auto;max-width:100%}
 .caption{display:flex;gap:22px;padding:25px 0;border-top:1px solid var(--line);margin-top:22px}
@@ -227,8 +229,9 @@ dialog p{text-align:center;font:12px 'Space Mono',monospace;padding-top:20px}
   .hero h1{font-size:10vw}
   .hero-character{width:35%;right:8%;bottom:90px}
   .hero-note{max-width:44%}
-  .story-grid{gap:5%}
+  .story-grid{gap:56px 5%}
   .story-piece.second{margin-top:80px}
+  .story-piece.third{margin-top:-80px}
   .pool-layout{gap:6%}
   .pool-copy p{font-size:16px}
   .toy{gap:40px}
@@ -255,7 +258,7 @@ dialog p{text-align:center;font:12px 'Space Mono',monospace;padding-top:20px}
   .section-top .eyebrow{padding-top:0;margin-bottom:22px}
   .section-top h2{width:100%}
   .story-grid{grid-template-columns:1fr;gap:40px}
-  .story-piece.second{margin-top:0}
+  .story-piece.second,.story-piece.third{margin-top:0}
   .caption{margin-top:14px;padding-top:20px;gap:15px}
   .caption h3{font-size:22px}
   .caption p{font-size:15px}
