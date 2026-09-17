@@ -1,7 +1,7 @@
 # shinhaedal.com — 홈페이지
 
 신해달 작가 공식 홈페이지 (정적 사이트, GitHub Pages).
-배포 주소: https://shinhaedal.com/ (보조 도메인 shinhaedal.art는 .com으로 전달, 옛 주소 yoonsunlee.github.io/shinhaedal/은 GitHub이 자동으로 새 주소로 넘김)
+배포 주소: https://shinhaedal.com/ (옛 주소 yoonsunlee.github.io/shinhaedal/은 GitHub이 자동으로 새 주소로 넘김)
 
 ## 아키텍처
 
