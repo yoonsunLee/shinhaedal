@@ -61,12 +61,13 @@
   }
   /* 작품 색은 그대로 두고 화면만 아주 천천히 숨 쉬게(26초 왕복). 스크롤 시 JS가 transform을 쓰므로 scale/translate 속성으로 겹친다 */
   @media (prefers-reduced-motion: no-preference){
-    .hero-bg{transform-origin:52% 38%; animation:heroBreath 26s ease-in-out infinite alternate;}
+    /* 시작 지점에서는 속도가 0이라 멈춘 것처럼 보여서, 음수 지연으로 이미 움직이는 중인 구간부터 시작한다 */
+    .hero-bg{transform-origin:52% 38%; animation:heroBreath 22s ease-in-out -3.5s infinite alternate;}
   }
   @keyframes heroBreath{ from{ scale:1; translate:0 0; } to{ scale:1.08; translate:-1.2% -1%; } }
   /* 폰은 화면이 좁아 같은 8%로는 초당 1px 남짓이라 멈춘 것처럼 보인다. 해달 얼굴 쪽으로 더 크게·조금 빠르게 */
   @media (max-width:720px) and (prefers-reduced-motion: no-preference){
-    .hero-bg{transform-origin:50% 44%; animation:heroBreathMobile 20s ease-in-out infinite alternate;}
+    .hero-bg{transform-origin:50% 44%; animation:heroBreathMobile 17s ease-in-out -2.5s infinite alternate;}
   }
   @keyframes heroBreathMobile{ from{ scale:1; } to{ scale:1.16; } }
   /* scale 속성을 모르는 구형 브라우저용. 이 경우 스크롤 패럴랙스(transform)는 줌에 덮인다 */
