@@ -280,8 +280,11 @@
 
 <dialog id="viewer">
   <button id="close-viewer" aria-label="사진 닫기" data-i-aria="aria_close_viewer">✕</button>
-  <img id="viewer-image" alt="얼빵해달 아트토이 상세" data-i-alt="alt_toy_main">
-  <p>SHIN HAEDAL · NAJEONCHILGI ART TOY</p>
+  <button type="button" class="viewer-nav viewer-prev" id="viewerPrev" aria-label="이전 사진" data-i-aria="aria_prev_photo">‹</button>
+  <img id="viewer-image" alt="얼빵해달 아트토이 상세">
+  <button type="button" class="viewer-nav viewer-next" id="viewerNext" aria-label="다음 사진" data-i-aria="aria_next_photo">›</button>
+  <div class="viewer-rail" id="viewerRail"></div>
+  <p><span id="viewerCount">1 / 4</span> · SHIN HAEDAL · NAJEONCHILGI ART TOY</p>
 </dialog>
 
 <script>
@@ -340,7 +343,7 @@ const I18N = {
     alt_toy_detail:'아트토이 디테일',
     alt_friends:'일월오봉단 다섯 친구들',
     aria_prev_friend:'이전 친구', aria_next_friend:'다음 친구',
-    aria_close_viewer:'사진 닫기'
+    aria_close_viewer:'사진 닫기', aria_prev_photo:'이전 사진', aria_next_photo:'다음 사진'
   },
   en: {
     hero_name:'Eolbbang Haedal (얼빵해달)',
@@ -396,7 +399,7 @@ const I18N = {
     alt_toy_detail:'Art toy detail',
     alt_friends:'The five friends of Irworobongdan',
     aria_prev_friend:'Previous friend', aria_next_friend:'Next friend',
-    aria_close_viewer:'Close photo'
+    aria_close_viewer:'Close photo', aria_prev_photo:'Previous photo', aria_next_photo:'Next photo'
   }
 };
 function applyLang(l, opts){

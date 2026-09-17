@@ -22,8 +22,35 @@ document.getElementById('next').onclick=()=>select(index+1);
 rail.addEventListener('scroll',()=>{let step=cards[1].offsetLeft-cards[0].offsetLeft;index=Math.round(rail.scrollLeft/step);count.textContent=(index+1)+' / 5'},{passive:true});
 
 const dialog=document.getElementById('viewer'),large=document.getElementById('viewer-image');
-let opener;
-document.querySelectorAll('.photo-open').forEach(b=>b.onclick=()=>{opener=b;large.src=b.dataset.photo;dialog.showModal();body.style.overflow='hidden';document.getElementById('close-viewer').focus()});
+// 아트토이 사진(메인 + 아래 3장)을 한 묶음으로: 어떤 사진을 눌러도 그 사진부터 열고 좌우로 넘긴다
+const photoButtons=[...document.querySelectorAll('.photo-open')];
+const photos=photoButtons.map(b=>({src:b.dataset.photo,alt:(b.querySelector('img')||{}).alt||''}));
+const viewerRail=document.getElementById('viewerRail'),viewerCount=document.getElementById('viewerCount');
+let opener,current=0,swiped=false;
+photos.forEach((p,i)=>{
+  const t=document.createElement('button');
+  t.type='button'; t.setAttribute('aria-label',(i+1)+' / '+photos.length);
+  const im=document.createElement('img'); im.src=p.src; im.alt=''; t.appendChild(im);
+  t.onclick=()=>show(i);
+  viewerRail.appendChild(t);
+});
+function show(i){
+  current=(i+photos.length)%photos.length;
+  large.src=photos[current].src; large.alt=photos[current].alt;
+  viewerCount.textContent=(current+1)+' / '+photos.length;
+  [...viewerRail.children].forEach((t,k)=>t.setAttribute('aria-current',k===current?'true':'false'));
+  [1,-1].forEach(d=>{const pre=new Image(); pre.src=photos[(current+d+photos.length)%photos.length].src;});
+}
+photoButtons.forEach((b,i)=>b.onclick=()=>{opener=b;show(i);dialog.showModal();body.style.overflow='hidden';document.getElementById('close-viewer').focus()});
+document.getElementById('viewerPrev').onclick=()=>show(current-1);
+document.getElementById('viewerNext').onclick=()=>show(current+1);
+let touchX=null,touchY=0;
+dialog.addEventListener('touchstart',e=>{if(e.touches.length!==1){touchX=null;return;} touchX=e.touches[0].clientX; touchY=e.touches[0].clientY;},{passive:true});
+dialog.addEventListener('touchend',e=>{
+  if(touchX===null) return;
+  const t=e.changedTouches[0],dx=t.clientX-touchX,dy=t.clientY-touchY; touchX=null;
+  if(Math.abs(dx)>45 && Math.abs(dx)>Math.abs(dy)*1.3){ swiped=true; show(current+(dx<0?1:-1)); setTimeout(()=>{swiped=false},400); }
+});
 document.getElementById('close-viewer').onclick=()=>dialog.close();
 function insideVisibleImage(e){
   const cw=large.clientWidth,ch=large.clientHeight,iw=large.naturalWidth,ih=large.naturalHeight;
@@ -36,12 +63,15 @@ function insideVisibleImage(e){
 }
 dialog.addEventListener('click',e=>{
   if(!dialog.open) return;
-  if(e.target.closest('#close-viewer')) return;
+  if(swiped) return;
+  if(e.target.closest('#close-viewer, .viewer-nav, .viewer-rail')) return;
   if(e.target===large && insideVisibleImage(e)) return;
   dialog.close();
 });
 dialog.addEventListener('keydown',e=>{
   if(e.key==='Backspace'){ e.preventDefault(); dialog.close(); }
+  if(e.key==='ArrowRight'){ e.preventDefault(); show(current+1); }
+  if(e.key==='ArrowLeft'){ e.preventDefault(); show(current-1); }
 });
 dialog.addEventListener('close',()=>{body.style.overflow='';large.removeAttribute('src');opener?.focus()});
 })();

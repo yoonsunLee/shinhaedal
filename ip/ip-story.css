@@ -239,7 +239,29 @@ dialog{border:0;background:#10151bf5;color:white;width:100vw;height:100dvh;max-w
 dialog::backdrop{background:#10151b}
 dialog img{width:100%;height:calc(100% - 45px);object-fit:contain}
 dialog p{text-align:center;font:12px 'Space Mono',monospace;padding-top:20px}
-#close-viewer{position:absolute;top:15px;right:20px;border:0;background:none;color:white;font-size:24px;width:44px;height:44px}
+#close-viewer{position:absolute;top:15px;right:20px;border:0;background:none;color:white;font-size:24px;width:44px;height:44px;z-index:2}
+/* 아트토이 사진 4장을 뷰어 안에서 넘겨 본다: 좌우 버튼·←→ 키·스와이프, 아래 작은 사진 줄로 바로 이동 */
+#viewer #viewer-image{height:calc(100% - 45px - 64px)}
+/* 가로 스와이프는 사진 넘기기로만 쓰고, 브라우저의 뒤로가기 제스처로 번지지 않게 */
+#viewer{touch-action:pan-y pinch-zoom;overscroll-behavior:contain}
+html:has(#viewer[open]){overscroll-behavior-x:none}
+.viewer-nav{position:absolute;top:calc(50% - 30px);transform:translateY(-50%);z-index:2;width:52px;height:52px;border:0;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;font-size:32px;line-height:1;display:grid;place-items:center;padding:0 0 4px;cursor:pointer;transition:background .2s ease}
+.viewer-nav:hover{background:rgba(255,255,255,.22)}
+.viewer-prev{left:max(12px,2vw)}
+.viewer-next{right:max(12px,2vw)}
+.viewer-rail{display:flex;justify-content:center;gap:8px;margin-top:12px}
+.viewer-rail button{width:52px;height:52px;padding:0;border:2px solid transparent;border-radius:6px;overflow:hidden;background:none;opacity:.5;cursor:pointer;transition:opacity .2s ease,border-color .2s ease}
+.viewer-rail button:hover{opacity:.8}
+.viewer-rail button[aria-current="true"]{opacity:1;border-color:#fff}
+#viewer .viewer-rail img{width:100%;height:100%;object-fit:cover}
+#viewer p{padding-top:12px}
+@media(max-width:580px){
+  .viewer-nav{width:40px;height:40px;font-size:26px;background:rgba(0,0,0,.35)}
+  .viewer-prev{left:8px}
+  .viewer-next{right:8px}
+  .viewer-rail button{width:44px;height:44px}
+  #viewer #viewer-image{height:calc(100% - 45px - 56px)}
+}
 .reveal{opacity:1;transform:none}
 .motion-ready .reveal:not(.seen){opacity:0;transform:translateY(28px)}
 .motion-ready .reveal{transition:opacity .8s,transform .8s}
