@@ -1501,7 +1501,8 @@ function wmInsideVisibleImage(e){
   return e.clientX >= left && e.clientX <= left + rw && e.clientY >= top && e.clientY <= top + rh;
 }
 wmModal.addEventListener('click', function(e){
-  if(e.target === wmModal || e.target === document.getElementById('wmMedia') || e.target === document.getElementById('wmStage') || e.target === document.getElementById('wmInfo')) { closeWorkModal(); return; }
+  // 작품 정보 영역(글·여백)은 읽다가 눌러도 닫히지 않게 하고, 사진 주변 빈 곳만 닫는다
+  if(e.target === wmModal || e.target === document.getElementById('wmMedia') || e.target === document.getElementById('wmStage')) { closeWorkModal(); return; }
   if(e.target === document.getElementById('wmImg') && !wmInsideVisibleImage(e)) { closeWorkModal(); return; }
   if(e.target === document.getElementById('wmVideoEmbed')) { closeWorkModal(); return; }
 });
