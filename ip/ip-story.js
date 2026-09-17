@@ -95,3 +95,40 @@ document.querySelectorAll('.nav-menu a').forEach(function(a){
   });
   wrap.addEventListener('pointerleave', function(){ tx = 0; ty = 0; tr = 0; kick(); });
 })();
+
+/* 캐릭터 프로필: 첫 화면 '프로필 보기'로 열고, ✕·Esc·바깥 누르기로 닫는다.
+   PC는 오른쪽 패널, 폰은 아래 시트(모양은 CSS). 닫으면 포커스는 '프로필 보기'로 돌아간다 */
+(function(){
+  var sheet = document.getElementById('profileSheet');
+  var openBtn = document.getElementById('profileOpen');
+  var closeBtn = document.getElementById('profileClose');
+  if(!sheet || !openBtn || typeof sheet.showModal !== 'function') return;
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  function open(){
+    sheet.showModal();
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ sheet.classList.add('is-open'); }); });
+  }
+  function close(){
+    if(!sheet.open) return;
+    sheet.classList.remove('is-open');
+    if(reduce.matches){ sheet.close(); return; }
+    var done = false;
+    function finish(){ if(done) return; done = true; sheet.close(); }
+    sheet.addEventListener('transitionend', finish, {once:true});
+    setTimeout(finish, 450);
+  }
+  openBtn.addEventListener('click', open);
+  closeBtn.addEventListener('click', close);
+  sheet.addEventListener('cancel', function(e){ e.preventDefault(); close(); });
+  sheet.addEventListener('click', function(e){
+    if(e.target !== sheet) return;
+    var r = sheet.getBoundingClientRect();
+    if(e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) close();
+  });
+  sheet.addEventListener('close', function(){
+    sheet.classList.remove('is-open');
+    document.body.style.overflow = '';
+    openBtn.focus();
+  });
+})();

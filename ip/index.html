@@ -87,10 +87,34 @@
       <span class="character-shadow"></span>
     </div>
     <div class="hero-note"><p data-i="hero_note">멍때리다 수영을 배우지 못한 해달.<br>해변에서 만나요.</p></div>
-    <a class="scroll-link" href="#story"><span data-i="hero_scroll">얼빵해달의 이야기</span><span>↓</span></a>
+    <div class="hero-actions">
+      <a class="scroll-link" href="#story"><span data-i="hero_scroll">얼빵해달의 이야기</span><span>↓</span></a>
+      <button type="button" class="profile-open" id="profileOpen" aria-haspopup="dialog" aria-controls="profileSheet"><span data-i="hero_profile">프로필 보기</span><span class="profile-open-plus" aria-hidden="true">+</span></button>
+    </div>
     <span class="hero-index">01 — MEET</span>
   </div>
 </section>
+
+<dialog class="profile-sheet" id="profileSheet" aria-labelledby="profileName">
+  <div class="profile-inner">
+    <button type="button" class="profile-close" id="profileClose" aria-label="프로필 닫기" data-i-aria="aria_close_profile">✕</button>
+    <div class="profile-figure"><img src="assets/hero_face.webp" alt="" decoding="async"><span class="profile-figure-shadow" aria-hidden="true"></span></div>
+    <div class="profile-intro">
+      <h2 class="profile-name" id="profileName" data-i="profile_name">얼빵해달</h2>
+      <p class="profile-name-sub" data-i="profile_name_sub">SPACED-OUT SEA OTTER</p>
+      <p class="profile-job" data-i="id_job">조개배달부</p>
+    </div>
+    <div class="profile-delivers">
+      <span class="profile-label">DELIVERS</span>
+      <p class="profile-delivers-text" data-i="id_delivers">사랑 · 용기 · 위로</p>
+    </div>
+    <dl class="profile-facts">
+      <div><dt>SPECIES</dt><dd data-i="id_species">해달</dd></div>
+      <div><dt>SIGNATURE</dt><dd data-i="id_sig">조개</dd></div>
+      <div><dt>CREATED</dt><dd>2020</dd></div>
+    </dl>
+  </div>
+</dialog>
 
 <section id="story" class="story section">
   <div class="section-top reveal">
@@ -146,28 +170,19 @@
     <p class="identity-subtitle" data-i="id_sub">'Spaced-out Sea Otter'는 이름뿐 아니라, 캐릭터의 성격까지 담아낸 번역이에요.</p>
   </div>
   <div class="naming">
-    <article class="name-card reveal">
-      <img src="assets/hero_logo.webp" alt="Spaced-out Sea Otter 공식 로고" data-i-alt="alt_logo" loading="lazy" decoding="async">
-      <h3>얼빵 <span>→ SPACED-OUT</span></h3>
-      <p data-i="id_card1_p">'얼빵'을 소리 그대로 Eolbbang이라 쓰는 대신, 조금 얼빠져 있고 어딘가 엇박자지만 그래서 사랑스러운 느낌을 'Spaced-out'으로 옮겼어요. 이름 자체가 성격 소개가 되도록요.</p>
+    <article class="name-part reveal">
+      <h3 class="name-word">얼빵</h3>
+      <p class="name-gloss">→ SPACED-OUT</p>
+      <div class="name-art"><img src="assets/hero_logo.webp" alt="Spaced-out Sea Otter 공식 로고" data-i-alt="alt_logo" loading="lazy" decoding="async"></div>
+      <p class="name-desc" data-i="id_card1_p">'얼빵'을 소리 그대로 Eolbbang이라 쓰는 대신, 조금 얼빠져 있고 어딘가 엇박자지만 그래서 사랑스러운 느낌을 'Spaced-out'으로 옮겼어요. 이름 자체가 성격 소개가 되도록요.</p>
     </article>
-    <article class="name-card reveal">
-      <img src="assets/name_haedal.webp" alt="해와 달, 조개" data-i-alt="alt_name" loading="lazy" decoding="async">
-      <h3>해달 <span>→ SUN + MOON</span></h3>
-      <p data-i="id_card2_p">'해달'은 동물 해달이면서, 해(☀︎)와 달(☾︎)로도 읽혀요. 하나의 이름 안에 동물과 하늘, 두 겹의 의미가 함께 들어 있어요.</p>
+    <article class="name-part reveal">
+      <h3 class="name-word">해달</h3>
+      <p class="name-gloss">→ SUN + MOON</p>
+      <div class="name-art name-art--symbol"><img src="assets/name_haedal.webp" alt="해와 달, 조개" data-i-alt="alt_name" loading="lazy" decoding="async"></div>
+      <p class="name-desc" data-i="id_card2_p">'해달'은 동물 해달이면서, 해(☀︎)와 달(☾︎)로도 읽혀요. 하나의 이름 안에 동물과 하늘, 두 겹의 의미가 함께 들어 있어요.</p>
     </article>
   </div>
-  <details class="profile-details">
-    <summary><span data-i="id_profile">얼빵해달 프로필</span><span>＋</span></summary>
-    <dl>
-      <div><dt>NAME</dt><dd>SPACED-OUT SEA OTTER / 얼빵해달</dd></div>
-      <div><dt>SPECIES</dt><dd><span data-i="id_species">해달</span></dd></div>
-      <div><dt>JOB</dt><dd><span data-i="id_job">조개배달부</span></dd></div>
-      <div><dt>DELIVERS</dt><dd><span data-i="id_delivers">사랑 · 용기 · 위로</span></dd></div>
-      <div><dt>SIGNATURE</dt><dd><span data-i="id_sig">조개</span></dd></div>
-      <div><dt>CREATED</dt><dd>2020</dd></div>
-    </dl>
-  </details>
 </section>
 
 <section class="toy section" id="toy">
@@ -308,7 +323,8 @@ const I18N = {
     close_cta:'협업 문의',
     logo_tag:'나전칠기 아티스트',
     page_title:'SPACED-OUT SEA OTTER — 얼빵해달 | SHIN HAEDAL',
-    aria_instagram:'인스타그램', aria_menu:'메뉴', aria_close_menu:'닫기',
+    aria_instagram:'인스타그램', aria_menu:'메뉴', aria_close_menu:'닫기', aria_close_profile:'프로필 닫기',
+    hero_profile:'프로필 보기', profile_name:'얼빵해달', profile_name_sub:'SPACED-OUT SEA OTTER',
     alt_hero:'조개를 안고 있는 얼빵해달',
     alt_collect:'해변에서 조개를 줍는 얼빵해달',
     alt_deliver:'주워온 조개를 작가님에게 전달하는 얼빵해달',
@@ -363,7 +379,8 @@ const I18N = {
     close_cta:'LET’S TALK',
     logo_tag:'Najeonchilgi Artist',
     page_title:'SPACED-OUT SEA OTTER | SHIN HAEDAL',
-    aria_instagram:'Instagram', aria_menu:'Menu', aria_close_menu:'Close',
+    aria_instagram:'Instagram', aria_menu:'Menu', aria_close_menu:'Close', aria_close_profile:'Close profile',
+    hero_profile:'Profile', profile_name:'Spaced-out Sea Otter', profile_name_sub:'얼빵해달',
     alt_hero:'Spaced-out Sea Otter holding a shell',
     alt_collect:'Spaced-out Sea Otter picking up a shell on the beach',
     alt_deliver:'Spaced-out Sea Otter delivering a shell to the artist',

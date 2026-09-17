@@ -101,7 +101,12 @@ html.no-hero-arrive .hero-character img{animation:none}
 .character-shadow{position:absolute;bottom:-5px;left:16%;width:75%;height:26px;border-radius:50%;background:#786b5940;filter:blur(11px);transform:rotate(-8deg)}
 .hero-note{position:absolute;left:6%;bottom:155px;max-width:380px}
 .hero-note p{font-size:18px;line-height:1.9}
-.scroll-link{position:absolute;left:6%;bottom:48px;display:flex;align-items:center;gap:45px;border-bottom:1px solid #12354870;padding-bottom:10px;font-size:13px}
+/* 주요 동선(이야기 ↓)은 그대로, 그 옆에 작은 '프로필 보기 +' */
+.hero-actions{position:absolute;left:6%;bottom:48px;z-index:3;display:flex;align-items:center;gap:30px}
+.profile-open{display:inline-flex;align-items:center;gap:8px;border:0;background:none;padding:10px 0 12px;font:13px 'Noto Sans KR',sans-serif;color:var(--navy);opacity:.78;cursor:pointer;transition:opacity .2s ease}
+.profile-open:hover{opacity:1}
+.profile-open-plus{display:inline-grid;place-items:center;width:18px;height:18px;border:1px solid currentColor;border-radius:50%;font:12px/1 'Space Mono',monospace}
+.scroll-link{display:flex;align-items:center;gap:45px;border-bottom:1px solid #12354870;padding-bottom:10px;font-size:13px}
 .scroll-link span:last-child{font-size:25px}
 .hero-index{position:absolute;bottom:45px;right:6%;font:12px 'Space Mono',monospace}
 .section-top{display:flex;justify-content:space-between;align-items:flex-start;gap:30px;margin-bottom:70px}
@@ -139,19 +144,43 @@ html.no-hero-arrive .hero-character img{animation:none}
 .identity{background:#f7f9fa}
 .identity-head .eyebrow{margin-bottom:22px}
 .identity-subtitle{max-width:800px;color:var(--muted);margin-top:25px}
-.naming{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:50px}
-.name-card{padding:35px;background:rgba(18,53,72,.03);border-radius:7px}
-.name-card>img{height:160px;width:100%;object-fit:contain;margin-bottom:35px}
-.name-card h3{font-size:23px}
-.name-card h3 span{font:12px/1.8 'Space Mono',monospace;display:block;margin:8px 0 16px}
-.name-card p{font-size:16px;color:var(--muted)}
-.profile-details{margin-top:35px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-summary{cursor:pointer;list-style:none;padding:24px 0;font-size:17px;display:flex;justify-content:space-between}
-summary::-webkit-details-marker{display:none}
-.profile-details dl{margin:0 0 30px}
-.profile-details dl div{display:flex;gap:25px;border-top:1px solid #dce1e4;padding:15px 0;font-size:14px}
-.profile-details dt{width:110px;font:12px 'Space Mono',monospace;flex-shrink:0}
-.profile-details dd{margin:0}
+/* 이름 풀이: 정보 카드 두 장이 아니라 '얼빵'과 '해달'을 크게 펼쳐 보여주는 2단 구성.
+   이름 → 영문 풀이 → 그림 → 설명 순서. 그림 칸 높이를 맞춰 두 설명의 시작선이 나란하다.
+   테두리·호버 없이 차분하게, 배경은 거의 느껴지지 않을 만큼만 */
+.naming{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:56px}
+.name-part{display:flex;flex-direction:column;padding:44px 40px 40px;background:rgba(18,53,72,.02);border-radius:7px}
+.name-word{margin:0;font-size:clamp(44px,4.4vw,62px);font-weight:900;line-height:1;letter-spacing:-.05em;color:var(--navy)}
+.name-gloss{margin:16px 0 0;font:13px/1.4 'Space Mono',monospace;letter-spacing:.12em;color:var(--muted)}
+.name-art{height:200px;margin:30px 0;display:flex;align-items:center}
+.name-art img{width:auto;height:auto;max-height:100%;max-width:100%}
+.name-art--symbol img{max-width:min(100%,420px)}
+.name-desc{font-size:16px;color:var(--muted);max-width:460px}
+
+/* 캐릭터 프로필: 화면 가운데에 세로 카드 한 장(PC·폰 같은 구성).
+   위는 캐릭터를 좋아하게 만드는 공간(큰 전신·이름·직업·배달하는 것), 아래는 정보를 확인하는 공간(2열).
+   얇은 선·배지 같은 장식 없이 따뜻한 아이보리 한 장. 아래 전역 dialog 규칙(사진 크게 보기용)을 이 요소에서만 덮어쓴다 */
+dialog.profile-sheet{position:fixed;inset:0;margin:auto;width:min(380px,calc(100vw - 32px));height:fit-content;max-width:none;max-height:calc(100dvh - 32px);padding:0;border:0;border-radius:14px;background:#fffaf0;color:var(--navy);box-shadow:0 30px 80px rgba(18,35,40,.28);overflow-y:auto;opacity:0;transform:translateY(22px);transition:opacity .3s ease,transform .45s cubic-bezier(.22,1,.36,1)}
+dialog.profile-sheet.is-open{opacity:1;transform:none}
+dialog.profile-sheet::backdrop{background:rgba(20,30,35,.36)}
+.profile-inner{position:relative;padding:34px 30px 30px}
+.profile-close{position:absolute;top:12px;right:12px;width:44px;height:44px;border:0;background:none;color:var(--navy);font-size:17px;opacity:.7;cursor:pointer}
+.profile-close:hover{opacity:1}
+.profile-figure{position:relative;height:250px;display:flex;justify-content:center;align-items:flex-end;margin-bottom:22px}
+.profile-sheet .profile-figure img{position:relative;z-index:1;width:auto;height:100%;object-fit:contain}
+.profile-figure-shadow{position:absolute;bottom:-4px;left:50%;width:150px;height:18px;margin-left:-75px;border-radius:50%;background:#786b5930;filter:blur(8px)}
+.profile-intro{text-align:center}
+.profile-name{margin:0;font-size:32px;font-weight:900;line-height:1.15;letter-spacing:-.04em}
+.profile-sheet .profile-name-sub{margin:8px 0 0;padding:0;text-align:center;font:11px/1.5 'Space Mono',monospace;letter-spacing:.14em;color:var(--muted)}
+html[lang="en"] .profile-sheet .profile-name-sub{font:13px/1.5 'Noto Sans KR',sans-serif;letter-spacing:0}
+.profile-sheet .profile-job{margin:12px 0 0;padding:0;font:500 16px/1.5 'Noto Sans KR',sans-serif;text-align:center;color:var(--navy)}
+.profile-delivers{margin:26px 0 0;padding:20px 16px 22px;border-radius:10px;background:rgba(236,190,110,.16);text-align:center}
+.profile-label{display:block;font:11px/1.5 'Space Mono',monospace;letter-spacing:.14em;color:var(--muted)}
+.profile-sheet .profile-delivers-text{margin:8px 0 0;padding:0;font:700 22px/1.4 'Noto Sans KR',sans-serif;letter-spacing:-.02em;text-align:center;color:var(--navy)}
+.profile-facts{display:grid;grid-template-columns:1fr 1fr;gap:18px 20px;margin:26px 4px 0}
+.profile-facts div{min-width:0}
+.profile-facts dt{font:10.5px/1.6 'Space Mono',monospace;letter-spacing:.14em;color:var(--muted)}
+.profile-facts dd{margin:3px 0 0;font-size:15px;font-weight:500}
+@media(prefers-reduced-motion:reduce){dialog.profile-sheet{transition:none;transform:none}}
 .toy{background:#F7F8FA;color:#172D3B;display:grid;grid-template-columns:1fr 1fr;gap:60px 9%;align-items:center}
 .toy-heading h2{margin:30px 0;color:#172D3B}
 .toy-heading p{color:#4D606C}
@@ -225,6 +254,8 @@ dialog p{text-align:center;font:12px 'Space Mono',monospace;padding-top:20px}
 @media(min-width:1600px){.section{padding-left:max(6vw,calc((100vw - 1380px)/2));padding-right:max(6vw,calc((100vw - 1380px)/2))}}
 @media(max-width:850px){
   .section{padding:75px 6%}
+  .name-part{padding:34px 28px 30px}
+  .name-art{height:160px}
   .friends{--fade:240px;padding-bottom:calc(75px + 130px)}
   .hero{min-height:calc(750px + var(--nav-h));max-height:calc(950px + var(--nav-h))}
   .hero h1{font-size:10vw}
@@ -253,7 +284,9 @@ dialog p{text-align:center;font:12px 'Space Mono',monospace;padding-top:20px}
   .hero-character{width:53%;right:8%;bottom:88px}
   .hero-note{bottom:170px;max-width:35%}
   .hero-note p{font-size:14px;line-height:1.8}
-  .scroll-link{bottom:33px;gap:28px;font-size:12px}
+  .hero-actions{bottom:33px;flex-direction:column;align-items:flex-start;gap:8px}
+  .profile-open{order:-1;padding:6px 0;font-size:12px}
+  .scroll-link{gap:28px;font-size:12px}
   .hero-index{font-size:10px;bottom:37px}
   .section-top{display:block;margin-bottom:35px}
   .section-top .eyebrow{padding-top:0;margin-bottom:22px}
@@ -273,11 +306,17 @@ dialog p{text-align:center;font:12px 'Space Mono',monospace;padding-top:20px}
   .pool-quote h2{font-size:42px}
   .slogan-break{display:block}
   .identity-subtitle{font-size:16px}
-  .naming{grid-template-columns:1fr;gap:18px;margin-top:30px}
-  .name-card{padding:25px}
-  .name-card>img{height:130px;margin-bottom:20px}
-  .profile-details dt{width:75px}
-  .profile-details dd{font-size:13px;word-break:break-word}
+  /* 폰: 두 영역을 세로로 쌓고, 각 영역 안에서 이름과 그림을 한 줄에 나란히 둔 뒤 설명은 아래로 */
+  .naming{grid-template-columns:1fr;gap:14px;margin-top:32px}
+  .name-part{display:grid;grid-template-columns:auto 1fr;column-gap:14px;padding:26px 22px 24px}
+  .name-word{grid-column:1;grid-row:1;font-size:44px;align-self:end}
+  .name-gloss{grid-column:1;grid-row:2;margin-top:10px;font-size:12px;align-self:start}
+  .name-art{grid-column:2;grid-row:1/3;height:150px;margin:0;justify-content:flex-end}
+  .name-desc{grid-column:1/-1;grid-row:3;margin-top:20px;font-size:15px}
+  .profile-inner{padding:30px 22px 24px}
+  .profile-figure{height:210px;margin-bottom:18px}
+  .profile-name{font-size:28px}
+  .profile-sheet .profile-delivers-text{font-size:20px}
   .toy{grid-template-columns:1fr}
   .toy-heading h2{font-size:43px}
   .toy-bottom{display:block}
