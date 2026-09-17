@@ -57,6 +57,16 @@
     .hero-bg{transform-origin:52% 38%; animation:heroBreath 26s ease-in-out infinite alternate;}
   }
   @keyframes heroBreath{ from{ scale:1; translate:0 0; } to{ scale:1.08; translate:-1.2% -1%; } }
+  /* 폰은 화면이 좁아 같은 8%로는 초당 1px 남짓이라 멈춘 것처럼 보인다. 해달 얼굴 쪽으로 더 크게·조금 빠르게 */
+  @media (max-width:720px) and (prefers-reduced-motion: no-preference){
+    .hero-bg{transform-origin:50% 44%; animation:heroBreathMobile 20s ease-in-out infinite alternate;}
+  }
+  @keyframes heroBreathMobile{ from{ scale:1; } to{ scale:1.16; } }
+  /* scale 속성을 모르는 구형 브라우저용. 이 경우 스크롤 패럴랙스(transform)는 줌에 덮인다 */
+  @supports not (scale: 1){
+    @media (prefers-reduced-motion: no-preference){ .hero-bg{animation-name:heroBreathLegacy;} }
+    @keyframes heroBreathLegacy{ from{ transform:scale(1); } to{ transform:scale(1.12); } }
+  }
   .hero-inner{
     position:relative; z-index:4;
     max-width:1180px; margin:0 auto; width:100%;
