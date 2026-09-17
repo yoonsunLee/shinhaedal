@@ -23,7 +23,7 @@ from pathlib import Path
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parent.parent
-SITE_BASE = "https://yoonsunlee.github.io/shinhaedal"
+SITE_BASE = "https://shinhaedal.com"
 CANVAS_SIZE = (1200, 630)
 BG_COLOR = (11, 11, 15)  # site.css --bg: #0b0b0f
 MARGIN_Y = 20  # 위아래 여백(px). 정사각/세로 작품 사진이 레터박스로 들어갈 때의 최소 여백.

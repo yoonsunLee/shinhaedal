@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://yoonsunlee.github.io/shinhaedal/sitemap.xml
+Sitemap: https://shinhaedal.com/sitemap.xml

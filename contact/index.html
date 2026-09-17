@@ -8,10 +8,10 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="연락하기 — 신해달 나전칠기 아티스트">
 <meta property="og:description" content="신해달의 작품, 전시, 협업, 라이선싱 문의.">
-<meta property="og:image" content="https://yoonsunlee.github.io/shinhaedal/ip/assets/og_character.jpg">
-<meta property="og:url" content="https://yoonsunlee.github.io/shinhaedal/contact/">
+<meta property="og:image" content="https://shinhaedal.com/ip/assets/og_character.jpg">
+<meta property="og:url" content="https://shinhaedal.com/contact/">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://yoonsunlee.github.io/shinhaedal/contact/">
+<link rel="canonical" href="https://shinhaedal.com/contact/">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
@@ -548,7 +548,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e){
   if(CURRENT_WORK){
     var workTitle = LANG === 'en' ? (CURRENT_WORK.title_en || CURRENT_WORK.title_ko) : (CURRENT_WORK.title_ko || CURRENT_WORK.title_en);
     body += 'Artwork: ' + CURRENT_WORK.id + ' — ' + workTitle + '\n'
-      + 'https://yoonsunlee.github.io/shinhaedal/works/?w=' + encodeURIComponent(CURRENT_WORK.id) + '\n\n';
+      + 'https://shinhaedal.com/works/?w=' + encodeURIComponent(CURRENT_WORK.id) + '\n\n';
   }
   body += message;
   LAST_MAIL_SUBJECT = mailSubject;

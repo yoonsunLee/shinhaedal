@@ -5,15 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>404 — SHIN HAEDAL</title>
 <meta name="robots" content="noindex">
-<link rel="icon" type="image/png" sizes="32x32" href="/shinhaedal/favicon-32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/shinhaedal/favicon-16.png">
-<link rel="apple-touch-icon" href="/shinhaedal/apple-touch-icon.png">
-<link rel="stylesheet" href="/shinhaedal/assets/fonts.css">
-<link rel="stylesheet" href="/shinhaedal/assets/site.css">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/fonts.css">
+<link rel="stylesheet" href="/assets/site.css">
 <style>
   /* 404 page — GitHub Pages는 이 파일을 실제 요청 경로 그대로 서빙하므로
-     (예: /shinhaedal/works/foo → /shinhaedal/404.html), 모든 리소스·링크는
-     상대경로가 아니라 /shinhaedal/ 절대경로를 써야 한다. */
+     (예: /works/foo → /404.html), 모든 리소스·링크는
+     상대경로가 아니라 / 로 시작하는 절대경로를 써야 한다. */
   html,body{height:100%;}
   body{display:flex; flex-direction:column; min-height:100vh;}
 
@@ -65,22 +65,22 @@
 </style>
 </head>
 <body>
-<script src="/shinhaedal/assets/starfield.js"></script>
+<script src="/assets/starfield.js"></script>
 
 <nav>
   <div class="logo-block">
-    <a class="logo" href="/shinhaedal/"><span class="logo-c">ⓒ</span><span class="logo-name">SHIN HAEDAL</span></a>
+    <a class="logo" href="/"><span class="logo-c">ⓒ</span><span class="logo-name">SHIN HAEDAL</span></a>
     <span class="logo-tag" data-i="logo_tag">나전칠기 아티스트</span>
   </div>
   <div class="nav-icons">
     <ul class="nav-menu">
-      <li><a href="/shinhaedal/">Home</a></li>
-      <li><a href="/shinhaedal/about/">About</a></li>
-      <li><a href="/shinhaedal/works/">Works</a></li>
-      <li><a href="/shinhaedal/ip/">IP</a></li>
-      <li><a href="/shinhaedal/press/">Press</a></li>
+      <li><a href="/">Home</a></li>
+      <li><a href="/about/">About</a></li>
+      <li><a href="/works/">Works</a></li>
+      <li><a href="/ip/">IP</a></li>
+      <li><a href="/press/">Press</a></li>
       <li><a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop</a></li>
-      <li><a href="/shinhaedal/contact/">Contact</a></li>
+      <li><a href="/contact/">Contact</a></li>
     </ul>
     <div class="lang" role="group" aria-label="Language">
       <button id="langKo" class="on">KO</button>
@@ -99,13 +99,13 @@
   <div class="nav-overlay" id="navOverlay">
     <button class="icon-btn overlay-close" id="btnMenuClose" aria-label="닫기">✕</button>
     <nav class="overlay-links">
-      <a href="/shinhaedal/">Home</a>
-      <a href="/shinhaedal/about/">About</a>
-      <a href="/shinhaedal/works/">Works</a>
-      <a href="/shinhaedal/ip/">IP</a>
-      <a href="/shinhaedal/press/">Press</a>
+      <a href="/">Home</a>
+      <a href="/about/">About</a>
+      <a href="/works/">Works</a>
+      <a href="/ip/">IP</a>
+      <a href="/press/">Press</a>
       <a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop</a>
-      <a href="/shinhaedal/contact/">Contact</a>
+      <a href="/contact/">Contact</a>
       <a href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener" class="overlay-ig">Instagram ↗</a>
     </nav>
   </div>
@@ -114,15 +114,15 @@
 <main class="notfound">
   <p class="nf-code">404</p>
   <div class="nf-character">
-    <img src="/shinhaedal/ip/assets/hero_face.webp" alt="조개를 안고 있는 얼빵해달" data-i-alt="alt_character">
+    <img src="/ip/assets/hero_face.webp" alt="조개를 안고 있는 얼빵해달" data-i-alt="alt_character">
     <span class="nf-shadow" aria-hidden="true"></span>
   </div>
   <h1 data-i="title">어라, 여기가 아닌가 봐요.</h1>
   <p class="nf-guide" data-i="guide">찾으신 페이지가 없거나 주소가 바뀌었어요.</p>
   <p class="nf-sub" data-i="sub">얼빵해달과 함께 다른 곳으로 가볼까요?</p>
   <div class="nf-links">
-    <a class="nf-link-primary" href="/shinhaedal/works/" data-i="link_primary">작품 보러 가기 →</a>
-    <a class="nf-link-secondary" href="/shinhaedal/" data-i="link_secondary">홈으로 돌아가기 →</a>
+    <a class="nf-link-primary" href="/works/" data-i="link_primary">작품 보러 가기 →</a>
+    <a class="nf-link-secondary" href="/" data-i="link_secondary">홈으로 돌아가기 →</a>
   </div>
 </main>
 
@@ -184,6 +184,6 @@ document.getElementById('langEn').onclick = function(){ applyLang('en'); };
 if(LANG!=='ko') applyLang(LANG, {skipUrl:true});
 </script>
 
-<script src="/shinhaedal/assets/site.js"></script>
+<script src="/assets/site.js"></script>
 </body>
 </html>
