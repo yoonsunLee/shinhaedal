@@ -129,7 +129,8 @@ html.no-hero-arrive .hero-character img{animation:none}
 .pool-copy p{color:#d6e4ff;max-width:420px}
 .pool-label{font:12px/1.9 'Space Mono',monospace;color:#bfd5ff;margin-top:35px;border-left:2px solid #f2a2b9;padding-left:17px}
 .pool-art{position:relative;padding:0 0 70px;max-width:550px}
-.swim-image{width:100%;box-shadow:0 25px 70px #062d8640}
+/* 타일 배경 위에서 '물 위에 띄운 그림'으로 읽히게 그림자를 두 겹(넓게 퍼지는 것 + 가까운 것)으로 */
+.swim-image{width:100%;box-shadow:0 34px 80px rgba(3,28,90,.5),0 10px 24px rgba(3,28,90,.28)}
 .membership{position:absolute;width:46%;right:-5%;bottom:-8px;transform:rotate(9deg);filter:drop-shadow(0 18px 22px #042f7a45)}
 .pool-quote{text-align:center;margin-top:100px;padding-top:65px;border-top:1px solid #ffffff40}
 .pool-quote h2{font-size:clamp(40px,7vw,100px);line-height:1.2;letter-spacing:-.065em;color:#eff7ff}
