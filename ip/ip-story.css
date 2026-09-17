@@ -118,7 +118,9 @@ html.no-hero-arrive .hero-character img{animation:none}
 .delivery-meaning{margin:65px auto 0;text-align:center;max-width:850px;padding:40px 0 0;border-top:1px solid var(--line)}
 .delivery-meaning .eyebrow{font-size:13px;letter-spacing:.07em;color:#8f4761}
 .delivery-meaning p{font-size:clamp(23px,3vw,38px);line-height:1.6;font-weight:600;letter-spacing:-.04em;margin-top:18px}
-.pool{background:#0847c2;color:#fff;position:relative;overflow:hidden;padding-bottom:85px}
+/* 수영장 타일 그림을 깔되, 글자가 있는 쪽은 진한 파랑으로 덮어 흰 글자 대비(약 7:1)를 지킨다.
+   PC는 글자가 왼쪽이라 오른쪽으로 갈수록, 폰은 글자가 위라 아래로 갈수록 타일이 드러난다 */
+.pool{background:linear-gradient(90deg,#0847c2 0%,rgba(8,71,194,.9) 34%,rgba(8,71,194,.42) 62%,rgba(8,71,194,.28) 100%),url('assets/pool-tile-bg.webp') center/cover no-repeat,#0847c2;color:#fff;position:relative;overflow:hidden;padding-bottom:85px}
 .pool-layout{display:grid;grid-template-columns:1fr 1fr;gap:8%;align-items:center}
 .pool-copy .eyebrow{color:#b9d4ff;margin-bottom:35px}
 .pool-copy h2{margin-bottom:28px}
@@ -235,6 +237,7 @@ dialog p{text-align:center;font:12px 'Space Mono',monospace;padding-top:20px}
   .toy-thumbs img{height:130px}
 }
 @media(max-width:580px){
+  .pool{background:linear-gradient(180deg,#0847c2 0%,rgba(8,71,194,.9) 36%,rgba(8,71,194,.38) 56%,rgba(8,71,194,.5) 100%),url('assets/pool-tile-bg.webp') center/cover no-repeat,#0847c2}
   .nav-menu{display:none}
   .lang{gap:3px}
   .hero{height:100svh;min-height:calc(710px + var(--nav-h));max-height:calc(900px + var(--nav-h))}
