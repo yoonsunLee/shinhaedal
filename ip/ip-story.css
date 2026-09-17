@@ -173,11 +173,11 @@ summary::-webkit-details-marker{display:none}
    넘어가는 곳만 그라데이션으로 잇는다. 가운데가 탁한 회색 띠로 보이지 않게 처음엔 천천히, 끝에서 빠르게 밝아진다.
    그라데이션이 캐릭터 이름 글자에 걸리지 않도록 그만큼 아래 여백을 늘렸다 */
 .friends{
-  --fade:200px;
-  padding-bottom:calc(110px + 80px);
+  --fade:320px;
+  padding-bottom:calc(110px + 170px);
   background:
-    linear-gradient(180deg, rgba(234,240,242,0) calc(100% - var(--fade)), rgba(234,240,242,.1) calc(100% - var(--fade) * .72), rgba(234,240,242,.42) calc(100% - var(--fade) * .42), rgba(234,240,242,.84) calc(100% - var(--fade) * .14), #EAF0F2 100%),
-    linear-gradient(rgba(11,20,22,.82), rgba(11,20,22,.82)),
+    linear-gradient(180deg, rgba(234,240,242,0) calc(100% - var(--fade)), rgba(234,240,242,.02) calc(100% - var(--fade) * .8), rgba(234,240,242,.08) calc(100% - var(--fade) * .65), rgba(234,240,242,.2) calc(100% - var(--fade) * .5), rgba(234,240,242,.4) calc(100% - var(--fade) * .35), rgba(234,240,242,.66) calc(100% - var(--fade) * .2), rgba(234,240,242,.88) calc(100% - var(--fade) * .08), #EAF0F2 100%),
+    linear-gradient(180deg, rgba(11,20,22,.82) 0, rgba(11,20,22,.82) calc(100% - var(--fade)), rgba(11,20,22,.5) 100%),
     url('assets/friends-bg.webp') center 26%/cover no-repeat,
     #0B1416;
   color:#BDCBCD;
@@ -205,7 +205,7 @@ summary::-webkit-details-marker{display:none}
 .closing p{font-size:15px;color:#4D6570}
 .contact-link{margin:40px auto 0;display:flex;justify-content:space-between;align-items:center;gap:70px;width:max-content;max-width:100%;font-size:20px;border-bottom:1px solid;padding-bottom:15px;color:#245B73}
 .contact-link span:last-child{font-size:30px}
-footer{display:flex;justify-content:space-between;gap:25px;padding:30px 6%;font:12px/1.6 'Space Mono',monospace;background:var(--paper)}
+footer{display:flex;justify-content:space-between;gap:25px;padding:30px 6%;font:12px/1.6 'Space Mono',monospace;background:#EAF0F2} /* 바로 위 라이선싱과 같은 색으로 이어지게 */
 dialog{border:0;background:#10151bf5;color:white;width:100vw;height:100dvh;max-width:none;max-height:none;margin:0;padding:60px 5vw 25px}
 dialog::backdrop{background:#10151b}
 dialog img{width:100%;height:calc(100% - 45px);object-fit:contain}
@@ -225,7 +225,7 @@ dialog p{text-align:center;font:12px 'Space Mono',monospace;padding-top:20px}
 @media(min-width:1600px){.section{padding-left:max(6vw,calc((100vw - 1380px)/2));padding-right:max(6vw,calc((100vw - 1380px)/2))}}
 @media(max-width:850px){
   .section{padding:75px 6%}
-  .friends{--fade:160px;padding-bottom:calc(75px + 70px)}
+  .friends{--fade:240px;padding-bottom:calc(75px + 130px)}
   .hero{min-height:calc(750px + var(--nav-h));max-height:calc(950px + var(--nav-h))}
   .hero h1{font-size:10vw}
   .hero-character{width:35%;right:8%;bottom:90px}
