@@ -449,7 +449,7 @@ function initWorkInquiry(){
 /* 문의 폼 서버 접수 설정. 두 값이 모두 채워지면 폼에서 바로 보내고(아카이브 저장 + 작가 메일),
    하나라도 비어 있으면 기존처럼 메일 앱으로 이어서 보낸다. 사이트 키는 공개값이다. */
 var CONTACT_API = 'https://nprtlonrdwwsmewrxotl.supabase.co/functions/v1/contact';
-var TURNSTILE_SITEKEY = '';
+var TURNSTILE_SITEKEY = '0x4AAAAAAE6OBv-kN3YvNpVS';
 var DIRECT_SUBMIT = !!(CONTACT_API && TURNSTILE_SITEKEY);
 var turnstileToken = '', turnstileWidget = null;
 
