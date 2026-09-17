@@ -82,15 +82,20 @@
   }
   .statement{
     font-family:'Black Han Sans', sans-serif; font-weight:400;
-    font-size:clamp(38px, 6.6vw, 82px);
+    /* 작품이 먼저 보이고 문구는 그다음에 읽히도록 이전(최대 82px)보다 약 22% 작게 */
+    font-size:clamp(30px, 5.1vw, 64px);
     line-height:1.16;
     margin:0;
     color:var(--ivory);
+    text-wrap:balance; /* 폰에서 두 줄로 나뉠 때 '순서가 다를 뿐, / 깊이는 같습니다.'처럼 고르게 */
     /* 밝은 자개 조각 위에서도 읽히도록. text-shadow는 글자 안 그라디언트를 덮어서 drop-shadow를 쓴다 */
     filter:drop-shadow(0 2px 16px rgba(5,6,10,.7));
   }
   .statement .lead1{
-    font-size:.6em; display:block; margin-bottom:.25em; color:rgba(245,240,230,.78);
+    /* 도입 문장은 차분하게: 핵심 문장의 0.48배(이전보다 약 38% 작게) */
+    font-size:.48em; display:block; color:rgba(245,240,230,.78);
+    /* 두 문장 사이 실제 글자 간격 약 14px: 줄 높이에 들어 있는 여백(글자 크기에 비례)만큼 빼 준다 */
+    margin-bottom:calc(14px - .56em);
   }
   /* 평소엔 아이보리 단색. 페이지가 열릴 때 자개빛이 한 번만 스치고 멈춘다(반복 없음) */
   .statement .accent{
@@ -104,7 +109,6 @@
   }
   @keyframes pearlSweep{ from{ background-position:100% 0; } to{ background-position:0% 0; } }
 
-  .hero-about-cta{display:inline-block; margin-top:28px;}
   .scroll-cue{
     display:flex; align-items:center; gap:8px; margin-top:36px;
     font-family:'Space Mono','Noto Sans KR', monospace; font-size:11px; letter-spacing:1px;
@@ -166,7 +170,7 @@
   .hero-video-mode.theme-light .hv-playpause{background:rgba(255,255,255,.82); color:#171717; border-color:rgba(0,0,0,.15);}
   .hero-video-mode.theme-light .hv-playpause:hover{background:rgba(255,255,255,.95);}
   /* 영상 모드에서는 영상이 이미 시선을 끌기 때문에 문구를 원본 히어로보다 한 단계 낮춘다(과도한 축소는 아님) */
-  .hv-inner .statement{font-size:clamp(28px, 4.4vw, 54px);}
+  .hv-inner .statement{font-size:clamp(22px, 3.4vw, 42px);}
   @media(max-width:720px){
     .hv-inner{padding:0 20px 40px;}
     .hv-meta-row{margin-bottom:16px;}
@@ -589,7 +593,6 @@
 
     <div class="hero-inner">
       <h1 class="statement" data-i="statement"><span class="lead1">쉽게 들어와서 오래 머무는 작업.</span><span class="accent">순서가 다를 뿐, 깊이는 같습니다.</span></h1>
-      <a class="hero-about-cta link-go" href="about/" data-i="hero_about_cta">작가와 작업에 대해 →</a>
       <div class="scroll-cue">SCROLL <span class="arrow">↓</span></div>
     </div>
   </div>
@@ -742,7 +745,6 @@ var I18N = {
     ip_teaser_lede:'SPACED-OUT SEA OTTER',
     ip_teaser_sub:'얼빵해달',
     ip_teaser_cta:'만나러 가기 <span class="cta-arrow">→</span>',
-    hero_about_cta:'작가와 작업에 대해 →',
     hv_view_work:'작품 보기 ↗',
     hv_play:'재생', hv_pause:'일시정지',
     about_teaser_lede:'독해하고, 해석하고, 번역하는 것.<br>저는 법을 읽고 의미를 찾아, 그것을 나전칠기의 언어로 옮깁니다.',
@@ -771,7 +773,6 @@ var I18N = {
     ip_teaser_lede:'SPACED-OUT SEA OTTER',
     ip_teaser_sub:'Eolbbang Haedal',
     ip_teaser_cta:'Say hello <span class="cta-arrow">→</span>',
-    hero_about_cta:'About the artist and the work →',
     hv_view_work:'View work ↗',
     hv_play:'Play', hv_pause:'Pause',
     about_teaser_lede:'To read, interpret, and translate.<br>I read the law, seek out its meaning, and translate it into the language of najeonchilgi.',
