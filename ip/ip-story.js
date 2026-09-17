@@ -59,3 +59,39 @@ document.querySelectorAll('.nav-menu a').forEach(function(a){
   a.textContent = '';
   a.appendChild(span);
 });
+
+/* 첫 화면 얼빵해달: 마우스를 올리고 움직이면 그쪽으로 살짝 기울며 따라온다(PC만).
+   캐릭터 그림에만 걸고 배경은 그대로 둔다. 등장 애니메이션(transform)과 겹치지 않게
+   개별 속성 translate·rotate를 쓴다. 움직임 줄이기 설정이면 끈다. */
+(function(){
+  var wrap = document.querySelector('.hero-character');
+  var img = wrap && wrap.querySelector('img');
+  var shadow = wrap && wrap.querySelector('.character-shadow');
+  if(!img) return;
+  if(!matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var MAX_X = 8, MAX_Y = 5, MAX_TILT = 3, EASE = 0.1;
+  var tx = 0, ty = 0, tr = 0, cx = 0, cy = 0, cr = 0, running = false;
+  function render(){
+    img.style.translate = cx.toFixed(2) + 'px ' + cy.toFixed(2) + 'px';
+    img.style.rotate = cr.toFixed(2) + 'deg';
+    if(shadow) shadow.style.translate = (cx * 0.5).toFixed(2) + 'px 0';
+  }
+  function loop(){
+    cx += (tx - cx) * EASE; cy += (ty - cy) * EASE; cr += (tr - cr) * EASE;
+    if(Math.abs(tx - cx) < 0.03 && Math.abs(ty - cy) < 0.03 && Math.abs(tr - cr) < 0.02){
+      cx = tx; cy = ty; cr = tr; render(); running = false; return;
+    }
+    render();
+    requestAnimationFrame(loop);
+  }
+  function kick(){ if(!running){ running = true; requestAnimationFrame(loop); } }
+  wrap.addEventListener('pointermove', function(e){
+    var r = img.getBoundingClientRect();
+    var nx = Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width / 2)) / (r.width / 2)));
+    var ny = Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height / 2)) / (r.height / 2)));
+    tx = nx * MAX_X; ty = ny * MAX_Y; tr = nx * MAX_TILT;
+    kick();
+  });
+  wrap.addEventListener('pointerleave', function(){ tx = 0; ty = 0; tr = 0; kick(); });
+})();

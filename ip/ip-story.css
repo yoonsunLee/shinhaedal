@@ -96,7 +96,7 @@ body>nav{position:absolute;top:0;left:0;right:0;background:transparent;border-bo
 .title-dot{color:#dc7495}
 .hero-name{font-size:26px;font-weight:700;margin-top:22px;letter-spacing:-.04em}
 .hero-character{position:absolute;width:clamp(250px,29vw,445px);right:10%;bottom:68px;transform:translateY(var(--char-y,0px));z-index:1}
-.hero-character img{position:relative;z-index:1;filter:drop-shadow(4px 12px 6px #58695514);animation:arrive 1.2s .25s both}
+.hero-character img{position:relative;z-index:1;filter:drop-shadow(4px 12px 6px #58695514);animation:arrive 1.2s .25s both;transform-origin:50% 92%} /* 발끝을 축으로 기울게(마우스 반응, ip-story.js) */
 html.no-hero-arrive .hero-character img{animation:none}
 .character-shadow{position:absolute;bottom:-5px;left:16%;width:75%;height:26px;border-radius:50%;background:#786b5940;filter:blur(11px);transform:rotate(-8deg)}
 .hero-note{position:absolute;left:6%;bottom:155px;max-width:380px}
