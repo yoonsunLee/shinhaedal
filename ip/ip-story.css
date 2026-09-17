@@ -1,4 +1,4 @@
-:root{--navy:#123548;--blue:#0649c8;--paper:#fffdf7;--muted:#526d77;--line:#ced5d4;--sweep-teal:#1E93A6;--sweep-violet:#5B4FA6}
+:root{--nav-h:90px;--navy:#123548;--blue:#0649c8;--paper:#fffdf7;--muted:#526d77;--line:#ced5d4;--sweep-teal:#1E93A6;--sweep-violet:#5B4FA6}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:85px}
 body{margin:0;color:var(--navy);background:var(--paper);font-family:'Noto Sans KR',sans-serif;-webkit-font-smoothing:antialiased;-webkit-user-select:none;-moz-user-select:none;user-select:none}
@@ -73,6 +73,9 @@ nav{display:flex;align-items:flex-start;justify-content:space-between;padding:26
    메뉴 패널 안에서는 무시하고 패널 자체 padding(.nav-overlay)만 쓰도록 명시적으로 리셋 */
 .overlay-links{display:flex;flex-direction:column;gap:26px;text-align:left;padding:0;height:auto}
 @media(max-width:560px){ .nav-overlay{width:min(340px,84vw);padding:88px 28px 32px} }
+/* 상단 메뉴는 따로 띠를 두지 않고 해변 그림 위에 얹는다. 그림은 메뉴 뒤까지 이어지고,
+   글자가 읽히도록 맨 위만 종이색으로 옅게 덮었다가 풀어 준다(.hero::before). 메뉴 패널 안 nav에는 걸리지 않게 body > nav로 한정 */
+body>nav{position:absolute;top:0;left:0;right:0;background:transparent;border-bottom:0}
 .overlay-links a{font-family:'Black Han Sans',sans-serif;font-size:26px;color:var(--navy);text-decoration:none}
 .overlay-links .overlay-ig{font-family:'Space Mono','Noto Sans KR',monospace;font-size:13px;color:var(--muted);margin-top:10px}
 .icon-btn{background:none;border:none;color:var(--navy);cursor:pointer;display:flex;align-items:center;justify-content:center;width:44px;height:44px;margin:-12px;opacity:.75;font-family:'Space Mono','Noto Sans KR',monospace;font-size:13px}
@@ -80,13 +83,14 @@ nav{display:flex;align-items:flex-start;justify-content:space-between;padding:26
 .icon-btn.menu-btn{display:none}
 @media(max-width:900px){.nav-menu{display:none}.icon-btn.menu-btn{display:flex}.nav-right{gap:20px}}
 
-.hero{position:relative;isolation:isolate;overflow:hidden;min-height:760px;height:calc(100svh - 90px);max-height:1080px;background:#e7ede0}
+.hero{position:relative;isolation:isolate;overflow:hidden;min-height:calc(760px + var(--nav-h));height:100svh;max-height:calc(1080px + var(--nav-h));background:#e7ede0}
+.hero::before{content:'';position:absolute;left:0;right:0;top:0;height:calc(var(--nav-h) + 90px);background:linear-gradient(to bottom,rgba(255,253,247,.78) 0%,rgba(255,253,247,.5) 45%,rgba(255,253,247,0) 100%);z-index:-1;pointer-events:none}
 /* 해변 → 이야기: 모래색(#FDEABB)과 다음 배경색을 먼저 맞추고 경계만 짧게 푼다.
    해변 그림은 스크롤에 따라 움직이므로 움직이지 않는 쪽(섹션)에 건다 */
 .hero::after{content:'';position:absolute;left:0;right:0;bottom:0;height:36px;background:linear-gradient(to bottom,rgba(253,234,187,0),#fdeabb);z-index:-1;pointer-events:none}
 .story{background:linear-gradient(to bottom,#fdeabb 0,var(--paper) 140px)}
 .beach{position:absolute;inset:-25px;background:url('assets/beach.webp') center 44%/cover;z-index:-2;transform:translateY(var(--shore-y,0px));will-change:transform}
-.hero-inner{height:100%;position:relative;padding:55px 6%}
+.hero-inner{height:100%;position:relative;padding:calc(55px + var(--nav-h)) 6% 55px}
 .hero .eyebrow{margin-bottom:22px}
 .hero h1{font-family:'Noto Sans KR',sans-serif;font-weight:900;font-size:clamp(64px,8.7vw,142px);line-height:.89;letter-spacing:-.05em;position:relative;z-index:2;max-width:1000px}
 .title-dot{color:#dc7495}
@@ -210,7 +214,7 @@ dialog p{text-align:center;font:12px 'Space Mono',monospace;padding-top:20px}
 @media(min-width:1600px){.section{padding-left:max(6vw,calc((100vw - 1380px)/2));padding-right:max(6vw,calc((100vw - 1380px)/2))}}
 @media(max-width:850px){
   .section{padding:75px 6%}
-  .hero{min-height:750px;max-height:950px}
+  .hero{min-height:calc(750px + var(--nav-h));max-height:calc(950px + var(--nav-h))}
   .hero h1{font-size:10vw}
   .hero-character{width:35%;right:8%;bottom:90px}
   .hero-note{max-width:44%}
@@ -226,8 +230,8 @@ dialog p{text-align:center;font:12px 'Space Mono',monospace;padding-top:20px}
 @media(max-width:580px){
   .nav-menu{display:none}
   .lang{gap:3px}
-  .hero{height:calc(100svh - 90px);min-height:710px;max-height:900px}
-  .hero-inner{padding-top:34px}
+  .hero{height:100svh;min-height:calc(710px + var(--nav-h));max-height:calc(900px + var(--nav-h))}
+  .hero-inner{padding-top:calc(34px + var(--nav-h))}
   .hero .eyebrow{font-size:10px;letter-spacing:.075em;margin-bottom:20px}
   .hero h1{font-size:12.5vw;letter-spacing:-.065em;line-height:.96}
   .hero-name{font-size:22px;margin-top:17px}

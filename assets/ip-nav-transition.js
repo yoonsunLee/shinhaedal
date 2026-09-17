@@ -71,16 +71,19 @@
 
       // Pre-render the destination's beach hero once, so the shell reveal shows the same
       // artwork the IP page will show, instead of the page currently underneath.
-      var navH=76;
+      // IP 페이지처럼 해변 그림이 메뉴 뒤까지 이어지고, 맨 위만 종이색으로 옅게 덮는다(ip-story.css .hero::before)
+      var navH=90;
       var scene=document.createElement('canvas');
       scene.width=w; scene.height=h;
       var sc=scene.getContext('2d');
-      sc.fillStyle='#fffdf7'; sc.fillRect(0,0,w,navH);
-      var areaW=w, areaH=Math.max(h-navH,1);
+      var areaW=w, areaH=Math.max(h,1);
       var scale=Math.max(areaW/beachImg.width, areaH/beachImg.height);
       var bw=beachImg.width*scale, bh=beachImg.height*scale;
-      var bx=(areaW-bw)/2, by=navH+(areaH-bh)*0.44;
+      var bx=(areaW-bw)/2, by=(areaH-bh)*0.44;
       sc.drawImage(beachImg,bx,by,bw,bh);
+      var wash=sc.createLinearGradient(0,0,0,navH+90);
+      wash.addColorStop(0,'rgba(255,253,247,.78)'); wash.addColorStop(.45,'rgba(255,253,247,.5)'); wash.addColorStop(1,'rgba(255,253,247,0)');
+      sc.fillStyle=wash; sc.fillRect(0,0,w,navH+90);
 
       var revealLayer=document.createElement('canvas');
       revealLayer.width=w; revealLayer.height=h;
