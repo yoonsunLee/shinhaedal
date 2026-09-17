@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>개인정보 처리방침 — 신해달 나전칠기 아티스트</title>
+<meta name="description" content="신해달 작가 공식 홈페이지의 개인정보 처리방침입니다.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="개인정보 처리방침 — 신해달 나전칠기 아티스트">
+<meta property="og:description" content="신해달 작가 공식 홈페이지의 개인정보 처리방침입니다.">
+<meta property="og:image" content="https://shinhaedal.com/ip/assets/og_character.jpg">
+<meta property="og:url" content="https://shinhaedal.com/privacy/">
+<link rel="canonical" href="https://shinhaedal.com/privacy/">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="stylesheet" href="../assets/fonts.css">
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+  /* 처리방침은 긴 글을 훑어 읽는 문서라, 사이트의 별 배경·광택 없이 단색으로 차분하게 둔다.
+     색과 헤더·푸터는 사이트와 같게 유지한다. */
+  body{background:var(--bg);}
+  .pp{
+    --pp-text:rgba(245,240,230,.78);   /* 긴 본문용: --ivory-dim보다 한 단계 밝게 */
+    max-width:760px; margin:0 auto 0 max(0px, calc((100% - 1180px) / 2)); padding:56px 32px 96px;
+  }
+  .pp[hidden]{display:none;}
+  .pp h1{font-family:'Noto Sans KR',sans-serif; font-weight:700; font-size:28px; line-height:1.3; letter-spacing:-.01em; margin:0 0 10px; color:var(--ivory);}
+  .pp-meta{font-size:13px; color:var(--ivory-muted); margin:0 0 24px;}
+  .pp-lead{font-size:16px; line-height:1.8; color:var(--pp-text); margin:0 0 28px;}
+
+  .pp-toc{margin:0; padding:20px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); list-style:none; columns:2; column-gap:28px;}
+  .pp-toc li{break-inside:avoid; font-size:15px; line-height:1.5; padding:5px 0;}
+  .pp-toc a{color:var(--pp-text); text-decoration:none;}
+  .pp-toc a:hover, .pp-toc a:focus-visible{color:var(--ivory); text-decoration:underline; text-underline-offset:4px;}
+  .pp-toc .n{color:var(--ivory-muted); display:inline-block; min-width:2.2em;}
+
+  .pp section{padding:36px 0 0; scroll-margin-top:24px;}
+  .pp h2{font-family:'Noto Sans KR',sans-serif; font-weight:700; font-size:19px; line-height:1.5; color:var(--ivory); margin:0 0 12px; display:flex; gap:10px; align-items:baseline;}
+  .pp h2 .n{font-weight:400; font-size:15px; color:var(--ivory-muted); flex:none;}
+  .pp p, .pp li{font-size:16px; line-height:1.8; color:var(--pp-text);}
+  .pp p{margin:0 0 12px;}
+  .pp section ul{margin:0 0 12px; padding-left:1.1em;}
+  .pp section li{margin:0 0 8px;}
+  .pp section li::marker{color:var(--ivory-muted);}
+  .pp strong{color:var(--ivory); font-weight:600;}
+  .pp a{color:var(--ivory); text-decoration:underline; text-underline-offset:4px; text-decoration-thickness:1px; overflow-wrap:anywhere;}
+  .pp .note{font-size:15px; color:var(--ivory-muted);}
+
+  /* 표는 폰에서 가로로만 넘기고 페이지 전체는 밀리지 않게 */
+  .pp-table{overflow-x:auto; margin:4px 0 14px; -webkit-overflow-scrolling:touch;}
+  .pp-table table{width:100%; border-collapse:collapse; min-width:520px;}
+  .pp-table th{font-weight:400; font-size:13px; color:var(--ivory-muted); text-align:left; padding:0 16px 10px 0; border-bottom:1px solid var(--line); white-space:nowrap;}
+  .pp-table td{font-size:15px; line-height:1.7; color:var(--pp-text); vertical-align:top; padding:12px 16px 12px 0; border-bottom:1px solid var(--line);}
+  .pp-table td:first-child{color:var(--ivory); white-space:nowrap;}
+
+  /* 국외 이전: 받는 곳마다 항목이 많아 표 대신 한 곳씩 묶어서 보여준다 */
+  .pp-transfer{border:1px solid var(--line); border-radius:8px; padding:18px 20px; margin:0 0 12px;}
+  .pp-transfer h3{font-family:'Noto Sans KR',sans-serif; font-weight:600; font-size:16px; color:var(--ivory); margin:0 0 12px;}
+  .pp-transfer dl{display:grid; grid-template-columns:132px 1fr; gap:10px 16px; margin:0;}
+  html[lang="en"] .pp-transfer dl{grid-template-columns:150px 1fr;}
+  .pp-transfer dt{font-size:14px; color:var(--ivory-muted); padding-top:2px;}
+  .pp-transfer dd{margin:0; font-size:15px; line-height:1.7; color:var(--pp-text);}
+
+  .pp-history{margin-top:40px; padding-top:24px; border-top:1px solid var(--line);}
+
+  @media(max-width:720px){
+    .pp{padding:40px 24px 72px;}
+    .pp-toc{columns:1;}
+    .pp-transfer{padding:16px;}
+    .pp-transfer dl, html[lang="en"] .pp-transfer dl{grid-template-columns:1fr; gap:2px;}
+    .pp-transfer dd{margin-bottom:10px;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo-block">
+    <a class="logo" href="../"><span class="logo-c">ⓒ</span><span class="logo-name">SHIN HAEDAL</span></a>
+    <span class="logo-tag" data-i="logo_tag">나전칠기 아티스트</span>
+  </div>
+  <div class="nav-icons">
+    <ul class="nav-menu">
+      <li><a href="../">Home</a></li>
+      <li><a href="../about/">About</a></li>
+      <li><a href="../works/">Works</a></li>
+      <li><a href="../ip/">IP</a></li>
+      <li><a href="../press/">Press</a></li>
+      <li><a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop</a></li>
+      <li><a href="../contact/">Contact</a></li>
+    </ul>
+    <div class="lang" role="group" aria-label="Language">
+      <button id="langKo" class="on">KO</button>
+      <span class="lang-sep" aria-hidden="true">/</span>
+      <button id="langEn">EN</button>
+    </div>
+    <a class="icon-btn" aria-label="인스타그램" href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.4"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor"/></svg>
+    </a>
+    <button class="icon-btn menu-btn" id="btnMenu" aria-label="메뉴" aria-expanded="false">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 6H17M3 10H17M3 14H17" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+
+  <div class="nav-backdrop" id="navBackdrop"></div>
+  <div class="nav-overlay" id="navOverlay">
+    <button class="icon-btn overlay-close" id="btnMenuClose" aria-label="닫기">✕</button>
+    <nav class="overlay-links">
+      <a href="../">Home</a>
+      <a href="../about/">About</a>
+      <a href="../works/">Works</a>
+      <a href="../ip/">IP</a>
+      <a href="../press/">Press</a>
+      <a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop</a>
+      <a href="../contact/">Contact</a>
+      <a href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener" class="overlay-ig">Instagram ↗</a>
+    </nav>
+  </div>
+</nav>
+
+<!-- ================= 국문 ================= -->
+<article class="pp" id="ppKo" lang="ko">
+  <h1>개인정보 처리방침</h1>
+  <p class="pp-meta">시행일 2026. 9. 18.</p>
+  <p class="pp-lead">해달자개(이하 "운영자")는 신해달 작가 공식 홈페이지(https://shinhaedal.com, 이하 "홈페이지")에서 처리하는 개인정보를 「개인정보 보호법」에 따라 보호하고, 관련 고충을 원활하게 처리하기 위해 다음과 같이 개인정보 처리방침을 둡니다.</p>
+
+  <ol class="pp-toc" aria-label="목차">
+    <li><a href="#ko-1"><span class="n">1</span>처리 목적</a></li>
+    <li><a href="#ko-2"><span class="n">2</span>처리하는 항목</a></li>
+    <li><a href="#ko-3"><span class="n">3</span>처리의 법적 근거</a></li>
+    <li><a href="#ko-4"><span class="n">4</span>보유 및 이용 기간</a></li>
+    <li><a href="#ko-5"><span class="n">5</span>파기 절차 및 방법</a></li>
+    <li><a href="#ko-6"><span class="n">6</span>제3자 제공</a></li>
+    <li><a href="#ko-7"><span class="n">7</span>처리의 위탁</a></li>
+    <li><a href="#ko-8"><span class="n">8</span>국외 이전</a></li>
+    <li><a href="#ko-9"><span class="n">9</span>정보주체의 권리와 행사 방법</a></li>
+    <li><a href="#ko-10"><span class="n">10</span>안전성 확보조치</a></li>
+    <li><a href="#ko-11"><span class="n">11</span>자동 수집 장치 및 외부 서비스</a></li>
+    <li><a href="#ko-12"><span class="n">12</span>만 14세 미만 아동</a></li>
+    <li><a href="#ko-13"><span class="n">13</span>개인정보 보호책임자</a></li>
+    <li><a href="#ko-14"><span class="n">14</span>시행일 및 변경 이력</a></li>
+  </ol>
+
+  <section id="ko-1">
+    <h2><span class="n">1</span>개인정보의 처리 목적</h2>
+    <p>운영자는 홈페이지 문의 폼으로 받은 문의(작품 소장, 전시, 협업, 라이선싱, 기타)를 확인하고 회신하기 위해서만 개인정보를 처리합니다. 같은 곳에서 짧은 시간에 반복되는 자동 등록(스팸)을 막는 데에도 필요한 범위에서 처리합니다. 전시 소식이나 홍보 메일 발송에는 이용하지 않습니다.</p>
+  </section>
+
+  <section id="ko-2">
+    <h2><span class="n">2</span>처리하는 개인정보 항목</h2>
+    <div class="pp-table"><table>
+      <thead><tr><th>구분</th><th>항목</th></tr></thead>
+      <tbody>
+        <tr><td>문의 시 직접 입력</td><td>성함 또는 소속, 이메일 주소, 문의 유형, 문의 제목, 문의 내용, (작품 문의일 때) 선택한 작품 번호</td></tr>
+        <tr><td>접수 과정에서 자동 생성</td><td>접수 일시, 작성 언어(국문/영문), 처리 상태·처리 완료 일시·담당자 메모, 알림 메일 발송 여부, 동의 일시·동의한 고지문 버전, 반복 접수 확인용 <strong>IP 주소의 해시값</strong>(IP 주소 원문은 저장하지 않습니다)</td></tr>
+        <tr><td>자동 등록 방지 확인 시</td><td>접속 IP 주소, 브라우저 정보 등 — Cloudflare Turnstile이 확인에만 사용하며 운영자의 문의 저장소에는 저장되지 않습니다</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">문의 내용에는 주민등록번호, 계좌번호, 건강 정보 등 필요 이상의 개인정보를 적지 말아 주세요.</p>
+  </section>
+
+  <section id="ko-3">
+    <h2><span class="n">3</span>처리의 법적 근거</h2>
+    <p>정보주체의 동의(「개인정보 보호법」 제15조 제1항 제1호)를 받아 처리합니다. 국외 이전은 별도 동의(같은 법 제28조의8 제1항 제1호)를 받습니다(<a href="#ko-8">8항</a>).</p>
+  </section>
+
+  <section id="ko-4">
+    <h2><span class="n">4</span>보유 및 이용 기간</h2>
+    <ul>
+      <li>문의 기록은 <strong>문의 처리 완료 후 1년</strong> 동안 보관한 뒤 파기합니다.</li>
+      <li>삭제를 요청하시거나 동의를 철회하시면 지체 없이 파기합니다.</li>
+      <li>문의가 계약으로 이어진 경우, 계약서 등 관련 서류는 문의 기록과 별도로 관계 법령이 정한 기간 동안 보관합니다.</li>
+    </ul>
+  </section>
+
+  <section id="ko-5">
+    <h2><span class="n">5</span>파기 절차 및 방법</h2>
+    <ul>
+      <li>운영자는 매월 1회 보관기간이 지난 문의를 확인하고 지체 없이 파기합니다.</li>
+      <li>문의 저장소(데이터베이스)의 기록은 복구할 수 없도록 삭제합니다.</li>
+      <li>운영자 메일함으로 받은 문의 알림 메일도 같은 시기에 삭제합니다.</li>
+      <li>메일 발송업체(Resend)에 남는 메일 내용·전송 기록은 Resend가 모든 요금제에 공통으로 적용하는 보관기간 <strong>30일</strong>이 지나면 자동으로 삭제됩니다.</li>
+    </ul>
+  </section>
+
+  <section id="ko-6">
+    <h2><span class="n">6</span>개인정보의 제3자 제공</h2>
+    <p>운영자는 문의로 받은 개인정보를 제3자에게 제공하지 않습니다. 다만 법률에 특별한 규정이 있는 경우는 예외로 합니다.</p>
+  </section>
+
+  <section id="ko-7">
+    <h2><span class="n">7</span>개인정보 처리의 위탁</h2>
+    <div class="pp-table"><table>
+      <thead><tr><th>수탁자</th><th>위탁 업무</th><th>처리 위치</th></tr></thead>
+      <tbody>
+        <tr><td>Supabase, Inc.</td><td>문의 접수 서버 운영, 문의 기록 저장</td><td>대한민국(서울 리전)</td></tr>
+        <tr><td>Plus Five Five, Inc.<br>(서비스명 Resend)</td><td>운영자에게 보내는 문의 알림 메일 발송</td><td>미국 (<a href="#ko-8">8항</a>)</td></tr>
+        <tr><td>Cloudflare, Inc.</td><td>문의 폼 자동 등록 방지 확인(Turnstile)</td><td>미국·유럽경제지역 등 (<a href="#ko-8">8항</a>)</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="ko-8">
+    <h2><span class="n">8</span>개인정보의 국외 이전</h2>
+    <p>문의 폼을 이용하시면 아래와 같이 개인정보가 국외로 이전됩니다. 이전은 문의 폼에서 받는 <strong>국외 이전 동의</strong>에 따라 이루어집니다(「개인정보 보호법」 제28조의8 제1항 제1호).</p>
+    <div class="pp-transfer">
+      <h3>Plus Five Five, Inc. (서비스명 Resend)</h3>
+      <dl>
+        <dt>연락처</dt><dd><a href="mailto:support@resend.com">support@resend.com</a></dd>
+        <dt>이전 국가</dt><dd>미국</dd>
+        <dt>이전 항목</dt><dd>성함·소속, 이메일, 문의 유형·제목·내용, 작품 번호</dd>
+        <dt>이전 시기·방법</dt><dd>문의 접수 직후, 알림 메일을 보낼 때 암호화된 네트워크로 전송</dd>
+        <dt>이용 목적</dt><dd>운영자에게 문의 알림 메일 발송</dd>
+        <dt>보유·이용 기간</dt><dd>발송 후 30일 — Resend가 모든 요금제에 공통 적용하는 이메일 데이터(내용·전송 기록) 보관기간</dd>
+      </dl>
+    </div>
+    <div class="pp-transfer">
+      <h3>Cloudflare, Inc.</h3>
+      <dl>
+        <dt>연락처</dt><dd><a href="mailto:privacyquestions@cloudflare.com">privacyquestions@cloudflare.com</a></dd>
+        <dt>이전 국가</dt><dd>미국·유럽경제지역(Cloudflare가 주로 저장하는 곳) 및 Cloudflare가 운영하는 그 밖의 국가</dd>
+        <dt>이전 항목</dt><dd>접속 IP 주소, 브라우저 정보(User-Agent), TLS 지문, 사이트 키와 접속한 주소</dd>
+        <dt>이전 시기·방법</dt><dd>문의 폼에서 두 가지 동의를 선택한 뒤 자동 등록 방지 확인이 시작될 때, 암호화된 네트워크로 전송</dd>
+        <dt>이용 목적</dt><dd>자동 등록(스팸) 방지 확인</dd>
+        <dt>보유·이용 기간</dt><dd>Cloudflare가 Turnstile에 대해 별도의 보관기간을 공개하지 않습니다. Cloudflare 개인정보 처리방침에 따라 수집 목적에 필요한 기간 동안 보관하며, 기간을 확인하려면 위 연락처나 dpo@cloudflare.com으로 문의할 수 있습니다.</dd>
+      </dl>
+    </div>
+    <p><strong>이전 거부 방법·절차와 그 효과</strong>: 문의 폼의 국외 이전 동의란을 선택하지 않으시면 국외 이전은 이루어지지 않습니다. 이 경우 문의 폼으로는 문의를 접수할 수 없으나, <a href="mailto:contact@shinhaedal.com">contact@shinhaedal.com</a> 으로 직접 이메일을 보내시면 같은 내용으로 확인하고 회신해 드립니다. 이미 하신 동의는 같은 주소로 언제든지 철회하실 수 있고, 철회 이후에는 해당 문의 기록을 지체 없이 파기합니다.</p>
+  </section>
+
+  <section id="ko-9">
+    <h2><span class="n">9</span>정보주체의 권리와 행사 방법</h2>
+    <ul>
+      <li>언제든지 자신의 개인정보 열람, 정정·삭제, 처리정지를 요구하거나 동의를 철회할 수 있습니다.</li>
+      <li>열람·정정·삭제·처리정지 요구와 동의 철회는 <a href="mailto:contact@shinhaedal.com">contact@shinhaedal.com</a> 에서 접수·처리합니다. 본인 확인 후 10일 이내에 조치하고 결과를 알려드립니다.</li>
+      <li>법정대리인이나 위임을 받은 사람을 통해서도 요청할 수 있으며, 이 경우 위임장을 받습니다.</li>
+      <li>법령에 따라 열람·처리정지가 제한되거나 보관 의무가 있어 삭제할 수 없는 경우에는 그 사유를 알려드립니다.</li>
+    </ul>
+  </section>
+
+  <section id="ko-10">
+    <h2><span class="n">10</span>개인정보의 안전성 확보조치</h2>
+    <ul>
+      <li>홈페이지와 문의 접수 서버의 모든 통신을 HTTPS로 암호화</li>
+      <li>문의 기록은 지정된 관리자 계정만 열람·수정·삭제할 수 있고, 관리자는 2단계 인증으로 로그인</li>
+      <li>관리자 계정 신규 가입 차단, 계정은 사람마다 따로 발급</li>
+      <li>관리자 접속·처리 기록을 1년 이상 보관하고 월 1회 점검</li>
+      <li>접수 서버에서 입력값 검증, 자동 등록 방지 확인, 반복 접수 제한</li>
+      <li>반복 접수 확인에는 IP 주소 원문 대신 복원할 수 없는 해시값만 저장</li>
+      <li>서버 오류 기록에는 문의 내용·연락처를 남기지 않음</li>
+    </ul>
+  </section>
+
+  <section id="ko-11">
+    <h2><span class="n">11</span>자동 수집 장치 및 외부 서비스</h2>
+    <ul>
+      <li>홈페이지는 방문자를 분석하거나 광고를 위해 추적하는 쿠키·도구를 사용하지 않습니다.</li>
+      <li>언어 선택(국문/영문)을 기억하기 위해 브라우저 저장공간(localStorage)에 설정값만 저장합니다. 이 값으로 개인을 식별하지 않으며, 브라우저 설정에서 삭제할 수 있습니다.</li>
+      <li>문의 폼에서는 두 가지 동의를 선택한 뒤에 자동 등록 방지를 위한 Cloudflare Turnstile이 작동합니다(<a href="#ko-8">8항</a>).</li>
+      <li>작품 영상 중 YouTube 영상은 방문자가 재생을 선택했을 때만 YouTube(youtube-nocookie.com) 플레이어를 불러오며, 재생 시 YouTube의 개인정보 처리방침이 적용됩니다.</li>
+      <li>홈페이지는 GitHub Pages로 제공되며, GitHub은 보안을 위해 방문자의 IP 주소를 기록합니다. 이 기록은 GitHub이 자체 방침에 따라 관리하며 운영자는 받지 않습니다.</li>
+    </ul>
+  </section>
+
+  <section id="ko-12">
+    <h2><span class="n">12</span>만 14세 미만 아동</h2>
+    <p>운영자는 만 14세 미만 아동의 개인정보를 수집하지 않습니다. 만 14세 미만 아동은 문의 폼을 이용하지 마시고 법정대리인을 통해 문의해 주세요. 법정대리인의 동의 없이 아동의 개인정보가 접수된 사실을 알게 되면 지체 없이 파기합니다.</p>
+  </section>
+
+  <section id="ko-13">
+    <h2><span class="n">13</span>개인정보 보호책임자</h2>
+    <ul>
+      <li>개인정보 보호책임자: 신다혜 (대표)</li>
+      <li>연락처: <a href="mailto:contact@shinhaedal.com">contact@shinhaedal.com</a></li>
+    </ul>
+    <p>개인정보 침해에 대한 신고·상담은 아래 기관에도 하실 수 있습니다.</p>
+    <ul>
+      <li>개인정보침해신고센터 (privacy.kisa.or.kr / 국번 없이 118)</li>
+      <li>개인정보분쟁조정위원회 (www.kopico.go.kr / 1833-6972)</li>
+      <li>대검찰청 (www.spo.go.kr / 국번 없이 1301)</li>
+      <li>경찰청 (ecrm.police.go.kr / 국번 없이 182)</li>
+    </ul>
+  </section>
+
+  <section id="ko-14" class="pp-history">
+    <h2><span class="n">14</span>시행일 및 변경 이력</h2>
+    <ul>
+      <li>이 처리방침은 2026년 9월 18일부터 적용됩니다.</li>
+      <li>내용을 추가·삭제·수정할 때에는 시행 7일 전부터 이 페이지에 변경 내용과 시행일을 함께 올립니다. 정보주체의 권리에 중대한 영향을 주는 변경은 시행 30일 전부터 알리고, 동의가 필요한 변경은 다시 동의를 받습니다.</li>
+      <li>2026. 9. 18. 최초 제정</li>
+    </ul>
+  </section>
+</article>
+
+<!-- ================= English ================= -->
+<article class="pp" id="ppEn" lang="en" hidden>
+  <h1>Privacy Policy</h1>
+  <p class="pp-meta">Effective September 18, 2026</p>
+  <p class="pp-lead">Haedaljagae (해달자개, the "Operator") sets out this Privacy Policy to protect personal information processed on the official website of the artist Shin Haedal (https://shinhaedal.com, the "Website") under the Personal Information Protection Act of Korea (PIPA), and to handle related concerns smoothly.</p>
+
+  <ol class="pp-toc" aria-label="Contents">
+    <li><a href="#en-1"><span class="n">1</span>Purposes</a></li>
+    <li><a href="#en-2"><span class="n">2</span>Information processed</a></li>
+    <li><a href="#en-3"><span class="n">3</span>Legal basis</a></li>
+    <li><a href="#en-4"><span class="n">4</span>Retention period</a></li>
+    <li><a href="#en-5"><span class="n">5</span>Destruction</a></li>
+    <li><a href="#en-6"><span class="n">6</span>Provision to third parties</a></li>
+    <li><a href="#en-7"><span class="n">7</span>Outsourcing of processing</a></li>
+    <li><a href="#en-8"><span class="n">8</span>Transfer outside Korea</a></li>
+    <li><a href="#en-9"><span class="n">9</span>Your rights</a></li>
+    <li><a href="#en-10"><span class="n">10</span>Security measures</a></li>
+    <li><a href="#en-11"><span class="n">11</span>Automatic collection and external services</a></li>
+    <li><a href="#en-12"><span class="n">12</span>Children under 14</a></li>
+    <li><a href="#en-13"><span class="n">13</span>Privacy officer</a></li>
+    <li><a href="#en-14"><span class="n">14</span>Effective date and history</a></li>
+  </ol>
+
+  <section id="en-1">
+    <h2><span class="n">1</span>Purposes</h2>
+    <p>The Operator processes personal information only to review and reply to inquiries received through the Website's contact form (artwork acquisition, exhibition, collaboration, licensing, other). It is also processed, to the extent necessary, to block automated or repeated submissions (spam) from the same source within a short time. It is not used for exhibition news or promotional emails.</p>
+  </section>
+
+  <section id="en-2">
+    <h2><span class="n">2</span>Information processed</h2>
+    <div class="pp-table"><table>
+      <thead><tr><th>Category</th><th>Items</th></tr></thead>
+      <tbody>
+        <tr><td>Entered by you</td><td>Name or organization, email address, inquiry type, subject, message, selected artwork number (artwork inquiries only)</td></tr>
+        <tr><td>Generated during submission</td><td>Date and time received, page language (Korean/English), handling status, date handling was completed and staff notes, whether the notification email was sent, date of consent and version of the notice you agreed to, a <strong>hash of your IP address</strong> used to check repeated submissions (the IP address itself is not stored)</td></tr>
+        <tr><td>During the bot check</td><td>IP address, browser information, etc. — used by Cloudflare Turnstile only for the check and not stored in the Operator's inquiry database</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">Please do not include unnecessary personal information such as national ID numbers, bank account numbers or health information in your message.</p>
+  </section>
+
+  <section id="en-3">
+    <h2><span class="n">3</span>Legal basis</h2>
+    <p>Your consent (PIPA Article 15(1)1). Transfers outside Korea are based on separate consent (PIPA Article 28-8(1)1) — see <a href="#en-8">Section 8</a>.</p>
+  </section>
+
+  <section id="en-4">
+    <h2><span class="n">4</span>Retention period</h2>
+    <ul>
+      <li>Inquiry records are kept for <strong>one year after handling of the inquiry is completed</strong>, then destroyed.</li>
+      <li>If you ask for deletion or withdraw your consent, your information is destroyed without delay.</li>
+      <li>If an inquiry leads to a contract, contract documents are kept separately from inquiry records for the period required by applicable laws.</li>
+    </ul>
+  </section>
+
+  <section id="en-5">
+    <h2><span class="n">5</span>Destruction procedure and method</h2>
+    <ul>
+      <li>Once a month, the Operator checks for inquiries whose retention period has ended and destroys them without delay.</li>
+      <li>Records in the inquiry database are deleted so they cannot be recovered.</li>
+      <li>Inquiry notification emails in the Operator's mailbox are deleted at the same time.</li>
+      <li>Email content and sending records held by the email provider (Resend) are deleted automatically after <strong>30 days</strong>, the retention period Resend applies to all of its plans.</li>
+    </ul>
+  </section>
+
+  <section id="en-6">
+    <h2><span class="n">6</span>Provision to third parties</h2>
+    <p>The Operator does not provide personal information received through inquiries to third parties, except where a law specifically requires it.</p>
+  </section>
+
+  <section id="en-7">
+    <h2><span class="n">7</span>Outsourcing of processing</h2>
+    <div class="pp-table"><table>
+      <thead><tr><th>Processor</th><th>Outsourced work</th><th>Where processed</th></tr></thead>
+      <tbody>
+        <tr><td>Supabase, Inc.</td><td>Running the inquiry submission server and storing inquiry records</td><td>Republic of Korea (Seoul region)</td></tr>
+        <tr><td>Plus Five Five, Inc.<br>(Resend)</td><td>Sending inquiry notification emails to the Operator</td><td>United States (<a href="#en-8">Section 8</a>)</td></tr>
+        <tr><td>Cloudflare, Inc.</td><td>Bot check on the contact form (Turnstile)</td><td>United States, EEA and other countries (<a href="#en-8">Section 8</a>)</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="en-8">
+    <h2><span class="n">8</span>Transfer of personal information outside Korea</h2>
+    <p>When you use the contact form, personal information is transferred outside Korea as follows. The transfer takes place with your <strong>consent to transfer outside Korea</strong> given on the form (PIPA Article 28-8(1)1).</p>
+    <div class="pp-transfer">
+      <h3>Plus Five Five, Inc. (Resend)</h3>
+      <dl>
+        <dt>Contact</dt><dd><a href="mailto:support@resend.com">support@resend.com</a></dd>
+        <dt>Country</dt><dd>United States</dd>
+        <dt>Items</dt><dd>Name/organization, email, inquiry type, subject, message, artwork number</dd>
+        <dt>When and how</dt><dd>Right after submission, sent over an encrypted network when the notification email goes out</dd>
+        <dt>Purpose</dt><dd>Sending the inquiry notification email to the Operator</dd>
+        <dt>Retention</dt><dd>30 days after sending — the retention period Resend applies to email data (content and sending records) on all of its plans</dd>
+      </dl>
+    </div>
+    <div class="pp-transfer">
+      <h3>Cloudflare, Inc.</h3>
+      <dl>
+        <dt>Contact</dt><dd><a href="mailto:privacyquestions@cloudflare.com">privacyquestions@cloudflare.com</a></dd>
+        <dt>Country</dt><dd>United States and the European Economic Area (where Cloudflare primarily stores data), and other countries where Cloudflare operates</dd>
+        <dt>Items</dt><dd>IP address, browser information (User-Agent), TLS fingerprint, site key and the address you visited</dd>
+        <dt>When and how</dt><dd>When the bot check starts after you tick both consent boxes on the form, sent over an encrypted network</dd>
+        <dt>Purpose</dt><dd>Bot check against automated submissions (spam)</dd>
+        <dt>Retention</dt><dd>Cloudflare publishes no specific retention period for Turnstile. Under its privacy policy the data is kept as long as needed for the purpose; you can ask about the period at the contact above or dpo@cloudflare.com.</dd>
+      </dl>
+    </div>
+    <p><strong>How to refuse the transfer and what happens if you do</strong>: if you leave the transfer consent box on the contact form unticked, no transfer takes place. You then cannot submit the form, but you can email <a href="mailto:contact@shinhaedal.com">contact@shinhaedal.com</a> directly and we will review and reply just the same. You may withdraw a consent you have already given at the same address at any time, and we destroy the related inquiry record without delay.</p>
+  </section>
+
+  <section id="en-9">
+    <h2><span class="n">9</span>Your rights and how to exercise them</h2>
+    <ul>
+      <li>You may at any time ask to access, correct, delete or suspend processing of your personal information, or withdraw your consent.</li>
+      <li>Requests to access, correct, delete or suspend processing, and withdrawals of consent, are received and handled at <a href="mailto:contact@shinhaedal.com">contact@shinhaedal.com</a>. We verify your identity, act within 10 days, and tell you the result.</li>
+      <li>A legal representative or a person you authorize may also make the request; in that case we ask for a letter of authorization.</li>
+      <li>If access or suspension is restricted by law, or information cannot be deleted because the law requires keeping it, we will tell you why.</li>
+    </ul>
+  </section>
+
+  <section id="en-10">
+    <h2><span class="n">10</span>Security measures</h2>
+    <ul>
+      <li>All communication with the Website and the submission server is encrypted with HTTPS</li>
+      <li>Only designated administrator accounts can view, edit or delete inquiry records, and administrators log in with two-step authentication</li>
+      <li>New administrator sign-ups are disabled, and each person has a separate account</li>
+      <li>Administrator access and handling records are kept for at least one year and reviewed monthly</li>
+      <li>The submission server validates input, runs a bot check and limits repeated submissions</li>
+      <li>Repeated submissions are checked using a one-way hash instead of the IP address itself</li>
+      <li>Server error logs do not record message content or contact details</li>
+    </ul>
+  </section>
+
+  <section id="en-11">
+    <h2><span class="n">11</span>Automatic collection tools and external services</h2>
+    <ul>
+      <li>The Website does not use cookies or tools that track visitors for analytics or advertising.</li>
+      <li>To remember your language choice (Korean/English), only that setting is saved in your browser storage (localStorage). It is not used to identify you, and you can delete it in your browser settings.</li>
+      <li>Cloudflare Turnstile runs on the contact form, after you tick both consent boxes, to block automated submissions (<a href="#en-8">Section 8</a>).</li>
+      <li>For YouTube videos among the artwork videos, the YouTube player (youtube-nocookie.com) loads only when you choose to play a video, and YouTube's privacy policy applies during playback.</li>
+      <li>The Website is served by GitHub Pages, and GitHub logs visitors' IP addresses for security. GitHub manages these logs under its own policy; the Operator does not receive them.</li>
+    </ul>
+  </section>
+
+  <section id="en-12">
+    <h2><span class="n">12</span>Children under 14</h2>
+    <p>The Operator does not collect personal information from children under 14. If you are under 14, please do not use the contact form; ask your legal representative to contact us instead. If we learn that a child's personal information has been submitted without that consent, we destroy it without delay.</p>
+  </section>
+
+  <section id="en-13">
+    <h2><span class="n">13</span>Privacy officer</h2>
+    <ul>
+      <li>Privacy officer: Shin Dahye (Representative)</li>
+      <li>Contact: <a href="mailto:contact@shinhaedal.com">contact@shinhaedal.com</a></li>
+    </ul>
+    <p>You may also report or seek advice about privacy infringement from:</p>
+    <ul>
+      <li>Personal Information Infringement Report Center (privacy.kisa.or.kr / 118 in Korea)</li>
+      <li>Personal Information Dispute Mediation Committee (www.kopico.go.kr / 1833-6972)</li>
+      <li>Supreme Prosecutors' Office (www.spo.go.kr / 1301 in Korea)</li>
+      <li>Korean National Police Agency (ecrm.police.go.kr / 182 in Korea)</li>
+    </ul>
+  </section>
+
+  <section id="en-14" class="pp-history">
+    <h2><span class="n">14</span>Effective date and history</h2>
+    <ul>
+      <li>This Policy applies from September 18, 2026.</li>
+      <li>When content is added, removed or changed, the change and its effective date are posted on this page at least 7 days in advance — at least 30 days in advance for changes that materially affect your rights — and we ask for consent again where consent is required.</li>
+      <li>September 18, 2026: first version</li>
+    </ul>
+    <p class="note">This English version is provided for convenience. If it differs from the Korean version, the Korean version prevails.</p>
+  </section>
+</article>
+
+<footer>
+  <span>© SHIN HAEDAL &nbsp;&nbsp;&nbsp;&nbsp; All rights reserved.<a class="ft-privacy" href="./" aria-current="page"><span class="ft-ko">개인정보 처리방침</span><span class="ft-en">Privacy Policy</span></a></span>
+  <a href="#">BACK TO TOP ↑</a>
+</footer>
+
+<script>
+var I18N = {
+  ko: { logo_tag:'나전칠기 아티스트', page_title:'개인정보 처리방침 — 신해달 나전칠기 아티스트' },
+  en: { logo_tag:'Najeonchilgi Artist', page_title:'Privacy Policy — Shin Haedal, Najeonchilgi Artist' }
+};
+var LANG = 'ko';
+try{
+  var urlLang = new URLSearchParams(location.search).get('lang');
+  if(urlLang === 'en' || urlLang === 'ko') LANG = urlLang;
+  else if(localStorage.getItem('site_lang')==='en') LANG = 'en';
+}catch(e){}
+
+function applyLang(l, opts){
+  opts = opts || {};
+  LANG = l;
+  try{ localStorage.setItem('site_lang', l); }catch(e){}
+  if(!opts.skipUrl){
+    try{
+      var url = new URL(location.href);
+      url.searchParams.set('lang', l);
+      url.hash = '';
+      history.replaceState(null, '', url);
+    }catch(e){}
+  }
+  document.documentElement.lang = l;
+  document.title = I18N[l].page_title;
+  document.querySelectorAll('[data-i]').forEach(function(el){
+    var v = I18N[l][el.dataset.i];
+    if(v!==undefined) el.innerHTML = v;
+  });
+  document.getElementById('ppKo').hidden = l !== 'ko';
+  document.getElementById('ppEn').hidden = l !== 'en';
+  document.getElementById('langKo').classList.toggle('on', l==='ko');
+  document.getElementById('langEn').classList.toggle('on', l==='en');
+}
+document.getElementById('langKo').onclick = function(){ applyLang('ko'); };
+document.getElementById('langEn').onclick = function(){ applyLang('en'); };
+if(LANG!=='ko') applyLang(LANG, {skipUrl:true});
+</script>
+
+<script src="../assets/site.js"></script>
+<script src="../assets/ip-nav-transition.js"></script>
+</body>
+</html>

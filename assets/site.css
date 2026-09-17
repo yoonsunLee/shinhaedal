@@ -136,3 +136,7 @@ button.link-go, button.link-sub{background:none; border:none; padding:0; margin:
 footer{border-top:1px solid var(--line); padding:30px max(32px, calc((100% - 1180px) / 2 + 32px)) 44px; /* 선은 화면 끝까지, 글자는 로고와 같은 선에서 시작 */ display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-muted);}
 footer a{color:var(--ivory-muted); text-decoration:none;}
 footer a:hover{color:var(--ivory);}
+/* 개인정보 처리방침 링크: 다른 푸터 글자보다 밝고 굵게 해서 한눈에 구분되게 (언어는 html[lang]로 전환) */
+footer .ft-privacy{color:var(--ivory); font-weight:700; margin-left:28px; white-space:nowrap;}
+footer .ft-privacy:hover{text-decoration:underline; text-underline-offset:4px;}
+html[lang="en"] .ft-ko, html:not([lang="en"]) .ft-en{display:none;}
