@@ -149,12 +149,13 @@
 
   <section id="ko-2">
     <h2><span class="n">2</span>처리하는 개인정보 항목</h2>
+    <p>문의 폼으로 보내신 내용은 <strong>별도의 데이터베이스에 저장하지 않고</strong>, 접수 서버가 운영자의 메일함으로 곧바로 전달합니다. 보관되는 곳은 운영자의 메일함입니다.</p>
     <div class="pp-table"><table>
       <thead><tr><th>구분</th><th>항목</th></tr></thead>
       <tbody>
         <tr><td>문의 시 직접 입력</td><td>성함 또는 소속, 이메일 주소, 문의 유형, 문의 제목, 문의 내용, (작품 문의일 때) 선택한 작품 번호</td></tr>
-        <tr><td>접수 과정에서 자동 생성</td><td>접수 일시, 작성 언어(국문/영문), 처리 상태·처리 완료 일시·담당자 메모, 알림 메일 발송 여부, 동의 일시·동의한 고지문 버전, 반복 접수 확인용 <strong>IP 주소의 해시값</strong>(IP 주소 원문은 저장하지 않습니다)</td></tr>
-        <tr><td>자동 등록 방지 확인 시</td><td>접속 IP 주소, 브라우저 정보 등 — Cloudflare Turnstile이 확인에만 사용하며 운영자의 문의 저장소에는 저장되지 않습니다</td></tr>
+        <tr><td>접수 과정에서 자동 생성</td><td>접수 일시, 작성 언어(국문/영문), 동의한 고지문 버전</td></tr>
+        <tr><td>반복 접수 확인용</td><td>접속 IP 주소를 되돌릴 수 없게 바꾼 <strong>해시값</strong>과 접수 시각(IP 주소 원문은 저장하지 않으며, 해시값도 20분 안에 자동 삭제)</td></tr>
       </tbody>
     </table></div>
     <p class="note">문의 내용에는 주민등록번호, 계좌번호, 건강 정보 등 필요 이상의 개인정보를 적지 말아 주세요.</p>
@@ -162,13 +163,14 @@
 
   <section id="ko-3">
     <h2><span class="n">3</span>처리의 법적 근거</h2>
-    <p>정보주체의 동의(「개인정보 보호법」 제15조 제1항 제1호)를 받아 처리합니다. 국외 이전은 별도 동의(같은 법 제28조의8 제1항 제1호)를 받습니다(<a href="#ko-8">8항</a>).</p>
+    <p>정보주체의 동의(「개인정보 보호법」 제15조 제1항 제1호)를 받아 처리합니다. 문의 폼에서는 수집·이용 동의 한 가지만 받습니다.</p>
   </section>
 
   <section id="ko-4">
     <h2><span class="n">4</span>보유 및 이용 기간</h2>
     <ul>
-      <li>문의 기록은 <strong>문의 처리 완료 후 1년</strong> 동안 보관한 뒤 파기합니다.</li>
+      <li>문의 메일은 <strong>문의 처리 완료 후 1년</strong> 동안 운영자의 메일함에 보관한 뒤 파기합니다.</li>
+      <li>반복 접수 확인에 쓰는 해시값과 접수 시각은 <strong>20분 안에 자동으로 삭제</strong>됩니다.</li>
       <li>삭제를 요청하시거나 동의를 철회하시면 지체 없이 파기합니다.</li>
       <li>문의가 계약으로 이어진 경우, 계약서 등 관련 서류는 문의 기록과 별도로 관계 법령이 정한 기간 동안 보관합니다.</li>
     </ul>
@@ -177,10 +179,8 @@
   <section id="ko-5">
     <h2><span class="n">5</span>파기 절차 및 방법</h2>
     <ul>
-      <li>운영자는 매월 1회 보관기간이 지난 문의를 확인하고 지체 없이 파기합니다.</li>
-      <li>문의 저장소(데이터베이스)의 기록은 복구할 수 없도록 삭제합니다.</li>
-      <li>운영자 메일함으로 받은 문의 알림 메일도 같은 시기에 삭제합니다.</li>
-      <li>메일 발송업체(Resend)에 남는 메일 내용·전송 기록은 Resend가 모든 요금제에 공통으로 적용하는 보관기간 <strong>30일</strong>이 지나면 자동으로 삭제됩니다.</li>
+      <li>운영자는 매월 1회 메일함에서 보관기간이 지난 문의 메일을 확인하고 지체 없이 삭제합니다(휴지통 비우기 포함).</li>
+      <li>접수 서버에는 문의 내용이 남지 않습니다. 반복 접수 확인용 기록은 시간이 지나면 서버가 스스로 지웁니다.</li>
     </ul>
   </section>
 
@@ -194,46 +194,24 @@
     <div class="pp-table"><table>
       <thead><tr><th>수탁자</th><th>위탁 업무</th><th>처리 위치</th></tr></thead>
       <tbody>
-        <tr><td>Supabase, Inc.</td><td>문의 접수 서버 운영, 문의 기록 저장</td><td>대한민국(서울 리전)</td></tr>
-        <tr><td>Plus Five Five, Inc.<br>(서비스명 Resend)</td><td>운영자에게 보내는 문의 알림 메일 발송</td><td>미국 (<a href="#ko-8">8항</a>)</td></tr>
-        <tr><td>Cloudflare, Inc.</td><td>문의 폼 자동 등록 방지 확인(Turnstile)</td><td>미국·유럽경제지역 등 (<a href="#ko-8">8항</a>)</td></tr>
+        <tr><td>주식회사 카페24</td><td>문의 접수 서버 운영, 운영자에게 보내는 문의 알림 메일 발송</td><td>대한민국</td></tr>
+        <tr><td>네이버 주식회사</td><td>운영자의 문의 메일함(네이버 메일) 제공</td><td>대한민국</td></tr>
       </tbody>
     </table></div>
+    <p class="note">수탁자에게는 문의 처리에 필요한 범위의 개인정보만 전달되며, 그 밖의 목적으로 이용하지 못하도록 관리합니다.</p>
   </section>
 
   <section id="ko-8">
     <h2><span class="n">8</span>개인정보의 국외 이전</h2>
-    <p>문의 폼을 이용하시면 아래와 같이 개인정보가 국외로 이전됩니다. 이전은 문의 폼에서 받는 <strong>국외 이전 동의</strong>에 따라 이루어집니다(「개인정보 보호법」 제28조의8 제1항 제1호).</p>
-    <div class="pp-transfer">
-      <h3>Plus Five Five, Inc. (서비스명 Resend)</h3>
-      <dl>
-        <dt>연락처</dt><dd><a href="mailto:support@resend.com">support@resend.com</a></dd>
-        <dt>이전 국가</dt><dd>미국</dd>
-        <dt>이전 항목</dt><dd>성함·소속, 이메일, 문의 유형·제목·내용, 작품 번호</dd>
-        <dt>이전 시기·방법</dt><dd>문의 접수 직후, 알림 메일을 보낼 때 암호화된 네트워크로 전송</dd>
-        <dt>이용 목적</dt><dd>운영자에게 문의 알림 메일 발송</dd>
-        <dt>보유·이용 기간</dt><dd>발송 후 30일 — Resend가 모든 요금제에 공통 적용하는 이메일 데이터(내용·전송 기록) 보관기간</dd>
-      </dl>
-    </div>
-    <div class="pp-transfer">
-      <h3>Cloudflare, Inc.</h3>
-      <dl>
-        <dt>연락처</dt><dd><a href="mailto:privacyquestions@cloudflare.com">privacyquestions@cloudflare.com</a></dd>
-        <dt>이전 국가</dt><dd>미국·유럽경제지역(Cloudflare가 주로 저장하는 곳) 및 Cloudflare가 운영하는 그 밖의 국가</dd>
-        <dt>이전 항목</dt><dd>접속 IP 주소, 브라우저 정보(User-Agent), TLS 지문, 사이트 키와 접속한 주소</dd>
-        <dt>이전 시기·방법</dt><dd>문의 폼에서 두 가지 동의를 선택한 뒤 자동 등록 방지 확인이 시작될 때, 암호화된 네트워크로 전송</dd>
-        <dt>이용 목적</dt><dd>자동 등록(스팸) 방지 확인</dd>
-        <dt>보유·이용 기간</dt><dd>Cloudflare가 Turnstile에 대해 별도의 보관기간을 공개하지 않습니다. Cloudflare 개인정보 처리방침에 따라 수집 목적에 필요한 기간 동안 보관하며, 기간을 확인하려면 위 연락처나 dpo@cloudflare.com으로 문의할 수 있습니다.</dd>
-      </dl>
-    </div>
-    <p><strong>이전 거부 방법·절차와 그 효과</strong>: 문의 폼의 국외 이전 동의란을 선택하지 않으시면 국외 이전은 이루어지지 않습니다. 이 경우 문의 폼으로는 문의를 접수할 수 없으나, <a href="mailto:contact@shinhaedal.com">contact@shinhaedal.com</a> 으로 직접 이메일을 보내시면 같은 내용으로 확인하고 회신해 드립니다. 이미 하신 동의는 같은 주소로 언제든지 철회하실 수 있고, 철회 이후에는 해당 문의 기록을 지체 없이 파기합니다.</p>
+    <p><strong>문의 폼으로 받은 개인정보는 국외로 이전하지 않습니다.</strong> 접수 서버와 메일함 모두 대한민국에 있습니다.</p>
+    <p>다만 홈페이지 자체는 GitHub Pages(미국)에서 제공되어, 홈페이지를 여는 순간의 접속 기록(IP 주소 등)이 GitHub의 보안 기록에 남습니다. 이 기록은 GitHub이 자체 방침에 따라 관리하며 운영자는 받지 않고, 문의 내용과는 분리되어 있습니다(<a href="#ko-11">11항</a>).</p>
   </section>
 
   <section id="ko-9">
     <h2><span class="n">9</span>정보주체의 권리와 행사 방법</h2>
     <ul>
       <li>언제든지 자신의 개인정보 열람, 정정·삭제, 처리정지를 요구하거나 동의를 철회할 수 있습니다.</li>
-      <li>열람·정정·삭제·처리정지 요구와 동의 철회는 <a href="mailto:contact@shinhaedal.com">contact@shinhaedal.com</a> 에서 접수·처리합니다. 본인 확인 후 10일 이내에 조치하고 결과를 알려드립니다.</li>
+      <li>열람·정정·삭제·처리정지 요구와 동의 철회는 <a href="mailto:haedarney@naver.com">haedarney@naver.com</a> 에서 접수·처리합니다. 본인 확인 후 10일 이내에 조치하고 결과를 알려드립니다.</li>
       <li>법정대리인이나 위임을 받은 사람을 통해서도 요청할 수 있으며, 이 경우 위임장을 받습니다.</li>
       <li>법령에 따라 열람·처리정지가 제한되거나 보관 의무가 있어 삭제할 수 없는 경우에는 그 사유를 알려드립니다.</li>
     </ul>
@@ -243,12 +221,12 @@
     <h2><span class="n">10</span>개인정보의 안전성 확보조치</h2>
     <ul>
       <li>홈페이지와 문의 접수 서버의 모든 통신을 HTTPS로 암호화</li>
-      <li>문의 기록은 지정된 관리자 계정만 열람·수정·삭제할 수 있고, 관리자는 2단계 인증으로 로그인</li>
-      <li>관리자 계정 신규 가입 차단, 계정은 사람마다 따로 발급</li>
-      <li>관리자 접속·처리 기록을 1년 이상 보관하고 월 1회 점검</li>
-      <li>접수 서버에서 입력값 검증, 자동 등록 방지 확인, 반복 접수 제한</li>
-      <li>반복 접수 확인에는 IP 주소 원문 대신 복원할 수 없는 해시값만 저장</li>
+      <li>문의 내용을 별도로 저장하지 않아, 유출될 수 있는 보관처를 최소화</li>
+      <li>문의 메일함은 운영자 본인 계정으로만 열람하며, 계정에 2단계 인증 적용</li>
+      <li>접수 서버에서 입력값 검증, 자동 접수 차단(숨은 입력칸), 폼을 실제로 연 사람만 접수되도록 하는 단기 제출 토큰, 같은 곳·같은 내용 반복 접수 제한</li>
+      <li>반복 접수 확인에는 IP 주소 원문 대신 복원할 수 없는 해시값만 사용하고 20분 안에 삭제</li>
       <li>서버 오류 기록에는 문의 내용·연락처를 남기지 않음</li>
+      <li>접수 서버의 설정 파일은 웹에서 열람할 수 없도록 차단</li>
     </ul>
   </section>
 
@@ -257,7 +235,7 @@
     <ul>
       <li>홈페이지는 방문자를 분석하거나 광고를 위해 추적하는 쿠키·도구를 사용하지 않습니다.</li>
       <li>언어 선택(국문/영문)을 기억하기 위해 브라우저 저장공간(localStorage)에 설정값만 저장합니다. 이 값으로 개인을 식별하지 않으며, 브라우저 설정에서 삭제할 수 있습니다.</li>
-      <li>문의 폼에서는 두 가지 동의를 선택한 뒤에 자동 등록 방지를 위한 Cloudflare Turnstile이 작동합니다(<a href="#ko-8">8항</a>).</li>
+      <li>문의 폼에서는 자동 등록 방지를 위한 외부 서비스(캡차 등)를 사용하지 않습니다. 접수 서버가 자체적으로 확인합니다.</li>
       <li>작품 영상 중 YouTube 영상은 방문자가 재생을 선택했을 때만 YouTube(youtube-nocookie.com) 플레이어를 불러오며, 재생 시 YouTube의 개인정보 처리방침이 적용됩니다.</li>
       <li>홈페이지는 GitHub Pages로 제공되며, GitHub은 보안을 위해 방문자의 IP 주소를 기록합니다. 이 기록은 GitHub이 자체 방침에 따라 관리하며 운영자는 받지 않습니다.</li>
     </ul>
@@ -272,7 +250,7 @@
     <h2><span class="n">13</span>개인정보 보호책임자</h2>
     <ul>
       <li>개인정보 보호책임자: 신다혜 (대표)</li>
-      <li>연락처: <a href="mailto:contact@shinhaedal.com">contact@shinhaedal.com</a></li>
+      <li>연락처: <a href="mailto:haedarney@naver.com">haedarney@naver.com</a></li>
     </ul>
     <p>개인정보 침해에 대한 신고·상담은 아래 기관에도 하실 수 있습니다.</p>
     <ul>
@@ -289,6 +267,7 @@
       <li>이 처리방침은 2026년 9월 18일부터 적용됩니다.</li>
       <li>내용을 추가·삭제·수정할 때에는 시행 7일 전부터 이 페이지에 변경 내용과 시행일을 함께 올립니다. 정보주체의 권리에 중대한 영향을 주는 변경은 시행 30일 전부터 알리고, 동의가 필요한 변경은 다시 동의를 받습니다.</li>
       <li>2026. 9. 18. 최초 제정</li>
+      <li>2026. 9. 18. 개정 — 문의 접수 경로를 국내로 옮기면서 <b>국외 이전을 중단</b>하고, 문의 내용을 <b>별도로 저장하지 않도록</b> 변경. 처리를 줄이는 변경이어서 사전 예고 기간 없이 즉시 시행했습니다. (이전 판: 접수·저장 Supabase, 알림 메일 Resend(미국), 자동 등록 방지 Cloudflare Turnstile(미국))</li>
     </ul>
   </section>
 </article>
@@ -323,12 +302,13 @@
 
   <section id="en-2">
     <h2><span class="n">2</span>Information processed</h2>
+    <p>What you send through the contact form is <strong>not stored in any database</strong>; the receiving server passes it straight to the Operator's mailbox, which is where it is kept.</p>
     <div class="pp-table"><table>
       <thead><tr><th>Category</th><th>Items</th></tr></thead>
       <tbody>
         <tr><td>Entered by you</td><td>Name or organization, email address, inquiry type, subject, message, selected artwork number (artwork inquiries only)</td></tr>
-        <tr><td>Generated during submission</td><td>Date and time received, page language (Korean/English), handling status, date handling was completed and staff notes, whether the notification email was sent, date of consent and version of the notice you agreed to, a <strong>hash of your IP address</strong> used to check repeated submissions (the IP address itself is not stored)</td></tr>
-        <tr><td>During the bot check</td><td>IP address, browser information, etc. — used by Cloudflare Turnstile only for the check and not stored in the Operator's inquiry database</td></tr>
+        <tr><td>Generated during submission</td><td>Date and time received, page language (Korean/English), version of the notice you agreed to</td></tr>
+        <tr><td>For the repeat-submission check</td><td>A one-way <strong>hash</strong> of your IP address and the time of submission (the IP address itself is never stored, and the hash is deleted automatically within 20 minutes)</td></tr>
       </tbody>
     </table></div>
     <p class="note">Please do not include unnecessary personal information such as national ID numbers, bank account numbers or health information in your message.</p>
@@ -336,13 +316,14 @@
 
   <section id="en-3">
     <h2><span class="n">3</span>Legal basis</h2>
-    <p>Your consent (PIPA Article 15(1)1). Transfers outside Korea are based on separate consent (PIPA Article 28-8(1)1) — see <a href="#en-8">Section 8</a>.</p>
+    <p>Your consent (PIPA Article 15(1)1). The contact form asks for a single consent, to the collection and use of your information.</p>
   </section>
 
   <section id="en-4">
     <h2><span class="n">4</span>Retention period</h2>
     <ul>
-      <li>Inquiry records are kept for <strong>one year after handling of the inquiry is completed</strong>, then destroyed.</li>
+      <li>Inquiry emails are kept in the Operator's mailbox for <strong>one year after handling of the inquiry is completed</strong>, then destroyed.</li>
+      <li>The hash and timestamp used for the repeat-submission check are <strong>deleted automatically within 20 minutes</strong>.</li>
       <li>If you ask for deletion or withdraw your consent, your information is destroyed without delay.</li>
       <li>If an inquiry leads to a contract, contract documents are kept separately from inquiry records for the period required by applicable laws.</li>
     </ul>
@@ -351,10 +332,8 @@
   <section id="en-5">
     <h2><span class="n">5</span>Destruction procedure and method</h2>
     <ul>
-      <li>Once a month, the Operator checks for inquiries whose retention period has ended and destroys them without delay.</li>
-      <li>Records in the inquiry database are deleted so they cannot be recovered.</li>
-      <li>Inquiry notification emails in the Operator's mailbox are deleted at the same time.</li>
-      <li>Email content and sending records held by the email provider (Resend) are deleted automatically after <strong>30 days</strong>, the retention period Resend applies to all of its plans.</li>
+      <li>Once a month the Operator checks the mailbox for inquiries whose retention period has ended and deletes them without delay, including from the trash folder.</li>
+      <li>No inquiry content remains on the receiving server. The repeat-submission records are removed by the server itself as they age.</li>
     </ul>
   </section>
 
@@ -368,46 +347,24 @@
     <div class="pp-table"><table>
       <thead><tr><th>Processor</th><th>Outsourced work</th><th>Where processed</th></tr></thead>
       <tbody>
-        <tr><td>Supabase, Inc.</td><td>Running the inquiry submission server and storing inquiry records</td><td>Republic of Korea (Seoul region)</td></tr>
-        <tr><td>Plus Five Five, Inc.<br>(Resend)</td><td>Sending inquiry notification emails to the Operator</td><td>United States (<a href="#en-8">Section 8</a>)</td></tr>
-        <tr><td>Cloudflare, Inc.</td><td>Bot check on the contact form (Turnstile)</td><td>United States, EEA and other countries (<a href="#en-8">Section 8</a>)</td></tr>
+        <tr><td>Cafe24 Corp.</td><td>Running the inquiry receiving server and sending the notification email to the Operator</td><td>Republic of Korea</td></tr>
+        <tr><td>NAVER Corp.</td><td>Providing the Operator's inquiry mailbox (Naver Mail)</td><td>Republic of Korea</td></tr>
       </tbody>
     </table></div>
+    <p class="note">Processors receive only what is needed to handle your inquiry and are not permitted to use it for any other purpose.</p>
   </section>
 
   <section id="en-8">
     <h2><span class="n">8</span>Transfer of personal information outside Korea</h2>
-    <p>When you use the contact form, personal information is transferred outside Korea as follows. The transfer takes place with your <strong>consent to transfer outside Korea</strong> given on the form (PIPA Article 28-8(1)1).</p>
-    <div class="pp-transfer">
-      <h3>Plus Five Five, Inc. (Resend)</h3>
-      <dl>
-        <dt>Contact</dt><dd><a href="mailto:support@resend.com">support@resend.com</a></dd>
-        <dt>Country</dt><dd>United States</dd>
-        <dt>Items</dt><dd>Name/organization, email, inquiry type, subject, message, artwork number</dd>
-        <dt>When and how</dt><dd>Right after submission, sent over an encrypted network when the notification email goes out</dd>
-        <dt>Purpose</dt><dd>Sending the inquiry notification email to the Operator</dd>
-        <dt>Retention</dt><dd>30 days after sending — the retention period Resend applies to email data (content and sending records) on all of its plans</dd>
-      </dl>
-    </div>
-    <div class="pp-transfer">
-      <h3>Cloudflare, Inc.</h3>
-      <dl>
-        <dt>Contact</dt><dd><a href="mailto:privacyquestions@cloudflare.com">privacyquestions@cloudflare.com</a></dd>
-        <dt>Country</dt><dd>United States and the European Economic Area (where Cloudflare primarily stores data), and other countries where Cloudflare operates</dd>
-        <dt>Items</dt><dd>IP address, browser information (User-Agent), TLS fingerprint, site key and the address you visited</dd>
-        <dt>When and how</dt><dd>When the bot check starts after you tick both consent boxes on the form, sent over an encrypted network</dd>
-        <dt>Purpose</dt><dd>Bot check against automated submissions (spam)</dd>
-        <dt>Retention</dt><dd>Cloudflare publishes no specific retention period for Turnstile. Under its privacy policy the data is kept as long as needed for the purpose; you can ask about the period at the contact above or dpo@cloudflare.com.</dd>
-      </dl>
-    </div>
-    <p><strong>How to refuse the transfer and what happens if you do</strong>: if you leave the transfer consent box on the contact form unticked, no transfer takes place. You then cannot submit the form, but you can email <a href="mailto:contact@shinhaedal.com">contact@shinhaedal.com</a> directly and we will review and reply just the same. You may withdraw a consent you have already given at the same address at any time, and we destroy the related inquiry record without delay.</p>
+    <p><strong>Personal information received through the contact form is not transferred outside Korea.</strong> Both the receiving server and the mailbox are located in the Republic of Korea.</p>
+    <p>The Website itself, however, is served by GitHub Pages (United States), so opening the site leaves connection data (such as your IP address) in GitHub's security logs. GitHub manages those logs under its own policy, the Operator does not receive them, and they are separate from the content of your inquiry (Section <a href="#en-11">11</a>).</p>
   </section>
 
   <section id="en-9">
     <h2><span class="n">9</span>Your rights and how to exercise them</h2>
     <ul>
       <li>You may at any time ask to access, correct, delete or suspend processing of your personal information, or withdraw your consent.</li>
-      <li>Requests to access, correct, delete or suspend processing, and withdrawals of consent, are received and handled at <a href="mailto:contact@shinhaedal.com">contact@shinhaedal.com</a>. We verify your identity, act within 10 days, and tell you the result.</li>
+      <li>Requests to access, correct, delete or suspend processing, and withdrawals of consent, are received and handled at <a href="mailto:haedarney@naver.com">haedarney@naver.com</a>. We verify your identity, act within 10 days, and tell you the result.</li>
       <li>A legal representative or a person you authorize may also make the request; in that case we ask for a letter of authorization.</li>
       <li>If access or suspension is restricted by law, or information cannot be deleted because the law requires keeping it, we will tell you why.</li>
     </ul>
@@ -416,13 +373,13 @@
   <section id="en-10">
     <h2><span class="n">10</span>Security measures</h2>
     <ul>
-      <li>All communication with the Website and the submission server is encrypted with HTTPS</li>
-      <li>Only designated administrator accounts can view, edit or delete inquiry records, and administrators log in with two-step authentication</li>
-      <li>New administrator sign-ups are disabled, and each person has a separate account</li>
-      <li>Administrator access and handling records are kept for at least one year and reviewed monthly</li>
-      <li>The submission server validates input, runs a bot check and limits repeated submissions</li>
-      <li>Repeated submissions are checked using a one-way hash instead of the IP address itself</li>
+      <li>All communication with the Website and the receiving server is encrypted with HTTPS</li>
+      <li>Inquiry content is not stored separately, keeping the number of places it could leak from to a minimum</li>
+      <li>The inquiry mailbox is opened only from the Operator's own account, which has two-step authentication enabled</li>
+      <li>The receiving server validates input, blocks automated submissions with a hidden field, issues a short-lived token so that only someone who actually opened the form can submit, and limits repeated or identical submissions</li>
+      <li>The repeat-submission check uses a one-way hash instead of the IP address itself, and it is deleted within 20 minutes</li>
       <li>Server error logs do not record message content or contact details</li>
+      <li>The receiving server's configuration file cannot be opened from the web</li>
     </ul>
   </section>
 
@@ -431,7 +388,7 @@
     <ul>
       <li>The Website does not use cookies or tools that track visitors for analytics or advertising.</li>
       <li>To remember your language choice (Korean/English), only that setting is saved in your browser storage (localStorage). It is not used to identify you, and you can delete it in your browser settings.</li>
-      <li>Cloudflare Turnstile runs on the contact form, after you tick both consent boxes, to block automated submissions (<a href="#en-8">Section 8</a>).</li>
+      <li>The contact form does not use an external bot-check service such as a CAPTCHA; the receiving server performs the check itself.</li>
       <li>For YouTube videos among the artwork videos, the YouTube player (youtube-nocookie.com) loads only when you choose to play a video, and YouTube's privacy policy applies during playback.</li>
       <li>The Website is served by GitHub Pages, and GitHub logs visitors' IP addresses for security. GitHub manages these logs under its own policy; the Operator does not receive them.</li>
     </ul>
@@ -446,7 +403,7 @@
     <h2><span class="n">13</span>Privacy officer</h2>
     <ul>
       <li>Privacy officer: Shin Dahye (Representative)</li>
-      <li>Contact: <a href="mailto:contact@shinhaedal.com">contact@shinhaedal.com</a></li>
+      <li>Contact: <a href="mailto:haedarney@naver.com">haedarney@naver.com</a></li>
     </ul>
     <p>You may also report or seek advice about privacy infringement from:</p>
     <ul>
@@ -463,8 +420,9 @@
       <li>This Policy applies from September 18, 2026.</li>
       <li>When content is added, removed or changed, the change and its effective date are posted on this page at least 7 days in advance — at least 30 days in advance for changes that materially affect your rights — and we ask for consent again where consent is required.</li>
       <li>September 18, 2026: first version</li>
+      <li>September 18, 2026: revised — the inquiry path was moved to servers in Korea, <b>ending transfers outside Korea</b> and <b>no longer storing inquiry content separately</b>. Because the change reduces processing, it took effect immediately without the advance-notice period. (Previous version: submissions stored on Supabase, notification email via Resend (US), bot check via Cloudflare Turnstile (US).)</li>
+      <li>This English version is provided for convenience. If it differs from the Korean version, the Korean version prevails.</li>
     </ul>
-    <p class="note">This English version is provided for convenience. If it differs from the Korean version, the Korean version prevails.</p>
   </section>
 </article>
 

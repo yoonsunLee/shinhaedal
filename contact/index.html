@@ -151,7 +151,7 @@
   <p data-i="c_p1">작품에 관한 이야기부터 전시, 협업, IP 라이선싱까지. 함께해 보고 싶은 일이 있다면 편하게 연락해주세요.</p>
   <p class="contact-quick" data-i="c_categories">작품 소장 · 전시 · 협업 · 라이선싱 · 기타 — 무엇이든 편하게 남겨주세요.</p>
   <div class="direct-inline">
-    <a class="direct-email" href="mailto:contact@shinhaedal.com">contact@shinhaedal.com</a>
+    <a class="direct-email" href="mailto:haedarney@naver.com">haedarney@naver.com</a>
     <button type="button" class="copy-btn link-sub" id="copyEmailBtn" data-i="copy_email">이메일 복사</button>
     <a class="direct-ig link-sub" href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener">Instagram ↗</a>
   </div>
@@ -216,7 +216,7 @@
         </div>
         <p class="cf-consent-links">
           <a class="link-sub" href="../privacy/" target="_blank" rel="noopener" data-i="policy_link">개인정보 처리방침 ↗</a>
-          <a class="link-sub" href="mailto:contact@shinhaedal.com" data-i="direct_mail_link">폼 이용에 동의하지 않으시면 이메일로 문의 ↗</a>
+          <a class="link-sub" href="mailto:haedarney@naver.com" data-i="direct_mail_link">폼 이용에 동의하지 않으시면 이메일로 문의 ↗</a>
         </p>
       </div>
     </div>
@@ -287,7 +287,7 @@ var I18N = {
     consent1_sum:'문의 확인·회신에 사용하며, <b>처리 완료 후 1년간</b> 보관합니다. 국내에서만 처리해요.',
     consent1_detail:'<li><b>목적</b>문의 확인과 회신 (홍보·소식 메일에는 쓰지 않아요)</li>'
       + '<li><b>항목</b>성함·소속, 이메일, 문의 유형·제목·내용, 작품 문의 시 작품 번호</li>'
-      + '<li><b>처리 경로</b>국내 서버(네이버 클라우드)에서 접수해 작가 메일로 보냅니다. 문의 내용을 따로 저장하지 않고, 국외로 이전하지 않아요</li>'
+      + '<li><b>처리 경로</b>국내 서버(카페24)에서 접수해 작가 메일로 보냅니다. 문의 내용을 따로 저장하지 않고, 국외로 이전하지 않아요</li>'
       + '<li><b>보관·파기</b>작가 메일함에 회신이 끝난 뒤 1년까지 두고, 매월 한 번 지난 문의를 지워요. 삭제를 요청하시면 그 즉시 파기해요</li>'
       + '<li><b>거부</b>동의하지 않으셔도 됩니다. 체크하지 않으시면 이 폼으로는 접수되지 않는 대신, 아래 메일 주소로 보내주시면 똑같이 확인해요</li>',
     detail1_more:'수집 항목·동의 안내 보기',
@@ -346,7 +346,7 @@ var I18N = {
     consent1_sum:'Used to review and reply to your inquiry, kept for <b>one year after handling is completed</b>, and handled in Korea only.',
     consent1_detail:'<li><b>Purpose</b>Reviewing and replying to your inquiry (never for news or promotional email)</li>'
       + '<li><b>Items</b>Name/organization, email, inquiry type, subject, message, artwork number for artwork inquiries</li>'
-      + '<li><b>Where it is handled</b>Received by a server in Korea (NAVER Cloud) and sent to the artist\'s mailbox. The message is not stored separately and is not transferred outside Korea</li>'
+      + '<li><b>Where it is handled</b>Received by a server in Korea (Cafe24) and sent to the artist\'s mailbox. The message is not stored separately and is not transferred outside Korea</li>'
       + '<li><b>Retention</b>Kept in the artist\'s mailbox until one year after the reply, cleared once a month, and destroyed right away if you ask</li>'
       + '<li><b>Refusal</b>You may refuse. Leaving the box unticked means the form cannot be submitted; use the email address below instead and it reaches us just the same</li>',
     detail1_more:'See the items collected and the full notice',
@@ -490,7 +490,7 @@ function initWorkInquiry(){
 // 문의 접수: 네이버 클라우드(한국 리전)에서만 처리한다. 문의 내용은 저장하지 않고 작가 메일로만 간다.
 var CONTACT_API = 'https://shinhaedalapi.mycafe24.com/contact.php';
 // 동의한 고지문 버전 = 개인정보 처리방침 시행일. 동의 문구를 바꾸면 이 값도 함께 바꾼다
-var NOTICE_VERSION = '2026-09-25';
+var NOTICE_VERSION = '2026-09-18r2';
 var DIRECT_SUBMIT = CONTACT_API.indexOf('http') === 0;
 var submitToken = null;
 
@@ -528,7 +528,7 @@ function showMailFallback(){
     fb.insertBefore(link, document.getElementById('copyBodyBtn'));
   }
   link.textContent = I18N[LANG].mailto_link;
-  link.href = 'mailto:contact@shinhaedal.com?subject=' + encodeURIComponent(LAST_MAIL_SUBJECT) + '&body=' + encodeURIComponent(LAST_MAIL_BODY);
+  link.href = 'mailto:haedarney@naver.com?subject=' + encodeURIComponent(LAST_MAIL_SUBJECT) + '&body=' + encodeURIComponent(LAST_MAIL_BODY);
 }
 function submitDirect(fields){
   if(!document.getElementById('cfConsentCollect').checked){
@@ -599,7 +599,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e){
     submitDirect({type: type, name: name, email: email, subject: subject, message: message});
     return;
   }
-  var mailto = 'mailto:contact@shinhaedal.com'
+  var mailto = 'mailto:haedarney@naver.com'
     + '?subject=' + encodeURIComponent(mailSubject)
     + '&body=' + encodeURIComponent(body);
   document.getElementById('cfNote').textContent = I18N[LANG].cf_sent;
@@ -613,7 +613,7 @@ function flashCopyFeedback(btn, text){
 }
 document.getElementById('copyEmailBtn').addEventListener('click', function(){
   var btn = this;
-  navigator.clipboard.writeText('contact@shinhaedal.com').then(function(){
+  navigator.clipboard.writeText('haedarney@naver.com').then(function(){
     flashCopyFeedback(btn, I18N[LANG].copy_email_done);
   }).catch(function(){
     flashCopyFeedback(btn, I18N[LANG].copy_failed);
