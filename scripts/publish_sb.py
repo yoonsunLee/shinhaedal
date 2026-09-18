@@ -272,6 +272,27 @@ def write_json(path, payload):
         json.dump(payload, f, ensure_ascii=False, indent=1)
 
 
+def prune_work_assets(no, out_root, photo_count, has_audio, media_names):
+    """작품은 그대로 공개돼 있는데 그 안의 상세사진·오디오·영상 썸네일만 빠진 경우,
+    예전에 만들어 둔 파일이 주소로는 계속 열린다. 이번 발행에서 쓰지 않는 것만 지운다.
+    og.jpg처럼 다른 단계(공유 페이지 생성)가 만든 파일은 건드리지 않는다."""
+    d = os.path.join(out_root, no)
+    if not os.path.isdir(d):
+        return
+    for name in sorted(os.listdir(d)):
+        p = os.path.join(d, name)
+        m = re.match(r"^photo(\d+)$", name)
+        if m and os.path.isdir(p) and int(m.group(1)) >= photo_count:
+            shutil.rmtree(p, ignore_errors=True)
+            print("정리: assets/works/%s/%s/" % (no, name))
+        elif name == "audio.mp3" and not has_audio:
+            os.remove(p)
+            print("정리: assets/works/%s/audio.mp3" % no)
+        elif re.match(r"^media\d+\.webp$", name) and name not in media_names:
+            os.remove(p)
+            print("정리: assets/works/%s/%s" % (no, name))
+
+
 def _remove_orphan(path, label):
     # 정리 대상 폴더엔 원래 작품/전시/영상별 하위 디렉터리만 있어야 하지만,
     # 테스트 등으로 낱개 파일이 섞여 들어가면 shutil.rmtree가 NotADirectoryError로 죽는다.
@@ -389,6 +410,12 @@ def main():
                     "title": s(m.get("title_ko")), "title_en": s(m.get("title_en")),
                     "duration": m.get("duration_seconds"),
                 })
+
+            # 이번에 쓰지 않는 예전 상세사진·오디오·썸네일 파일 정리
+            prune_work_assets(
+                no, assets_dir, len(my_photos), bool(audio),
+                {"media%d.webp" % i for i, m in enumerate(my_media) if s(m.get("thumb_file"))},
+            )
 
         year = w.get("year")
         detail = {
