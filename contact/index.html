@@ -90,7 +90,6 @@
   .cf-detail ul{list-style:none; font-size:13px; line-height:1.6; color:var(--ivory-dim); margin:2px 0 8px; padding:14px 16px; display:grid; gap:6px; background:var(--bg-2); border:1px solid var(--line); border-radius:8px;}
   .cf-detail b{font-weight:500; color:var(--ivory); margin-right:6px;}
   .cf-consent-links{display:flex; flex-wrap:wrap; gap:8px 20px; margin:2px 0 0 28px;}
-  #cfTurnstile:not(:empty){min-height:65px; margin-top:8px;}
   /* 봇만 채우는 숨은 칸. display:none이면 일부 봇이 건너뛰므로 화면 밖으로만 뺀다 */
   .cf-hp{position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden;}
   .cf-submit:disabled{opacity:.55; cursor:default;}
@@ -215,23 +214,11 @@
             <ul id="cfConsentCollectDetail" data-i="consent1_detail"></ul>
           </details>
         </div>
-        <div class="cf-consent-block">
-          <label class="cf-consent" for="cfConsentTransfer">
-            <input type="checkbox" id="cfConsentTransfer" aria-describedby="cfConsentTransferSum">
-            <span data-i="consent2_label"><span class="req">[필수]</span>개인정보 국외 이전 동의</span>
-          </label>
-          <p class="cf-consent-sum" id="cfConsentTransferSum" data-i="consent2_sum"></p>
-          <details class="cf-detail">
-            <summary data-i="detail2_more">이전 내역·동의 안내 보기</summary>
-            <ul id="cfConsentTransferDetail" data-i="consent2_detail"></ul>
-          </details>
-        </div>
         <p class="cf-consent-links">
           <a class="link-sub" href="../privacy/" target="_blank" rel="noopener" data-i="policy_link">개인정보 처리방침 ↗</a>
           <a class="link-sub" href="mailto:contact@shinhaedal.com" data-i="direct_mail_link">폼 이용에 동의하지 않으시면 이메일로 문의 ↗</a>
         </p>
       </div>
-      <div id="cfTurnstile"></div>
     </div>
     <div class="cf-hp" aria-hidden="true">
       <label for="cfWebsite">Website</label>
@@ -297,24 +284,19 @@ var I18N = {
     cf_send:'문의 보내기 →',
     cf_sending:'보내는 중…',
     consent1_label:'<span class="req">[필수]</span>개인정보 수집·이용 동의',
-    consent1_sum:'문의 확인·회신에 사용하며, <b>처리 완료 후 1년간</b> 보관합니다.',
+    consent1_sum:'문의 확인·회신에 사용하며, <b>처리 완료 후 1년간</b> 보관합니다. 국내에서만 처리해요.',
     consent1_detail:'<li><b>목적</b>문의 확인과 회신 (홍보·소식 메일에는 쓰지 않아요)</li>'
       + '<li><b>항목</b>성함·소속, 이메일, 문의 유형·제목·내용, 작품 문의 시 작품 번호</li>'
-      + '<li><b>보관·파기</b>처리 완료 후 1년. 매월 한 번 지난 문의를 확인해 복구할 수 없게 삭제하고, 삭제를 요청하시면 그 즉시 파기해요</li>'
-      + '<li><b>거부</b>동의하지 않으셔도 됩니다. 체크하지 않으시면 이 폼으로는 접수되지 않는 대신, contact@shinhaedal.com 으로 보내주시면 똑같이 확인해요</li>',
-    consent2_label:'<span class="req">[필수]</span>개인정보 국외 이전 동의',
-    consent2_sum:'메일 발송 및 스팸 방지를 위해 국외로 이전합니다.',
-    consent2_detail:'<li><b>Resend</b>Plus Five Five, Inc.(미국) · 위 수집 항목 · 문의 접수 직후 알림 메일 보낼 때 암호화해 전송 · 보관 30일(Resend가 모든 요금제에 적용) · support@resend.com</li>'
-      + '<li><b>Cloudflare</b>Cloudflare, Inc.(미국·유럽경제지역 등 Cloudflare 운영 국가) · 접속 IP 주소·브라우저 정보 · 동의 후 자동 입력 방지 확인할 때 암호화해 전송 · 보관기간을 공개하지 않아 확인 목적에 필요한 기간 · privacyquestions@cloudflare.com</li>'
-      + '<li><b>이전 거부</b>동의하지 않으셔도 됩니다. 체크하지 않으시면 국외로 이전되지 않고 이 폼으로는 접수되지 않는 대신, contact@shinhaedal.com 으로 보내주시면 똑같이 확인해요</li>',
+      + '<li><b>처리 경로</b>국내 서버(네이버 클라우드)에서 접수해 작가 메일로 보냅니다. 문의 내용을 따로 저장하지 않고, 국외로 이전하지 않아요</li>'
+      + '<li><b>보관·파기</b>작가 메일함에 회신이 끝난 뒤 1년까지 두고, 매월 한 번 지난 문의를 지워요. 삭제를 요청하시면 그 즉시 파기해요</li>'
+      + '<li><b>거부</b>동의하지 않으셔도 됩니다. 체크하지 않으시면 이 폼으로는 접수되지 않는 대신, 아래 메일 주소로 보내주시면 똑같이 확인해요</li>',
     detail1_more:'수집 항목·동의 안내 보기',
-    detail2_more:'이전 내역·동의 안내 보기',
     policy_link:'개인정보 처리방침 ↗',
     direct_mail_link:'폼 이용에 동의하지 않으시면 이메일로 문의 ↗',
     err_consent:'두 가지 개인정보 동의를 모두 선택해 주셔야 보낼 수 있어요.',
-    err_captcha_wait:'자동 입력 방지 확인이 끝나면 다시 눌러 주세요.',
-    err_captcha:'자동 입력 방지 확인에 실패했어요. 다시 시도해 주세요.',
+    err_expired:'페이지를 연 지 오래됐어요. 새로고침한 뒤 다시 보내주세요.',
     err_rate:'짧은 시간에 여러 번 보내셨어요. 잠시 후 다시 시도해 주세요.',
+    err_duplicate:'같은 내용이 이미 접수됐어요.',
     err_invalid:'입력한 내용을 다시 확인해 주세요.',
     err_other:'문의를 보내지 못했어요. 아래 방법으로 메일을 보내주시면 확인할게요.',
     mailto_link:'메일 앱으로 보내기',
@@ -361,24 +343,19 @@ var I18N = {
     cf_send:'SEND INQUIRY →',
     cf_sending:'Sending…',
     consent1_label:'<span class="req">[Required]</span>Consent to collection and use',
-    consent1_sum:'Used to review and reply to your inquiry, and kept for <b>one year after handling is completed</b>.',
+    consent1_sum:'Used to review and reply to your inquiry, kept for <b>one year after handling is completed</b>, and handled in Korea only.',
     consent1_detail:'<li><b>Purpose</b>Reviewing and replying to your inquiry (never for news or promotional email)</li>'
       + '<li><b>Items</b>Name/organization, email, inquiry type, subject, message, artwork number for artwork inquiries</li>'
-      + '<li><b>Retention</b>One year after handling is completed. Once a month we delete expired inquiries beyond recovery, and we destroy yours right away if you ask</li>'
-      + '<li><b>Refusal</b>You may refuse. Leaving the box unticked means the form cannot be submitted; email contact@shinhaedal.com instead and it reaches us just the same</li>',
-    consent2_label:'<span class="req">[Required]</span>Consent to transfer outside Korea',
-    consent2_sum:'Transferred outside Korea for the notification email and the spam check.',
-    consent2_detail:'<li><b>Resend</b>Plus Five Five, Inc. (United States) · the items above · sent encrypted right after submission with the notification email · kept 30 days (Resend applies this to all plans) · support@resend.com</li>'
-      + '<li><b>Cloudflare</b>Cloudflare, Inc. (United States, European Economic Area and other countries where Cloudflare operates) · IP address and browser information · sent encrypted during the bot check after you consent · no published retention period, kept as long as needed for the check · privacyquestions@cloudflare.com</li>'
-      + '<li><b>Refusing the transfer</b>You may refuse. Leaving the box unticked means nothing goes abroad and the form cannot be submitted; email contact@shinhaedal.com instead and it reaches us just the same</li>',
+      + '<li><b>Where it is handled</b>Received by a server in Korea (NAVER Cloud) and sent to the artist\'s mailbox. The message is not stored separately and is not transferred outside Korea</li>'
+      + '<li><b>Retention</b>Kept in the artist\'s mailbox until one year after the reply, cleared once a month, and destroyed right away if you ask</li>'
+      + '<li><b>Refusal</b>You may refuse. Leaving the box unticked means the form cannot be submitted; use the email address below instead and it reaches us just the same</li>',
     detail1_more:'See the items collected and the full notice',
-    detail2_more:'See the transfer details and the full notice',
     policy_link:'Privacy Policy ↗',
     direct_mail_link:'Prefer not to consent? Email us instead ↗',
     err_consent:'Please tick both personal information consent boxes to send the form.',
-    err_captcha_wait:'Please wait for the spam check to finish, then try again.',
-    err_captcha:'The spam check failed. Please try again.',
+    err_expired:'This page has been open for a while. Please refresh and send again.',
     err_rate:'You have sent several messages in a short time. Please try again later.',
+    err_duplicate:'The same message has already been sent.',
     err_invalid:'Please check the information you entered.',
     err_other:'Your inquiry could not be sent. Please email us using one of the options below.',
     mailto_link:'Send with email app',
@@ -510,54 +487,30 @@ function initWorkInquiry(){
 
 /* 문의 폼 서버 접수 설정. 두 값이 모두 채워지면 폼에서 바로 보내고(아카이브 저장 + 작가 메일),
    하나라도 비어 있으면 기존처럼 메일 앱으로 이어서 보낸다. 사이트 키는 공개값이다. */
-// 접수 함수는 서울 리전에서만 실행(개인정보 처리방침의 처리 위치와 맞춤)
-var CONTACT_API = 'https://nprtlonrdwwsmewrxotl.supabase.co/functions/v1/contact?forceFunctionRegion=ap-northeast-2';
+// 문의 접수: 네이버 클라우드(한국 리전)에서만 처리한다. 문의 내용은 저장하지 않고 작가 메일로만 간다.
+var CONTACT_API = 'https://shinhaedalapi.mycafe24.com/contact.php';
 // 동의한 고지문 버전 = 개인정보 처리방침 시행일. 동의 문구를 바꾸면 이 값도 함께 바꾼다
-var NOTICE_VERSION = '2026-09-18';
-var TURNSTILE_SITEKEY = '0x4AAAAAAE6OBv-kN3YvNpVS';
-var DIRECT_SUBMIT = !!(CONTACT_API && TURNSTILE_SITEKEY);
-var turnstileToken = '', turnstileWidget = null;
+var NOTICE_VERSION = '2026-09-25';
+var DIRECT_SUBMIT = CONTACT_API.indexOf('http') === 0;
+var submitToken = null;
 
 function setupDirectSubmit(){
   if(!DIRECT_SUBMIT) return;
   document.querySelector('.cf-direct').hidden = false;
   document.getElementById('cfConsentCollectSum').innerHTML = I18N[LANG].consent1_sum;
-  document.getElementById('cfConsentTransferSum').innerHTML = I18N[LANG].consent2_sum;
   document.getElementById('cfConsentCollectDetail').innerHTML = I18N[LANG].consent1_detail;
-  document.getElementById('cfConsentTransferDetail').innerHTML = I18N[LANG].consent2_detail;
   document.getElementById('cfSubmit').dataset.i = 'cf_send';
   document.getElementById('cfSubmit').textContent = I18N[LANG].cf_send;
-  /* 자동 입력 방지 확인은 Cloudflare(미국 등)로 접속 정보가 넘어가므로 두 동의를 받은 뒤에만 불러온다 */
-  var turnstileRequested = false;
-  function onConsentChange(){
-    if(!bothConsented()) return;
-    if(document.getElementById('cfNote').textContent === I18N[LANG].err_consent) showNote('', false);
-    if(turnstileRequested) return;
-    turnstileRequested = true;
-    var s = document.createElement('script');
-    s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad';
-    s.async = true; s.defer = true;
-    document.head.appendChild(s);
-  }
-  document.getElementById('cfConsentCollect').addEventListener('change', onConsentChange);
-  document.getElementById('cfConsentTransfer').addEventListener('change', onConsentChange);
-  window.onTurnstileLoad = function(){
-    var box = document.getElementById('cfTurnstile');
-    turnstileWidget = window.turnstile.render(box, {
-      sitekey: TURNSTILE_SITEKEY,
-      theme: 'dark',
-      // 기본 위젯은 폭 300px 고정이라 좁은 폰에서 가로 스크롤이 생긴다
-      size: box.clientWidth < 300 ? 'compact' : 'normal',
-      language: LANG,
-      callback: function(token){ turnstileToken = token; },
-      'expired-callback': function(){ turnstileToken = ''; },
-      'error-callback': function(){ turnstileToken = ''; }
-    });
-  };
-  onConsentChange(); // 뒤로 가기 등으로 체크 상태가 복원된 경우
+  /* 제출 토큰: 폼을 실제로 쓰기 시작할 때 한 번만 받아 둔다(그냥 지나가는 방문자의 접속 정보는 보내지 않도록).
+     서버는 이 토큰으로 '폼을 연 사람의 요청'인지 확인한다. */
+  document.getElementById('contactForm').addEventListener('focusin', fetchToken, { once: true });
 }
-function bothConsented(){
-  return document.getElementById('cfConsentCollect').checked && document.getElementById('cfConsentTransfer').checked;
+function fetchToken(){
+  if(submitToken) return Promise.resolve(submitToken);
+  return fetch(CONTACT_API + (CONTACT_API.indexOf('?') === -1 ? '?' : '&') + 'op=token')
+    .then(function(res){ return res.json(); })
+    .then(function(j){ if(j && j.s) submitToken = j; return submitToken; })
+    .catch(function(){ return null; });
 }
 function showNote(key, isError){
   var note = document.getElementById('cfNote');
@@ -578,28 +531,29 @@ function showMailFallback(){
   link.href = 'mailto:contact@shinhaedal.com?subject=' + encodeURIComponent(LAST_MAIL_SUBJECT) + '&body=' + encodeURIComponent(LAST_MAIL_BODY);
 }
 function submitDirect(fields){
-  if(!bothConsented()){
+  if(!document.getElementById('cfConsentCollect').checked){
     showNote('err_consent', true);
-    document.getElementById(document.getElementById('cfConsentCollect').checked ? 'cfConsentTransfer' : 'cfConsentCollect').focus();
+    document.getElementById('cfConsentCollect').focus();
     return;
   }
-  if(!turnstileToken){ showNote('err_captcha_wait', true); return; }
   var btn = document.getElementById('cfSubmit');
   btn.disabled = true;
   btn.textContent = I18N[LANG].cf_sending;
   showNote('', false);
-  fetch(CONTACT_API, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      type: fields.type,
-      work_no: (fields.type === 'Artwork' && CURRENT_WORK) ? CURRENT_WORK.id : '',
-      name: fields.name, email: fields.email, subject: fields.subject, message: fields.message,
-      lang: LANG, turnstile_token: turnstileToken,
-      consent: true, // 이전 버전 접수 함수 호환용
-      consent_collect: true, consent_transfer: true, notice_version: NOTICE_VERSION,
-      website: document.getElementById('cfWebsite').value
-    })
+  fetchToken().then(function(tok){
+    return fetch(CONTACT_API, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        type: fields.type,
+        work_no: (fields.type === 'Artwork' && CURRENT_WORK) ? CURRENT_WORK.id : '',
+        name: fields.name, email: fields.email, subject: fields.subject, message: fields.message,
+        lang: LANG,
+        consent_collect: true, notice_version: NOTICE_VERSION,
+        token_t: tok ? tok.t : '', token_n: tok ? tok.n : '', token_s: tok ? tok.s : '',
+        website: document.getElementById('cfWebsite').value
+      })
+    });
   })
     .then(function(res){ return res.json().catch(function(){ return {ok:false, code:'other'}; }); })
     .then(function(j){
@@ -610,7 +564,8 @@ function submitDirect(fields){
         done.focus();
         return;
       }
-      var key = {captcha:'err_captcha', rate:'err_rate', invalid:'err_invalid'}[j.code] || 'err_other';
+      var key = {expired:'err_expired', rate:'err_rate', duplicate:'err_duplicate', invalid:'err_invalid'}[j.code] || 'err_other';
+      if(j.code === 'expired') submitToken = null; // 다음 시도에서 새로 받도록
       showNote(key, true);
       if(key === 'err_other') showMailFallback();
     })
@@ -618,8 +573,6 @@ function submitDirect(fields){
     .then(function(){
       btn.disabled = false;
       btn.textContent = I18N[LANG].cf_send;
-      turnstileToken = '';
-      if(window.turnstile && turnstileWidget !== null) window.turnstile.reset(turnstileWidget);
     });
 }
 
