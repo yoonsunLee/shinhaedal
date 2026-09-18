@@ -63,7 +63,8 @@
   /* ---------- 4. 학력·자격 + 전시 ---------- */
   .ab-credentials{max-width:1180px; margin:0 auto; padding:46px 32px 56px; display:grid; grid-template-columns:1fr 1.55fr; column-gap:80px;}
   .ab-edu ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px;}
-  .ab-edu li{font-family:'Noto Sans KR', sans-serif; font-size:16px; color:var(--ivory-dim); position:relative; padding-left:16px;}
+  .ab-edu li{font-family:'Noto Sans KR', sans-serif; font-size:16px; line-height:1.6; color:var(--ivory-dim); position:relative; padding-left:26px;}
+  .ab-edu li .sub{font-size:13px; color:var(--ivory-muted);}
   .ab-edu li::before{content:'—'; position:absolute; left:0; color:var(--ivory-muted);}
 
   .ab-ex-upcoming{margin-bottom:22px;}
@@ -202,10 +203,10 @@
   <div class="ab-edu">
     <h2 class="ab-section-title">Education &amp; Qualifications</h2>
     <ul data-i="bio_list">
-      <li>법학 전공</li>
-      <li>지식재산권법 석사</li>
-      <li>지식재산권법 박사과정 수료</li>
-      <li>국가유산수리기능자 (칠공)</li>
+      <li>국가유산수리기능자 <span class="sub">(칠공)</span></li>
+      <li>중앙대학교 일반대학원 법학과 박사수료 <span class="sub">(지식재산권법 전공)</span></li>
+      <li>중앙대학교 일반대학원 법학과 석사 <span class="sub">(지식재산권법 전공)</span></li>
+      <li>단국대학교 법학과 학사</li>
     </ul>
   </div>
   <div class="ab-ex">
@@ -254,7 +255,7 @@ var I18N = {
       + '<p>얼빵해달이 귀여워서,<br>자개가 반짝여서 작품 앞에 멈춰 서도 좋습니다.</p>'
       + '<p>그 다음 제목을 읽고, 그 안에 법과 전통의 이야기가 있다는 것을 발견하고, 조금 더 오래 바라보게 되기를 바랍니다.</p>'
       + '<p>그리고 작품을 떠날 때에는<br>사회 속의 자기 자신을 한 번쯤 다정하게 바라볼 수 있었으면 합니다.</p>',
-    bio_list:'<li>법학 전공</li><li>지식재산권법 석사</li><li>지식재산권법 박사과정 수료</li><li>국가유산수리기능자 (칠공)</li>',
+    bio_list:'<li>국가유산수리기능자 <span class="sub">(칠공)</span></li><li>중앙대학교 일반대학원 법학과 박사수료 <span class="sub">(지식재산권법 전공)</span></li><li>중앙대학교 일반대학원 법학과 석사 <span class="sub">(지식재산권법 전공)</span></li><li>단국대학교 법학과 학사</li>',
     ex_loading:'불러오는 중…',
     ex_error:'전시 이력을 불러오지 못했어요.',
     ex_empty:'등록된 전시가 없습니다.',
@@ -289,7 +290,7 @@ var I18N = {
       + '<p>It is enough to stop in front of a work because Eolbbang Haedal catches your eye,<br>or because the mother-of-pearl shimmers.</p>'
       + '<p>Then perhaps you read the title, discover the stories of law and tradition within it, and stay with the work a little longer.</p>'
       + '<p>And when you leave the work, I hope you might look at yourself within society with a little more kindness.</p>',
-    bio_list:'<li>Studied Law</li><li>M.A. in Intellectual Property Law</li><li>Ph.D. Coursework Completed, Intellectual Property Law</li><li>National Heritage Repair Technician (Lacquerware)</li>',
+    bio_list:'<li>National Heritage Repair Technician <span class="sub">(Lacquerware)</span></li><li>Ph.D. Coursework Completed, Chung-Ang University Graduate School of Law <span class="sub">(Intellectual Property Law)</span></li><li>M.A., Chung-Ang University Graduate School of Law <span class="sub">(Intellectual Property Law)</span></li><li>LL.B., Dankook University</li>',
     ex_loading:'Loading…',
     ex_error:'Could not load exhibitions.',
     ex_empty:'No exhibitions registered yet.',
