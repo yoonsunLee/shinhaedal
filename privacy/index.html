@@ -155,7 +155,7 @@
       <tbody>
         <tr><td>문의 시 직접 입력</td><td>성함 또는 소속, 이메일 주소, 문의 유형, 문의 제목, 문의 내용, (작품 문의일 때) 선택한 작품 번호</td></tr>
         <tr><td>접수 과정에서 자동 생성</td><td>접수 일시, 작성 언어(국문/영문), 동의한 고지문 버전</td></tr>
-        <tr><td>반복 접수 확인용</td><td>접속 IP 주소를 되돌릴 수 없게 바꾼 <strong>해시값</strong>과 접수 시각(IP 주소 원문은 저장하지 않으며, 해시값도 20분 안에 자동 삭제)</td></tr>
+        <tr><td>반복 접수 확인용</td><td>접속 IP 주소를 되돌릴 수 없게 바꾼 <strong>해시값</strong>, 같은 문의가 연달아 오는지 확인하기 위해 이메일·제목·내용을 합쳐 만든 <strong>해시값</strong>, 그리고 접수 시각. 세 가지 모두 원문을 복원할 수 없으며, 접수 서버에만 짧게 남습니다(<a href="#ko-4">4항</a>)</td></tr>
       </tbody>
     </table></div>
     <p class="note">문의 내용에는 주민등록번호, 계좌번호, 건강 정보 등 필요 이상의 개인정보를 적지 말아 주세요.</p>
@@ -169,8 +169,8 @@
   <section id="ko-4">
     <h2><span class="n">4</span>보유 및 이용 기간</h2>
     <ul>
-      <li>문의 메일은 <strong>문의 처리 완료 후 1년</strong> 동안 운영자의 메일함에 보관한 뒤 파기합니다.</li>
-      <li>반복 접수 확인에 쓰는 해시값과 접수 시각은 <strong>20분 안에 자동으로 삭제</strong>됩니다.</li>
+      <li>문의 메일은 <strong>회신을 마친 뒤 1년</strong> 동안 운영자의 메일함에 보관한 뒤 파기합니다. 파기는 매월 1회 정리할 때 이루어지므로 실제 삭제가 최대 한 달 정도 늦어질 수 있습니다.</li>
+      <li>반복 접수 확인에 쓰는 해시값과 접수 시각은 <strong>20분이 지나면 효력을 잃고</strong>, 그 뒤 들어온 문의를 처리할 때 접수 서버가 지웁니다. 새 문의가 없으면 그때까지 서버에 남아 있을 수 있으나, 원문을 복원할 수 없는 값입니다.</li>
       <li>삭제를 요청하시거나 동의를 철회하시면 지체 없이 파기합니다.</li>
       <li>문의가 계약으로 이어진 경우, 계약서 등 관련 서류는 문의 기록과 별도로 관계 법령이 정한 기간 동안 보관합니다.</li>
     </ul>
@@ -179,7 +179,7 @@
   <section id="ko-5">
     <h2><span class="n">5</span>파기 절차 및 방법</h2>
     <ul>
-      <li>운영자는 매월 1회 메일함에서 보관기간이 지난 문의 메일을 확인하고 지체 없이 삭제합니다(휴지통 비우기 포함).</li>
+      <li>운영자는 매월 1회 메일함에서 보관기간(회신 후 1년)이 지난 문의 메일을 확인하고 삭제합니다(휴지통 비우기 포함).</li>
       <li>접수 서버에는 문의 내용이 남지 않습니다. 반복 접수 확인용 기록은 시간이 지나면 서버가 스스로 지웁니다.</li>
     </ul>
   </section>
@@ -308,7 +308,7 @@
       <tbody>
         <tr><td>Entered by you</td><td>Name or organization, email address, inquiry type, subject, message, selected artwork number (artwork inquiries only)</td></tr>
         <tr><td>Generated during submission</td><td>Date and time received, page language (Korean/English), version of the notice you agreed to</td></tr>
-        <tr><td>For the repeat-submission check</td><td>A one-way <strong>hash</strong> of your IP address and the time of submission (the IP address itself is never stored, and the hash is deleted automatically within 20 minutes)</td></tr>
+        <tr><td>For the repeat-submission check</td><td>A one-way <strong>hash</strong> of your IP address, a one-way <strong>hash</strong> of your email, subject and message combined (to catch the same inquiry sent twice), and the time of submission. None of them can be turned back into the original, and they stay only briefly on the receiving server (Section <a href="#en-4">4</a>)</td></tr>
       </tbody>
     </table></div>
     <p class="note">Please do not include unnecessary personal information such as national ID numbers, bank account numbers or health information in your message.</p>
@@ -322,8 +322,8 @@
   <section id="en-4">
     <h2><span class="n">4</span>Retention period</h2>
     <ul>
-      <li>Inquiry emails are kept in the Operator's mailbox for <strong>one year after handling of the inquiry is completed</strong>, then destroyed.</li>
-      <li>The hash and timestamp used for the repeat-submission check are <strong>deleted automatically within 20 minutes</strong>.</li>
+      <li>Inquiry emails are kept in the Operator's mailbox for <strong>one year after we reply</strong>, then destroyed. Destruction happens during the monthly clear-out, so actual deletion can be up to about a month later.</li>
+      <li>The hashes and timestamp used for the repeat-submission check <strong>stop being valid after 20 minutes</strong> and are erased by the receiving server while it handles a later inquiry. If no new inquiry arrives they may remain until then, but they cannot be turned back into the original values.</li>
       <li>If you ask for deletion or withdraw your consent, your information is destroyed without delay.</li>
       <li>If an inquiry leads to a contract, contract documents are kept separately from inquiry records for the period required by applicable laws.</li>
     </ul>
@@ -332,7 +332,7 @@
   <section id="en-5">
     <h2><span class="n">5</span>Destruction procedure and method</h2>
     <ul>
-      <li>Once a month the Operator checks the mailbox for inquiries whose retention period has ended and deletes them without delay, including from the trash folder.</li>
+      <li>Once a month the Operator checks the mailbox for inquiries whose retention period (one year after the reply) has ended and deletes them, including from the trash folder.</li>
       <li>No inquiry content remains on the receiving server. The repeat-submission records are removed by the server itself as they age.</li>
     </ul>
   </section>

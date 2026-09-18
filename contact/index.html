@@ -186,11 +186,11 @@
     </div>
     <div class="cf-row">
       <label for="cfName" data-i="lbl_name">성함 / 소속<span class="req-mark">*</span></label>
-      <input id="cfName" name="name" type="text" data-i-ph="ph_name" placeholder="성함 또는 소속" required aria-required="true">
+      <input id="cfName" name="name" type="text" data-i-ph="ph_name" placeholder="성함 또는 소속" autocomplete="name" required aria-required="true">
     </div>
     <div class="cf-row">
       <label for="cfEmail" data-i="lbl_email">이메일<span class="req-mark">*</span></label>
-      <input id="cfEmail" name="email" type="email" data-i-ph="ph_email" placeholder="회신받으실 이메일" required aria-required="true">
+      <input id="cfEmail" name="email" type="email" data-i-ph="ph_email" placeholder="회신받으실 이메일" autocomplete="email" required aria-required="true">
     </div>
     <div class="cf-row">
       <label for="cfSubject" data-i="lbl_subject">문의 제목<span class="req-mark">*</span></label>
@@ -284,16 +284,16 @@ var I18N = {
     cf_send:'문의 보내기 →',
     cf_sending:'보내는 중…',
     consent1_label:'<span class="req">[필수]</span>개인정보 수집·이용 동의',
-    consent1_sum:'문의 확인·회신에 사용하며, <b>처리 완료 후 1년간</b> 보관합니다.',
+    consent1_sum:'문의 확인·회신에 사용하며, <b>회신이 끝난 뒤 1년간</b> 보관합니다.',
     consent1_detail:'<li><b>목적</b>문의 확인과 회신 (홍보·소식 메일에는 쓰지 않아요)</li>'
       + '<li><b>항목</b>성함·소속, 이메일, 문의 유형·제목·내용, 작품 문의 시 작품 번호</li>'
       + '<li><b>처리 경로</b>국내 서버(카페24)에서 접수해 작가 메일로 보냅니다. 문의 내용을 따로 저장하지 않고, 국외로 이전하지 않아요</li>'
-      + '<li><b>보관·파기</b>작가 메일함에 회신이 끝난 뒤 1년까지 두고, 매월 한 번 지난 문의를 지워요. 삭제를 요청하시면 그 즉시 파기해요</li>'
+      + '<li><b>보관·파기</b>작가 메일함에 회신이 끝난 뒤 1년까지 두고, 매월 한 번 정리할 때 지워요(그래서 최대 한 달쯤 늦어질 수 있어요). 삭제를 요청하시면 그 즉시 파기해요</li>'
       + '<li><b>거부</b>동의하지 않으셔도 됩니다. 체크하지 않으시면 이 폼으로는 접수되지 않는 대신, 아래 메일 주소로 보내주시면 똑같이 확인해요</li>',
     detail1_more:'수집 항목·동의 안내 보기',
     policy_link:'개인정보 처리방침 ↗',
     direct_mail_link:'폼 이용에 동의하지 않으시면 이메일로 문의 ↗',
-    err_consent:'두 가지 개인정보 동의를 모두 선택해 주셔야 보낼 수 있어요.',
+    err_consent:'개인정보 수집·이용 동의를 선택해 주셔야 보낼 수 있어요.',
     err_expired:'페이지를 연 지 오래됐어요. 새로고침한 뒤 다시 보내주세요.',
     err_rate:'짧은 시간에 여러 번 보내셨어요. 잠시 후 다시 시도해 주세요.',
     err_duplicate:'같은 내용이 이미 접수됐어요.',
@@ -343,16 +343,16 @@ var I18N = {
     cf_send:'SEND INQUIRY →',
     cf_sending:'Sending…',
     consent1_label:'<span class="req">[Required]</span>Consent to collection and use',
-    consent1_sum:'Used to review and reply to your inquiry, kept for <b>one year after handling is completed</b>.',
+    consent1_sum:'Used to review and reply to your inquiry, kept for <b>one year after we reply</b>.',
     consent1_detail:'<li><b>Purpose</b>Reviewing and replying to your inquiry (never for news or promotional email)</li>'
       + '<li><b>Items</b>Name/organization, email, inquiry type, subject, message, artwork number for artwork inquiries</li>'
       + '<li><b>Where it is handled</b>Received by a server in Korea (Cafe24) and sent to the artist\'s mailbox. The message is not stored separately and is not transferred outside Korea</li>'
-      + '<li><b>Retention</b>Kept in the artist\'s mailbox until one year after the reply, cleared once a month, and destroyed right away if you ask</li>'
+      + '<li><b>Retention</b>Kept in the artist\'s mailbox until one year after the reply and removed at the next monthly clear-out (so it can linger up to a month longer), or destroyed right away if you ask</li>'
       + '<li><b>Refusal</b>You may refuse. Leaving the box unticked means the form cannot be submitted; use the email address below instead and it reaches us just the same</li>',
     detail1_more:'See the items collected and the full notice',
     policy_link:'Privacy Policy ↗',
     direct_mail_link:'Prefer not to consent? Email us instead ↗',
-    err_consent:'Please tick both personal information consent boxes to send the form.',
+    err_consent:'Please agree to the collection and use of your personal information.',
     err_expired:'This page has been open for a while. Please refresh and send again.',
     err_rate:'You have sent several messages in a short time. Please try again later.',
     err_duplicate:'The same message has already been sent.',
