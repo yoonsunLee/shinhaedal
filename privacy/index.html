@@ -95,17 +95,17 @@
       <span class="lang-sep" aria-hidden="true">/</span>
       <button id="langEn">EN</button>
     </div>
-    <a class="icon-btn" aria-label="인스타그램" href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener">
+    <a class="icon-btn" aria-label="인스타그램" data-i-aria="aria_instagram" href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.4"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor"/></svg>
     </a>
-    <button class="icon-btn menu-btn" id="btnMenu" aria-label="메뉴" aria-expanded="false">
+    <button class="icon-btn menu-btn" id="btnMenu" aria-label="메뉴" data-i-aria="aria_menu" aria-expanded="false">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 6H17M3 10H17M3 14H17" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
     </button>
   </div>
 
   <div class="nav-backdrop" id="navBackdrop"></div>
   <div class="nav-overlay" id="navOverlay">
-    <button class="icon-btn overlay-close" id="btnMenuClose" aria-label="닫기">✕</button>
+    <button class="icon-btn overlay-close" id="btnMenuClose" aria-label="메뉴 닫기" data-i-aria="aria_menu_close">✕</button>
     <nav class="overlay-links">
       <a href="../">Home</a>
       <a href="../about/">About</a>
@@ -433,8 +433,8 @@
 
 <script>
 var I18N = {
-  ko: { logo_tag:'나전칠기 아티스트', page_title:'개인정보 처리방침 — 신해달 나전칠기 아티스트' },
-  en: { logo_tag:'Najeonchilgi Artist', page_title:'Privacy Policy — Shin Haedal, Najeonchilgi Artist' }
+  ko: { aria_instagram:'인스타그램', aria_menu:'메뉴', aria_menu_close:'메뉴 닫기', logo_tag:'나전칠기 아티스트', page_title:'개인정보 처리방침 — 신해달 나전칠기 아티스트' },
+  en: { aria_instagram:'Instagram', aria_menu:'Menu', aria_menu_close:'Close menu', logo_tag:'Najeonchilgi Artist', page_title:'Privacy Policy — Shin Haedal, Najeonchilgi Artist' }
 };
 var LANG = 'ko';
 try{
@@ -460,6 +460,14 @@ function applyLang(l, opts){
   document.querySelectorAll('[data-i]').forEach(function(el){
     var v = I18N[l][el.dataset.i];
     if(v!==undefined) el.innerHTML = v;
+  });
+  document.querySelectorAll('[data-i-aria]').forEach(function(el){
+    var v = I18N[l][el.dataset.iAria];
+    if(v!==undefined) el.setAttribute('aria-label', v);
+  });
+  document.querySelectorAll('[data-i-alt]').forEach(function(el){
+    var v = I18N[l][el.dataset.iAlt];
+    if(v!==undefined) el.setAttribute('alt', v);
   });
   document.getElementById('ppKo').hidden = l !== 'ko';
   document.getElementById('ppEn').hidden = l !== 'en';

@@ -318,9 +318,14 @@ def main():
     try:
         home_videos = sb("home_videos?select=*&is_public=eq.true&deleted_at=is.null&order=sort_order")
     except Exception as e:
-        # 스키마를 아직 안 만들었으면(Phase 2 도입 전) 조용히 건너뛴다.
-        print("home_videos 조회 건너뜀(테이블이 없으면 정상): %s" % e)
-        home_videos = []
+        # 표가 아직 없을 때만(Phase 2 도입 전) 조용히 건너뛴다.
+        # 통신·권한 오류까지 '영상 0개'로 발행하면 멀쩡한 영상이 지워지므로 여기서 멈춘다.
+        msg = str(e)
+        if "404" in msg or "PGRST205" in msg or "does not exist" in msg:
+            print("home_videos 조회 건너뜀(표가 없으면 정상): %s" % e)
+            home_videos = []
+        else:
+            sys.exit("home_videos 조회 실패 — 기존 영상을 지우지 않도록 반영을 멈춥니다: %s" % e)
     all_media = sb("work_media_links?select=*&is_public=eq.true&order=sort_order")
 
     if not works:
