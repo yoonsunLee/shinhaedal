@@ -30,6 +30,11 @@ jobs:
       - name: Install dependencies
         run: pip install requests Pillow
 
+      # 홈 영상은 ffmpeg로 PC용·모바일용·포스터를 만든다. 러너 이미지에 보통 들어
+      # 있지만, 없으면 영상만 조용히 빠진 채로 발행된다(그 사고가 눈에 잘 안 띈다).
+      - name: Ensure ffmpeg
+        run: ffmpeg -version >/dev/null 2>&1 || (sudo apt-get update && sudo apt-get install -y ffmpeg)
+
       # 아카이브 원본은 Supabase에 있다. service_role 키는 RLS를 우회하므로
       # 반드시 서버(Actions secret)에만 두고 브라우저에는 넣지 않는다.
       - name: Fetch, filter & build derivatives
