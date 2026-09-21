@@ -10,11 +10,18 @@ on:
         type: boolean
         default: false
   schedule:
-    # 매일 09:00 KST (= 00:00 UTC) — 발행 버튼을 못 눌렀을 때 대비한 백업
-    - cron: '0 0 * * *'
+    # 매일 00:05 KST (= 15:05 UTC) — 발행 버튼을 못 눌렀을 때 대비한 백업.
+    # 날짜가 바뀐 직후에 돌아야 전시 시작·종료처럼 날짜에 따라 달라지는 정적 HTML(작품 페이지의
+    # 전시 이력, 미리 쓴 목록)이 그날 하루 종일 맞는다(예전 09:00엔 아침 9시간 동안 전날 기준이었다).
+    - cron: '5 15 * * *'
 
 permissions:
   contents: write
+
+# 발행 버튼을 연달아 누르거나 자동 발행과 겹쳐도 한 번에 하나씩만 돈다(서로의 커밋을 덮어쓰지 않도록)
+concurrency:
+  group: publish
+  cancel-in-progress: false
 
 jobs:
   publish:
@@ -89,20 +96,35 @@ jobs:
           print('검사 통과: 작품 %d건, 전시 %d건, Press %d건, 홈 영상 %d건' % (len(idx), len(ex), len(pr), len(hv)))
           PY
 
-      # 공개 작품마다 개별 작품 페이지(works/w/ID/) + 공유용 og:image를 다시 만들고 sitemap.xml을 갱신한다.
+      # 공개 작품마다 개별 작품 페이지(works/w/ID/) + 공유용 og:image를 다시 만들고,
+      # 작품 목록·홈 Recent·Press 목록을 HTML에 미리 쓰고(prerender_lists.py), sitemap.xml을 갱신한다.
       # 목록에서 빠진(비공개·삭제) 작품의 페이지도 여기서 같이 정리된다.
-      - name: Generate work pages (page + og:image + sitemap)
+      - name: Generate work pages, prerendered lists, sitemap
         run: python scripts/gen_work_share.py --all
 
       - name: Commit if changed
+        id: commit
         run: |
           git config user.name "haedal-publish-bot"
           git config user.email "actions@users.noreply.github.com"
           mkdir -p assets/exhibitions assets/home-video
-          git add data/ assets/works/ assets/exhibitions/ assets/home-video/ works/w/ sitemap.xml
+          git add data/ assets/works/ assets/exhibitions/ assets/home-video/ works/w/ sitemap.xml \
+                  index.html works/index.html press/index.html
           if git diff --cached --quiet; then
             echo "No changes."
           else
-            git commit -m "chore: publish archive data ($(date -u +%Y-%m-%d))"
+            git commit -m "chore: publish archive data ($(TZ=Asia/Seoul date +%Y-%m-%d))"
+            # 발행하는 사이에 다른 커밋(디자인 수정 등)이 올라왔으면 그 위에 얹는다
+            git pull --rebase --quiet
             git push
+            echo "committed=true" >> "$GITHUB_OUTPUT"
           fi
+
+      # 바뀐 페이지만 검색엔진(Bing·네이버)에 바로 알린다. 구글은 IndexNow를 받지 않아 사이트맵으로 찾아온다.
+      # GitHub Pages 배포가 끝난 뒤 알려야 새 내용을 가져가므로 잠시 기다린다. 실패해도 발행은 성공으로 둔다.
+      - name: Notify search engines (IndexNow)
+        if: steps.commit.outputs.committed == 'true'
+        continue-on-error: true
+        run: |
+          sleep 90
+          python scripts/indexnow.py HEAD~1 HEAD

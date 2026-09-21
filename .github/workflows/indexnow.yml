@@ -1,0 +1,36 @@
+name: Notify search engines
+
+# 사람이 직접 올린 수정(디자인·문구)으로 바뀐 페이지를 Bing·네이버에 알린다.
+# 발행 봇의 커밋은 여기서 돌지 않는다(GitHub은 봇 토큰으로 올린 커밋으로 다른 워크플로를 깨우지 않는다) —
+# 그쪽은 publish.yml이 직접 알린다.
+on:
+  push:
+    branches: [main]
+    paths: ['**/index.html', 'index.html']
+  workflow_dispatch:      # Actions 탭에서 수동 실행 = 사이트맵의 주소 전부를 한 번 알림(처음 등록할 때)
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      # GitHub Pages 배포가 끝난 뒤에 알려야 새 내용을 가져간다
+      - name: Wait for Pages deploy
+        run: sleep 90
+      - name: IndexNow
+        continue-on-error: true
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            python scripts/indexnow.py --all
+          else
+            python scripts/indexnow.py "${{ github.event.before }}" "${{ github.sha }}"
+          fi
