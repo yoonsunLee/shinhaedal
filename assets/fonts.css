@@ -1717,7 +1717,18 @@
   font-weight: 400;
   font-display: swap;
   src: url(fonts/e04b1d07ab70765d.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  unicode-range: U+0000-001F, U+0021-009F, U+00A1-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Space Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/e04b1d07ab70765d.woff2) format('woff2');
+  /* 공백만 따로: 고정폭 공백(0.61em)이 한글 라벨("작가 소개 보기")에서 띄어쓰기를 약 3배로 벌려 놓았다.
+     같은 파일을 절반 크기로 불러 공백 폭만 줄인다(영문 라벨의 단어 간격은 유지). size-adjust를 모르는 옛 브라우저는 예전 폭 그대로 */
+  size-adjust: 50%;
+  unicode-range: U+0020, U+00A0;
 }
 @font-face {
   font-family: 'Space Mono';
@@ -1741,5 +1752,16 @@
   font-weight: 700;
   font-display: swap;
   src: url(fonts/0319ea60ff1a93d1.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  unicode-range: U+0000-001F, U+0021-009F, U+00A1-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Space Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(fonts/0319ea60ff1a93d1.woff2) format('woff2');
+  /* 공백만 따로: 고정폭 공백(0.61em)이 한글 라벨("작가 소개 보기")에서 띄어쓰기를 약 3배로 벌려 놓았다.
+     같은 파일을 절반 크기로 불러 공백 폭만 줄인다(영문 라벨의 단어 간격은 유지). size-adjust를 모르는 옛 브라우저는 예전 폭 그대로 */
+  size-adjust: 50%;
+  unicode-range: U+0020, U+00A0;
 }

@@ -225,13 +225,22 @@
   }
 
   /* About teaser — 사진과 글이 스크롤 진입 때 살짝 나타나는 것 외에는 움직이지 않는다 */
-  .about-teaser{display:flex; align-items:center; gap:64px; text-decoration:none; color:inherit;}
+  /* IP 배너와 같은 외곽 폭·모서리 규칙(8px)을 쓰되, 높이는 IP처럼 고정 비율을 두지 않고
+     사진+글 내용에 맞춰 자연스럽게 늘어난다. 반투명 먹남색이라 뒤편 별이 옅게 비친다 —
+     테두리·그림자·호버 상승 효과는 넣지 않는다(카드처럼 보이지 않게). */
+  .about-teaser{display:flex; align-items:center; gap:64px; text-decoration:none; color:inherit;
+    background:rgba(10,12,22,.70); border-radius:8px; padding:44px 48px;}
   .about-teaser:focus-visible{outline:2px solid var(--accent); outline-offset:8px;}
   .about-teaser-media{flex:0 0 220px;}
   .about-teaser-media img{width:100%; height:auto; display:block; -webkit-user-select:none; user-select:none; -webkit-user-drag:none;}
   .about-teaser-body{flex:1 1 auto; min-width:0;}
+  /* 1행 '독해·해석·번역'이 2·3행 '읽고·찾아·옮깁니다'와 짝을 이루도록 줄을 나누고, 굵은 제목체는 1행에만.
+     1인칭 문장까지 포스터체로 쓰면 외치는 느낌이 난다 */
+  .about-teaser-lede .lede-1{display:block;}
+  .about-teaser-lede .lede-2{display:block; margin-top:12px; font-family:'Noto Sans KR',sans-serif; font-weight:500;
+    font-size:clamp(16px,1.5vw,19px); line-height:1.7; color:var(--ivory-dim); word-break:keep-all;}
   @media(max-width:720px){
-    .about-teaser{flex-direction:column; align-items:flex-start; gap:26px;}
+    .about-teaser{flex-direction:column; align-items:flex-start; gap:26px; padding:32px 28px;}
     .about-teaser-media{flex-basis:auto; width:160px;}
   }
 
@@ -611,11 +620,11 @@
       <div class="hv-meta-row">
         <a class="hv-work-link" id="hvWorkLink" href="#" hidden>
           <span class="hv-work-title" id="hvWorkTitle"></span>
-          <span class="hv-work-cta" data-i="hv_view_work">작품 보기 ↗</span>
+          <span class="hv-work-cta" data-i="hv_view_work">작품 보기 →</span>
         </a>
         <button class="hv-playpause" id="hvPlayPause" type="button" aria-label="일시정지">❚❚</button>
       </div>
-      <h1 class="statement" data-i="statement"><span class="lead1">쉽게 들어와서 오래 머무는 작업.</span><span class="accent">순서가 다를 뿐, 깊이는 같습니다.</span></h1>
+      <p class="statement" role="heading" aria-level="1" data-i="statement"><span class="lead1">쉽게 들어와서 오래 머무는 작업.</span><span class="accent">순서가 다를 뿐, 깊이는 같습니다.</span></p>
     </div>
   </div>
 </header>
@@ -637,7 +646,7 @@
     </div>
     <div class="about-teaser-body reveal-text" data-reveal>
       <p class="about-teaser-label">About the artist</p>
-      <p class="about-teaser-lede" data-i="about_teaser_lede">독해하고, 해석하고, 번역하는 것.<br>저는 법을 읽고 의미를 찾아, 그것을 나전칠기의 언어로 옮깁니다.</p>
+      <p class="about-teaser-lede" data-i="about_teaser_lede"><span class="lede-1">독해하고, 해석하고, 번역하는 것.</span><span class="lede-2">저는 법을 읽고 의미를 찾아,<br>그것을 나전칠기의 언어로 옮깁니다.</span></p>
       <span class="about-teaser-cta" data-i="about_teaser_cta">작가 소개 보기 <span class="cta-arrow">→</span></span>
     </div>
   </a>
@@ -757,9 +766,9 @@ var I18N = {
     ip_teaser_lede:'SPACED-OUT SEA OTTER',
     ip_teaser_sub:'얼빵해달',
     ip_teaser_cta:'만나러 가기 <span class="cta-arrow">→</span>',
-    hv_view_work:'작품 보기 ↗',
+    hv_view_work:'작품 보기 →',
     hv_play:'재생', hv_pause:'일시정지',
-    about_teaser_lede:'독해하고, 해석하고, 번역하는 것.<br>저는 법을 읽고 의미를 찾아, 그것을 나전칠기의 언어로 옮깁니다.',
+    about_teaser_lede:'<span class="lede-1">독해하고, 해석하고, 번역하는 것.</span><span class="lede-2">저는 법을 읽고 의미를 찾아,<br>그것을 나전칠기의 언어로 옮깁니다.</span>',
     about_teaser_cta:'작가 소개 보기 <span class="cta-arrow">→</span>',
   },
   en: {
@@ -793,9 +802,9 @@ var I18N = {
     ip_teaser_lede:'SPACED-OUT SEA OTTER',
     ip_teaser_sub:'Eolbbang Haedal',
     ip_teaser_cta:'Say hello <span class="cta-arrow">→</span>',
-    hv_view_work:'View work ↗',
+    hv_view_work:'View work →',
     hv_play:'Play', hv_pause:'Pause',
-    about_teaser_lede:'To read, interpret, and translate.<br>I read the law, seek out its meaning, and translate it into the language of najeonchilgi.',
+    about_teaser_lede:'<span class="lede-1">To read, interpret, and translate.</span><span class="lede-2">I read the law, seek out its meaning,<br>and translate it into the language of najeonchilgi.</span>',
     about_teaser_cta:'Meet the artist <span class="cta-arrow">→</span>'
   }
 };
@@ -1689,10 +1698,25 @@ document.addEventListener('contextmenu', function(e){
   function clearHoldTimer(){
     if(hvHoldTimer){ clearTimeout(hvHoldTimer); hvHoldTimer = null; }
   }
+  /* 자동재생 거부(저전력 모드·데이터 절약·인앱 브라우저)는 사용자가 멈춘 게 아니다.
+     포스터를 그대로 보여 주고 ▶로 직접 재생할 수 있게 둔 채, 슬라이드가 여럿이면 8초 뒤 다음으로 넘어간다
+     (예전에는 hvPaused로 처리돼 순환이 영구히 멈췄다). */
+  var hvBlockedTimer = null;
+  function clearBlockedTimer(){
+    if(hvBlockedTimer){ clearTimeout(hvBlockedTimer); hvBlockedTimer = null; }
+  }
+  function onAutoplayBlocked(){
+    updatePlayPauseUI();
+    if(HV_LIST.length > 1 && !hvBlockedTimer){
+      hvBlockedTimer = setTimeout(function(){ hvBlockedTimer = null; if(!hvPaused) goToNext(); }, 8000);
+    }
+  }
+  videoEl.addEventListener('playing', clearBlockedTimer);
   function goToNext(){ switchTo((hvIndex + 1) % HV_LIST.length); }
 
   /* 다른 슬라이드로 전환 — 항상 새로 로드하고, 뜰 때까지 포스터를 보여준다 */
   function switchTo(i){
+    clearBlockedTimer();
     hvIndex = i;
     var item = HV_LIST[i];
     updateWorkLink(item);
@@ -1710,7 +1734,7 @@ document.addEventListener('contextmenu', function(e){
       // (포스터는 실제로 재생이 시작될 때 'playing' 이벤트에서 감춘다 — 아래 참고).
       if(!hvPaused && isHeroVisible() && !document.hidden){
         var p = videoEl.play();
-        if(p && p.catch) p.catch(function(){ hvPaused = true; updatePlayPauseUI(); });
+        if(p && p.catch) p.catch(onAutoplayBlocked);
       }else if(!hvPaused){
         hvVisPaused = true;
       }
@@ -1892,7 +1916,7 @@ document.addEventListener('contextmenu', function(e){
     applyTheme(HV_LIST[0]);
     if(isHeroVisible() && !document.hidden){
       var p = videoEl.play();
-      if(p && p.catch) p.catch(function(){ hvPaused = true; updatePlayPauseUI(); });
+      if(p && p.catch) p.catch(onAutoplayBlocked);
     }else{
       hvVisPaused = true;
     }
