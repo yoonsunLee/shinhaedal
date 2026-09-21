@@ -88,8 +88,11 @@
   .cf-detail summary::-webkit-details-marker{display:none;}
   .cf-detail summary:hover, .cf-detail summary:focus-visible{color:var(--ivory);}
   .cf-detail ul{list-style:none; font-size:13px; line-height:1.6; color:var(--ivory-dim); margin:2px 0 8px; padding:14px 16px; display:grid; gap:6px; background:var(--bg-2); border:1px solid var(--line); border-radius:8px;}
-  .cf-detail b{font-weight:500; color:var(--ivory); margin-right:6px;}
-  .cf-consent-links{display:flex; flex-wrap:wrap; gap:8px 20px; margin:2px 0 0 28px;}
+  /* 항목 이름은 한 단계 흐리게, '보관 기간'만 굵고 밝게 — 동의 안내에서 보유 기간은 '중요한 내용'이라
+     다른 글과 구별되게 표시한다(개인정보 보호법 제22조 제2항·시행령 제17조 제3항 제3호). 전부 굵으면 아무것도 강조되지 않는다 */
+  .cf-detail .k{color:var(--ivory-muted); margin-right:8px;}
+  .cf-detail strong{font-weight:700; color:var(--ivory);}
+  .cf-actions{display:flex; flex-wrap:wrap; align-items:center; gap:8px 20px;}
   /* 봇만 채우는 숨은 칸. display:none이면 일부 봇이 건너뛰므로 화면 밖으로만 뺀다 */
   .cf-hp{position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden;}
   .cf-submit:disabled{opacity:.55; cursor:default;}
@@ -149,7 +152,7 @@
 <div class="contact-hero">
   <h1>Contact</h1>
   <p data-i="c_p1">작품에 관한 이야기부터 전시, 협업, IP 라이선싱까지. 함께해 보고 싶은 일이 있다면 편하게 연락해주세요.</p>
-  <p class="contact-quick" data-i="c_categories">작품 소장 · 전시 · 협업 · 라이선싱 · 기타 — 무엇이든 편하게 남겨주세요.</p>
+  <p class="contact-quick" data-i="c_categories">작품문의 · 전시 · 협업 · 라이선싱 · 기타 — 무엇이든 편하게 남겨주세요.</p>
   <div class="direct-inline">
     <a class="direct-email" href="mailto:haedarney@naver.com">haedarney@naver.com</a>
     <button type="button" class="copy-btn link-sub" id="copyEmailBtn" data-i="copy_email">이메일 복사</button>
@@ -163,7 +166,7 @@
     <div class="cf-row">
       <label for="cfType" data-i="lbl_type">문의 유형</label>
       <select id="cfType" name="type">
-        <option value="Artwork" data-i="opt_artwork">작품 소장</option>
+        <option value="Artwork" data-i="opt_artwork">작품문의</option>
         <option value="Exhibition" data-i="opt_exhibition">전시</option>
         <option value="Collaboration" data-i="opt_collaboration">협업</option>
         <option value="Licensing" data-i="opt_licensing">라이선싱</option>
@@ -205,26 +208,24 @@
       <div class="cf-consents">
         <div class="cf-consent-block">
           <label class="cf-consent" for="cfConsentCollect">
-            <input type="checkbox" id="cfConsentCollect" aria-describedby="cfConsentCollectSum">
-            <span data-i="consent1_label"><span class="req">[필수]</span>개인정보 수집·이용 동의</span>
+            <input type="checkbox" id="cfConsentCollect">
+            <span data-i="consent1_label"><span class="req">[필수]</span> 개인정보 수집·이용에 동의합니다.</span>
           </label>
-          <p class="cf-consent-sum" id="cfConsentCollectSum" data-i="consent1_sum"></p>
           <details class="cf-detail">
-            <summary data-i="detail1_more">수집 항목·동의 안내 보기</summary>
+            <summary data-i="detail1_more">수집·이용 안내 보기</summary>
             <ul id="cfConsentCollectDetail" data-i="consent1_detail"></ul>
           </details>
         </div>
-        <p class="cf-consent-links">
-          <a class="link-sub" href="../privacy/" target="_blank" rel="noopener" data-i="policy_link">개인정보 처리방침 ↗</a>
-          <a class="link-sub" href="mailto:haedarney@naver.com" data-i="direct_mail_link">폼 이용에 동의하지 않으시면 이메일로 문의 ↗</a>
-        </p>
       </div>
     </div>
     <div class="cf-hp" aria-hidden="true">
       <label for="cfWebsite">Website</label>
       <input type="text" id="cfWebsite" name="website" tabindex="-1" autocomplete="off">
     </div>
-    <button type="submit" class="cf-submit" id="cfSubmit" data-i="cf_submit">메일 앱에서 계속하기 →</button>
+    <div class="cf-actions">
+      <button type="submit" class="cf-submit" id="cfSubmit" data-i="cf_submit">메일 앱에서 계속하기 →</button>
+      <a class="link-sub" href="mailto:haedarney@naver.com" data-i="direct_mail_link">이메일로 문의 ↗</a>
+    </div>
     <p class="cf-note" id="cfNote" role="status" aria-live="polite"></p>
     <div class="cf-fallback" id="cfFallback" hidden>
       <p data-i="fallback_note">메일 앱이 열리지 않았다면, 아래 버튼으로 문의 내용을 복사해서 메일이나 웹메일에 붙여넣어 보내주세요.</p>
@@ -250,7 +251,7 @@ var I18N = {
     aria_menu_close:'메뉴 닫기',
     logo_tag:'나전칠기 아티스트',
     c_p1:'작품에 관한 이야기부터 전시, 협업, IP 라이선싱까지. 함께해 보고 싶은 일이 있다면 편하게 연락해주세요.',
-    c_categories:'작품 소장 · 전시 · 협업 · 라이선싱 · 기타 — 무엇이든 편하게 남겨주세요.',
+    c_categories:'작품문의 · 전시 · 협업 · 라이선싱 · 기타 — 무엇이든 편하게 남겨주세요.',
     copy_email:'이메일 복사',
     copy_email_done:'복사됨',
     copy_failed:'복사 실패 — 직접 선택해서 복사해주세요',
@@ -259,7 +260,7 @@ var I18N = {
     lbl_name:'성함 / 소속<span class="req-mark">*</span>',
     lbl_email:'이메일<span class="req-mark">*</span>',
     lbl_subject:'문의 제목<span class="req-mark">*</span>',
-    opt_artwork:'작품 소장',
+    opt_artwork:'작품문의',
     opt_exhibition:'전시',
     opt_collaboration:'협업',
     opt_licensing:'라이선싱',
@@ -286,18 +287,16 @@ var I18N = {
     page_title:'연락하기 — 신해달 나전칠기 아티스트',
     cf_send:'문의 보내기 →',
     cf_sending:'보내는 중…',
-    consent1_label:'<span class="req">[필수]</span>개인정보 수집·이용 동의',
-    consent1_sum:'문의 확인·회신에 사용하며, <b>회신이 끝난 뒤 1년간</b> 보관합니다.',
-    consent1_detail:'<li><b>목적</b>문의 확인과 회신 (홍보·소식 메일에는 쓰지 않아요)</li>'
-      + '<li><b>항목</b>성함·소속, 이메일, 문의 유형·제목·내용, 작품 문의 시 작품 번호</li>'
-      + '<li><b>처리 경로</b>국내 서버(카페24)에서 접수해 작가 메일로 보냅니다. 문의 내용을 따로 저장하지 않고, 국외로 이전하지 않아요</li>'
-      + '<li><b>보관·파기</b>작가 메일함에 회신이 끝난 뒤 1년까지 두고, 매월 한 번 정리할 때 지워요(그래서 최대 한 달쯤 늦어질 수 있어요). 삭제를 요청하시면 그 즉시 파기해요</li>'
-      + '<li><b>거부</b>동의하지 않으셔도 됩니다. 체크하지 않으시면 이 폼으로는 접수되지 않는 대신, 아래 메일 주소로 보내주시면 똑같이 확인해요</li>',
-    detail1_more:'수집 항목·동의 안내 보기',
-    policy_link:'개인정보 처리방침 ↗',
-    direct_mail_link:'폼 이용에 동의하지 않으시면 이메일로 문의 ↗',
+    consent1_label:'<span class="req">[필수]</span> 개인정보 수집·이용에 동의합니다.',
+    consent1_detail:'<li><span class="k">목적</span>문의 확인과 회신 (홍보·소식 메일에는 쓰지 않아요)</li>'
+      + '<li><span class="k">항목</span>성함·소속, 이메일, 문의 유형·제목·내용, 작품 문의 시 작품 번호</li>'
+      + '<li><span class="k">처리 경로</span>국내 서버(카페24)에서 접수해 작가 메일로 보냅니다. 문의 내용을 따로 저장하지 않고, 국외로 이전하지 않아요</li>'
+      + '<li><span class="k">보관·파기</span>작가 메일함에 <strong>회신이 끝난 뒤 1년</strong>까지 두고, 매월 한 번 정리할 때 지워요(그래서 최대 한 달쯤 늦어질 수 있어요). 삭제를 요청하시면 그 즉시 파기해요</li>'
+      + '<li><span class="k">거부</span>동의하지 않으셔도 됩니다. 체크하지 않으시면 이 폼으로는 접수되지 않는 대신, haedarney@naver.com 으로 메일을 보내주시면 똑같이 확인해요</li>',
+    detail1_more:'수집·이용 안내 보기',
+    direct_mail_link:'이메일로 문의 ↗',
     err_consent:'개인정보 수집·이용 동의를 선택해 주셔야 보낼 수 있어요.',
-    err_expired:'페이지를 연 지 오래됐어요. 새로고침한 뒤 다시 보내주세요.',
+    err_expired:'접수 확인이 만료됐어요. 입력하신 내용은 그대로 있으니 한 번 더 보내기를 눌러 주세요.',
     err_rate:'짧은 시간에 여러 번 보내셨어요. 잠시 후 다시 시도해 주세요.',
     err_duplicate:'같은 내용이 이미 접수됐어요.',
     err_invalid:'입력한 내용을 다시 확인해 주세요.',
@@ -348,18 +347,16 @@ var I18N = {
     page_title:'Contact — Shin Haedal, Najeonchilgi Artist',
     cf_send:'SEND INQUIRY →',
     cf_sending:'Sending…',
-    consent1_label:'<span class="req">[Required]</span>Consent to collection and use',
-    consent1_sum:'Used to review and reply to your inquiry, kept for <b>one year after we reply</b>.',
-    consent1_detail:'<li><b>Purpose</b>Reviewing and replying to your inquiry (never for news or promotional email)</li>'
-      + '<li><b>Items</b>Name/organization, email, inquiry type, subject, message, artwork number for artwork inquiries</li>'
-      + '<li><b>Where it is handled</b>Received by a server in Korea (Cafe24) and sent to the artist\'s mailbox. The message is not stored separately and is not transferred outside Korea</li>'
-      + '<li><b>Retention</b>Kept in the artist\'s mailbox until one year after the reply and removed at the next monthly clear-out (so it can linger up to a month longer), or destroyed right away if you ask</li>'
-      + '<li><b>Refusal</b>You may refuse. Leaving the box unticked means the form cannot be submitted; use the email address below instead and it reaches us just the same</li>',
-    detail1_more:'See the items collected and the full notice',
-    policy_link:'Privacy Policy ↗',
-    direct_mail_link:'Prefer not to consent? Email us instead ↗',
+    consent1_label:'<span class="req">[Required]</span> I agree to the collection and use of my personal information.',
+    consent1_detail:'<li><span class="k">Purpose</span>Reviewing and replying to your inquiry (never for news or promotional email)</li>'
+      + '<li><span class="k">Items</span>Name/organization, email, inquiry type, subject, message, artwork number for artwork inquiries</li>'
+      + '<li><span class="k">Where it is handled</span>Received by a server in Korea (Cafe24) and sent to the artist\'s mailbox. The message is not stored separately and is not transferred outside Korea</li>'
+      + '<li><span class="k">Retention</span>Kept in the artist\'s mailbox <strong>until one year after the reply</strong> and removed at the next monthly clear-out (so it can linger up to a month longer), or destroyed right away if you ask</li>'
+      + '<li><span class="k">Refusal</span>You may refuse. Leaving the box unticked means the form cannot be submitted; email haedarney@naver.com instead and it reaches us just the same</li>',
+    detail1_more:'See the collection & use notice',
+    direct_mail_link:'Email us ↗',
     err_consent:'Please agree to the collection and use of your personal information.',
-    err_expired:'This page has been open for a while. Please refresh and send again.',
+    err_expired:'The submission check expired. Your message is still here — please press send once more.',
     err_rate:'You have sent several messages in a short time. Please try again later.',
     err_duplicate:'The same message has already been sent.',
     err_invalid:'Please check the information you entered.',
@@ -496,14 +493,13 @@ function initWorkInquiry(){
 // 문의 접수: 네이버 클라우드(한국 리전)에서만 처리한다. 문의 내용은 저장하지 않고 작가 메일로만 간다.
 var CONTACT_API = 'https://shinhaedalapi.mycafe24.com/contact.php';
 // 동의한 고지문 버전 = 개인정보 처리방침 시행일. 동의 문구를 바꾸면 이 값도 함께 바꾼다
-var NOTICE_VERSION = '2026-09-18r2';
+var NOTICE_VERSION = '2026-09-22';
 var DIRECT_SUBMIT = CONTACT_API.indexOf('http') === 0;
 var submitToken = null;
 
 function setupDirectSubmit(){
   if(!DIRECT_SUBMIT) return;
   document.querySelector('.cf-direct').hidden = false;
-  document.getElementById('cfConsentCollectSum').innerHTML = I18N[LANG].consent1_sum;
   document.getElementById('cfConsentCollectDetail').innerHTML = I18N[LANG].consent1_detail;
   document.getElementById('cfSubmit').dataset.i = 'cf_send';
   document.getElementById('cfSubmit').textContent = I18N[LANG].cf_send;
@@ -546,7 +542,7 @@ function submitDirect(fields){
   btn.disabled = true;
   btn.textContent = I18N[LANG].cf_sending;
   showNote('', false);
-  fetchToken().then(function(tok){
+  function send(tok){
     return fetch(CONTACT_API, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
@@ -559,9 +555,18 @@ function submitDirect(fields){
         token_t: tok ? tok.t : '', token_n: tok ? tok.n : '', token_s: tok ? tok.s : '',
         website: document.getElementById('cfWebsite').value
       })
-    });
-  })
-    .then(function(res){ return res.json().catch(function(){ return {ok:false, code:'other'}; }); })
+    }).then(function(res){ return res.json().catch(function(){ return {ok:false, code:'other'}; }); });
+  }
+  /* 제출 토큰은 받은 곳의 IP에 묶여 있어서, 폰이 와이파이↔데이터로 바뀌면 'expired'가 온다.
+     그때 쓴 글을 날리지 않도록 새 토큰을 받아 한 번만 자동으로 다시 보낸다(두 번 이상은 하지 않음). */
+  fetchToken().then(send)
+    .then(function(j){
+      if(j && j.code === 'expired'){
+        submitToken = null;
+        return fetchToken().then(send);
+      }
+      return j;
+    })
     .then(function(j){
       if(j.ok){
         document.getElementById('contactForm').hidden = true;
