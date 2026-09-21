@@ -558,6 +558,7 @@ def main():
         press_out.append({
             "no": s(p.get("press_no")),
             "outlet": s(p.get("outlet_ko")),
+            "outlet_en": s(p.get("outlet_en")),  # 열이 아직 없으면 빈 값
             "date": s(p.get("published_date")),
             "title": s(p.get("title_ko")),
             "url": s(p.get("url")),

@@ -960,7 +960,7 @@ function addDays(dateStr, days){
 }
 function pickUpcomingExhibition(list){
   var today = todayKST();
-  var UPCOMING_WINDOW_DAYS = 14;
+  var UPCOMING_WINDOW_DAYS = 30; // 개막 30일 전부터 홈에 전시 예고(2026-09-22 운영자 결정)
   var candidates = list.filter(function(ex){
     if(!ex.start_date) return false;
     var windowStart = addDays(ex.start_date, -UPCOMING_WINDOW_DAYS);

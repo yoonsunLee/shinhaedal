@@ -201,6 +201,10 @@ function matchExhibition(p){
 function dekFor(p){
   return String((LANG === 'en' ? p.quote_en : p.quote) || '').trim();
 }
+// 영문 화면은 영문 매체명(아카이브 '매체명 (영문)'), 없으면 한글 매체명
+function outletFor(p){
+  return (LANG === 'en' && p.outlet_en) ? p.outlet_en : p.outlet;
+}
 function langFlag(p){
   return (LANG === 'en' && !p.title_en) ? '<span class="press-lang-flag">' + esc(I18N.en.ko_flag) + '</span>' : '';
 }
@@ -235,7 +239,7 @@ function renderFeatured(p){
   return '<div class="press-feature-grid reveal-once' + (img ? '' : ' no-media') + '">' +
     media +
     '<div class="press-feature-body">' +
-      '<p class="press-feature-meta"><span>' + esc(p.outlet) + '</span><span class="dot"></span><span>' + esc(p.date) + '</span></p>' +
+      '<p class="press-feature-meta"><span>' + esc(outletFor(p)) + '</span><span class="dot"></span><span>' + esc(p.date) + '</span></p>' +
       '<h2 class="press-feature-title">' + titleHtml + langFlag(p) + '</h2>' +
       (dek ? '<p class="press-feature-dek">' + esc(dek) + '</p>' : '') +
       '<div class="press-feature-links">' + linksFor(p).join('') + '</div>' +
@@ -250,7 +254,7 @@ function renderRow(p){
   return '<article class="press-row' + (img ? '' : ' no-media') + '">' +
     media +
     '<div class="press-row-text">' +
-      '<p class="press-row-meta"><span>' + esc(p.outlet) + '</span><span class="dot"></span><span>' + esc(p.date) + '</span></p>' +
+      '<p class="press-row-meta"><span>' + esc(outletFor(p)) + '</span><span class="dot"></span><span>' + esc(p.date) + '</span></p>' +
       '<h3 class="press-row-title">' + esc(title) + langFlag(p) + '</h3>' +
       (dek ? '<p class="press-row-dek">' + esc(dek) + '</p>' : '') +
     '</div>' +
