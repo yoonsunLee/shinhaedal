@@ -216,54 +216,116 @@ def make_audio(no, audio_master, out_root):
             "duration": round(float(probe.stdout.strip()))}
 
 
+# 인코딩 방식이 바뀌면 이 값을 올린다 → 모든 홈 영상을 다음 발행 때 다시 만든다.
+VIDEO_PIPELINE = "2026-09-22"
+VIDEO_MAX_SECONDS = 20
+HDR_TRANSFERS = {"smpte2084", "arib-std-b67"}  # PQ(HDR10·돌비비전 호환), HLG — 폰 기본 HDR 영상
+
+
+def _probe_video(path):
+    """길이(초)와 HDR 전송 특성(PQ면 'smpte2084', HLG면 'arib-std-b67', 아니면 '')."""
+    try:
+        out = subprocess.run(
+            ["ffprobe", "-v", "error", "-select_streams", "v:0",
+             "-show_entries", "stream=color_transfer:format=duration", "-of", "json", path],
+            check=True, capture_output=True, timeout=60).stdout
+        info = json.loads(out.decode("utf-8") or "{}")
+        dur = float((info.get("format") or {}).get("duration") or 0) or None
+        trc = ((info.get("streams") or [{}])[0].get("color_transfer") or "").lower()
+        return dur, (trc if trc in HDR_TRANSFERS else "")
+    except Exception:
+        return None, ""
+
+
+def _encode(src, out, width, crf, maxrate, hdr):
+    """웹용 H.264(8bit·BT.709·무음·faststart). 원본을 그대로 복사하지 않는다 —
+    폰 기본값(HEVC·HDR·4K·오디오)이 그대로 공개되고, 파일이 커져 발행 전체가 멈출 수 있어서."""
+    scale = "scale='min(%d,iw)':-2" % width
+    bufsize = "%dM" % (int(maxrate.rstrip("M")) * 2)
+
+    def run(vf):
+        subprocess.run(
+            ["ffmpeg", "-y", "-i", src, "-t", str(VIDEO_MAX_SECONDS), "-an", "-sn", "-dn",
+             "-map_metadata", "-1", "-vf", vf, "-fpsmax", "30",
+             "-c:v", "libx264", "-preset", "slow", "-crf", str(crf),
+             "-maxrate", maxrate, "-bufsize", bufsize,
+             "-pix_fmt", "yuv420p", "-profile:v", "high",
+             "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709",
+             "-movflags", "+faststart", out],
+            check=True, capture_output=True, timeout=600)
+
+    if hdr:
+        # HDR을 그대로 8bit로 내리면 색이 바래 보인다 → SDR로 톤매핑.
+        # 러너의 ffmpeg에 zscale이 없거나 원본 태그가 이상하면 톤매핑 없이라도 만든다(영상이 빠지는 것보다 낫다).
+        try:
+            run("zscale=tin=%s:pin=bt2020:min=bt2020nc:t=linear:npl=100,format=gbrpf32le,"
+                "zscale=p=bt709,tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,format=yuv420p,%s" % (hdr, scale))
+            return
+        except subprocess.CalledProcessError:
+            print("  HDR 변환 실패 — 변환 없이 인코딩합니다(색이 조금 바랠 수 있음)")
+    run(scale)
+
+
 def make_video(vid, video_master, out_root):
-    """홈 영상 하나: 마스터 원본 하나만 받아서 PC용(faststart 리먹스), 모바일용(저해상도
-    재인코딩), 포스터 프레임(첫 프레임 근처)까지 전부 자동으로 만든다.
-    작가가 모바일용을 따로 준비할 필요가 없게 하는 게 목적(2026-09-14 결정)."""
+    """홈 영상 하나: 마스터 원본 하나만 받아서 PC용·모바일용·포스터를 자동으로 만든다.
+    작가가 모바일용을 따로 준비할 필요가 없게 하는 게 목적(2026-09-14 결정).
+
+    - 원본이 같고(업로드 경로가 같음) 인코딩 방식도 같으면 이전 결과를 그대로 쓴다.
+      매일 자동 발행 때마다 다시 인코딩해 같은 영상이 저장소에 또 커밋되는 일을 막는다.
+    - 20초를 넘는 부분은 잘라 낸다(홈 히어로 루프는 8~15초 권장)."""
+    out_dir = os.path.join(out_root, vid)
+    pc_out = os.path.join(out_dir, "video.mp4")
+    poster_out = os.path.join(out_dir, "poster.webp")
+    mobile_out = os.path.join(out_dir, "video_mobile.mp4")
+    stamp = os.path.join(out_dir, "source.txt")
+    key = "%s|%s" % (VIDEO_PIPELINE, s(video_master))
+    result = {
+        "video": "assets/home-video/%s/video.mp4" % vid,
+        "video_mobile": "assets/home-video/%s/video_mobile.mp4" % vid,
+        "poster": "assets/home-video/%s/poster.webp" % vid,
+        "poster_mobile": "",
+    }
+    if all(os.path.exists(p) for p in (pc_out, poster_out, mobile_out, stamp)):
+        with open(stamp, encoding="utf-8") as f:
+            if f.read().strip() == key:
+                print("  같은 원본 — 이전 결과 재사용")
+                return result
+
     raw = fetch_image_bytes(video_master)
     if not raw:
         return None
-    out_dir = os.path.join(out_root, vid)
     os.makedirs(out_dir, exist_ok=True)
     src = os.path.join(out_dir, "_src_video")
     with open(src, "wb") as f:
         f.write(raw)
-
-    pc_out = os.path.join(out_dir, "video.mp4")
-    poster_out = os.path.join(out_dir, "poster.webp")
-    mobile_out = os.path.join(out_dir, "video_mobile.mp4")
     try:
-        # PC용: 재인코딩 없이 moov atom만 앞으로 옮긴다(모바일 브라우저에서 전체를
-        # 받기 전엔 재생이 시작되지 않던 문제의 원인이었다 — 2026-09-14에 겪음).
-        subprocess.run(["ffmpeg", "-y", "-i", src, "-c", "copy", "-movflags", "+faststart", pc_out],
-                       check=True, capture_output=True, timeout=300)
-        # 포스터: 검은 프레임으로 시작하는 경우가 많아 0.3초 지점에서 한 장 뽑는다.
-        subprocess.run(["ffmpeg", "-y", "-ss", "0.3", "-i", src, "-frames:v", "1", poster_out],
+        dur, hdr = _probe_video(src)
+        if dur and dur > VIDEO_MAX_SECONDS:
+            print("  %.1f초 — 앞 %d초만 씁니다" % (dur, VIDEO_MAX_SECONDS))
+        if hdr:
+            print("  HDR 원본 — SDR로 변환합니다(폰 설정에서 HDR 영상을 끄고 찍는 게 가장 좋습니다)")
+        # PC용: 1920폭 이하, 화질 기준(CRF 20) + 최대 8Mbps. 빛이 움직이는 자개 영상 기준 12초에 8~10MB 안팎
+        _encode(src, pc_out, 1920, 20, "8M", hdr)
+        # 모바일용: 1080폭 이하, CRF 23 + 최대 4Mbps (예전 720폭·CRF 26은 타일이 뭉개졌다)
+        _encode(src, mobile_out, 1080, 23, "4M", hdr)
+        # 포스터: 완성된 PC용의 첫 프레임 — 재생이 시작될 때 포스터에서 영상으로 튀지 않도록 루프 시작과 같은 장면
+        subprocess.run(["ffmpeg", "-y", "-i", pc_out, "-frames:v", "1", "-quality", "85", poster_out],
                        check=True, capture_output=True, timeout=60)
-        # 모바일용: 해상도·비트레이트를 낮춰서 재인코딩(작가가 따로 만들 필요 없음).
-        subprocess.run(["ffmpeg", "-y", "-i", src,
-                         "-vf", "scale='min(720,iw)':'-2'",
-                         "-c:v", "libx264", "-crf", "26", "-preset", "veryfast",
-                         "-c:a", "aac", "-b:a", "96k",
-                         "-movflags", "+faststart", mobile_out],
-                       check=True, capture_output=True, timeout=300)
+        for label, p in (("PC", pc_out), ("모바일", mobile_out)):
+            mb = os.path.getsize(p) / 1e6
+            print("  %s용 %.1fMB%s" % (label, mb, " — 큽니다. 더 짧게 또는 움직임을 느리게 찍어 주세요" if mb > 20 else ""))
+        with open(stamp, "w", encoding="utf-8") as f:
+            f.write(key + "\n")
     except Exception:
-        # 셋 중 하나라도 실패하면 절반만 만들어진 산출물을 남기지 않는다
-        # (다음 발행 때 헷갈리지 않도록 폴더를 깨끗한 상태로 되돌린다).
-        for p in (pc_out, poster_out, mobile_out):
+        # 하나라도 실패하면 절반만 만들어진 산출물을 남기지 않는다
+        for p in (pc_out, poster_out, mobile_out, stamp):
             if os.path.exists(p):
                 os.remove(p)
         raise
     finally:
         if os.path.exists(src):
             os.remove(src)
-
-    return {
-        "video": "assets/home-video/%s/video.mp4" % vid,
-        "video_mobile": "assets/home-video/%s/video_mobile.mp4" % vid,
-        "poster": "assets/home-video/%s/poster.webp" % vid,
-        "poster_mobile": "",
-    }
+    return result
 
 
 def write_json(path, payload):
