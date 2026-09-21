@@ -10,17 +10,22 @@ og 이미지는 data/works/<id>.json의 large 사진을 브랜드 배경(#0b0b0f
 이미지는 같이 정리한다.
 
 사용법:
-  python scripts/gen_work_share.py --all        # 현재 발행된 작품 전부 + sitemap.xml
+  python scripts/gen_work_share.py --all        # 현재 발행된 작품 전부 + 목록 미리 쓰기 + sitemap.xml
   python scripts/gen_work_share.py HD-2026-009  # 특정 작품만 (sitemap은 건드리지 않음)
 """
 import datetime
+import hashlib
 import json
 import shutil
+import subprocess
 import sys
 from html import escape
 from pathlib import Path
 
 from PIL import Image
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from prerender_lists import prerender  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE_BASE = "https://shinhaedal.com"
@@ -360,10 +365,70 @@ def gen_page(meta, index, exhibitions, today):
     print(f"{wid}: {og_path.relative_to(ROOT)}, {out_path.relative_to(ROOT)}")
 
 
-def write_sitemap(index):
-    urls = [(f"{SITE_BASE}/{path}", prio) for path, prio in STATIC_PAGES]
-    urls += [(f"{SITE_BASE}/works/w/{w['id']}/", "0.8") for w in index]
-    body = "\n".join(f"  <url><loc>{e(loc)}</loc><priority>{prio}</priority></url>" for loc, prio in urls)
+LASTMOD_FILE = ROOT / "data" / "lastmod.json"
+
+
+def _page_file(path):
+    return ROOT / path / "index.html" if path else ROOT / "index.html"
+
+
+def _content_hash(f):
+    # 줄바꿈 차이는 내용 변화가 아니다
+    return hashlib.sha256(f.read_bytes().replace(b"\r\n", b"\n")).hexdigest()[:16]
+
+
+def _git_date(f):
+    """git에 기록된 마지막 수정일. 커밋되지 않은 내용 변경이 있으면(방금 만들거나 고친 파일) None → 오늘."""
+    try:
+        dirty = subprocess.run(["git", "diff", "--ignore-cr-at-eol", "--quiet", "HEAD", "--", str(f)], cwd=ROOT,
+                               capture_output=True, timeout=30).returncode != 0
+        tracked = subprocess.run(["git", "ls-files", "--error-unmatch", "--", str(f)], cwd=ROOT,
+                                 capture_output=True, timeout=30).returncode == 0
+        if dirty or not tracked:
+            return None
+        out = subprocess.run(["git", "log", "-1", "--format=%cs", "--", str(f)], cwd=ROOT,
+                             capture_output=True, text=True, timeout=30).stdout.strip()
+        return out or None
+    except Exception:
+        return None
+
+
+def lastmod_dates(paths, today):
+    """페이지 내용이 실제로 바뀐 날만 lastmod를 올린다.
+    매일 자동 발행 때마다 전부 오늘 날짜로 올리면 검색엔진이 이 값을 믿지 않게 된다.
+    처음 보는 페이지는 git 기록의 마지막 수정일(없으면 오늘)."""
+    try:
+        old = json.loads(LASTMOD_FILE.read_text(encoding="utf-8"))
+    except (FileNotFoundError, ValueError):
+        old = {}
+    new = {}
+    for path in paths:
+        f = _page_file(path)
+        if not f.exists():
+            continue
+        h = _content_hash(f)
+        prev = old.get(path)
+        if prev and prev.get("hash") == h:
+            date = prev["date"]
+        elif prev:
+            date = today
+        else:
+            date = _git_date(f) or today
+        new[path] = {"hash": h, "date": date}
+    if new != old:
+        LASTMOD_FILE.write_text(json.dumps(new, ensure_ascii=False, indent=1, sort_keys=True) + "\n",
+                                encoding="utf-8", newline="\n")
+    return {k: v["date"] for k, v in new.items()}
+
+
+def write_sitemap(index, today):
+    pages = [(path, prio) for path, prio in STATIC_PAGES]
+    pages += [(f"works/w/{w['id']}/", "0.8") for w in index]
+    dates = lastmod_dates([p for p, _ in pages], today)
+    urls = [(f"{SITE_BASE}/{path}", prio, dates.get(path)) for path, prio in pages]
+    body = "\n".join(
+        f"  <url><loc>{e(loc)}</loc>" + (f"<lastmod>{d}</lastmod>" if d else "") + f"<priority>{prio}</priority></url>"
+        for loc, prio, d in urls)
     xml = f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{body}\n</urlset>\n'
     (ROOT / "sitemap.xml").write_text(xml, encoding="utf-8", newline="\n")
     print(f"sitemap.xml: {len(urls)} URLs")
@@ -398,7 +463,8 @@ def main(argv):
         for meta in index:
             gen_page(meta, index, exhibitions, today)
         cleanup_stale({w["id"] for w in index})
-        write_sitemap(index)
+        prerender()  # 작품 목록·홈 Recent·Press를 HTML에 미리 쓰기(검색 로봇용)
+        write_sitemap(index, today)
     else:
         meta = next((w for w in index if w["id"] == argv[0]), None)
         if not meta:
