@@ -288,11 +288,11 @@ var I18N = {
     cf_send:'문의 보내기 →',
     cf_sending:'보내는 중…',
     consent1_label:'<span class="req">[필수]</span> 개인정보 수집·이용에 동의합니다.',
-    consent1_detail:'<li><span class="k">목적</span>문의 확인과 회신 (홍보·소식 메일에는 쓰지 않아요)</li>'
+    consent1_detail:'<li><span class="k">목적</span>문의 확인과 회신에만 이용합니다. 홍보·소식 메일에는 이용하지 않습니다.</li>'
       + '<li><span class="k">항목</span>성함·소속, 이메일, 문의 유형·제목·내용, 작품 문의 시 작품 번호</li>'
-      + '<li><span class="k">처리 경로</span>국내 서버(카페24)에서 접수해 작가 메일로 보냅니다. 문의 내용을 따로 저장하지 않고, 국외로 이전하지 않아요</li>'
-      + '<li><span class="k">보관·파기</span>작가 메일함에 <strong>회신이 끝난 뒤 1년</strong>까지 두고, 매월 한 번 정리할 때 지워요(그래서 최대 한 달쯤 늦어질 수 있어요). 삭제를 요청하시면 그 즉시 파기해요</li>'
-      + '<li><span class="k">거부</span>동의하지 않으셔도 됩니다. 체크하지 않으시면 이 폼으로는 접수되지 않는 대신, haedarney@naver.com 으로 메일을 보내주시면 똑같이 확인해요</li>',
+      + '<li><span class="k">처리 경로</span>국내 서버(카페24)에서 접수해 작가 메일로 보냅니다. 문의 내용은 따로 저장하지 않으며, 국외로 이전하지 않습니다.</li>'
+      + '<li><span class="k">보관·파기</span>작가 메일함에 <strong>회신이 끝난 뒤 1년</strong>까지 보관하고, 매월 1회 정리할 때 파기합니다(이 때문에 파기가 최대 한 달 늦어질 수 있습니다). 삭제를 요청하시면 즉시 파기합니다.</li>'
+      + '<li><span class="k">거부</span>동의하지 않으실 수 있습니다. 동의하지 않으시면 이 폼으로는 접수되지 않으며, haedarney@naver.com 으로 메일을 보내주시면 동일하게 확인합니다.</li>',
     detail1_more:'수집·이용 안내 보기',
     direct_mail_link:'이메일로 문의 ↗',
     err_consent:'개인정보 수집·이용 동의를 선택해 주셔야 보낼 수 있어요.',
@@ -493,7 +493,7 @@ function initWorkInquiry(){
 // 문의 접수: 네이버 클라우드(한국 리전)에서만 처리한다. 문의 내용은 저장하지 않고 작가 메일로만 간다.
 var CONTACT_API = 'https://shinhaedalapi.mycafe24.com/contact.php';
 // 동의한 고지문 버전 = 개인정보 처리방침 시행일. 동의 문구를 바꾸면 이 값도 함께 바꾼다
-var NOTICE_VERSION = '2026-09-22';
+var NOTICE_VERSION = '2026-09-22r2';
 var DIRECT_SUBMIT = CONTACT_API.indexOf('http') === 0;
 var submitToken = null;
 
