@@ -32,7 +32,9 @@
 
   /* ---------- 페이지·언어·기기 ---------- */
   // 영문 페이지(/en/works/)도 같은 페이지로 센다 — 언어는 따로(l) 보낸다
+  // 주소가 제각각인 곳(없는 페이지, 처리방침 지난 판)은 페이지가 __SH_PAGE로 이름을 정한다
   function pageKey(){
+    if(typeof window.__SH_PAGE === 'string' && /^\/[a-z0-9\-\/]*\/$/.test(window.__SH_PAGE)) return window.__SH_PAGE;
     var p = location.pathname.replace(/index\.html$/, '').replace(/^\/en(?=\/)/, '');
     if(p.charAt(p.length - 1) !== '/') p += '/';
     return p;
