@@ -215,6 +215,46 @@ def make_poster(ex_id, poster_ref, assets_root):
     return "assets/exhibitions/%s/poster.webp" % ex_id
 
 
+HERO_IMAGE_MAX = 2000   # 홈 히어로에 따로 올린 이미지의 긴 변(작품 한 점을 화면 가운데 크게 — 레티나까지)
+
+
+def make_hero_image(slide_id, image_ref, out_root):
+    """홈 히어로 '이미지' 장: 원본(sb:/drive:)을 홈페이지용 webp 한 장으로. (경로, 가로, 세로)를 돌려준다."""
+    from io import BytesIO
+    from PIL import Image, ImageCms, ImageOps
+    raw = fetch_image_bytes(image_ref)
+    if not raw:
+        return None
+    im = Image.open(BytesIO(raw))
+    im = ImageOps.exif_transpose(im)
+    if im.mode not in ("RGB", "RGBA"):
+        im = im.convert("RGB")
+    icc = im.info.get("icc_profile")
+    if icc:
+        try:
+            im = ImageCms.profileToProfile(im, ImageCms.ImageCmsProfile(BytesIO(icc)),
+                                           ImageCms.createProfile("sRGB"), outputMode="RGB")
+        except Exception:
+            pass
+    w0, h0 = im.size
+    scale = min(1.0, HERO_IMAGE_MAX / max(w0, h0))
+    if scale < 1.0:
+        im = im.resize((max(1, int(w0 * scale)), max(1, int(h0 * scale))), Image.LANCZOS)
+    out_dir = os.path.join(out_root, slide_id)
+    os.makedirs(out_dir, exist_ok=True)
+    im.save(os.path.join(out_dir, "image.webp"), "WEBP", quality=86)
+    return "assets/home-hero/%s/image.webp" % slide_id, im.size[0], im.size[1]
+
+
+def image_size(path):
+    try:
+        from PIL import Image
+        with Image.open(path) as im:
+            return im.size
+    except Exception:
+        return None
+
+
 def make_audio(no, audio_master, out_root):
     raw = fetch_image_bytes(audio_master)   # 같은 규칙(drive:/sb:)을 쓴다
     if not raw:
@@ -454,7 +494,7 @@ def main():
     works.sort(key=lambda w: (w.get("display_order") is None, w.get("display_order") or 0))
 
     index_entries = []
-    asset_sources = {"works": {}, "posters": {}, "home_videos": {}}  # 미리보기용 원본 지문
+    asset_sources = {"works": {}, "posters": {}, "home_videos": {}, "hero_images": {}}  # 미리보기용 원본 지문
     for w in works:
         no = s(w["work_no"])
         mine = [e for e in ex_of_work.get(w["id"], []) if e]
@@ -640,42 +680,109 @@ def main():
     write_json(os.path.join(data_dir, "press.json"), press_out)
     print("press.json: %d건" % len(press_out))
 
+    # ── 홈 히어로 ──
+    # 한 장에 작품 한 점(자르지 않고 크게)·따로 올린 이미지·영상 하나. 홈페이지가 들어올 때마다 섞어 차례로 보여 준다.
+    # 표는 home_videos 그대로(kind 열: video·work·image — home_hero_2026-09.sql). kind 열이 없으면 전부 영상.
+    # 기본 이미지(지금 얼빵해달 화면)는 site_settings 'hero_default'로 켜고 끄며, 공개된 장이 없으면 늘 나온다.
+    HERO_MAX, HERO_MAX_VIDEO = 5, 2
     hv_no_by_id = {w["id"]: s(w["work_no"]) for w in works}
+    work_by_id = {w["id"]: w for w in works}   # 공개 작품만
     hv_assets_dir = os.path.join(os.path.dirname(assets_dir), "home-video")
-    hv_out = []
-    for v in home_videos[:3]:  # 홈페이지는 최대 3개까지만 쓴다
+    hero_assets_dir = os.path.join(os.path.dirname(assets_dir), "home-hero")
+    hero_default = settings.get("hero_default")
+    default_on = not (isinstance(hero_default, dict) and hero_default.get("enabled") is False)
+
+    def work_credit(work_id):
+        w = work_by_id.get(s(work_id))
+        if not w:
+            return None
+        y = w.get("year")
+        return {"no": s(w["work_no"]), "title": s(w.get("title_ko")), "title_en": s(w.get("title_en")),
+                "year": y if isinstance(y, int) else s(y)}
+
+    hero_slides, hv_out, n_video = [], [], 0
+    for v in home_videos:
         vid = s(v.get("id"))
         if not vid:
             continue
-        media = {"video": "", "video_mobile": "", "poster": "", "poster_mobile": ""}
-        if not data_only and s(v.get("video_master")):
-            print("영상 처리 중: " + (s(v.get("name")) or vid))
-            try:
-                made = make_video(vid, v.get("video_master"), hv_assets_dir)
-            except Exception as e:
-                # 영상 하나가 깨졌다고 작품·전시·Press 발행까지 전부 막으면 안 된다.
-                # 이 영상만 건너뛰고(다음 발행 때 다시 시도됨) 나머지는 정상 진행한다.
-                print("영상 처리 실패, 이 영상은 건너뜀(%s): %s" % (vid, e))
+        if len(hero_slides) + (1 if default_on else 0) >= HERO_MAX:
+            print("홈 히어로: %d장을 넘어 건너뜀 — %s" % (HERO_MAX, s(v.get("name")) or vid))
+            continue
+        kind = s(v.get("kind")) or "video"
+        if kind == "video":
+            if n_video >= HERO_MAX_VIDEO:
+                print("홈 히어로: 영상은 %d개까지라 건너뜀 — %s" % (HERO_MAX_VIDEO, s(v.get("name")) or vid))
                 continue
-            if made:
-                media = made
-                asset_sources["home_videos"][vid] = src_hash(v.get("video_master"))
-        hv_out.append({
-            "id": vid,
-            "name": s(v.get("name")),
-            "public": True,  # is_public=eq.true로 이미 걸러서 가져왔으니 여기 온 건 전부 공개
-            "order": v.get("sort_order") or 0,
-            "video": media["video"],
-            "video_mobile": media["video_mobile"],
-            "poster": media["poster"],
-            "poster_mobile": media["poster_mobile"],
-            "work_no": hv_no_by_id.get(s(v.get("work_id")), ""),
-            "bg_color": s(v.get("bg_color")) or "#000000",
-            "ui_theme": s(v.get("ui_theme")) or "dark",
-            "mobile_image_fallback": bool(v.get("mobile_image_fallback")),
-        })
+            media = {"video": "", "video_mobile": "", "poster": "", "poster_mobile": ""}
+            if not data_only and s(v.get("video_master")):
+                print("영상 처리 중: " + (s(v.get("name")) or vid))
+                try:
+                    made = make_video(vid, v.get("video_master"), hv_assets_dir)
+                except Exception as e:
+                    # 영상 하나가 깨졌다고 작품·전시·Press 발행까지 전부 막으면 안 된다.
+                    # 이 영상만 건너뛰고(다음 발행 때 다시 시도됨) 나머지는 정상 진행한다.
+                    print("영상 처리 실패, 이 영상은 건너뜀(%s): %s" % (vid, e))
+                    continue
+                if made:
+                    media = made
+                    asset_sources["home_videos"][vid] = src_hash(v.get("video_master"))
+            elif data_only and os.path.exists(os.path.join(hv_assets_dir, vid, "video.mp4")):
+                media = {"video": "assets/home-video/%s/video.mp4" % vid, "video_mobile": "assets/home-video/%s/video_mobile.mp4" % vid,
+                         "poster": "assets/home-video/%s/poster.webp" % vid, "poster_mobile": ""}
+            # 예전 home-videos.json(영상만) — 옛 홈페이지 코드가 읽던 파일. 새 홈페이지는 home-hero.json을 읽는다
+            hv_out.append({
+                "id": vid, "name": s(v.get("name")), "public": True, "order": v.get("sort_order") or 0,
+                "video": media["video"], "video_mobile": media["video_mobile"],
+                "poster": media["poster"], "poster_mobile": media["poster_mobile"],
+                "work_no": hv_no_by_id.get(s(v.get("work_id")), ""),
+                "bg_color": s(v.get("bg_color")) or "#000000", "ui_theme": s(v.get("ui_theme")) or "dark",
+                "mobile_image_fallback": bool(v.get("mobile_image_fallback")),
+            })
+            if not media["video"]:
+                continue
+            n_video += 1
+            hero_slides.append({"id": vid, "kind": "video", "video": media["video"], "video_mobile": media["video_mobile"],
+                                "poster": media["poster"], "mobile_image_fallback": bool(v.get("mobile_image_fallback")),
+                                "work": work_credit(v.get("work_id"))})
+        elif kind == "work":
+            w = work_by_id.get(s(v.get("work_id")))
+            if not w:
+                print("홈 히어로: 연결한 작품이 비공개·삭제라 건너뜀 — %s" % (s(v.get("name")) or vid))
+                continue
+            no = s(w["work_no"])
+            size = image_size(os.path.join(assets_dir, no, "detail.webp"))
+            if not size:
+                print("홈 히어로: %s 작품 사진이 없어 건너뜀" % no)
+                continue
+            hero_slides.append({"id": vid, "kind": "image", "image": "assets/works/%s/detail.webp" % no,
+                                "w": size[0], "h": size[1], "work": work_credit(w["id"])})
+        elif kind == "image":
+            if not s(v.get("image_file")):
+                continue
+            made = None
+            if not data_only:
+                print("히어로 이미지 처리 중: " + (s(v.get("name")) or vid))
+                try:
+                    made = make_hero_image(vid, v.get("image_file"), hero_assets_dir)
+                except Exception as e:
+                    print("히어로 이미지 처리 실패, 건너뜀(%s): %s" % (vid, e))
+                if made:
+                    asset_sources["hero_images"][vid] = src_hash(v.get("image_file"))
+            else:
+                size = image_size(os.path.join(hero_assets_dir, vid, "image.webp"))
+                if size:
+                    made = ("assets/home-hero/%s/image.webp" % vid, size[0], size[1])
+            if not made:
+                continue
+            hero_slides.append({"id": vid, "kind": "image", "image": made[0], "w": made[1], "h": made[2],
+                                "work": work_credit(v.get("work_id"))})
+    if default_on or not hero_slides:
+        size = image_size(os.path.join(ROOT, "assets", "landing", "hero-bg.webp")) or (1448, 1086)
+        hero_slides.insert(0, {"id": "default", "kind": "image", "image": "assets/landing/hero-bg.webp",
+                               "w": size[0], "h": size[1], "work": None})
+    write_json(os.path.join(data_dir, "home-hero.json"), {"slides": hero_slides})
+    print("home-hero.json: %d장(영상 %d)" % (len(hero_slides), n_video))
     write_json(os.path.join(data_dir, "home-videos.json"), hv_out)
-    print("home-videos.json: %d건" % len(hv_out))
     if not data_only:  # 사진을 새로 만들지 않은 발행에서는 지문을 쓰지 않는다(파일과 어긋나므로)
         write_json(os.path.join(data_dir, "asset-sources.json"), asset_sources)
 
@@ -702,6 +809,11 @@ def main():
             for name in os.listdir(hv_assets_dir):
                 if name not in current_hv:
                     _remove_orphan(os.path.join(hv_assets_dir, name), "assets/home-video/%s" % name)
+        current_hero = {x["id"] for x in hero_slides if x.get("image", "").startswith("assets/home-hero/")}
+        if os.path.isdir(hero_assets_dir):
+            for name in os.listdir(hero_assets_dir):
+                if name not in current_hero:
+                    _remove_orphan(os.path.join(hero_assets_dir, name), "assets/home-hero/%s" % name)
 
 
 if __name__ == "__main__":

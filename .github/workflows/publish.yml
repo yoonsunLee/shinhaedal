@@ -107,8 +107,8 @@ jobs:
         run: |
           git config user.name "haedal-publish-bot"
           git config user.email "actions@users.noreply.github.com"
-          mkdir -p assets/exhibitions assets/home-video
-          git add data/ assets/works/ assets/exhibitions/ assets/home-video/ works/w/ sitemap.xml \
+          mkdir -p assets/exhibitions assets/home-video assets/home-hero
+          git add data/ assets/works/ assets/exhibitions/ assets/home-video/ assets/home-hero/ works/w/ sitemap.xml \
                   index.html works/index.html press/index.html
           if git diff --cached --quiet; then
             echo "No changes."
