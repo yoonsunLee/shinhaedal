@@ -29,7 +29,7 @@ from prerender_lists import blocks, fill_block  # noqa: E402
 ROOT = Path(__file__).resolve().parent.parent
 SITE = "https://shinhaedal.com"
 HOST = "shinhaedal.com"
-PAGES = ["", "works/", "about/", "press/", "contact/", "privacy/", "ip/"]
+PAGES = ["", "works/", "about/", "press/", "contact/", "privacy/", "copyright/", "ip/"]
 INDEX_TITLE_EN = "Shin Haedal — Najeonchilgi Artist"  # index.html applyLang의 영문 제목과 같게
 
 
@@ -48,6 +48,7 @@ def en_desc(path, en):
         "press/": strip_tags(en.get("page_sub")),
         "contact/": "Contact Shin Haedal about artworks, exhibitions, collaborations and licensing.",
         "privacy/": "Privacy policy of the official website of the artist Shin Haedal.",
+        "copyright/": "What you may do with the artworks, writing and characters of Shin Haedal, and what needs permission. Use for AI training is not permitted.",
         "ip/": strip_tags(en.get("hero_note")),  # IP 페이지 영문 그대로(작가 요청)
     }[path]
 
@@ -230,6 +231,7 @@ def apply_edits(text, edits):
 EXTRA = {  # 페이지 applyLang이 언어에 따라 켜고 끄는 것(id → hidden)
     "press/": {"enNote": False},
     "privacy/": {"ppKo": True, "ppEn": False},
+    "copyright/": {"cpKo": True, "cpEn": False},
 }
 JS_SWAPS = {  # 페이지 스크립트의 국문 초기값 → 영문(없으면 조용히 넘어감: 국문 페이지 쪽 전환이 대신 보낸다)
     "": [("location.replace('works/' + location.search)", "location.replace('/en/works/' + location.search)"),

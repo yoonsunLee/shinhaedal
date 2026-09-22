@@ -1,5 +1,30 @@
 #DaumWebMasterTool:03fd7becd9029077fed53883bcc9dee0f94f6bfabedfcbdc0dc7887b2018ee22:xW6Kk2oQii5AqEml977qZg==
+
+# 검색 로봇은 모두 환영합니다.
 User-agent: *
 Allow: /
+
+# 인공지능 모델 학습·데이터셋 수집용 로봇은 허락하지 않습니다.
+# 사람이 물었을 때 사이트를 찾아 소개하는 로봇(ChatGPT-User, OAI-SearchBot, PerplexityBot,
+# Claude-User, Claude-SearchBot 등)과 링크 미리보기 로봇은 위 Allow 그대로 열어 둡니다.
+# 같은 뜻을 /.well-known/tdmrep.json 과 /copyright/ 5항에도 적어 두었습니다.
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: anthropic-ai
+User-agent: CCBot
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: Meta-ExternalAgent
+User-agent: FacebookBot
+User-agent: Bytespider
+User-agent: ImagesiftBot
+User-agent: Diffbot
+User-agent: Omgilibot
+User-agent: Omgili
+User-agent: Timpibot
+User-agent: PanguBot
+User-agent: AI2Bot
+User-agent: Webzio-Extended
+Disallow: /
 
 Sitemap: https://shinhaedal.com/sitemap.xml

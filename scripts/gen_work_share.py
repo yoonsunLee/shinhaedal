@@ -35,7 +35,7 @@ BG_COLOR = (11, 11, 15)  # site.css --bg: #0b0b0f
 MARGIN_Y = 20  # 위아래 여백(px). 정사각/세로 작품 사진이 레터박스로 들어갈 때의 최소 여백.
 DESCRIPTION_LIMIT = 110  # 카톡·페북 모두 대략 150~200자에서 잘라버리니, 문장 중간에 끊기지 않도록 미리 짧게 자른다.
 SHOP_URL = "https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product"
-STATIC_PAGES = [("", "1.0"), ("works/", "0.9"), ("about/", "0.7"), ("ip/", "0.7"), ("press/", "0.6"), ("contact/", "0.6"), ("privacy/", "0.3")]
+STATIC_PAGES = [("", "1.0"), ("works/", "0.9"), ("about/", "0.7"), ("ip/", "0.7"), ("press/", "0.6"), ("contact/", "0.6"), ("privacy/", "0.3"), ("copyright/", "0.3")]
 
 
 def e(s):
@@ -228,7 +228,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 </main>
 
 <footer>
-  <span>© SHIN HAEDAL &nbsp;&nbsp;&nbsp;&nbsp; All rights reserved.<a class="ft-privacy" href="../../../privacy/"><span class="ft-ko">개인정보 처리방침</span><span class="ft-en">Privacy Policy</span></a></span>
+  <span>© SHIN HAEDAL &nbsp;&nbsp;&nbsp;&nbsp; All rights reserved.<a class="ft-privacy" href="../../../privacy/"><span class="ft-ko">개인정보 처리방침</span><span class="ft-en">Privacy Policy</span></a><a class="ft-privacy" href="../../../copyright/"><span class="ft-ko">저작권·이용 안내</span><span class="ft-en">Copyright &amp; Use</span></a></span>
   <a href="#">BACK TO TOP ↑</a>
 </footer>
 
