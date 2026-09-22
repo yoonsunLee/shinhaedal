@@ -39,39 +39,50 @@
 <link rel="stylesheet" href="assets/site.css">
 <style>
   /* ───────── 홈 히어로 ─────────
-     한 장에 작품 한 점(자르지 않고 크게) 또는 영상 하나. 여러 장을 들어올 때마다 섞어 블랙 딥으로 넘긴다.
-     작품 가운데 = 메뉴까지 포함한 화면 전체의 가운데. 크기·위치는 스크립트가 메뉴·문구 위치를 재서 잡는다
-     (아래 .hh-art 값은 스크립트가 없을 때의 기본). 메뉴 뒤까지 올라가도록 margin-top을 음수로, 배경은 투명(뒤 밤하늘). */
+     장마다 작품(또는 기본 이미지·영상)을 화면에 꽉 채우고, 보이는 동안 아주 천천히 확대한다(켄 번스).
+     여러 장은 들어올 때마다 섞어 블랙 딥으로 넘긴다. 위(메뉴)·아래(문구)만 어둡게 깔고, 아래 30%는 뒤 밤하늘로 녹인다.
+     메뉴 뒤까지 올라가도록 margin-top을 음수로, 배경은 투명(뒤 밤하늘). (2026-09-22 작가 요청으로 '자르지 않고 가운데' → 다시 꽉 채움) */
   header.hero{
     position:relative; z-index:0; overflow:hidden;
-    height:100vh; height:100svh; min-height:540px;
+    height:88vh; height:88svh; min-height:520px;
     margin-top:-86px;
     background:transparent;
   }
-  .hh-stage{position:absolute; inset:0; z-index:0;}
-  .hh-slide{position:absolute; inset:0; visibility:hidden;}
+  /* 확대되는 사진에 직접 마스크를 걸면 마스크도 같이 커져 경계가 생기므로, 변형 없는 감싸개에 건다 */
+  .hh-media{position:absolute; inset:0; z-index:0;
+    -webkit-mask-image:linear-gradient(to bottom, #000 0%, #000 70%, transparent 100%);
+            mask-image:linear-gradient(to bottom, #000 0%, #000 70%, transparent 100%);}
+  /* 스크롤할 때 배경이 조금 느리게 따라오도록(최대 60px) 위로 여유를 둔다 */
+  .hh-stage{position:absolute; top:-70px; left:0; right:0; bottom:0; will-change:transform;}
+  .hh-slide{position:absolute; inset:0; visibility:hidden; overflow:hidden;}
   .hh-slide.on{visibility:visible;}
-  .hh-art{position:absolute; left:12.5%; right:12.5%; top:17%; height:56%;}
-  /* 작품 뒤 아주 옅은 빛 */
-  .hh-art::before{content:''; position:absolute; left:-45%; right:-45%; top:-45%; bottom:-45%; border-radius:50%; pointer-events:none;
-    background:radial-gradient(closest-side, rgba(200,215,245,.12), rgba(200,215,245,.04) 55%, transparent);}
-  .hh-art img{position:relative; display:block; width:100%; height:100%; object-fit:contain;
-    filter:drop-shadow(0 24px 36px rgba(0,0,0,.55)) drop-shadow(0 2px 8px rgba(0,0,0,.35));}
-  .hh-video video, .hh-video .hh-poster{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;}
+  .hh-art{position:absolute; inset:0;}
+  .hh-art img, .hh-video video, .hh-video .hh-poster{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;}
+  .hh-art img{object-position:50% 45%; transform-origin:50% 45%;}
+  /* 기본 이미지는 얼빵해달 얼굴 쪽으로(예전 히어로와 같은 자리) */
+  .hh-slide[data-id="default"] .hh-art img{object-position:50% 25%; transform-origin:52% 38%;}
   .hh-video .hh-poster{z-index:1; transition:opacity .35s ease;}
   .hh-video .hh-poster.off{opacity:0;}
-  /* 좁은 화면의 영상: 폭 가득, 작품과 같은 가운데(스크립트가 top·height를 준다), 위아래는 바탕으로 녹인다 */
-  @media (max-width:900px){
-    .hh-video{bottom:auto;
-      -webkit-mask-image:linear-gradient(to bottom, transparent 0%, #000 12%, #000 80%, transparent 100%);
-              mask-image:linear-gradient(to bottom, transparent 0%, #000 12%, #000 80%, transparent 100%);}
+  /* 천천히 줌인 — 한 장이 보이는 동안(넘김 전환까지 --hh-zoom-ms). 넓은 화면 6%, 폰은 좁아서 같은 비율로는 멈춘 듯 보여 11% */
+  @media (prefers-reduced-motion: no-preference){
+    .hh-slide.on .hh-art img{animation:hhZoom var(--hh-zoom-ms, 10000ms) linear both;}
+    header.hero.hh-frozen .hh-slide.on .hh-art img{animation-play-state:paused;}
   }
-  /* 메뉴 글자가 밝은 작품 위에서도 읽히도록 위쪽만 살짝 어둡게. 넓은 화면의 영상 장은 아래 문구 쪽도 */
+  @keyframes hhZoom{ from{ transform:scale(1); } to{ transform:scale(1.06); } }
+  @media (max-width:720px){
+    .hh-slide[data-id="default"] .hh-art img{transform-origin:50% 44%;}
+  }
+  @media (max-width:720px) and (prefers-reduced-motion: no-preference){
+    .hh-slide.on .hh-art img{animation-name:hhZoomM;}
+  }
+  @keyframes hhZoomM{ from{ transform:scale(1); } to{ transform:scale(1.11); } }
+  /* 작품이 보이도록 가운데는 비우고, 위(메뉴)와 아래(문구)에만 어둠을 깐다 */
   .hh-scrim{position:absolute; inset:0; z-index:1; pointer-events:none;
-    background:linear-gradient(to bottom, rgba(5,6,10,.5) 0%, rgba(5,6,10,0) 14%);}
-  @media (min-width:901px){
-    header.hero.hh-is-video .hh-scrim{background:linear-gradient(to bottom, rgba(5,6,10,.62) 0%, rgba(5,6,10,.25) 10%, rgba(5,6,10,0) 22%, rgba(5,6,10,0) 50%, rgba(5,6,10,.6) 76%, rgba(5,6,10,.92) 100%);}
+    background:linear-gradient(to bottom, rgba(5,6,10,.62) 0%, rgba(5,6,10,.3) 9%, rgba(5,6,10,0) 20%, rgba(5,6,10,0) 38%, rgba(5,6,10,.55) 66%, rgba(5,6,10,.92) 100%);}
+  @media (max-width:720px){
+    .hh-scrim{background:linear-gradient(to bottom, rgba(5,6,10,.62) 0%, rgba(5,6,10,.3) 8%, rgba(5,6,10,.08) 18%, rgba(5,6,10,.2) 32%, rgba(5,6,10,.72) 52%, rgba(5,6,10,.95) 100%);}
   }
+  /* 첫 화면 작품 위에 얹히는 메뉴 글자·언어 버튼에 옅은 그림자 — 밝은 자개 조각 위에서도 경계가 흐려지지 않게 */
   body > nav .nav-icons{filter:drop-shadow(0 1px 6px rgba(5,6,10,.7));}
   /* 블랙 딥 막. 첫 진입은 검정에서 걷히며 시작(스크립트가 있을 때만 처음부터 검정) */
   .hh-curtain{position:absolute; inset:0; z-index:2; pointer-events:none; opacity:0;
@@ -81,13 +92,13 @@
     position:absolute; z-index:3; left:0; right:0; bottom:0;
     max-width:1180px; margin:0 auto; padding:0 32px 64px;
   }
-  .hh-lower{display:flex; align-items:flex-end; justify-content:space-between; gap:32px;}
+  /* 크레딧(작품명, 연도 · 작품 보기)은 문구 위에 작게 — 문구가 예전처럼 한 줄로 크게 들어가도록 */
+  .hh-lower{display:flex; flex-direction:column; align-items:flex-start; gap:14px;}
   .statement{
     font-family:'Black Han Sans', sans-serif; font-weight:400;
-    /* 작품이 먼저 보이고 문구는 그다음에 읽히도록(히어로 개편 2026-09-22) */
-    font-size:40px;
+    font-size:clamp(30px, 5.1vw, 64px);
     line-height:1.16;
-    margin:0; max-width:64%;
+    margin:0;
     color:var(--ivory);
     text-wrap:balance; word-break:keep-all; /* 폰에서 두 줄로 나뉠 때 '순서가 다를 뿐, / 깊이는 같습니다.'처럼 고르게 */
     /* 밝은 자개 조각 위에서도 읽히도록. text-shadow는 글자 안 그라디언트를 덮어서 drop-shadow를 쓴다 */
@@ -110,12 +121,13 @@
     .statement .accent{animation:pearlSweep 1.8s cubic-bezier(.45,.05,.25,1) .6s both;}
   }
   @keyframes pearlSweep{ from{ background-position:100% 0; } to{ background-position:0% 0; } }
-  /* 크레딧: 작품명, 연도 + 작품 보기. 크레딧이 없는 장(기본 이미지 등)에도 자리는 남겨 작품 위치가 흔들리지 않게 */
-  .hh-credit{flex:0 0 auto; display:flex; flex-direction:column; align-items:flex-end; justify-content:flex-end; gap:5px;
-    min-height:42px; padding-bottom:4px; text-decoration:none; color:var(--ivory); transition:opacity .45s ease;}
+  /* 크레딧이 없는 장(기본 이미지 등)에도 자리는 남겨 문구가 흔들리지 않게 */
+  .hh-credit{order:-1; display:flex; flex-direction:column; align-items:flex-start; justify-content:flex-end; gap:5px;
+    min-height:42px; text-decoration:none; color:var(--ivory); transition:opacity .45s ease;
+    filter:drop-shadow(0 1px 8px rgba(5,6,10,.8));}
   .hh-credit.fade, .hh-credit.empty{opacity:0;}
   .hh-credit.empty{pointer-events:none;}
-  .hh-credit .t{font-family:'Noto Sans KR',sans-serif; font-weight:600; font-size:14px; line-height:1.35; text-align:right;}
+  .hh-credit .t{font-family:'Noto Sans KR',sans-serif; font-weight:600; font-size:14px; line-height:1.35;}
   .hh-credit .go{font-family:'Space Mono','Noto Sans KR',monospace; font-size:11.5px; letter-spacing:.3px; color:var(--accent);}
   .hh-credit:hover .go{text-decoration:underline;}
   .hh-credit:focus-visible{outline:2px solid var(--accent); outline-offset:4px;}
@@ -130,17 +142,9 @@
   .hh-pp{flex:0 0 auto; margin-left:auto; width:30px; height:30px; border:0; border-radius:50%; background:none;
     color:rgba(245,240,230,.85); font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center;}
   .hh-pp:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
-  @media (max-width:900px){
-    .hh-lower{flex-direction:column; align-items:flex-start; gap:14px;}
-    .hh-credit{order:-1; align-items:flex-start;}
-    .hh-credit .t{text-align:left;}
-    .statement{font-size:34px; max-width:100%;}
-  }
   @media (max-width:560px){
     .hero-inner{padding:0 20px 44px;}
     .hh-bar{padding:0 20px; bottom:14px;}
-    .statement{font-size:26px;}
-    .statement .lead1{font-size:.55em;}
   }
   /* grid */
   .grid-section{max-width:1180px; margin:0 auto; padding:56px 32px 96px;}
@@ -557,11 +561,13 @@
 </nav>
 
 <header class="hero" id="hero">
-  <div class="hh-stage" id="hhStage" aria-hidden="true">
-    <!-- 스크립트가 없거나 불러오기 전에는 기본 이미지. 스크립트가 data/home-hero.json의 장들로 이어 간다 -->
-    <div class="hh-slide on" data-id="default"><div class="hh-art"><img src="assets/landing/hero-bg.webp" width="1448" height="1086" alt="" draggable="false" fetchpriority="high"></div></div>
+  <div class="hh-media" aria-hidden="true">
+    <div class="hh-stage" id="hhStage">
+      <!-- 스크립트가 없거나 불러오기 전에는 기본 이미지. 스크립트가 data/home-hero.json의 장들로 이어 간다 -->
+      <div class="hh-slide on" data-id="default"><div class="hh-art"><img src="assets/landing/hero-bg.webp" width="1448" height="1086" alt="" draggable="false" fetchpriority="high"></div></div>
+    </div>
+    <div class="hh-scrim"></div>
   </div>
-  <div class="hh-scrim" aria-hidden="true"></div>
   <div class="hh-curtain" id="hhCurtain" aria-hidden="true"></div>
   <div class="hero-inner">
     <div class="hh-lower" id="hhLower">
@@ -1580,11 +1586,11 @@ document.addEventListener('contextmenu', function(e){
 <script>
 /* ---------- 홈 히어로 ----------
    data/home-hero.json의 장(kind 'image' = 작품·올린 이미지·기본 이미지, 'video' = 영상)을 들어올 때마다 섞어 차례로 보여 준다.
-   · 작품은 자르지 않고 크게: 가운데 = 메뉴까지 포함한 화면 전체의 가운데, 메뉴·문구와 겹치지 않는 가장 큰 크기
-   · 영상: 넓은 화면은 꽉 채움, 좁은 화면(≤900px)은 폭 가득·같은 가운데·위아래를 바탕으로 녹임
+   · 장마다 화면을 꽉 채우고(cover) 보이는 동안 천천히 확대(CSS hhZoom, 길이는 --hh-zoom-ms). 정지·화면 밖이면 확대도 멈춘다
+   · 스크롤하면 배경이 조금 느리게 따라온다(최대 60px)
    · 전환은 블랙 딥(0.7초 가라앉음 → 0.2초 멈춤 → 0.9초 떠오름), 첫 진입은 검정에서 걷힘
    · 재방문은 지난번 첫 장과 다른 장으로 시작 — localStorage 'hero_first'(처리방침 11항 '첫 화면에서 지난번 처음 본 장')
-   · 이미지 8초, 영상은 끝날 때까지(최대 20초). 자동재생이 막히면 포스터로 8초
+   · 이미지 9초, 영상은 끝날 때까지(최대 20초). 자동재생이 막히면 포스터로 9초
    · 정지 버튼: 넘김·영상·별 배경을 모두 멈춘다. '움직임 줄이기'면 첫 장만(넘김·전환 없음)
    · 불러오지 못한 장은 건너뛰고, 전부 실패하면 기본 이미지 */
 (function(){
@@ -1594,50 +1600,20 @@ document.addEventListener('contextmenu', function(e){
   var credit = document.getElementById('hhCredit'), barsEl = document.getElementById('hhBars'), pp = document.getElementById('hhPP');
   var bar = document.getElementById('hhBar');
   var reduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
-  var IMAGE_MS = 8000, VIDEO_MAX_MS = 20000, OUT_MS = 700, HOLD_MS = 200, IN_MS = 900, FIRST_MS = 1200, FIRST_WAIT_MS = 3500;
+  var IMAGE_MS = 9000, VIDEO_MAX_MS = 20000, OUT_MS = 700, HOLD_MS = 200, IN_MS = 900, FIRST_MS = 1200, FIRST_WAIT_MS = 3500;
   var FIRST_KEY = 'hero_first', firstStore = null;
   try{ firstStore = window.localStorage; }catch(e){}
   var staticEl = stage.querySelector('.hh-slide[data-id="default"]');
   var DEFAULT = {id:'default', kind:'image', image:'assets/landing/hero-bg.webp', w:1448, h:1086, work:null};
   var order = [], pos = -1, cur = null, elapsed = 0, busy = true, userPaused = false, heroVisible = true, lastT = 0;
+  // 확대는 넘김 전환(가라앉는 동안)까지 이어지도록 조금 길게
+  hero.style.setProperty('--hh-zoom-ms', (IMAGE_MS + OUT_MS + HOLD_MS + 300) + 'ms');
 
   function curtainTo(v, ms, done){
     if(reduce) ms = 0;
     curtain.style.transition = ms ? 'opacity ' + ms + 'ms ease-in-out' : 'none';
     curtain.style.opacity = String(v);
     if(done) setTimeout(done, ms);
-  }
-
-  /* 작품 칸: 가운데를 화면 높이의 절반에 두고, 메뉴 아래·문구 위와 겹치지 않는 가장 큰 크기 */
-  function metrics(){
-    var hr = hero.getBoundingClientRect(), W = hero.clientWidth, H = hero.clientHeight;
-    var logo = document.querySelector('body > nav .logo-block');
-    var navBottom = logo ? logo.getBoundingClientRect().bottom - hr.top : 70;
-    var textTop = lower.getBoundingClientRect().top - hr.top;
-    var narrow = W <= 900, mobile = W <= 560;
-    var gapTop = narrow && !mobile ? 32 : 28, gapBottom = narrow ? (mobile ? 28 : 34) : 30;
-    var side = narrow ? (mobile ? 0 : 32) : Math.max(32, Math.round(W * 0.125));
-    var c = H / 2, half = Math.min(c - navBottom - gapTop, textTop - gapBottom - c);
-    return {W:W, c:c, maxH:Math.max(120, half * 2), side:side, narrow:narrow};
-  }
-  function place(sl, m){
-    if(!sl.el) return;
-    if(sl.kind === 'video'){
-      if(m.narrow){
-        var h = Math.min(m.W * 1.25, Math.min((m.W - m.side * 2) * 1.25, m.maxH) * 1.18);
-        sl.el.style.top = Math.round(m.c - h / 2) + 'px'; sl.el.style.height = Math.round(h) + 'px';
-      }else{ sl.el.style.top = ''; sl.el.style.height = ''; }
-      return;
-    }
-    var art = sl.el.querySelector('.hh-art'), ar = (sl.w && sl.h) ? sl.w / sl.h : 1;
-    var w = Math.min(m.W - m.side * 2, m.maxH * ar), hh = w / ar;
-    art.style.left = Math.round((m.W - w) / 2) + 'px'; art.style.right = 'auto'; art.style.width = Math.round(w) + 'px';
-    art.style.top = Math.round(m.c - hh / 2) + 'px'; art.style.height = Math.round(hh) + 'px';
-  }
-  function placeAll(){
-    var m = metrics();
-    order.forEach(function(sl){ place(sl, m); });
-    if(cur && order.indexOf(cur) < 0) place(cur, m);
   }
 
   function build(sl){
@@ -1730,7 +1706,10 @@ document.addEventListener('contextmenu', function(e){
     pp.textContent = userPaused ? '▶' : '❚❚';
     pp.setAttribute('aria-label', I18N[LANG][userPaused ? 'hv_play' : 'hv_pause']);
   }
+  // 정지 버튼·다른 탭·화면 밖이면 확대도 멈춘다
+  function syncFreeze(){ hero.classList.toggle('hh-frozen', userPaused || !heroVisible || !!document.hidden); }
   function playCur(){
+    syncFreeze();
     var sl = cur;
     if(!sl || !sl.video_el) return;
     if(userPaused || reduce || !heroVisible || document.hidden){ sl.video_el.pause(); return; }
@@ -1748,7 +1727,6 @@ document.addEventListener('contextmenu', function(e){
       if(cur.id === 'default' && order.indexOf(cur) < 0 && cur.el.parentNode){ cur.el.parentNode.removeChild(cur.el); cur.el = null; }
     }
     cur = sl; pos = p; elapsed = 0; sl.blocked = false;
-    place(sl, metrics());
     sl.el.classList.add('on');
     hero.classList.toggle('hh-is-video', !!sl.video_el);
     if(sl.video_el){ sl.video_el.loop = order.length < 2; playCur(); }
@@ -1850,9 +1828,18 @@ document.addEventListener('contextmenu', function(e){
       playCur();
     }, {threshold:0.2}).observe(hero);
   }
-  var rt = 0;
-  window.addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(placeAll, 120); });
-  if(document.fonts && document.fonts.ready) document.fonts.ready.then(placeAll);
+  // 스크롤 때 배경이 조금 느리게(최대 60px) — 예전 히어로와 같은 깊이감
+  if(!reduce){
+    var ticking = false;
+    window.addEventListener('scroll', function(){
+      if(ticking) return;
+      ticking = true;
+      requestAnimationFrame(function(){
+        stage.style.transform = 'translateY(' + Math.round(Math.min(window.scrollY || window.pageYOffset || 0, 400) * 0.15) + 'px)';
+        ticking = false;
+      });
+    }, {passive:true});
+  }
 
   // 언어를 바꾸면 크레딧(작품명)과 정지 버튼 이름도 다시
   if(typeof window.applyLang === 'function'){
@@ -1861,7 +1848,6 @@ document.addEventListener('contextmenu', function(e){
       origApplyLang(l, opts);
       if(cur) setCredit(cur);
       updatePP();
-      setTimeout(placeAll, 0);
     };
   }
   updatePP();
