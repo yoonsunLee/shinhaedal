@@ -1583,8 +1583,7 @@ document.addEventListener('contextmenu', function(e){
    · 작품은 자르지 않고 크게: 가운데 = 메뉴까지 포함한 화면 전체의 가운데, 메뉴·문구와 겹치지 않는 가장 큰 크기
    · 영상: 넓은 화면은 꽉 채움, 좁은 화면(≤900px)은 폭 가득·같은 가운데·위아래를 바탕으로 녹임
    · 전환은 블랙 딥(0.7초 가라앉음 → 0.2초 멈춤 → 0.9초 떠오름), 첫 진입은 검정에서 걷힘
-   · 재방문은 지난번 첫 장과 다른 장으로 시작 — 지금은 sessionStorage(탭을 닫으면 사라짐).
-     처리방침 4차 개정(브라우저 저장 항목에 '첫 화면에서 지난번에 처음 본 장')을 게시하는 날 localStorage로 바꾼다
+   · 재방문은 지난번 첫 장과 다른 장으로 시작 — localStorage 'hero_first'(처리방침 11항 '첫 화면에서 지난번 처음 본 장')
    · 이미지 8초, 영상은 끝날 때까지(최대 20초). 자동재생이 막히면 포스터로 8초
    · 정지 버튼: 넘김·영상·별 배경을 모두 멈춘다. '움직임 줄이기'면 첫 장만(넘김·전환 없음)
    · 불러오지 못한 장은 건너뛰고, 전부 실패하면 기본 이미지 */
@@ -1597,7 +1596,7 @@ document.addEventListener('contextmenu', function(e){
   var reduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
   var IMAGE_MS = 8000, VIDEO_MAX_MS = 20000, OUT_MS = 700, HOLD_MS = 200, IN_MS = 900, FIRST_MS = 1200, FIRST_WAIT_MS = 3500;
   var FIRST_KEY = 'hero_first', firstStore = null;
-  try{ firstStore = window.sessionStorage; }catch(e){}
+  try{ firstStore = window.localStorage; }catch(e){}
   var staticEl = stage.querySelector('.hh-slide[data-id="default"]');
   var DEFAULT = {id:'default', kind:'image', image:'assets/landing/hero-bg.webp', w:1448, h:1086, work:null};
   var order = [], pos = -1, cur = null, elapsed = 0, busy = true, userPaused = false, heroVisible = true, lastT = 0;

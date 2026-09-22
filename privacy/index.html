@@ -66,6 +66,12 @@
   .pp-transfer dt{font-size:14px; color:var(--ivory-muted); padding-top:2px;}
   .pp-transfer dd{margin:0; font-size:15px; line-height:1.7; color:var(--pp-text);}
 
+  /* 방문 통계 제외 버튼 */
+  .pp-optout{display:flex; flex-wrap:wrap; gap:10px 16px; align-items:center; border:1px solid var(--line); border-radius:8px; padding:14px 16px; margin:4px 0 12px;}
+  .pp-optstate{font-size:15px; color:var(--pp-text);}
+  .pp-optbtn{font:inherit; font-size:15px; padding:8px 14px; border:1px solid var(--ivory-dim); border-radius:6px; background:none; color:var(--ivory); cursor:pointer;}
+  .pp-optbtn:hover{border-color:var(--ivory);}
+  .pp-optbtn:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
   .pp-history{margin-top:40px; padding-top:24px; border-top:1px solid var(--line);}
 
   @media(max-width:720px){
@@ -127,10 +133,7 @@
 <article class="pp" id="ppKo" lang="ko">
   <h1>개인정보 처리방침</h1>
   <p class="pp-meta">시행일 2026. 9. 22.</p>
-  <!-- REV4-NOTICE -->
-  <p class="pp-lead" style="border:1px solid var(--line);border-radius:8px;padding:14px 16px"><strong>개정 예고</strong> — 2026년 9월 29일부터 4차 개정 처리방침이 적용됩니다. 홈페이지 방문 통계(합계만 저장, IP 주소 미저장, 국내 서버)를 도입하면서 처리 목적·항목·근거·보유 기간과 브라우저 저장 항목, 통계에서 빠지는 방법을 밝힙니다. <a href="next/">개정안 전문 보기</a></p>
-  <!-- /REV4-NOTICE -->
-  <p class="pp-lead">해달자개(이하 "운영자")는 신해달 작가 공식 홈페이지(https://shinhaedal.com, 이하 "홈페이지")의 문의 폼과 홈페이지에 안내된 이메일 주소로 받은 문의에서 처리하는 개인정보를 「개인정보 보호법」에 따라 보호하고, 관련 고충을 원활하게 처리하기 위해 다음과 같이 개인정보 처리방침을 둡니다.</p>
+    <p class="pp-lead">해달자개(이하 "운영자")는 신해달 작가 공식 홈페이지(https://shinhaedal.com, 이하 "홈페이지")의 문의 폼과 홈페이지에 안내된 이메일 주소로 받은 문의, 그리고 홈페이지 방문 통계에서 처리하는 개인정보를 「개인정보 보호법」에 따라 보호하고, 관련 고충을 원활하게 처리하기 위해 다음과 같이 개인정보 처리방침을 둡니다.</p>
 
   <ol class="pp-toc" aria-label="목차">
     <li><a href="#ko-1"><span class="n">1</span>처리 목적</a></li>
@@ -152,6 +155,7 @@
   <section id="ko-1">
     <h2><span class="n">1</span>개인정보의 처리 목적</h2>
     <p>운영자는 홈페이지 문의 폼 또는 안내된 이메일 주소로 받은 문의(작품문의, 전시, 협업, 라이선싱, 기타)를 확인하고 회신하기 위해서만 개인정보를 처리합니다. 같은 곳에서 짧은 시간에 반복되는 자동 등록(스팸)을 막는 데에도 필요한 범위에서 처리합니다. 전시 소식이나 홍보 메일 발송에는 이용하지 않습니다.</p>
+    <p>또한 홈페이지가 어떻게 이용되는지 날짜별·항목별 합계로 파악해 작품 소개와 홈페이지를 개선하기 위해 방문 통계를 냅니다. 개인을 알아보거나 사이트 밖까지 따라다니는 데에는 쓰지 않습니다.</p>
   </section>
 
   <section id="ko-2">
@@ -164,8 +168,10 @@
         <tr><td>접수 과정에서 자동 생성</td><td>접수 일시, 작성 언어(국문/영문), 동의한 고지문 버전</td></tr>
         <tr><td>이메일로 직접 문의할 때</td><td>보내신 분의 이름과 이메일 주소, 제목과 본문, 첨부파일에 담긴 내용, 받은 시각 — 문의자가 스스로 적어 보낸 범위</td></tr>
         <tr><td>반복 접수 확인용</td><td>접속 IP 주소를 접수 서버에만 있는 비밀키로 변환한 <strong>해시값</strong>(비밀키 없이는 되돌릴 수 없습니다), 같은 문의가 연달아 오는지 확인하기 위해 이메일·제목·내용을 합쳐 만든 <strong>해시값</strong>, 그리고 접수 시각. 원문은 저장하지 않으며, 접수 서버에만 짧게 남습니다(<a href="#ko-4">4항</a>)</td></tr>
+        <tr><td>방문 통계</td><td>접속 IP 주소(국가를 알아내고 과도한 요청을 막는 데에만 쓰며 원문은 저장하지 않습니다), 본 페이지와 작품, 누른 버튼의 종류, 스크롤 깊이, 머문 시간, 들어온 사이트의 종류(예: 인스타그램·검색)와 주소의 캠페인 표시(?src=), 화면 언어, 기기 종류(폰·태블릿·컴퓨터), 브라우저 정보(로봇과 기기 종류를 가리는 데에만 사용)</td></tr>
       </tbody>
     </table></div>
+    <p>방문 통계는 방문자마다 따로 기록하지 않고 고유 번호도 붙이지 않습니다. 저장되는 것은 "날짜 × 항목"별 <strong>합계 숫자뿐</strong>이어서, 저장된 통계로는 특정 개인을 알아볼 수 없습니다.</p>
     <p class="note">문의 내용에는 주민등록번호, 계좌번호, 건강 정보 등 필요 이상의 개인정보를 적지 말아 주세요.</p>
   </section>
 
@@ -174,6 +180,7 @@
     <p>문의 폼은 정보주체의 동의(「개인정보 보호법」 제15조 제1항 제1호)를 받아 처리하며, 수집·이용 동의 한 가지만 받습니다.</p>
     <p>이메일로 직접 보내주신 문의 중 작품·전시·협업·라이선싱에 관한 문의는 계약을 체결하는 과정에서 정보주체의 요청에 따른 조치(같은 항 제4호)로, 그 밖의 문의는 문의에 답하기 위한 운영자의 정당한 이익(같은 항 제6호)으로 회신에 필요한 범위에서만 처리합니다. 문의 처리에 필요하지 않은 내용이 담겨 있으면 확인 후 지웁니다.</p>
     <p>자동·반복 접수를 막기 위한 처리(제출 토큰 발급·확인, IP 주소의 해시값)는 폼에 입력을 시작하는 시점부터 이루어지므로 동의에 앞섭니다. 스팸과 자동 등록으로부터 문의 창구를 지키기 위한 최소한의 처리이며(같은 항 제6호), 원문을 남기지 않고 짧게만 보관합니다(<a href="#ko-4">4항</a>).</p>
+    <p>방문 통계는 홈페이지 운영 현황을 파악하기 위한 운영자의 정당한 이익(같은 항 제6호)으로 처리합니다. 개인을 알아볼 수 없는 합계만 남기고, IP 주소는 국가를 알아낸 직후 버리며, 브라우저의 추적 거부 신호(GPC·Do Not Track)를 따르고, 원하시면 언제든 통계에서 빠질 수 있게 해(<a href="#ko-11">11항</a>) 필요한 범위를 넘지 않도록 합니다.</p>
   </section>
 
   <section id="ko-4">
@@ -181,7 +188,9 @@
     <ul>
       <li>문의 폼으로 받은 문의와 이메일로 직접 받은 문의 모두 <strong>회신을 마친 뒤 1년</strong> 동안 운영자의 메일함에 보관한 뒤 파기합니다. 파기는 매월 1회 정리할 때 이루어지므로 실제 삭제가 최대 한 달 정도 늦어질 수 있습니다.</li>
       <li>반복 접수 확인에 쓰는 해시값과 접수 시각은 <strong>10분이 지나면 효력을 잃고</strong>, 그 뒤 다음 문의가 들어올 때 접수 서버가 지웁니다. 새 문의가 없으면 그때까지 서버에 남아 있을 수 있으나, 원문이 아닌 해시값입니다.</li>
-      <li>접수 서버의 웹서버 접속 기록(IP 주소, 접속 시각, 요청 주소 등)은 호스팅 업체(카페24)가 서버 운영과 보안을 위해 <strong>최대 7일</strong> 보관한 뒤 자동으로 삭제합니다.</li>
+      <li>방문 통계의 합계 숫자는 개인을 알아볼 수 없는 정보이므로 기간을 정하지 않고 보관합니다. 접속 IP 주소는 국가를 알아낸 즉시 버리고 <strong>저장하지 않습니다</strong>.</li>
+      <li>과도한 요청을 막기 위해 IP 주소를 그날만 쓰는 비밀값과 섞어 되돌릴 수 없게 만든 값을 씁니다. 이 값은 <strong>10분이 지나면 효력을 잃고</strong> 이후 요청이 들어올 때 서버가 지웁니다. 날짜가 바뀌면 비밀값이 달라져 다른 날의 값과 이어 볼 수 없습니다.</li>
+      <li>접수 서버와 통계 서버(같은 카페24 서버)의 웹서버 접속 기록(IP 주소, 접속 시각, 요청 주소 등)은 호스팅 업체(카페24)가 서버 운영과 보안을 위해 <strong>최대 7일</strong> 보관한 뒤 자동으로 삭제합니다.</li>
       <li>삭제를 요청하시거나 동의를 철회하시면 지체 없이 파기합니다.</li>
       <li>문의가 계약으로 이어진 경우, 계약서 등 관련 서류는 문의 기록과 별도로 관계 법령이 정한 기간 동안 보관합니다.</li>
     </ul>
@@ -205,7 +214,7 @@
     <div class="pp-table"><table>
       <thead><tr><th>수탁자</th><th>위탁 업무</th><th>처리 위치</th></tr></thead>
       <tbody>
-        <tr><td>주식회사 카페24</td><td>문의 접수 서버 운영(서버 접속 기록 보관 포함), 운영자에게 보내는 문의 알림 메일 발송</td><td>대한민국</td></tr>
+        <tr><td>주식회사 카페24</td><td>문의 접수 서버·방문 통계 서버 운영(서버 접속 기록 보관 포함), 운영자에게 보내는 문의 알림 메일 발송</td><td>대한민국</td></tr>
         <tr><td>네이버 주식회사</td><td>운영자의 문의 메일함(네이버 메일) 제공</td><td>대한민국</td></tr>
       </tbody>
     </table></div>
@@ -214,7 +223,7 @@
 
   <section id="ko-8">
     <h2><span class="n">8</span>개인정보의 국외 이전</h2>
-    <p><strong>문의 폼으로 받은 개인정보는 국외로 이전하지 않습니다.</strong> 접수 서버와 메일함 모두 대한민국에 있습니다.</p>
+    <p><strong>문의 폼으로 받은 개인정보는 국외로 이전하지 않습니다.</strong> 접수 서버와 메일함 모두 대한민국에 있습니다. 방문 통계도 국외로 이전하지 않으며, 통계 서버는 대한민국(카페24)에 있습니다.</p>
     <p>다만 홈페이지 자체는 GitHub Pages(미국)에서 제공되어, 홈페이지를 여는 순간의 접속 기록(IP 주소 등)이 GitHub의 보안 기록에 남습니다. 이 기록은 GitHub이 자체 방침에 따라 관리하며 운영자는 받지 않고, 문의 내용과는 분리되어 있습니다(<a href="#ko-11">11항</a>).</p>
   </section>
 
@@ -225,6 +234,7 @@
       <li>열람·정정·삭제·처리정지 요구와 동의 철회는 <a href="mailto:haedarney@naver.com">haedarney@naver.com</a> 에서 접수·처리합니다. <strong>요청을 받은 날부터 10일 이내</strong>에 조치하고 결과를 알려드립니다(본인 확인에 걸린 기간을 빼고 다시 세지 않습니다).</li>
       <li>법정대리인은 그 지위를 확인할 수 있는 자료로, 위임을 받은 대리인은 위임 사실을 확인할 수 있는 자료로 요청할 수 있습니다. 본인 확인에 필요하지 않은 자료는 요구하지 않습니다.</li>
       <li>법령에 따라 열람·처리정지가 제한되거나 보관 의무가 있어 삭제할 수 없는 경우에는 그 사유를 알려드립니다.</li>
+      <li>방문 통계에는 개인을 알아볼 수 있는 기록이 남지 않아 열람·정정·삭제의 대상이 되는 개인별 기록이 없습니다. 통계에 포함되기를 원하지 않으시면 <a href="#ko-11">11항</a>의 방법으로 빠질 수 있습니다.</li>
     </ul>
   </section>
 
@@ -238,20 +248,27 @@
       <li>반복 접수 확인에는 IP 주소 원문 대신 비밀키 없이는 되돌릴 수 없는 해시값만 사용하고, 10분이 지나면 다음 접수 때 삭제</li>
       <li>서버 오류 기록에는 문의 내용·연락처를 남기지 않음</li>
       <li>접수 서버의 설정 파일은 웹에서 열람할 수 없도록 차단</li>
+      <li>방문 통계는 합계 숫자만 저장하고, IP 주소 원문·방문자별 기록·고유 번호를 남기지 않음</li>
+      <li>국가 판별은 통계 서버에 내려받아 둔 데이터로만 하고, IP 주소를 외부에 보내 조회하지 않음</li>
+      <li>통계 조회는 운영자 계정(2단계 인증)으로만 가능</li>
     </ul>
   </section>
 
   <section id="ko-11">
     <h2><span class="n">11</span>자동 수집 장치 및 외부 서비스</h2>
     <ul>
-      <li>홈페이지는 방문자를 분석하거나 광고를 위해 추적하는 쿠키·도구를 사용하지 않습니다.</li>
-      <li>언어 선택(국문/영문)을 기억하기 위해 브라우저 저장공간(localStorage)에 설정값만 저장합니다. 이 값으로 개인을 식별하지 않으며, 브라우저 설정에서 삭제할 수 있습니다.</li>
+      <li>홈페이지는 광고나 다른 사이트를 넘나드는 추적을 위한 쿠키·도구를 사용하지 않습니다.</li>
+      <li>방문 통계를 위해, 페이지를 열거나 버튼을 누를 때 홈페이지가 짧은 신호를 운영자의 통계 서버(카페24, 국내)로 보냅니다(<a href="#ko-2">2항</a>의 항목).</li>
+      <li>브라우저 저장공간(localStorage)에는 다음 값만 둡니다: 언어 선택 · 방문자와 방문을 세기 위한 마지막으로 센 날짜와 마지막 활동 시각 · 이번 방문의 들어온 곳 · 이번 방문에서 이미 누른 버튼 종류(같은 방문에서 두 번 세지 않기 위해) · 첫 화면에서 지난번 처음 본 장(다음에는 다른 장으로 시작하기 위해) · 통계 제외 설정. 이 값들은 이 브라우저 안에서만 쓰이고 서버로 보내지지 않으며, 개인을 식별하는 값은 만들지 않습니다. 브라우저 설정에서 언제든 삭제할 수 있습니다.</li>
+      <li><strong>통계에서 빠지는 방법</strong>: 아래 "이 브라우저를 통계에서 제외" 버튼을 누르면 이 브라우저에서는 세지 않습니다(폰·컴퓨터·앱 안 브라우저마다 따로 눌러야 합니다). 브라우저의 추적 거부 신호(GPC 또는 Do Not Track)를 켜 두셔도 세지 않습니다.</li>
+      <li>국가 판별에는 DB-IP(<a href="https://db-ip.com" target="_blank" rel="noopener">db-ip.com</a>)의 무료 데이터베이스(IP to Country Lite, CC BY 4.0)를 씁니다.</li>
       <li>문의 폼에서는 자동 등록 방지를 위한 외부 서비스(캡차 등)를 사용하지 않습니다. 접수 서버가 자체적으로 확인합니다.</li>
       <li>작품 영상 중 YouTube 영상은 방문자가 재생을 선택했을 때만 YouTube(youtube-nocookie.com) 플레이어를 불러오며, 재생 시 YouTube의 개인정보 처리방침이 적용됩니다.</li>
       <li>Press 화면의 기사 사진 일부는 해당 언론사 서버(국내)에서 직접 불러옵니다. 그 화면을 여는 동안 방문자의 접속 정보가 해당 언론사에 전달될 수 있으며, 운영자는 이를 받지 않습니다.</li>
       <li>홈페이지는 GitHub Pages로 제공되며, GitHub은 보안을 위해 방문자의 IP 주소를 기록합니다. 이 기록은 GitHub이 자체 방침에 따라 관리하며 운영자는 받지 않습니다.</li>
-      <li>문의 접수 서버(카페24)는 서버 운영과 보안을 위해 접속 기록(IP 주소 등)을 최대 7일 보관한 뒤 자동으로 삭제합니다. 운영자는 이 기록을 다른 목적으로 이용하지 않습니다.</li>
+      <li>문의 접수 서버와 통계 서버(카페24)는 서버 운영과 보안을 위해 접속 기록(IP 주소 등)을 최대 7일 보관한 뒤 자동으로 삭제합니다. 운영자는 이 기록을 다른 목적으로 이용하지 않습니다.</li>
     </ul>
+    <div class="pp-optout" data-optout-box><span class="pp-optstate" data-optstate>지금 이 브라우저: 확인 중…</span><button type="button" class="pp-optbtn" data-optout>이 브라우저를 통계에서 제외</button></div>
   </section>
 
   <section id="ko-12">
@@ -283,6 +300,7 @@
       <li>2026. 9. 18. 1차 개정 — 문의 접수 경로를 국내로 옮기면서 <b>국외 이전을 중단</b>하고, 문의 내용을 <b>별도로 저장하지 않도록</b> 변경. 처리를 줄이는 변경이어서 사전 예고 기간 없이 즉시 시행했습니다. (이전 판: 접수·저장 Supabase, 알림 메일 Resend(미국), 자동 등록 방지 Cloudflare Turnstile(미국)) — <a href="history/2026-09-18-1.html">최초 제정판 보기</a></li>
       <li>2026. 9. 18. 2차 개정 — 이메일로 직접 받은 문의를 방침 범위에 넣고, 자동 접수 방지 처리의 근거와 Press 화면의 외부 이미지 사용을 밝혔습니다. 열람 등 요구의 처리 기한을 <b>요청을 받은 날부터</b> 10일로 바로잡았습니다. 고지 범위를 넓히는 변경이어서 즉시 시행했습니다. — <a href="history/2026-09-18-2.html">1차 개정판 보기</a></li>
       <li>2026. 9. 22. 3차 개정 — 방침을 실제 동작에 맞게 바로잡았습니다. 이메일 문의의 처리 근거(3항), 반복 접수 방지 처리가 시작되는 시점(3항), 반복 접수 확인값의 성격과 효력 시간(20분 → 10분, 2·4·10항), 문의 유형 이름(1항). 접수 서버의 접속 기록 보관(최대 7일)을 밝혔습니다(4·7·11항). 처리를 늘리지 않고 고지를 바로잡는 변경이어서 즉시 시행했습니다. — <a href="history/2026-09-18-3.html">2차 개정판 보기</a></li>
+      <li>2026. 9. 22. 4차 개정 — 방문 통계(합계만 저장, IP 주소 미저장, 국내 서버)를 도입하면서 처리 목적·항목·근거·보유 기간(1~4항), 위탁·국외 이전(7·8항), 권리 행사와 안전성 확보조치(9·10항), 브라우저 저장 항목과 통계에서 빠지는 방법(11항)을 밝혔습니다. 같은 날 2026. 9. 29. 시행으로 예고했으나, 예고 기간을 두지 않고 앞당겨 시행했습니다. — <a href="history/2026-09-22-4.html">3차 개정판 보기</a></li>
     </ul>
   </section>
 </article>
@@ -291,10 +309,7 @@
 <article class="pp" id="ppEn" lang="en" hidden>
   <h1>Privacy Policy</h1>
   <p class="pp-meta">Effective September 22, 2026</p>
-  <!-- REV4-NOTICE -->
-  <p class="pp-lead" style="border:1px solid var(--line);border-radius:8px;padding:14px 16px"><strong>Upcoming revision</strong> — a fourth revision takes effect on September 29, 2026. It introduces visit statistics for the Website (totals only, IP addresses not stored, servers in Korea) and discloses the purposes, items, legal basis and retention, browser storage, and how to opt out. <a href="next/?lang=en">Read the full revised policy</a></p>
-  <!-- /REV4-NOTICE -->
-  <p class="pp-lead">Haedaljagae (해달자개, the "Operator") sets out this Privacy Policy to protect personal information received through the contact form on the official website of the artist Shin Haedal (https://shinhaedal.com, the "Website") and through the email address published on it, under the Personal Information Protection Act of Korea (PIPA), and to handle related concerns smoothly.</p>
+    <p class="pp-lead">Haedaljagae (해달자개, the "Operator") sets out this Privacy Policy to protect personal information received through the contact form on the official website of the artist Shin Haedal (https://shinhaedal.com, the "Website") and through the email address published on it, and processed for the Website's visit statistics, under the Personal Information Protection Act of Korea (PIPA), and to handle related concerns smoothly.</p>
 
   <ol class="pp-toc" aria-label="Contents">
     <li><a href="#en-1"><span class="n">1</span>Purposes</a></li>
@@ -316,6 +331,7 @@
   <section id="en-1">
     <h2><span class="n">1</span>Purposes</h2>
     <p>The Operator processes personal information only to review and reply to inquiries received through the Website's contact form or the published email address (artwork inquiry, exhibition, collaboration, licensing, other). It is also processed, to the extent necessary, to block automated or repeated submissions (spam) from the same source within a short time. It is not used for exhibition news or promotional emails.</p>
+    <p>We also compile visit statistics as daily totals per item to understand how the Website is used and to improve how the works are presented. They are never used to identify you or to follow you across other sites.</p>
   </section>
 
   <section id="en-2">
@@ -328,8 +344,10 @@
         <tr><td>Generated during submission</td><td>Date and time received, page language (Korean/English), version of the notice you agreed to</td></tr>
         <tr><td>When you email us directly</td><td>Your name and email address, the subject and message, anything contained in attachments, and the time received — whatever you chose to send</td></tr>
         <tr><td>For the repeat-submission check</td><td>A <strong>hash</strong> of your IP address made with a secret key held only on the receiving server (it cannot be reversed without that key), a <strong>hash</strong> of your email, subject and message combined (to catch the same inquiry sent twice), and the time of submission. The original values are not stored, and these records stay only briefly on the receiving server (Section <a href="#en-4">4</a>)</td></tr>
+        <tr><td>Visit statistics</td><td>IP address (used only to determine the country and to block excessive requests; never stored), pages and works viewed, types of buttons pressed, scroll depth, time on page, the kind of referring site (e.g. Instagram, search) and campaign tags in the address (?src=), display language, device type (phone, tablet, computer), and browser information (used only to detect bots and the device type)</td></tr>
       </tbody>
     </table></div>
+    <p>Visit statistics keep no per-visitor records and assign no unique IDs. Only <strong>daily totals per item</strong> are stored, so the stored statistics cannot identify any individual.</p>
     <p class="note">Please do not include unnecessary personal information such as national ID numbers, bank account numbers or health information in your message.</p>
   </section>
 
@@ -338,6 +356,7 @@
     <p>The contact form relies on your consent (PIPA Article 15(1)1) and asks for a single consent, to the collection and use of your information.</p>
     <p>If you email us directly, inquiries about artworks, exhibitions, collaboration or licensing are processed as steps taken at your request in the course of entering into a contract (Article 15(1)4), and other inquiries on the basis of the Operator's legitimate interest in answering them (Article 15(1)6), in both cases only to the extent the reply requires. Anything not needed to handle the inquiry is deleted once noticed.</p>
     <p>Processing that blocks automated or repeated submissions (issuing and checking the submit token, hashing the IP address) starts when you begin filling in the form, before consent is given. It is the minimum needed to keep the inquiry channel usable against spam and bots (Article 15(1)6); no original values are kept and the records are short-lived (Section <a href="#en-4">4</a>).</p>
+    <p>Visit statistics are processed on the basis of the Operator's legitimate interest in understanding how the Website is used (Article 15(1)6). We keep only totals that cannot identify anyone, discard the IP address right after determining the country, honor browser opt-out signals (GPC, Do Not Track), and let you opt out at any time (Section <a href="#en-11">11</a>), so the processing stays within what is necessary.</p>
   </section>
 
   <section id="en-4">
@@ -345,7 +364,9 @@
     <ul>
       <li>Inquiries received through the form and by direct email alike are kept in the Operator's mailbox for <strong>one year after we reply</strong>, then destroyed. Destruction happens during the monthly clear-out, so actual deletion can be up to about a month later.</li>
       <li>The hashes and timestamp used for the repeat-submission check <strong>stop being valid after 10 minutes</strong> and are erased by the receiving server when the next inquiry arrives. If no new inquiry arrives they may remain until then, but they are hashes, not the original values.</li>
-      <li>The receiving server's web access logs (IP address, time, requested address and similar) are kept by the hosting provider (Cafe24) for server operation and security for <strong>up to 7 days</strong> and then deleted automatically.</li>
+      <li>Visit statistics totals cannot identify individuals and are kept without a set period. IP addresses are discarded as soon as the country is determined and are <strong>never stored</strong>.</li>
+      <li>To block excessive requests we use a value derived from the IP address mixed with a secret that changes every day; it cannot be reversed, <strong>stops being valid after 10 minutes</strong> and is deleted by the server on a later request. Because the secret changes daily, values from different days cannot be linked.</li>
+      <li>The web access logs of the receiving server and the statistics server (the same Cafe24 server) (IP address, time, requested address and similar) are kept by the hosting provider (Cafe24) for server operation and security for <strong>up to 7 days</strong> and then deleted automatically.</li>
       <li>If you ask for deletion or withdraw your consent, your information is destroyed without delay.</li>
       <li>If an inquiry leads to a contract, contract documents are kept separately from inquiry records for the period required by applicable laws.</li>
     </ul>
@@ -369,7 +390,7 @@
     <div class="pp-table"><table>
       <thead><tr><th>Processor</th><th>Outsourced work</th><th>Where processed</th></tr></thead>
       <tbody>
-        <tr><td>Cafe24 Corp.</td><td>Running the inquiry receiving server (including keeping its access logs) and sending the notification email to the Operator</td><td>Republic of Korea</td></tr>
+        <tr><td>Cafe24 Corp.</td><td>Running the inquiry receiving server and the visit statistics server (including keeping their access logs) and sending the notification email to the Operator</td><td>Republic of Korea</td></tr>
         <tr><td>NAVER Corp.</td><td>Providing the Operator's inquiry mailbox (Naver Mail)</td><td>Republic of Korea</td></tr>
       </tbody>
     </table></div>
@@ -378,7 +399,7 @@
 
   <section id="en-8">
     <h2><span class="n">8</span>Transfer of personal information outside Korea</h2>
-    <p><strong>Personal information received through the contact form is not transferred outside Korea.</strong> Both the receiving server and the mailbox are located in the Republic of Korea.</p>
+    <p><strong>Personal information received through the contact form is not transferred outside Korea.</strong> Both the receiving server and the mailbox are located in the Republic of Korea. Visit statistics are not transferred abroad either; the statistics server is in the Republic of Korea (Cafe24).</p>
     <p>The Website itself, however, is served by GitHub Pages (United States), so opening the site leaves connection data (such as your IP address) in GitHub's security logs. GitHub manages those logs under its own policy, the Operator does not receive them, and they are separate from the content of your inquiry (Section <a href="#en-11">11</a>).</p>
   </section>
 
@@ -389,6 +410,7 @@
       <li>Requests to access, correct, delete or suspend processing, and withdrawals of consent, are received and handled at <a href="mailto:haedarney@naver.com">haedarney@naver.com</a>. We act <strong>within 10 days of receiving the request</strong> and tell you the result; the clock is not restarted after identity checks.</li>
       <li>A legal representative may make the request with evidence of that status, and someone you authorize with evidence of the authorization. We do not ask for documents that identity checking does not require.</li>
       <li>If access or suspension is restricted by law, or information cannot be deleted because the law requires keeping it, we will tell you why.</li>
+      <li>Visit statistics contain no records that identify individuals, so there are no per-person records to access, correct or delete. If you prefer not to be counted, you can opt out as described in Section <a href="#en-11">11</a>.</li>
     </ul>
   </section>
 
@@ -402,20 +424,27 @@
       <li>The repeat-submission check uses a keyed hash instead of the IP address itself, and it is deleted at the next submission once 10 minutes have passed</li>
       <li>Server error logs do not record message content or contact details</li>
       <li>The receiving server's configuration file cannot be opened from the web</li>
+      <li>Visit statistics store totals only — no raw IP addresses, per-visitor records or unique IDs</li>
+      <li>Country lookup uses a database stored on the statistics server; IP addresses are never sent to outside services</li>
+      <li>Only the Operator's account (with two-step verification) can view the statistics</li>
     </ul>
   </section>
 
   <section id="en-11">
     <h2><span class="n">11</span>Automatic collection tools and external services</h2>
     <ul>
-      <li>The Website does not use cookies or tools that track visitors for analytics or advertising.</li>
-      <li>To remember your language choice (Korean/English), only that setting is saved in your browser storage (localStorage). It is not used to identify you, and you can delete it in your browser settings.</li>
+      <li>The Website does not use cookies or tools for advertising or cross-site tracking.</li>
+      <li>For visit statistics, the Website sends a short signal to the Operator's statistics server (Cafe24, Korea) when you open a page or press a button (the items in Section <a href="#en-2">2</a>).</li>
+      <li>Browser storage (localStorage) holds only: your language choice; the last date you were counted and the time of your last activity (to count visitors and visits); where this visit came from; which kinds of buttons you already pressed during this visit (so they are not counted twice); which slide you saw first on the home page last time (so the next visit starts with a different one); and your opt-out setting. These values stay in your browser, are never sent to the server, and no identifier is created. You can delete them in your browser settings at any time.</li>
+      <li><strong>How to opt out</strong>: press "Exclude this browser from statistics" below and this browser will not be counted (do it separately on each phone, computer or in-app browser). Turning on your browser's opt-out signal (GPC or Do Not Track) also stops counting.</li>
+      <li>Country lookup uses DB-IP's free database (IP to Country Lite, <a href="https://db-ip.com" target="_blank" rel="noopener">db-ip.com</a>, CC BY 4.0).</li>
       <li>The contact form does not use an external bot-check service such as a CAPTCHA; the receiving server performs the check itself.</li>
       <li>For YouTube videos among the artwork videos, the YouTube player (youtube-nocookie.com) loads only when you choose to play a video, and YouTube's privacy policy applies during playback.</li>
       <li>Some article images on the Press page load directly from the publishers' own servers in Korea. While that page is open your connection data may reach those publishers; the Operator does not receive it.</li>
       <li>The Website is served by GitHub Pages, and GitHub logs visitors' IP addresses for security. GitHub manages these logs under its own policy; the Operator does not receive them.</li>
-      <li>The inquiry receiving server (Cafe24) keeps access logs (such as IP addresses) for server operation and security for up to 7 days and then deletes them automatically. The Operator does not use these logs for any other purpose.</li>
+      <li>The inquiry receiving server and the statistics server (Cafe24) keep access logs (such as IP addresses) for server operation and security for up to 7 days and then delete them automatically. The Operator does not use these logs for any other purpose.</li>
     </ul>
+    <div class="pp-optout" data-optout-box><span class="pp-optstate" data-optstate>This browser: checking…</span><button type="button" class="pp-optbtn" data-optout>Exclude this browser from statistics</button></div>
   </section>
 
   <section id="en-12">
@@ -447,6 +476,7 @@
       <li>September 18, 2026 (first revision) — the inquiry path was moved to servers in Korea, <b>ending transfers outside Korea</b> and <b>no longer storing inquiry content separately</b>. Because the change reduces processing, it took effect immediately without the advance-notice period. (Previous version: submissions stored on Supabase, notification email via Resend (US), bot check via Cloudflare Turnstile (US).) — <a href="history/2026-09-18-1.html">view the first version</a></li>
       <li>September 18, 2026 (second revision) — direct email inquiries were brought into the scope of this Policy, the basis for anti-spam processing and the external images on the Press page were disclosed, and the deadline for access requests was corrected to 10 days <b>from receipt of the request</b>. As the change widens disclosure, it took effect immediately. — <a href="history/2026-09-18-2.html">view the first revision</a></li>
       <li>September 22, 2026 (third revision) — the Policy was corrected to match how the Website actually works: the legal basis for direct email inquiries (Section 3), when anti-spam processing starts (Section 3), the nature and validity period of the repeat-submission records (20 → 10 minutes; Sections 2, 4 and 10), and the inquiry type name (Section 1). The receiving server's access logs (kept up to 7 days) are now disclosed (Sections 4, 7 and 11). As the change corrects disclosure without adding processing, it took effect immediately. — <a href="history/2026-09-18-3.html">view the second revision</a></li>
+      <li>September 22, 2026 (fourth revision) — with the introduction of visit statistics (totals only, IP addresses not stored, servers in Korea), the purposes, items, legal basis and retention (Sections 1–4), outsourcing and transfers (Sections 7 and 8), rights and security measures (Sections 9 and 10), and browser storage and how to opt out (Section 11) were disclosed. It was announced the same day with an effective date of September 29, 2026, but was brought forward and took effect without the advance-notice period. — <a href="history/2026-09-22-4.html">view the third revision</a></li>
       <li>This English version is provided for convenience. If it differs from the Korean version, the Korean version prevails.</li>
     </ul>
   </section>
@@ -507,6 +537,29 @@ if(LANG!=='ko') applyLang(LANG, {skipUrl:true});
 
 <script src="../assets/stats.js"></script>
 <script src="../assets/site.js"></script>
+<script>
+/* 방문 통계 제외 — 이 브라우저에 'sh_stat_off' 표시만 남긴다(assets/stats.js가 보고 세지 않음) */
+(function(){
+  var KEY = 'sh_stat_off';
+  function off(){ try{ return localStorage.getItem(KEY) === '1'; }catch(e){ return false; } }
+  function signal(){ var n = navigator; return n.globalPrivacyControl === true || n.doNotTrack === '1' || window.doNotTrack === '1'; }
+  function draw(){
+    document.querySelectorAll('[data-optout-box]').forEach(function(box){
+      var en = !!box.closest('[lang="en"]'), o = off(), st = box.querySelector('[data-optstate]'), b = box.querySelector('[data-optout]');
+      st.textContent = en ? ('This browser: ' + (o ? 'excluded from statistics' : (signal() ? 'not counted (opt-out signal is on)' : 'included in statistics')))
+                          : ('지금 이 브라우저: ' + (o ? '통계에서 제외됨' : (signal() ? '추적 거부 신호가 켜져 있어 세지 않음' : '통계에 포함')));
+      b.textContent = en ? (o ? 'Include this browser again' : 'Exclude this browser from statistics') : (o ? '이 브라우저를 다시 통계에 포함' : '이 브라우저를 통계에서 제외');
+    });
+  }
+  document.addEventListener('click', function(e){
+    var b = e.target.closest && e.target.closest('[data-optout]');
+    if(!b) return;
+    try{ if(off()) localStorage.removeItem(KEY); else localStorage.setItem(KEY, '1'); }catch(err){}
+    draw();
+  });
+  draw();
+})();
+</script>
 <script src="../assets/ip-nav-transition.js"></script>
 <script src="../assets/lang.js"></script>
 </body>

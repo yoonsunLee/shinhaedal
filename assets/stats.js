@@ -10,9 +10,8 @@
             이번 방문에서 이미 누른 버튼 종류 — 모두 이 브라우저 안에서만 쓰고 서버로 보내지 않는다.
    다른 페이지 코드는 window.shStat(이름, 대상) · window.shStatWork(작품번호|null)만 부르면 된다. */
 (function(){
-  // 처리방침 4차 개정(방문 통계)을 게시하는 날 'https://shinhaedalapi.mycafe24.com/stats/collect.php'로 바꾼다.
-  // 그 전에는 비어 있어 아무것도 세지 않는다(__SH_STATS_ENDPOINT는 로컬 시험용)
-  var ENDPOINT = window.__SH_STATS_ENDPOINT || '';
+  // 처리방침 4차 개정(2026-09-22 시행)부터 수집. __SH_STATS_ENDPOINT는 로컬 시험용
+  var ENDPOINT = window.__SH_STATS_ENDPOINT || 'https://shinhaedalapi.mycafe24.com/stats/collect.php';
   var KEY = 'sh_stat', OFF_KEY = 'sh_stat_off';
   var VISIT_GAP = 30 * 60 * 1000, FLUSH_MS = 15000, MAX_EVENTS = 40;
   var ls = null;
