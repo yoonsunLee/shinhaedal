@@ -39,6 +39,9 @@ nav{display:flex;align-items:flex-start;justify-content:space-between;padding:26
 .nav-menu a:hover,.nav-menu a.on{color:var(--navy)}
 /* 메뉴 글자에 자개빛이 한 번 스치는 호버 효과 — 다른 5개 페이지와 같은 구조(site.css 참고)지만,
    밝은 배경에 맞춰 옅은 파스텔 대신 중간 명도의 청록·남보라를 쓴다(기존 헤더용 밝은 색 재사용 금지). */
+/* 글자 칸을 실제 글자 높이로 세운다. 공백만 절반 크기로 부르는 Space Mono 글꼴(fonts.css size-adjust 50%) 때문에
+   줄 안 글자 칸이 반 높이로 잡혀, 글자 안에만 칠하는 자개빛(background-clip:text)이 대문자 윗부분을 못 칠하던 것(2026-09-22) */
+.nav-menu .nav-sweep{display:inline-block;}
 @media (hover:hover) and (pointer:fine) and (prefers-reduced-motion: no-preference){
   .nav-menu a:not([aria-current="page"]) .nav-sweep{
     background-image:linear-gradient(90deg,
@@ -55,6 +58,15 @@ nav{display:flex;align-items:flex-start;justify-content:space-between;padding:26
     background-position:0% 0;
     color:#0867ba;
   }
+}
+/* 상단 메뉴 움직임(assets/nav-glide.js) — 올린 메뉴 뒤 옅은 판 + 밑줄(지금 페이지 고정 · 올린 메뉴 따라감) */
+.nav-menu{position:relative; z-index:0;}
+.nav-glide{position:absolute; left:0; top:0; width:0; height:0; pointer-events:none; list-style:none;}
+.nav-glide span{position:absolute; left:0; top:0; opacity:0; will-change:transform, width;}
+.nav-glide .ng-pill{z-index:-1; border-radius:6px; background:rgba(18,53,72,.08);}
+.nav-glide .ng-line{height:2px; background:var(--navy);}
+@media (prefers-reduced-motion: no-preference){
+  .nav-glide.ready span{transition:transform .32s cubic-bezier(.3,.7,.2,1), width .32s cubic-bezier(.3,.7,.2,1), height .32s cubic-bezier(.3,.7,.2,1), opacity .2s ease;}
 }
 .nav-backdrop{position:fixed;inset:0;z-index:49;background:rgba(20,20,10,.25);opacity:0;pointer-events:none;transition:opacity .3s ease}
 .nav-backdrop.open{opacity:1;pointer-events:auto}

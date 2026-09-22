@@ -235,6 +235,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <script src="../../../assets/work-page.js"></script>
 <script src="../../../assets/stats.js"></script>
 <script src="../../../assets/site.js"></script>
+<script src="../../../assets/nav-glide.js"></script>
 </body>
 </html>
 """

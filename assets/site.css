@@ -73,6 +73,9 @@ nav{
    시작 위치를 100%(밝은 쪽 끝)로 잡아 호버 시 0%로 옮기는데, 이렇게 해야
    (background-size:300%에서 position이 커질수록 내용물은 화면상 왼쪽으로
    흐른다는 성질 때문에) 실제로는 왼쪽에서 오른쪽으로 스치는 것처럼 보인다. */
+/* 글자 칸을 실제 글자 높이로 세운다. 공백만 절반 크기로 부르는 Space Mono 글꼴(fonts.css size-adjust 50%) 때문에
+   줄 안 글자 칸이 반 높이로 잡혀, 글자 안에만 칠하는 자개빛(background-clip:text)이 대문자 윗부분을 못 칠하던 것(2026-09-22) */
+.nav-menu .nav-sweep{display:inline-block;}
 @media (hover:hover) and (pointer:fine) and (prefers-reduced-motion: no-preference){
   .nav-menu a:not([aria-current="page"]) .nav-sweep{
     background-image:linear-gradient(90deg,
@@ -89,6 +92,15 @@ nav{
     background-position:0% 0;
     color:var(--ivory);
   }
+}
+/* 상단 메뉴 움직임(assets/nav-glide.js) — 올린 메뉴 뒤 옅은 판 + 밑줄(지금 페이지 고정 · 올린 메뉴 따라감) */
+.nav-menu{position:relative; z-index:0;}
+.nav-glide{position:absolute; left:0; top:0; width:0; height:0; pointer-events:none; list-style:none;}
+.nav-glide span{position:absolute; left:0; top:0; opacity:0; will-change:transform, width;}
+.nav-glide .ng-pill{z-index:-1; border-radius:6px; background:rgba(245,240,230,.1);}
+.nav-glide .ng-line{height:2px; background:var(--ivory);}
+@media (prefers-reduced-motion: no-preference){
+  .nav-glide.ready span{transition:transform .32s cubic-bezier(.3,.7,.2,1), width .32s cubic-bezier(.3,.7,.2,1), height .32s cubic-bezier(.3,.7,.2,1), opacity .2s ease;}
 }
 /* 오른쪽에서 슬라이드로 나오는 메뉴 패널. 태블릿에서는 화면 오른쪽에 붙은 폭 좁은 패널로,
    모바일에서는 더 넓은 비율로 나오되 항상 같은 오른쪽 슬라이드 모션을 쓴다. */
