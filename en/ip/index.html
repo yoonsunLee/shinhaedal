@@ -31,7 +31,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <link rel="stylesheet" href="../assets/fonts.css">
-<link rel="stylesheet" href="ip-story.css">
+<link rel="stylesheet" href="ip-story.css?v=20260922">
 </head>
 <body>
 <a class="skip" href="#story">본문으로</a>
@@ -227,47 +227,44 @@
     </div>
     <div class="group-art reveal"><img src="assets/friends.webp" alt="The five friends of Irworobongdan" data-i-alt="alt_friends" loading="lazy" decoding="async"></div>
   </div>
-  <div class="member-controls">
-    <span>MEET THE FIVE</span>
-    <div><button id="prev" aria-label="Previous friend" data-i-aria="aria_prev_friend">←</button><span id="member-count">1 / 5</span><button id="next" aria-label="Next friend" data-i-aria="aria_next_friend">→</button></div>
-  </div>
-  <div class="members" id="members">
-    <article class="member">
-      <span class="eyebrow">SUN</span>
-      <img src="assets/crane-cutout.webp" alt="Crane Crane" data-i-alt="fr1_h3" loading="lazy" decoding="async">
+  <p class="members-head" lang="en">MEET THE FIVE</p>
+  <ul class="members" id="members" role="list">
+    <li class="member" data-c="crane">
+      <span class="eyebrow" lang="en">SUN</span>
+      <div class="member-fig"><img src="assets/crane-cutout.webp" alt="Crane Crane" data-i-alt="fr1_h3" loading="lazy" decoding="async"></div>
       <h3 data-i="fr1_h3">Crane Crane</h3>
       <p data-i="fr1_p">Guard</p>
-      <small data-i="fr1_sig">Item: ㅎ (hieut, a Korean letter)</small>
-    </article>
-    <article class="member">
-      <span class="eyebrow">MOON</span>
-      <img src="assets/rabbit-cutout.webp" alt="First-Moon Rabbit" data-i-alt="fr2_h3" loading="lazy" decoding="async">
+      <small data-i="fr1_sig">Item: ㅎ (hieut, from the Korean alphabet)</small>
+    </li>
+    <li class="member" data-c="rabbit">
+      <span class="eyebrow" lang="en">MOON</span>
+      <div class="member-fig"><img src="assets/rabbit-cutout.webp" alt="First-Moon Rabbit" data-i-alt="fr2_h3" loading="lazy" decoding="async"></div>
       <h3 data-i="fr2_h3">First-Moon Rabbit</h3>
       <p data-i="fr2_p">Princess in Disguise</p>
       <small data-i="fr2_sig">Item: Evening Primrose</small>
-    </article>
-    <article class="member">
-      <span class="eyebrow">MOUNTAIN</span>
-      <img src="assets/tiger-cutout.webp" alt="Gentle Tiger" data-i-alt="fr3_h3" loading="lazy" decoding="async">
+    </li>
+    <li class="member" data-c="tiger">
+      <span class="eyebrow" lang="en">MOUNTAIN</span>
+      <div class="member-fig"><img src="assets/tiger-cutout.webp" alt="Gentle Tiger" data-i-alt="fr3_h3" loading="lazy" decoding="async"></div>
       <h3 data-i="fr3_h3">Gentle Tiger</h3>
       <p data-i="fr3_p">Mountain Keeper</p>
       <small data-i="fr3_sig">Item: Dried Persimmon</small>
-    </article>
-    <article class="member">
-      <span class="eyebrow">PINE</span>
-      <img src="assets/deer-cutout.webp" alt="Blunt Deer" data-i-alt="fr4_h3" loading="lazy" decoding="async">
+    </li>
+    <li class="member" data-c="deer">
+      <span class="eyebrow" lang="en">PINE</span>
+      <div class="member-fig"><img src="assets/deer-cutout.webp" alt="Blunt Deer" data-i-alt="fr4_h3" loading="lazy" decoding="async"></div>
       <h3 data-i="fr4_h3">Blunt Deer</h3>
       <p data-i="fr4_p">Porter</p>
       <small data-i="fr4_sig">Item: Pine Cone</small>
-    </article>
-    <article class="member">
-      <span class="eyebrow">SEA</span>
-      <img src="assets/otter-cutout.webp" alt="Spaced-out Sea Otter" data-i-alt="fr5_h3" loading="lazy" decoding="async">
+    </li>
+    <li class="member" data-c="otter">
+      <span class="eyebrow" lang="en">SEA</span>
+      <div class="member-fig"><img src="assets/otter-cutout.webp" alt="Spaced-out Sea Otter" data-i-alt="fr5_h3" loading="lazy" decoding="async"></div>
       <h3 data-i="fr5_h3">Spaced-out Sea Otter</h3>
       <p data-i="fr5_p">Shell Delivery Worker</p>
       <small data-i="fr5_sig">Item: Mother-of-Pearl</small>
-    </article>
-  </div>
+    </li>
+  </ul>
 </section>
 
 <section id="licensing" class="closing section">
@@ -318,10 +315,10 @@ const I18N = {
     toy_spec:'천연자개 · 옻칠 · 굴패각 친환경 수지',
     toy_cta:'아트토이 보러 가기',
     fr_h2:'혼자가 아니에요.',
-    fr_lead:'얼빵해달에게는<br>일월오봉단 친구들이 있어요.',
+    fr_lead:'일월오봉단 친구들을<br>만나 보세요.',
     fr_p:'일월오봉단은 조선 왕실과 깊이 연결된 전통 회화인 일월오봉도에서 영감을 받은 신해달 작가의 오리지널 캐릭터 그룹이에요. 해와 달, 다섯 봉우리, 소나무와 물이 그 세계의 출발점이에요.',
     fr_p2:'캐릭터와 이야기는 학·토끼·호랑이·사슴 등 한국의 전통적인 소재에서 출발했어요. 각자의 역할에는 신해달 작가가 존중하고 동경하는 직업과 삶의 방식을 담았어요.',
-    fr1_h3:'학두루미', fr1_p:'경호원', fr1_sig:'아이템: ㅎ',
+    fr1_h3:'학두루미', fr1_p:'경비원', fr1_sig:'아이템: ㅎ',
     fr2_h3:'정월토끼', fr2_p:'신분을 숨긴 공주', fr2_sig:'아이템: 달맞이꽃',
     fr3_h3:'선한백호', fr3_p:'산지기', fr3_sig:'아이템: 곶감',
     fr4_h3:'솔직사슴', fr4_p:'짐꾼', fr4_sig:'아이템: 솔방울',
@@ -377,7 +374,7 @@ const I18N = {
     fr_lead:'Meet the friends of<br>Irworobongdan.',
     fr_p:'Irworobongdan (일월오봉단) is Shin Haedal’s original character group, inspired by Irworobongdo (일월오봉도, Sun, Moon and Five Peaks). This traditional Korean painting motif depicts the sun, moon, five mountain peaks, pine trees and water, and is closely associated with the royal court of the Joseon dynasty.',
     fr_p2:'Its characters and stories draw from traditional Korean motifs, including the crane, rabbit, tiger and deer. Their roles reflect occupations and ways of life that Shin Haedal personally respects and admires.',
-    fr1_h3:'Crane Crane', fr1_p:'Guard', fr1_sig:'Item: ㅎ (hieut, a Korean letter)',
+    fr1_h3:'Crane Crane', fr1_p:'Guard', fr1_sig:'Item: ㅎ (hieut, from the Korean alphabet)',
     fr2_h3:'First-Moon Rabbit', fr2_p:'Princess in Disguise', fr2_sig:'Item: Evening Primrose',
     fr3_h3:'Gentle Tiger', fr3_p:'Mountain Keeper', fr3_sig:'Item: Dried Persimmon',
     fr4_h3:'Blunt Deer', fr4_p:'Porter', fr4_sig:'Item: Pine Cone',
@@ -495,7 +492,7 @@ document.getElementById('langEn').onclick=()=>applyLang('en');
   });
 })();
 </script>
-<script src="ip-story.js"></script>
+<script src="ip-story.js?v=20260922"></script>
 <script src="../assets/nav-glide.js"></script>
 <script src="../assets/stats.js"></script>
 <script src="../assets/lang.js"></script>

@@ -253,7 +253,6 @@
     ['a[href*="works/?ex="]', function(el){ return [PAGE === '/about/' ? 'about_ex' : 'ex_works', exFromHref(el)]; }],
     // IP
     ['#profileOpen', function(){ return ['ip_profile', 'haedal']; }],
-    ['#friends #prev, #friends #next', function(el){ return ['ip_friend', el.id]; }],
     ['#toy button, #toy a, #toy [data-viewer], #viewerPrev, #viewerNext', function(){ return ['ip_toy', '']; }],
     ['#licensing a', function(el){ return ['ip_license', outKind(el) || 'contact']; }],
     // Contact

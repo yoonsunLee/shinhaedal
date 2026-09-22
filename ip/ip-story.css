@@ -232,16 +232,38 @@ html[lang="en"] .profile-sheet .profile-name-sub{font:13px/1.5 'Noto Sans KR',sa
 .friends-top p:not(.friends-lead) + p{margin-top:16px}
 .group-art{max-width:510px;transform:rotate(2deg)}
 .group-art img{width:100%;box-shadow:20px 25px 0 #080D0F}
-.member-controls{display:flex;justify-content:space-between;align-items:center;margin:90px 0 25px;font:12px 'Space Mono',monospace;color:#99B0B4}
-.member-controls>div{display:flex;gap:18px;align-items:center}
-.member-controls button{background:none;border:1px solid #30464B;color:#BDCBCD;width:40px;height:40px;border-radius:50%;font-size:20px}
-.members{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:thin;padding-bottom:25px}
-.member{flex:0 0 calc((100% - 88px)/5);scroll-snap-align:start;min-width:160px}
+/* 일월오봉단 라인업(2026-09-22 개편) — 다섯 명을 한 번에: 넓은 화면 5명 / 1199px 이하 3+2 / 640px 이하 2+2+1.
+   가로 스크롤·넘김 버튼 없음. 키는 머리 꼭대기~발끝(--T)으로 맞춘다 — 토끼 귀·사슴 뿔·백호 곶감은 그 위로 올라오고,
+   선한백호만 혼자 커 보이게 15% 크게(작가 결정 — 7%는 차이가 안 느껴진다고 함). 그림 파일은 그대로 두고, 파일마다 다른 위아래 투명 여백은
+   --k(그림 전체 높이 ÷ 머리~발 높이)·--g(발 아래 여백 ÷ 머리~발 높이)로 보정해 발끝을 한 줄에 세운다(값은 알파 채널 실측) */
+.members-head{margin:72px 0 30px;text-align:center;font:12px 'Space Mono',monospace;letter-spacing:.08em;color:#A9D6CE}
+.members{--Tmax:210px;display:flex;flex-wrap:wrap;justify-content:center;gap:44px 22px;list-style:none;margin:0;padding:0}
+.member{flex:0 0 calc((100% - 88px)/5);min-width:0;display:flex;flex-direction:column;align-items:center;text-align:center}
 .member .eyebrow{color:#A9D6CE}
-.member img{object-fit:contain;object-position:center bottom;height:260px;width:100%;margin:15px 0 20px}
-.member h3{font-size:20px;color:#F1F5F2;text-align:center}
-.member p{font-size:14px;margin:7px 0;color:#99B0B4;text-align:center}
-.member small{font:12px/1.6 'Space Mono','Noto Sans KR',sans-serif;color:#99B0B4;text-align:center;display:block}
+.member-fig{--T:var(--Tmax);width:100%;height:calc(var(--T) * 1.3);margin:14px 0 18px;display:flex;justify-content:center;align-items:flex-end}
+.member-fig img{display:block;width:auto;max-width:none;height:calc(var(--T) * var(--s, 1) * var(--k));margin-bottom:calc(var(--T) * var(--s, 1) * var(--g) * -1)}
+/* 좁은 칸에서는 가장 넓은 학두루미(머리~발 높이의 0.82배 폭)가 칸을 넘지 않게 키를 줄인다 */
+@supports (width:1cqi){
+  .member{container-type:inline-size}
+  .member-fig{--T:min(var(--Tmax), 100cqi / .9)}
+}
+.member[data-c="crane"]{--k:1.1656;--g:.0359}
+.member[data-c="rabbit"]{--k:1.4076;--g:.0461}
+.member[data-c="tiger"]{--k:1.2589;--g:.0898;--s:1.15}
+.member[data-c="deer"]{--k:1.3070;--g:.0268}
+.member[data-c="otter"]{--k:1.0560;--g:.0285}
+/* 글자: 배경 그림을 가리는 판 대신 역할·아이템 글자를 한 단계 밝게 + 옅은 그림자(작가 선택 B안) */
+.member h3{font-size:20px;color:#F1F5F2;text-wrap:balance;text-shadow:0 1px 10px rgba(6,14,16,.8)}
+.member p{font-size:14px;margin:7px 0;color:#C4D2D4;text-wrap:balance;text-shadow:0 1px 2px rgba(6,14,16,.9),0 0 12px rgba(6,14,16,.75)}
+.member small{font:12px/1.6 'Space Mono','Noto Sans KR',sans-serif;color:#B3C5C7;display:block;text-wrap:balance;text-shadow:0 1px 2px rgba(6,14,16,.9),0 0 12px rgba(6,14,16,.75)}
+@media(max-width:1199px){
+  .member{flex-basis:calc((100% - 44px)/3)}
+}
+@media(max-width:640px){
+  .members{--Tmax:180px;gap:36px 16px}
+  .member{flex-basis:calc((100% - 16px)/2)}
+  .members-head{margin:52px 0 24px}
+}
 .closing{background:#EAF0F2;text-align:center}
 .closing h2{margin:27px 0;font-size:clamp(40px,6vw,80px);color:#183544}
 .closing p{font-size:15px;color:#4D6570}
@@ -286,8 +308,6 @@ html:has(#viewer[open]){overscroll-behavior-x:none}
   .photo-open:hover>span{background:#fff;color:#123548}
   .nav-menu a:hover{color:#0867ba}
   .contact-link:hover{color:#173E52}
-  .member img{transition:transform .35s}
-  .member:hover img{transform:translateY(-5px)}
 }
 @media(min-width:1600px){.section{padding-left:max(6vw,calc((100vw - 1380px)/2));padding-right:max(6vw,calc((100vw - 1380px)/2))}}
 @media(max-width:850px){
@@ -305,8 +325,6 @@ html:has(#viewer[open]){overscroll-behavior-x:none}
   .pool-layout{gap:6%}
   .pool-copy p{font-size:16px}
   .toy{gap:40px}
-  .members .member{flex-basis:27%}
-  .member img{height:240px}
   .toy-thumbs img{height:130px}
 }
 @media(max-width:580px){
@@ -366,9 +384,6 @@ html:has(#viewer[open]){overscroll-behavior-x:none}
   .friends-lead{font-size:24px}
   .group-art{width:86%;margin:auto;transform:rotate(1deg)}
   .group-art img{box-shadow:10px 12px 0 #080D0F}
-  .member-controls{margin-top:55px}
-  .members .member{flex-basis:65%;min-width:0}
-  .member img{height:310px;object-fit:contain;object-position:center bottom}
   .closing p{max-width:290px;margin:auto}
   .contact-link{font-size:18px}
   footer{flex-wrap:wrap;font-size:10px}
