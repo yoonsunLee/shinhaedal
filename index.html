@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 아카이브 미리보기(iframe·?pv=1)일 때만 데이터 바꿔 끼우기 스크립트를 먼저 불러온다. 평소 방문에는 아무것도 안 함 -->
+<script>try{if(window.top!==window&&(/[?&]pv=1(&|$)/.test(location.search)||sessionStorage.getItem('sh_pv')==='1'))document.write('<script src="/assets/preview.js"><\/script>')}catch(e){}</script>
 <meta name="naver-site-verification" content="6fbf6a9554154a8cd7b5941509d0f5f79bdafafd" />
 <title>신해달 — 나전칠기 아티스트 공식 홈페이지</title>
 <meta name="description" content="법과 사회의 규범을 나전칠기의 언어로 옮기는 작가, 신해달의 공식 홈페이지.">
@@ -854,6 +856,8 @@ if(LANG!=='ko') applyLang(LANG, {skipUrl:true});
 /* ---------- 해달아카이브 발행 데이터 연동 (정적 JSON, 브라우저는 더 이상 Apps Script를 직접 호출하지 않음) ---------- */
 var DATA_BASE = 'data/';
 var ASSET_BASE = '';
+// 절대 주소(https://…)는 그대로 쓴다 — 영상 썸네일(YouTube), 아카이브 미리보기의 반영 전 원본 사진
+function assetUrl(p){ return /^(https?:)?\/\//i.test(p) ? p : ASSET_BASE + p; }
 /* 발행 스크립트(scripts/gen_work_share.py)가 매 발행 때마다 공개 작품 전부에
    works/w/ID/ 스텁 + og:image를 만들어두므로, 공개 목록에 있는 작품이면
    항상 스텁이 존재한다고 보고 id로 바로 경로를 계산한다. */
@@ -924,7 +928,7 @@ function renderWorkTiles(rows){
     return;
   }
   grid.innerHTML = rows.map(function(r, i){
-    var img = r.thumb ? ASSET_BASE + r.thumb : '';
+    var img = r.thumb ? assetUrl(r.thumb) : '';
     var media = img ? '<img src="' + img.replace(/"/g,'&quot;') + '" alt="" loading="lazy" draggable="false" onerror="this.style.visibility=\'hidden\'">' : '';
     var title = primaryTitle(r);
     return '<a class="tile" href="works/w/' + encodeURIComponent(r.id) + '/" data-idx="' + i + '" aria-label="' + esc(title) + '">' +
@@ -1120,7 +1124,7 @@ function renderDocent(w){
   fill.style.width = '0%';
 
   if(hasAudio){
-    docentAudioEl = new Audio(ASSET_BASE + w.audio.src);
+    docentAudioEl = new Audio(assetUrl(w.audio.src));
     var totalGuess = w.audio.duration || 0;
     timeEl.textContent = '0:00 / ' + fmtDocentTime(totalGuess);
     docentAudioEl.addEventListener('timeupdate', function(){
@@ -1214,14 +1218,14 @@ function renderRail(){
       var src = item.thumb || item.detail || '';
       var photoLabel = (i + 1) + ' / ' + RAIL_ITEMS.length;
       return '<button type="button" class="wm-rail-item' + (i === railActiveIndex ? ' is-active' : '') + '" data-i="' + i + '" aria-label="' + esc(photoLabel) + '">'
-        + (src ? '<img src="' + esc(ASSET_BASE + src) + '" alt="" loading="lazy">' : '')
+        + (src ? '<img src="' + esc(assetUrl(src)) + '" alt="" loading="lazy">' : '')
         + '</button>';
     }
     var isExternal = item.platform !== 'youtube';
     var durationLabel = !isExternal ? formatDuration(item.duration) : '';
     var videoLabel = (isExternal ? (LANG==='en'?'View on Instagram':'인스타그램에서 보기') : ((LANG==='en'?(item.title_en||item.title):(item.title||item.title_en)) || I18N[LANG].video_default));
     return '<button type="button" class="wm-rail-item wm-rail-item--video' + (i === railActiveIndex ? ' is-active' : '') + '" data-i="' + i + '" aria-label="' + esc(videoLabel) + '">'
-      + (item.thumb ? '<img src="' + esc(item.thumb.indexOf('http') === 0 ? item.thumb : ASSET_BASE + item.thumb) + '" alt="" loading="lazy">' : '<span class="wm-rail-noThumb"></span>')
+      + (item.thumb ? '<img src="' + esc(item.thumb.indexOf('http') === 0 ? item.thumb : assetUrl(item.thumb)) + '" alt="" loading="lazy">' : '<span class="wm-rail-noThumb"></span>')
       + '<span class="wm-rail-play">' + (isExternal ? '↗' : '▶') + '</span>'
       + (durationLabel ? '<span class="wm-rail-duration">' + durationLabel + '</span>' : '')
       + '</button>';
@@ -1233,7 +1237,7 @@ function renderRail(){
 function showPhoto(item){
   var img = document.getElementById('wmImg');
   img.hidden = false;
-  img.src = item.detail ? ASSET_BASE + item.detail : (item.thumb ? ASSET_BASE + item.thumb : '');
+  img.src = item.detail ? assetUrl(item.detail) : (item.thumb ? assetUrl(item.thumb) : '');
   img.alt = (LANG === 'en' ? (item.caption_en || item.caption) : (item.caption || item.caption_en)) || item.alt || '';
   document.getElementById('wmVideoEmbed').hidden = true;
   document.getElementById('wmMediaLabel').hidden = true;
@@ -1241,7 +1245,7 @@ function showPhoto(item){
   vl.hidden = false;
   vl.onclick = function(){
     var src = item.large || item.detail;
-    if(src) openLargeView(ASSET_BASE + src, document.getElementById('wmTitlePrimary').textContent);
+    if(src) openLargeView(assetUrl(src), document.getElementById('wmTitlePrimary').textContent);
   };
 }
 function showVideo(item){
@@ -1319,7 +1323,7 @@ function renderWorkModal(){
   document.getElementById('wmCounter').textContent = (wmIndex + 1) + ' / ' + HOME_LIST.length;
   document.getElementById('wmCaption').textContent = I18N[LANG].loading;
   var imgEl = document.getElementById('wmImg');
-  imgEl.src = meta.thumb ? ASSET_BASE + meta.thumb : '';
+  imgEl.src = meta.thumb ? assetUrl(meta.thumb) : '';
   imgEl.alt = metaPrimary;
   document.getElementById('wmAskAbout').href = 'contact/?type=artwork&work=' + encodeURIComponent(meta.id);
 
@@ -1331,7 +1335,7 @@ function renderWorkModal(){
     seriesWrap.hidden = false;
     document.getElementById('wmSeriesList').innerHTML = siblings.map(function(s){
       var sTitle = primaryTitle(s);
-      var sImg = s.thumb ? ASSET_BASE + s.thumb : '';
+      var sImg = s.thumb ? assetUrl(s.thumb) : '';
       return '<button class="wm-series-item" type="button" data-work-id="' + esc(s.id) + '" aria-label="' + esc(sTitle) + '">' +
         (sImg ? '<img src="' + sImg.replace(/"/g,'&quot;') + '" alt="" loading="lazy" draggable="false" onerror="this.style.visibility=\'hidden\'">' : '') +
         '<span>' + esc(sTitle) + '</span>' +

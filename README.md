@@ -54,7 +54,9 @@ press/                 Press — 매체 기사
 contact/                Contact — 문의 폼 (mailto 연동)
 data/                  publish_sb.py가 생성하는 공개 정적 JSON
                        (works/*.json, works-index.json, exhibitions.json,
-                        press.json, home-videos.json)
+                        press.json, home-videos.json, series.json, works-page.json,
+                        asset-sources.json — 미리보기용 원본 지문)
+assets/preview.js      아카이브 미리보기 전용(iframe·?pv=1일 때만 불림). data/*.json을 반영 전 데이터로 바꿔 끼움
 assets/works/<id>/     작품별 thumb/detail/large WebP + (있으면) audio.mp3
 assets/home-video/<id>/  홈 영상별 video.mp4/video_mobile.mp4/poster.webp
 scripts/publish_sb.py   Archive(Supabase) → Publish 스크립트

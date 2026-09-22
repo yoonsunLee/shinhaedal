@@ -10,7 +10,7 @@
 
 환경변수: SUPABASE_URL, SUPABASE_SERVICE_KEY
 """
-import json, os, re, shutil, subprocess, sys, urllib.parse, urllib.request
+import hashlib, json, os, re, shutil, subprocess, sys, urllib.parse, urllib.request
 
 API = os.environ.get("SUPABASE_URL", "").strip().rstrip("/")
 KEY = os.environ.get("SUPABASE_SERVICE_KEY", "").strip()
@@ -54,6 +54,14 @@ def sb_optional(path, label):
 
 def s(v):
     return "" if v is None else str(v).strip()
+
+
+def src_hash(v):
+    """원본 파일 주소의 지문(sha256 앞 16자). 아카이브 미리보기가 '이 사진이 지난 반영 때와 같은 원본인가'를
+    알아보는 데만 쓴다 — 같으면 이미 만들어 둔 최적화 사진을 쓰고, 다르면 원본을 보여 준다.
+    주소 자체(저장소 경로·Drive ID)는 공개하지 않는다."""
+    v = s(v)
+    return hashlib.sha256(v.encode("utf-8")).hexdigest()[:16] if v else ""
 
 
 def fmt_ex_line(ex):
@@ -446,6 +454,7 @@ def main():
     works.sort(key=lambda w: (w.get("display_order") is None, w.get("display_order") or 0))
 
     index_entries = []
+    asset_sources = {"works": {}, "posters": {}, "home_videos": {}}  # 미리보기용 원본 지문
     for w in works:
         no = s(w["work_no"])
         mine = [e for e in ex_of_work.get(w["id"], []) if e]
@@ -462,9 +471,11 @@ def main():
             images = make_image_tiers(no, w.get("image_file"), assets_dir)
             audio = make_audio(no, w.get("audio_master"), assets_dir) if w.get("docent_enabled") else None
 
+            photo_src = []
             photos = []
             for i, p in enumerate(my_photos):
                 tiers = make_photo_tiers(no, i, p.get("image_file"), assets_dir)
+                photo_src.append(src_hash(p.get("image_file")) if tiers else "")
                 if not tiers:
                     continue
                 photos.append({
@@ -474,12 +485,15 @@ def main():
                     "alt": s(p.get("alt_text")),
                 })
 
+            media_src = []
             media = []
             for i, m in enumerate(my_media):
                 url = s(m.get("url"))
                 if not url:
+                    media_src.append("")
                     continue
                 thumb = make_media_thumb(no, i, m.get("thumb_file"), assets_dir) if s(m.get("thumb_file")) else ""
+                media_src.append(src_hash(m.get("thumb_file")) if thumb else "")
                 if not thumb:
                     yid = youtube_id(url)
                     if yid:
@@ -489,6 +503,12 @@ def main():
                     "title": s(m.get("title_ko")), "title_en": s(m.get("title_en")),
                     "duration": m.get("duration_seconds"),
                 })
+
+            asset_sources["works"][no] = {
+                "image": src_hash(w.get("image_file")) if images else "",
+                "photos": photo_src, "media": media_src,
+                "audio": src_hash(w.get("audio_master")) if audio else "",
+            }
 
             # 이번에 쓰지 않는 예전 상세사진·오디오·썸네일 파일 정리
             prune_work_assets(
@@ -575,6 +595,8 @@ def main():
         if not data_only and s(e.get("poster_url")):
             print("포스터 처리 중: " + ex_id)
             poster_asset = make_poster(ex_id, e.get("poster_url"), ex_assets_root)
+            if poster_asset:
+                asset_sources["posters"][ex_id] = src_hash(e.get("poster_url"))
         ex_out.append({
             "id": ex_id,
             "title": s(e.get("title_ko")),
@@ -637,6 +659,7 @@ def main():
                 continue
             if made:
                 media = made
+                asset_sources["home_videos"][vid] = src_hash(v.get("video_master"))
         hv_out.append({
             "id": vid,
             "name": s(v.get("name")),
@@ -653,6 +676,8 @@ def main():
         })
     write_json(os.path.join(data_dir, "home-videos.json"), hv_out)
     print("home-videos.json: %d건" % len(hv_out))
+    if not data_only:  # 사진을 새로 만들지 않은 발행에서는 지문을 쓰지 않는다(파일과 어긋나므로)
+        write_json(os.path.join(data_dir, "asset-sources.json"), asset_sources)
 
     if not dry and not data_only:
         current = {s(w["work_no"]) for w in works}
