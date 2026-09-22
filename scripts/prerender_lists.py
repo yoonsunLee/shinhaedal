@@ -64,12 +64,13 @@ def series_sort_key(r):
     return (o is None, o if o is not None else 0, str(r["id"]))
 
 
-def group_series(rows):
-    """연작은 첫 작품 자리에 연작 안 순서대로 연이어(works/index.html groupSeries 와 같음)."""
+def group_series(rows, joined):
+    """'두 폭 붙이기' 연작만 첫 작품 자리에 연작 안 순서대로 붙인다(works/index.html groupSeries 와 같음).
+    시리즈 키만 같은 작품은 목록 순서 그대로."""
     out, seen = [], set()
     for w in rows:
         k = w.get("series_key")
-        if not k:
+        if not k or k not in joined:
             out.append(w)
             continue
         if k in seen:
@@ -218,7 +219,7 @@ def prerender():
     changed = []
     if replace_block(ROOT / "index.html", "home-recent", work_tiles(index[:HOME_RECENT], "works/", "")):
         changed.append("index.html")
-    grouped = group_series(index)
+    grouped = group_series(index, joined)
     by_id = {w["id"]: w for w in index}
     sel, added = [], set()
     for wid in page.get("selected") or []:

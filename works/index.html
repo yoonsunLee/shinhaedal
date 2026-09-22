@@ -683,11 +683,12 @@ function seriesOrderCmp(a, b){
   if(x == null && y != null) return 1;
   return String(a.id).localeCompare(String(b.id));
 }
-// 연작은 목록에서 첫 작품 자리에 연작 안 순서대로 연이어 놓는다(이름표·새 줄 없음)
+// '두 폭 붙이기' 연작만 첫 작품 자리에 연작 안 순서대로 붙여 놓는다(이름표·새 줄 없음).
+// 시리즈 키만 같은 작품(두 폭이 아닌 묶음)은 목록 순서 그대로 둔다 — 작가 결정 2026-09-22
 function groupSeries(list){
   var out = [], seen = {};
   list.forEach(function(w){
-    if(!w.series_key){ out.push(w); return; }
+    if(!isJoined(w.series_key)){ out.push(w); return; }
     if(seen[w.series_key]) return;
     seen[w.series_key] = true;
     list.filter(function(x){ return x.series_key === w.series_key; }).sort(seriesOrderCmp)
@@ -821,7 +822,7 @@ function applyExFilter(exId, opts){
     var ids = exId ? exWorkIds(exId) : null;
     base = ids ? ALL_WORKS.filter(function(w){ return ids.indexOf(w.id) !== -1; }) : ALL_WORKS.slice();
   }
-  // 목록 순서 = 발행 순서(작가 지정 → 최신순)에서 연작을 연이어 모은 것. 작품 창의 이전·다음도 이 순서
+  // 목록 순서 = 발행 순서(작가 지정 → 최신순)에서 두 폭 연작만 붙여 모은 것. 작품 창의 이전·다음도 이 순서
   VISIBLE_WORKS = groupSeries(base);
   document.getElementById('exFilter').value = exId || '';
   renderExInfoCard(seriesKey ? '' : exId);
