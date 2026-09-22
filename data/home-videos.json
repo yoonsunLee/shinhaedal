@@ -1,1 +1,16 @@
-[]
+[
+ {
+  "id": "8e178b83-e837-462e-8649-7ace2f250b1a",
+  "name": "N차적저작물B",
+  "public": true,
+  "order": 1,
+  "video": "assets/home-video/8e178b83-e837-462e-8649-7ace2f250b1a/video.mp4",
+  "video_mobile": "assets/home-video/8e178b83-e837-462e-8649-7ace2f250b1a/video_mobile.mp4",
+  "poster": "assets/home-video/8e178b83-e837-462e-8649-7ace2f250b1a/poster.webp",
+  "poster_mobile": "",
+  "work_no": "HD-2026-011",
+  "bg_color": "#000000",
+  "ui_theme": "dark",
+  "mobile_image_fallback": false
+ }
+]

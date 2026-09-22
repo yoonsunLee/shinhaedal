@@ -9,15 +9,16 @@
    "work": null
   },
   {
-   "id": "01368e23-a9a9-420a-83c8-3e4d9e26ea71",
-   "kind": "image",
-   "image": "assets/works/HD-2026-003/detail.webp",
-   "w": 1137,
-   "h": 1117,
+   "id": "8e178b83-e837-462e-8649-7ace2f250b1a",
+   "kind": "video",
+   "video": "assets/home-video/8e178b83-e837-462e-8649-7ace2f250b1a/video.mp4",
+   "video_mobile": "assets/home-video/8e178b83-e837-462e-8649-7ace2f250b1a/video_mobile.mp4",
+   "poster": "assets/home-video/8e178b83-e837-462e-8649-7ace2f250b1a/poster.webp",
+   "mobile_image_fallback": false,
    "work": {
-    "no": "HD-2026-003",
-    "title": "POV : 업무 중",
-    "title_en": "POV : Working...",
+    "no": "HD-2026-011",
+    "title": "N차적 저작물B",
+    "title_en": "N-th Degree Derivative Works B",
     "year": 2026
    }
   }
