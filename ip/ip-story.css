@@ -116,11 +116,11 @@ html.no-hero-arrive .hero-character img{animation:none}
 .hero-note p{font-size:18px;line-height:1.9}
 /* 주요 동선(이야기 ↓)은 그대로, 그 옆에 작은 '프로필 보기 +' */
 .hero-actions{position:absolute;left:6%;bottom:48px;z-index:3;display:flex;align-items:center;gap:30px}
-.profile-open{display:inline-flex;align-items:center;gap:8px;border:0;background:none;padding:10px 0 12px;font:13px 'Noto Sans KR',sans-serif;color:var(--navy);opacity:.78;cursor:pointer;transition:opacity .2s ease}
+.profile-open{display:inline-flex;align-items:center;gap:5px;border:0;background:none;padding:10px 0 12px;font:13px 'Noto Sans KR',sans-serif;color:var(--navy);opacity:.78;cursor:pointer;transition:opacity .2s ease}
 .profile-open:hover{opacity:1}
-.profile-open-plus{display:inline-grid;place-items:center;width:18px;height:18px;border:1px solid currentColor;border-radius:50%;font:12px/1 'Space Mono',monospace}
+.profile-open-plus{font:16px/1 'Noto Sans KR',sans-serif}
 .scroll-link{display:flex;align-items:center;gap:45px;border-bottom:1px solid #12354870;padding-bottom:10px;font-size:13px}
-.scroll-link span:last-child{font-size:25px}
+.scroll-link span:last-child{font-size:16px;line-height:1}
 .hero-index{position:absolute;bottom:45px;right:6%;font:12px 'Space Mono',monospace}
 .section-top{display:flex;justify-content:space-between;align-items:flex-start;gap:30px;margin-bottom:70px}
 .section-top .eyebrow{padding-top:15px}
