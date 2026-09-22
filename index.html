@@ -75,6 +75,16 @@
     .hh-slide.on .hh-art img{animation-name:hhZoomM;}
   }
   @keyframes hhZoomM{ from{ transform:scale(1); } to{ transform:scale(1.11); } }
+  /* 한 장뿐일 때(작가 결정 2026-09-22: 기본 이미지 하나로 통일) — 예전 첫 화면처럼 천천히 커졌다 작아지기를 계속.
+     시작 지점은 속도가 0이라 멈춘 듯 보여 음수 지연으로 이미 움직이는 중인 구간부터 */
+  @media (prefers-reduced-motion: no-preference){
+    header.hero.hh-single .hh-slide.on .hh-art img{animation:hhBreath 22s ease-in-out -3.5s infinite alternate;}
+  }
+  @keyframes hhBreath{ from{ transform:scale(1) translate(0, 0); } to{ transform:scale(1.08) translate(-1.2%, -1%); } }
+  @media (max-width:720px) and (prefers-reduced-motion: no-preference){
+    header.hero.hh-single .hh-slide.on .hh-art img{animation:hhBreathM 17s ease-in-out -2.5s infinite alternate;}
+  }
+  @keyframes hhBreathM{ from{ transform:scale(1); } to{ transform:scale(1.16); } }
   /* 작품이 보이도록 가운데는 비우고, 위(메뉴)와 아래(문구)에만 어둠을 깐다 */
   .hh-scrim{position:absolute; inset:0; z-index:1; pointer-events:none;
     background:linear-gradient(to bottom, rgba(5,6,10,.62) 0%, rgba(5,6,10,.3) 9%, rgba(5,6,10,0) 20%, rgba(5,6,10,0) 38%, rgba(5,6,10,.55) 66%, rgba(5,6,10,.92) 100%);}
@@ -1693,7 +1703,9 @@ document.addEventListener('contextmenu', function(e){
     credit.href = 'works/?w=' + encodeURIComponent(w.no);
   }
   function buildBars(){
-    bar.hidden = reduce;
+    // 한 장뿐이면 넘김 바·정지 버튼 없이 예전 첫 화면처럼 천천히 숨 쉬기만(.hh-single)
+    hero.classList.toggle('hh-single', order.length < 2);
+    bar.hidden = reduce || order.length < 2;
     barsEl.style.visibility = order.length > 1 ? '' : 'hidden';
     barsEl.innerHTML = order.map(function(){ return '<span><i></i></span>'; }).join('');
   }
