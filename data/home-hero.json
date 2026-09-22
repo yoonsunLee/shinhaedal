@@ -1,0 +1,25 @@
+{
+ "slides": [
+  {
+   "id": "default",
+   "kind": "image",
+   "image": "assets/landing/hero-bg.webp",
+   "w": 1448,
+   "h": 1086,
+   "work": null
+  },
+  {
+   "id": "01368e23-a9a9-420a-83c8-3e4d9e26ea71",
+   "kind": "image",
+   "image": "assets/works/HD-2026-003/detail.webp",
+   "w": 1137,
+   "h": 1117,
+   "work": {
+    "no": "HD-2026-003",
+    "title": "POV : 업무 중",
+    "title_en": "POV : Working...",
+    "year": 2026
+   }
+  }
+ ]
+}
