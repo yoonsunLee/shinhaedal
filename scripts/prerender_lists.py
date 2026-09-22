@@ -153,11 +153,11 @@ def press_featured(p, exhibitions):
     title_html = '<a href="%s" target="_blank" rel="noopener">%s</a>' % (e(url), title) if url else title
     dek = str(p.get("quote") or "").strip()
     media = ('<div class="press-feature-media"><img src="%s" alt="" onerror="onMediaError(this)"></div>' % e(img)) if img else ""
-    return ('<div class="press-feature-grid%s">%s<div class="press-feature-body">'
+    return ('<div class="press-feature-grid%s" data-no="%s">%s<div class="press-feature-body">'
             '<p class="press-feature-meta"><span>%s</span><span class="dot"></span><span>%s</span></p>'
             '<h2 class="press-feature-title">%s</h2>%s'
             '<div class="press-feature-links">%s</div></div></div>'
-            % ("" if img else " no-media", media, e(p.get("outlet")), e(p.get("date")), title_html,
+            % ("" if img else " no-media", e(p.get("no")), media, e(p.get("outlet")), e(p.get("date")), title_html,
                ('<p class="press-feature-dek">%s</p>' % e(dek)) if dek else "", press_links(p, exhibitions)))
 
 
@@ -165,11 +165,11 @@ def press_row(p, exhibitions):
     img = archive_img_url(p.get("image"))
     dek = str(p.get("quote") or "").strip()
     media = ('<div class="press-row-media"><img src="%s" alt="" loading="lazy" onerror="onMediaError(this)"></div>' % e(img)) if img else ""
-    return ('<article class="press-row%s">%s<div class="press-row-text">'
+    return ('<article class="press-row%s" data-no="%s">%s<div class="press-row-text">'
             '<p class="press-row-meta"><span>%s</span><span class="dot"></span><span>%s</span></p>'
             '<h3 class="press-row-title">%s</h3>%s</div>'
             '<div class="press-row-links">%s</div></article>'
-            % ("" if img else " no-media", media, e(p.get("outlet")), e(p.get("date")), e(p.get("title")),
+            % ("" if img else " no-media", e(p.get("no")), media, e(p.get("outlet")), e(p.get("date")), e(p.get("title")),
                ('<p class="press-row-dek">%s</p>' % e(dek)) if dek else "", press_links(p, exhibitions)))
 
 

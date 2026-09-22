@@ -1118,6 +1118,7 @@ function setupMedia(w, fallbackAlt){
 function renderWorkModal(){
   var meta = VISIBLE_WORKS[wmIndex];
   if(!meta) return;
+  if(window.shStatWork) shStatWork(meta.id);   // 방문 통계: 작품별 열람·머문 시간
   var requestIndex = wmIndex;
   stopDocent();
   stopVideo();
@@ -1284,6 +1285,7 @@ document.getElementById('wmSeriesList').addEventListener('click', function(e){
   openWorkById(btn.dataset.workId);
 });
 function hideWorkModal(){
+  if(window.shStatWork) shStatWork(null);
   stopDocent();
   stopVideo();
   wmModal.classList.remove('open');
@@ -1470,6 +1472,7 @@ document.addEventListener('contextmenu', function(e){
 });
 </script>
 
+<script src="../assets/stats.js"></script>
 <script src="../assets/site.js"></script>
 <script src="../assets/ip-nav-transition.js"></script>
 </body>

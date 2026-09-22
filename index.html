@@ -1235,6 +1235,7 @@ function setupMedia(w, fallbackAlt){
 function renderWorkModal(){
   var meta = HOME_LIST[wmIndex];
   if(!meta) return;
+  if(window.shStatWork) shStatWork(meta.id);   // 방문 통계: 작품별 열람·머문 시간
   var requestIndex = wmIndex;
   stopDocent();
   stopVideo();
@@ -1369,6 +1370,7 @@ function openWorkModal(idx){
   }catch(e){}
 }
 function hideWorkModal(){
+  if(window.shStatWork) shStatWork(null);
   stopDocent();
   stopVideo();
   wmModal.classList.remove('open');
@@ -1871,6 +1873,7 @@ document.addEventListener('contextmenu', function(e){
 })();
 </script>
 
+<script src="assets/stats.js"></script>
 <script src="assets/site.js"></script>
 <script src="assets/ip-nav-transition.js"></script>
 </body>

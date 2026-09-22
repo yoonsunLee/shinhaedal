@@ -569,6 +569,7 @@ function submitDirect(fields){
     })
     .then(function(j){
       if(j.ok){
+        if(window.shStat) shStat('contact_sent', fields.type || '');   // 방문 통계: 문의 보냄(유형별)
         document.getElementById('contactForm').hidden = true;
         var done = document.getElementById('cfDone');
         done.hidden = false;
@@ -613,6 +614,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e){
   var mailto = 'mailto:haedarney@naver.com'
     + '?subject=' + encodeURIComponent(mailSubject)
     + '&body=' + encodeURIComponent(body);
+  if(window.shStat) shStat('contact_mailapp', type || '');   // 방문 통계: 메일 앱으로 넘김(유형별)
   document.getElementById('cfNote').textContent = I18N[LANG].cf_sent;
   document.getElementById('cfFallback').hidden = false;
   window.location.href = mailto;
@@ -683,6 +685,7 @@ initWorkInquiry();
 setupDirectSubmit();
 </script>
 
+<script src="../assets/stats.js"></script>
 <script src="../assets/site.js"></script>
 <script src="../assets/ip-nav-transition.js"></script>
 </body>

@@ -238,7 +238,7 @@ function renderFeatured(p){
   var titleHtml = articleUrl ? '<a href="' + esc(articleUrl) + '" target="_blank" rel="noopener">' + esc(title) + '</a>' : esc(title);
   var dek = dekFor(p);
   var media = img ? '<div class="press-feature-media"><img src="' + esc(img) + '" alt="" onerror="onMediaError(this)"></div>' : '';
-  return '<div class="press-feature-grid reveal-once' + (img ? '' : ' no-media') + '">' +
+  return '<div class="press-feature-grid reveal-once' + (img ? '' : ' no-media') + '" data-no="' + esc(p.no || '') + '">' +
     media +
     '<div class="press-feature-body">' +
       '<p class="press-feature-meta"><span>' + esc(outletFor(p)) + '</span><span class="dot"></span><span>' + esc(p.date) + '</span></p>' +
@@ -253,7 +253,7 @@ function renderRow(p){
   var title = LANG === 'en' ? (p.title_en || p.title) : p.title;
   var dek = dekFor(p);
   var media = img ? '<div class="press-row-media"><img src="' + esc(img) + '" alt="" loading="lazy" onerror="onMediaError(this)"></div>' : '';
-  return '<article class="press-row' + (img ? '' : ' no-media') + '">' +
+  return '<article class="press-row' + (img ? '' : ' no-media') + '" data-no="' + esc(p.no || '') + '">' +
     media +
     '<div class="press-row-text">' +
       '<p class="press-row-meta"><span>' + esc(outletFor(p)) + '</span><span class="dot"></span><span>' + esc(p.date) + '</span></p>' +
@@ -335,6 +335,7 @@ loadPress();
 if(LANG!=='ko') applyLang(LANG, {skipUrl:true});
 </script>
 
+<script src="../assets/stats.js"></script>
 <script src="../assets/site.js"></script>
 <script src="../assets/ip-nav-transition.js"></script>
 </body>
