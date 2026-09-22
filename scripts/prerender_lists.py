@@ -64,24 +64,8 @@ def series_sort_key(r):
     return (o is None, o if o is not None else 0, str(r["id"]))
 
 
-def group_series(rows, joined):
-    """'두 폭 붙이기' 연작만 첫 작품 자리에 연작 안 순서대로 붙인다(works/index.html groupSeries 와 같음).
-    시리즈 키만 같은 작품은 목록 순서 그대로."""
-    out, seen = [], set()
-    for w in rows:
-        k = w.get("series_key")
-        if not k or k not in joined:
-            out.append(w)
-            continue
-        if k in seen:
-            continue
-        seen.add(k)
-        out.extend(sorted([x for x in rows if x.get("series_key") == k], key=series_sort_key))
-    return out
-
-
 def works_cells(rows, joined, attr_of):
-    """'두 폭 붙이기' 연작의 두 작품은 두 칸짜리 한 단위(.pair)로."""
+    """'두 폭 붙이기' 연작의 두 작품은 두 칸짜리 한 단위(.pair)로 — Selected에서만 쓴다."""
     html, i = [], 0
     while i < len(rows):
         r = rows[i]
@@ -219,7 +203,6 @@ def prerender():
     changed = []
     if replace_block(ROOT / "index.html", "home-recent", work_tiles(index[:HOME_RECENT], "works/", "")):
         changed.append("index.html")
-    grouped = group_series(index, joined)
     by_id = {w["id"]: w for w in index}
     sel, added = [], set()
     for wid in page.get("selected") or []:
@@ -234,8 +217,9 @@ def prerender():
             if x["id"] not in added:
                 added.add(x["id"])
                 sel.append(x)
+    # All works: 연작도 한 점씩(두 폭으로 붙이는 건 Selected에 넣었을 때만 — 작가 결정 2026-09-22)
     a = replace_block(ROOT / "works" / "index.html", "works-grid",
-                      works_cells(grouped, joined, lambda r, i: 'data-idx="%d"' % i))
+                      "".join(works_tile(r, 'data-idx="%d"' % i) for i, r in enumerate(index)))
     b = replace_block(ROOT / "works" / "index.html", "works-selected",
                       works_cells(sel, joined, lambda r, i: 'data-id="%s"' % e(r["id"])))
     if a or b:
