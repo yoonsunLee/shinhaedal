@@ -112,12 +112,25 @@
   .tile.loading span{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-dim);}
   .tile-cap{padding-top:16px;}
   .tile-title{font-size:14px; color:var(--ivory-dim); font-weight:500; line-height:1.4;}
+  /* 목록 캡션 둘째 줄: 연도 · 크기(모바일은 연도만) */
+  .tile-meta{display:block; font-size:12px; color:var(--ivory-muted); line-height:1.5; margin-top:4px;}
+  /* 두 폭(ㅁㅁ) 작품: 두 칸을 차지하는 한 단위, 사이만 살짝 띄워 각각의 작품임을 보이게 */
+  .pair{grid-column:span 2; display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); column-gap:8px; align-items:start;}
+  /* Selected works / All works 구역 제목 */
+  .works-sec-head{margin:0 0 30px;}
+  .works-sec-head h2{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:22px; margin:0;}
+  .sel-section{padding-bottom:24px;}
+  .sel-section + .grid-section{padding-top:40px; border-top:1px solid var(--line);}
 
   @media(max-width:900px){
     .work-grid{grid-template-columns:repeat(2, minmax(0, 1fr)); gap:48px 28px;}
   }
   @media(max-width:480px){
-    .work-grid{grid-template-columns:1fr; gap:44px;}
+    .work-grid{grid-template-columns:repeat(2, minmax(0, 1fr)); gap:34px 12px;}
+    .pair{column-gap:6px;}
+    .tile-cap{padding-top:10px;}
+    .tile-title{font-size:13px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
+    .tile-meta .sep, .tile-meta .sz{display:none;}
   }
 
   /* work modal — fullscreen editorial viewer */
@@ -363,20 +376,27 @@
   <h1 data-i="page_h">Works</h1>
   <p data-i="page_sub">같은 규칙 안에서 서로 다른 빛으로 살아가는 개인에 관한 작업입니다.</p>
   <div class="ex-filter-row">
-    <label for="exFilter" data-i="filter_label">전시별로 보기</label>
+    <label for="exFilter" data-i="filter_label">모아 보기</label>
     <select id="exFilter">
       <option value="" data-i="filter_all">전체 작품</option>
     </select>
-    <span class="ex-filter-notice" id="exFilterNotice" data-i="filter_cleared_notice" hidden>다른 전시의 작품이라 필터가 해제됐어요</span>
+    <span class="ex-filter-notice" id="exFilterNotice" data-i="filter_cleared_notice" hidden>선택한 목록에 없는 작품이라 필터가 해제됐어요</span>
   </div>
 </div>
 
 <div class="ex-info-wrap" id="exInfoWrap" hidden></div>
 
+<!-- Selected works: 아카이브 'Works 구성'에서 고른 작품. 비어 있거나 필터를 쓰는 동안에는 통째로 숨긴다 -->
+<section class="grid-section sel-section" id="selSection" hidden>
+  <div class="works-sec-head"><h2 data-i="sel_h">Selected works</h2></div>
+  <div class="work-grid" id="selGrid"><!-- GEN:works-selected --><!-- /GEN:works-selected --></div>
+</section>
+
 <section class="grid-section">
+  <div class="works-sec-head" id="allHead" hidden><h2 data-i="all_h">All works</h2></div>
   <div class="work-grid" id="workGrid">
     <!-- 발행 때 scripts/prerender_lists.py가 채운다(검색 로봇용). JS가 같은 모양으로 다시 그린다 -->
-    <!-- GEN:works-grid --><a class="tile" href="w/HD-2026-012/" data-idx="0" aria-label="조개배달부 얼빵해달 2026 Limited Edition"><div class="tile-media"><img src="../assets/works/HD-2026-012/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">조개배달부 얼빵해달 2026 Limited Edition</span></span></a><a class="tile" href="w/HD-2026-011/" data-idx="1" aria-label="N차적 저작물B"><div class="tile-media"><img src="../assets/works/HD-2026-011/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">N차적 저작물B</span></span></a><a class="tile" href="w/HD-2026-010/" data-idx="2" aria-label="POV : 유급휴일"><div class="tile-media"><img src="../assets/works/HD-2026-010/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">POV : 유급휴일</span></span></a><a class="tile" href="w/HD-2026-009/" data-idx="3" aria-label="무주의 바다"><div class="tile-media"><img src="../assets/works/HD-2026-009/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">무주의 바다</span></span></a><a class="tile" href="w/HD-2026-008/" data-idx="4" aria-label="더 블루북"><div class="tile-media"><img src="../assets/works/HD-2026-008/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">더 블루북</span></span></a><a class="tile" href="w/HD-2026-007/" data-idx="5" aria-label="POV : 퇴근"><div class="tile-media"><img src="../assets/works/HD-2026-007/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">POV : 퇴근</span></span></a><a class="tile" href="w/HD-2026-006/" data-idx="6" aria-label="POV : 출근"><div class="tile-media"><img src="../assets/works/HD-2026-006/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">POV : 출근</span></span></a><a class="tile" href="w/HD-2026-005/" data-idx="7" aria-label="헌법 제10조 행복추구권*"><div class="tile-media"><img src="../assets/works/HD-2026-005/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">헌법 제10조 행복추구권*</span></span></a><a class="tile" href="w/HD-2026-004/" data-idx="8" aria-label="우주조약"><div class="tile-media"><img src="../assets/works/HD-2026-004/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">우주조약</span></span></a><a class="tile" href="w/HD-2026-003/" data-idx="9" aria-label="POV : 업무 중"><div class="tile-media"><img src="../assets/works/HD-2026-003/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">POV : 업무 중</span></span></a><a class="tile" href="w/HD-2026-002/" data-idx="10" aria-label="N차적 저작물A"><div class="tile-media"><img src="../assets/works/HD-2026-002/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">N차적 저작물A</span></span></a><a class="tile" href="w/HD-2026-001/" data-idx="11" aria-label="이 세계의 얼빵해달, 저작인접권자가 되었다!"><div class="tile-media"><img src="../assets/works/HD-2026-001/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">이 세계의 얼빵해달, 저작인접권자가 되었다!</span></span></a><a class="tile" href="w/HD-2025-004/" data-idx="12" aria-label="nn차적 저작물a"><div class="tile-media"><img src="../assets/works/HD-2025-004/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">nn차적 저작물a</span></span></a><a class="tile" href="w/HD-2025-002/" data-idx="13" aria-label="안녕! 권리소진의 원칙"><div class="tile-media"><img src="../assets/works/HD-2025-002/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">안녕! 권리소진의 원칙</span></span></a><a class="tile" href="w/HD-2025-001/" data-idx="14" aria-label="권리누적: 이차원에서 삼차원으로"><div class="tile-media"><img src="../assets/works/HD-2025-001/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">권리누적: 이차원에서 삼차원으로</span></span></a><!-- /GEN:works-grid -->
+    <!-- GEN:works-grid --><a class="tile" href="w/HD-2026-012/" data-idx="0" aria-label="조개배달부 얼빵해달 2026 Limited Edition"><div class="tile-media"><img src="../assets/works/HD-2026-012/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">조개배달부 얼빵해달 2026 Limited Edition</span><span class="tile-meta">2026</span></span></a><a class="tile" href="w/HD-2025-004/" data-idx="1" aria-label="nn차적 저작물a"><div class="tile-media"><img src="../assets/works/HD-2025-004/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">nn차적 저작물a</span><span class="tile-meta">2025</span></span></a><a class="tile" href="w/HD-2026-002/" data-idx="2" aria-label="N차적 저작물A"><div class="tile-media"><img src="../assets/works/HD-2026-002/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">N차적 저작물A</span><span class="tile-meta">2026</span></span></a><a class="tile" href="w/HD-2026-011/" data-idx="3" aria-label="N차적 저작물B"><div class="tile-media"><img src="../assets/works/HD-2026-011/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">N차적 저작물B</span><span class="tile-meta">2026</span></span></a><a class="tile" href="w/HD-2026-003/" data-idx="4" aria-label="POV : 업무 중"><div class="tile-media"><img src="../assets/works/HD-2026-003/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">POV : 업무 중</span><span class="tile-meta">2026</span></span></a><a class="tile" href="w/HD-2026-006/" data-idx="5" aria-label="POV : 출근"><div class="tile-media"><img src="../assets/works/HD-2026-006/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">POV : 출근</span><span class="tile-meta">2026</span></span></a><a class="tile" href="w/HD-2026-007/" data-idx="6" aria-label="POV : 퇴근"><div class="tile-media"><img src="../assets/works/HD-2026-007/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">POV : 퇴근</span><span class="tile-meta">2026</span></span></a><a class="tile" href="w/HD-2026-010/" data-idx="7" aria-label="POV : 유급휴일"><div class="tile-media"><img src="../assets/works/HD-2026-010/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">POV : 유급휴일</span><span class="tile-meta">2026</span></span></a><a class="tile" href="w/HD-2026-004/" data-idx="8" aria-label="우주조약"><div class="tile-media"><img src="../assets/works/HD-2026-004/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">우주조약</span><span class="tile-meta">2026</span></span></a><a class="tile" href="w/HD-2026-009/" data-idx="9" aria-label="무주의 바다"><div class="tile-media"><img src="../assets/works/HD-2026-009/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">무주의 바다</span><span class="tile-meta">2026</span></span></a><a class="tile" href="w/HD-2026-008/" data-idx="10" aria-label="더 블루북"><div class="tile-media"><img src="../assets/works/HD-2026-008/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">더 블루북</span><span class="tile-meta">2026</span></span></a><a class="tile" href="w/HD-2026-005/" data-idx="11" aria-label="헌법 제10조 행복추구권*"><div class="tile-media"><img src="../assets/works/HD-2026-005/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">헌법 제10조 행복추구권*</span><span class="tile-meta">2026</span></span></a><a class="tile" href="w/HD-2026-001/" data-idx="12" aria-label="이 세계의 얼빵해달, 저작인접권자가 되었다!"><div class="tile-media"><img src="../assets/works/HD-2026-001/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">이 세계의 얼빵해달, 저작인접권자가 되었다!</span><span class="tile-meta">2026</span></span></a><a class="tile" href="w/HD-2025-002/" data-idx="13" aria-label="안녕! 권리소진의 원칙"><div class="tile-media"><img src="../assets/works/HD-2025-002/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">안녕! 권리소진의 원칙</span><span class="tile-meta">2025</span></span></a><a class="tile" href="w/HD-2025-001/" data-idx="14" aria-label="권리누적: 이차원에서 삼차원으로"><div class="tile-media"><img src="../assets/works/HD-2025-001/thumb.webp" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">권리누적: 이차원에서 삼차원으로</span><span class="tile-meta">2025</span></span></a><!-- /GEN:works-grid -->
   </div>
 </section>
 
@@ -461,10 +481,14 @@ var I18N = {
     loading:'불러오는 중…',
     empty:'등록된 작품이 아직 없어요',
     error:'작품을 불러오지 못했어요',
-    filter_label:'전시별로 보기',
+    filter_label:'모아 보기',
+    filter_group_ex:'전시',
+    filter_group_series:'연작',
+    sel_h:'Selected works',
+    all_h:'All works',
     filter_all:'전체 작품',
     filter_empty:'이 전시에는 등록된 작품이 없어요',
-    filter_cleared_notice:'다른 전시의 작품이라 필터가 해제됐어요',
+    filter_cleared_notice:'선택한 목록에 없는 작품이라 필터가 해제됐어요',
     ex_upcoming:'예정',
     wm_ex_label:'전시 이력',
     wm_ex_more:'전시 이력 더보기',
@@ -493,10 +517,14 @@ var I18N = {
     loading:'Loading…',
     empty:'No works registered yet',
     error:'Could not load works',
-    filter_label:'Browse by exhibition',
+    filter_label:'Browse',
+    filter_group_ex:'Exhibitions',
+    filter_group_series:'Series',
+    sel_h:'Selected works',
+    all_h:'All works',
     filter_all:'All works',
     filter_empty:'No works registered for this exhibition',
-    filter_cleared_notice:'Cleared the filter — this work is from a different exhibition',
+    filter_cleared_notice:'Cleared the filter — this work is not in the selected group',
     ex_upcoming:'Upcoming',
     wm_ex_label:'Exhibitions',
     wm_ex_more:'Show more',
@@ -545,7 +573,10 @@ function applyLang(l, opts){
   });
   document.getElementById('langKo').classList.toggle('on', l==='ko');
   document.getElementById('langEn').classList.toggle('on', l==='en');
-  if(typeof renderWorkTiles==='function' && typeof VISIBLE_WORKS!=='undefined' && VISIBLE_WORKS.length) renderWorkTiles(VISIBLE_WORKS);
+  if(typeof renderWorkTiles==='function' && typeof VISIBLE_WORKS!=='undefined' && VISIBLE_WORKS.length){
+    renderWorkTiles(VISIBLE_WORKS);
+    renderSelected(!!document.getElementById('exFilter').value);
+  }
   if(typeof populateExFilter==='function' && typeof EXHIBITIONS!=='undefined' && EXHIBITIONS.length){
     var keepEx = document.getElementById('exFilter').value;
     populateExFilter();
@@ -627,25 +658,87 @@ function renderExInfoCard(exId){
     };
   });
 }
+// 사이트 공통 규칙: 크기에 단위가 없으면 cm
+function sizeLabel(v){ v = String(v || '').trim(); return v && !/cm/i.test(v) ? v + ' cm' : v; }
+function tileHtml(r, attr){
+  var img = r.thumb ? ASSET_BASE + r.thumb : '';
+  var dims = (r.tw && r.th) ? ' width="' + r.tw + '" height="' + r.th + '"' : '';
+  var media = img ? '<img src="' + img.replace(/"/g,'&quot;') + '"' + dims + ' alt="" loading="lazy" draggable="false" onerror="this.style.visibility=\'hidden\'">' : '';
+  var title = primaryTitle(r);
+  var size = sizeLabel(r.size);
+  var meta = esc(r.year || '') + (size ? '<span class="sep"> · </span><span class="sz">' + esc(size) + '</span>' : '');
+  return '<a class="tile" href="w/' + encodeURIComponent(r.id) + '/" ' + attr + ' aria-label="' + esc(title) + '">' +
+    '<div class="tile-media">' + media + '<div class="tile-sheen"></div></div>' +
+    '<span class="tile-cap"><span class="tile-title">' + esc(title) + '</span><span class="tile-meta">' + meta + '</span></span>' +
+    '</a>';
+}
+function seriesOrderCmp(a, b){
+  var x = a.series_order, y = b.series_order;
+  if(x != null && y != null && x !== y) return x - y;
+  if(x != null && y == null) return -1;
+  if(x == null && y != null) return 1;
+  return String(a.id).localeCompare(String(b.id));
+}
+// 연작은 목록에서 첫 작품 자리에 연작 안 순서대로 연이어 놓는다(이름표·새 줄 없음)
+function groupSeries(list){
+  var out = [], seen = {};
+  list.forEach(function(w){
+    if(!w.series_key){ out.push(w); return; }
+    if(seen[w.series_key]) return;
+    seen[w.series_key] = true;
+    list.filter(function(x){ return x.series_key === w.series_key; }).sort(seriesOrderCmp)
+      .forEach(function(x){ out.push(x); });
+  });
+  return out;
+}
+function isJoined(key){ return !!(key && SERIES_META[key] && SERIES_META[key].joined); }
+// 칸 만들기: '두 폭 붙이기' 연작에서 이어지는 두 작품은 두 칸짜리 한 단위로
+function cellsHtml(rows, attrOf){
+  var html = '';
+  for(var i = 0; i < rows.length; i++){
+    var r = rows[i], n = rows[i + 1];
+    if(n && isJoined(r.series_key) && n.series_key === r.series_key &&
+       rows.filter(function(x){ return x.series_key === r.series_key; }).length === 2){
+      html += '<div class="pair">' + tileHtml(r, attrOf(r, i)) + tileHtml(n, attrOf(n, i + 1)) + '</div>';
+      i++;
+    }else{
+      html += tileHtml(r, attrOf(r, i));
+    }
+  }
+  return html;
+}
 function renderWorkTiles(rows){
   var grid = document.getElementById('workGrid');
   if(!rows.length){
     grid.innerHTML = '<div class="tile loading"><span data-i="empty">' + I18N[LANG].empty + '</span></div>';
     return;
   }
-  grid.innerHTML = rows.map(function(r, i){
-    var img = r.thumb ? ASSET_BASE + r.thumb : '';
-    var media = img ? '<img src="' + img.replace(/"/g,'&quot;') + '" alt="" loading="lazy" draggable="false" onerror="this.style.visibility=\'hidden\'">' : '';
-    var title = primaryTitle(r);
-    return '<a class="tile" href="w/' + encodeURIComponent(r.id) + '/" data-idx="' + i + '" aria-label="' + esc(title) + '">' +
-      '<div class="tile-media">' + media + '<div class="tile-sheen"></div></div>' +
-      '<span class="tile-cap"><span class="tile-title">' + esc(title) + '</span></span>' +
-      '</a>';
-  }).join('');
+  grid.innerHTML = cellsHtml(rows, function(r, i){ return 'data-idx="' + i + '"'; });
+}
+// Selected works: 고른 순서대로. '두 폭 붙이기' 작품은 한쪽만 골라도 두 폭이 함께 나온다
+function selectedRows(){
+  var out = [], added = {};
+  SELECTED_IDS.forEach(function(id){
+    var w = ALL_WORKS.find(function(x){ return x.id === id; });
+    if(!w || added[w.id]) return;
+    var group = isJoined(w.series_key) ? ALL_WORKS.filter(function(x){ return x.series_key === w.series_key; }).sort(seriesOrderCmp) : [w];
+    if(group.length !== 2 && isJoined(w.series_key)) group = [w];
+    group.forEach(function(x){ if(!added[x.id]){ added[x.id] = true; out.push(x); } });
+  });
+  return out;
+}
+function renderSelected(filterActive){
+  var sec = document.getElementById('selSection');
+  var rows = filterActive ? [] : selectedRows();
+  sec.hidden = !rows.length;
+  document.getElementById('allHead').hidden = !rows.length;
+  if(rows.length) document.getElementById('selGrid').innerHTML = cellsHtml(rows, function(r){ return 'data-id="' + esc(r.id) + '"'; });
 }
 var ALL_WORKS = [];
 var VISIBLE_WORKS = [];
 var EXHIBITIONS = [];
+var SERIES_META = {};   // 연작 키 → {name, name_en, joined} (data/series.json)
+var SELECTED_IDS = [];  // Selected works 작품번호 목록 (data/works-page.json)
 var DETAIL_CACHE = {};
 
 // 제목 패턴으로 시리즈 판별(폴백 전용): "POV : 출근"처럼 콜론으로 구분되거나, "저작물B"처럼
@@ -673,7 +766,7 @@ var MANUAL_SERIES_GROUPS = [
 ];
 function seriesSiblings(meta){
   if(meta.series_key){
-    var byKey = ALL_WORKS.filter(function(w){ return w.series_key === meta.series_key; });
+    var byKey = ALL_WORKS.filter(function(w){ return w.series_key === meta.series_key; }).sort(seriesOrderCmp);
     return byKey.filter(function(w){ return w.id !== meta.id; });
   }
   var manualGroup = MANUAL_SERIES_GROUPS.filter(function(ids){ return ids.indexOf(meta.id) !== -1; })[0];
@@ -687,14 +780,28 @@ function seriesSiblings(meta){
   return group.filter(function(w){ return w.id !== meta.id; });
 }
 
+function namedSeries(){
+  return Object.keys(SERIES_META).filter(function(k){
+    return (SERIES_META[k].name || SERIES_META[k].name_en) && ALL_WORKS.some(function(w){ return w.series_key === k; });
+  });
+}
 function populateExFilter(){
   var select = document.getElementById('exFilter');
   var sorted = EXHIBITIONS.slice().sort(function(a, b){ return String(b.start_date||'').localeCompare(String(a.start_date||'')); });
+  var exOpts = sorted.map(function(ex){
+    var exTitle = LANG === 'en' ? (ex.title_en || ex.title) : ex.title;
+    return '<option value="' + esc(ex.id) + '">' + esc(exTitle) + '</option>';
+  }).join('');
+  var keys = namedSeries();
+  var seOpts = keys.map(function(k){
+    var m = SERIES_META[k], nm = LANG === 'en' ? (m.name_en || m.name) : (m.name || m.name_en);
+    return '<option value="series:' + esc(k) + '">' + esc(nm) + '</option>';
+  }).join('');
   select.innerHTML = '<option value="" data-i="filter_all">' + I18N[LANG].filter_all + '</option>' +
-    sorted.map(function(ex){
-      var exTitle = LANG === 'en' ? (ex.title_en || ex.title) : ex.title;
-      return '<option value="' + esc(ex.id) + '">' + esc(exTitle) + '</option>';
-    }).join('');
+    (keys.length
+      ? '<optgroup label="' + esc(I18N[LANG].filter_group_ex) + '">' + exOpts + '</optgroup>' +
+        '<optgroup label="' + esc(I18N[LANG].filter_group_series) + '">' + seOpts + '</optgroup>'
+      : exOpts);
 }
 function exWorkIds(exId){
   var ex = EXHIBITIONS.find(function(e){ return e.id === exId; });
@@ -703,10 +810,18 @@ function exWorkIds(exId){
 }
 function applyExFilter(exId, opts){
   opts = opts || {};
-  var ids = exId ? exWorkIds(exId) : null;
-  VISIBLE_WORKS = ids ? ALL_WORKS.filter(function(w){ return ids.indexOf(w.id) !== -1; }) : ALL_WORKS.slice();
+  var seriesKey = exId && exId.indexOf('series:') === 0 ? exId.slice(7) : '';
+  var base;
+  if(seriesKey) base = ALL_WORKS.filter(function(w){ return w.series_key === seriesKey; });
+  else {
+    var ids = exId ? exWorkIds(exId) : null;
+    base = ids ? ALL_WORKS.filter(function(w){ return ids.indexOf(w.id) !== -1; }) : ALL_WORKS.slice();
+  }
+  // 목록 순서 = 발행 순서(작가 지정 → 최신순)에서 연작을 연이어 모은 것. 작품 창의 이전·다음도 이 순서
+  VISIBLE_WORKS = groupSeries(base);
   document.getElementById('exFilter').value = exId || '';
-  renderExInfoCard(exId);
+  renderExInfoCard(seriesKey ? '' : exId);
+  renderSelected(!!exId);
   if(!VISIBLE_WORKS.length && exId){
     document.getElementById('workGrid').innerHTML = '<div class="tile loading"><span>' + I18N[LANG].filter_empty + '</span></div>';
   }else{
@@ -715,7 +830,9 @@ function applyExFilter(exId, opts){
   if(!opts.skipUrl){
     try{
       var url = new URL(location.href);
-      if(exId) url.searchParams.set('ex', exId); else url.searchParams.delete('ex');
+      url.searchParams.delete('ex'); url.searchParams.delete('series');
+      if(seriesKey) url.searchParams.set('series', seriesKey);
+      else if(exId) url.searchParams.set('ex', exId);
       history.replaceState(null, '', url);
     }catch(e){}
   }
@@ -725,13 +842,20 @@ document.getElementById('exFilter').addEventListener('change', function(){ apply
 function loadAllWorks(){
   Promise.all([
     fetch(DATA_BASE + 'works-index.json').then(function(res){ return res.json(); }),
-    fetch(DATA_BASE + 'exhibitions.json').then(function(res){ return res.json(); }).catch(function(){ return []; })
+    fetch(DATA_BASE + 'exhibitions.json').then(function(res){ return res.json(); }).catch(function(){ return []; }),
+    fetch(DATA_BASE + 'series.json').then(function(res){ return res.ok ? res.json() : []; }).catch(function(){ return []; }),
+    fetch(DATA_BASE + 'works-page.json').then(function(res){ return res.ok ? res.json() : {}; }).catch(function(){ return {}; })
   ]).then(function(results){
       ALL_WORKS = results[0] || [];
       EXHIBITIONS = results[1] || [];
+      SERIES_META = {};
+      (results[2] || []).forEach(function(r){ if(r && r.key) SERIES_META[r.key] = r; });
+      SELECTED_IDS = ((results[3] || {}).selected) || [];
       populateExFilter();
-      var urlEx = new URLSearchParams(location.search).get('ex');
-      var initialEx = (urlEx && EXHIBITIONS.some(function(e){ return e.id === urlEx; })) ? urlEx : '';
+      var params = new URLSearchParams(location.search);
+      var urlEx = params.get('ex'), urlSeries = params.get('series');
+      var initialEx = (urlEx && EXHIBITIONS.some(function(e){ return e.id === urlEx; })) ? urlEx
+        : (urlSeries && ALL_WORKS.some(function(w){ return w.series_key === urlSeries; })) ? 'series:' + urlSeries : '';
       applyExFilter(initialEx, {skipUrl:true});
       openFromUrlIfPresent();
     })
@@ -744,6 +868,15 @@ function loadAllWorks(){
 }
 loadAllWorks();
 
+document.getElementById('selGrid').addEventListener('click', function(e){
+  var tile = e.target.closest('.tile[data-id]');
+  if(!tile) return;
+  if(e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  var idx = VISIBLE_WORKS.findIndex(function(r){ return r.id === tile.dataset.id; });
+  if(idx < 0) return; // 아직 데이터 전이거나 목록에 없으면 링크대로 작품 페이지로
+  e.preventDefault();
+  openWorkModal(idx);
+});
 document.getElementById('workGrid').addEventListener('click', function(e){
   var tile = e.target.closest('.tile[data-idx]');
   if(!tile) return;

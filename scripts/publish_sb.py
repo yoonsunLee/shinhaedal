@@ -40,6 +40,18 @@ def sb(path):
         return json.loads(r.read().decode("utf-8"))
 
 
+def sb_optional(path, label):
+    """아직 없을 수 있는 표(연작·사이트 설정)를 읽는다. 표가 없으면 빈 목록, 다른 오류는 발행을 멈춘다."""
+    try:
+        return sb(path)
+    except Exception as e:
+        msg = str(e)
+        if "404" in msg or "PGRST205" in msg or "does not exist" in msg or "42P01" in msg:
+            print("%s 조회 건너뜀(표가 아직 없으면 정상): %s" % (label, e))
+            return []
+        sys.exit("%s 조회 실패 — 반영을 멈춥니다: %s" % (label, e))
+
+
 def s(v):
     return "" if v is None else str(v).strip()
 
@@ -410,6 +422,8 @@ def main():
         else:
             sys.exit("home_videos 조회 실패 — 기존 영상을 지우지 않도록 반영을 멈춥니다: %s" % e)
     all_media = sb("work_media_links?select=*&is_public=eq.true&order=sort_order")
+    series_rows = sb_optional("series?select=*", "series")
+    settings_rows = sb_optional("site_settings?select=key,value", "site_settings")
 
     if not works:
         sys.exit("공개 작품이 0건 — 반영 중단")
@@ -426,7 +440,10 @@ def main():
     for m in all_media:
         media_of_work.setdefault(m["work_id"], []).append(m)
 
+    # 작가가 정한 표시 순서가 있는 작품이 먼저(작은 수부터), 없는 작품은 그 뒤에 최신순.
+    # display_order 열이 아직 없으면 모두 최신순(예전과 같음).
     works.sort(key=sort_key, reverse=True)
+    works.sort(key=lambda w: (w.get("display_order") is None, w.get("display_order") or 0))
 
     index_entries = []
     for w in works:
@@ -503,18 +520,45 @@ def main():
             detail["media"] = media
         write_json(os.path.join(data_dir, "works", no + ".json"), detail)
 
-        index_entries.append({
+        entry = {
             "id": no,
             "title": detail["title"],
             "title_en": detail["title_en"],
             "year": detail["year"],
+            "size": detail["size"],
             "thumb": images.get("thumb", ""),
             "has_audio": bool(audio),
             "series_key": s(w.get("series_key")),
-        })
+            "series_order": w.get("series_order"),
+        }
+        # 목록 사진의 가로·세로(불러오는 동안 칸이 흔들리지 않게)
+        thumb_path = os.path.join(ROOT, entry["thumb"]) if entry["thumb"] else ""
+        if thumb_path and os.path.exists(thumb_path):
+            try:
+                from PIL import Image
+                with Image.open(thumb_path) as im:
+                    entry["tw"], entry["th"] = im.size
+            except Exception:
+                pass
+        index_entries.append(entry)
 
     write_json(os.path.join(data_dir, "works-index.json"), index_entries)
     print("works-index.json: %d건" % len(index_entries))
+
+    # 연작: 공개 작품에 쓰인 연작만. 이름(국·영)과 '두 폭 붙이기'
+    used_keys = {e["series_key"] for e in index_entries if e["series_key"]}
+    series_out = [{"key": s(r.get("key")), "name": s(r.get("name_ko")), "name_en": s(r.get("name_en")),
+                   "joined": bool(r.get("joined"))}
+                  for r in series_rows if s(r.get("key")) in used_keys]
+    write_json(os.path.join(data_dir, "series.json"), series_out)
+    print("series.json: %d건" % len(series_out))
+
+    # Works 페이지 구성: Selected(작품 id 목록 → 공개 작품의 작품번호만, 순서 유지)
+    settings = {r.get("key"): r.get("value") for r in settings_rows}
+    no_by_uuid = {w["id"]: s(w["work_no"]) for w in works}
+    selected = [no_by_uuid[i] for i in (settings.get("works_selected") or []) if i in no_by_uuid]
+    write_json(os.path.join(data_dir, "works-page.json"), {"selected": selected})
+    print("works-page.json: Selected %d점" % len(selected))
 
     # 전시: 홈페이지는 여전히 work_nos 문자열을 읽으므로 관계에서 되만들어 준다.
     no_by_id = {w["id"]: s(w["work_no"]) for w in works}

@@ -40,6 +40,62 @@ def primary_title(r):
     return ko or str(r.get("title_en") or "").strip()
 
 
+def size_label(v):
+    v = str(v or "").strip()
+    return v + " cm" if v and "cm" not in v.lower() else v
+
+
+def works_tile(r, attr):
+    """works/index.html 의 tileHtml 과 같은 마크업(캡션 둘째 줄: 연도 · 크기)."""
+    title = primary_title(r)
+    img = ("../" + r["thumb"]) if r.get("thumb") else ""
+    dims = (' width="%s" height="%s"' % (r["tw"], r["th"])) if r.get("tw") and r.get("th") else ""
+    media = ('<img src="%s"%s alt="" loading="lazy" draggable="false" '
+             'onerror="this.style.visibility=\'hidden\'">' % (e(img), dims)) if img else ""
+    size = size_label(r.get("size"))
+    meta = e(r.get("year") or "") + (('<span class="sep"> · </span><span class="sz">%s</span>' % e(size)) if size else "")
+    return ('<a class="tile" href="w/%s/" %s aria-label="%s"><div class="tile-media">%s<div class="tile-sheen"></div></div>'
+            '<span class="tile-cap"><span class="tile-title">%s</span><span class="tile-meta">%s</span></span></a>'
+            % (e(r["id"]), attr, e(title), media, e(title), meta))
+
+
+def series_sort_key(r):
+    o = r.get("series_order")
+    return (o is None, o if o is not None else 0, str(r["id"]))
+
+
+def group_series(rows):
+    """연작은 첫 작품 자리에 연작 안 순서대로 연이어(works/index.html groupSeries 와 같음)."""
+    out, seen = [], set()
+    for w in rows:
+        k = w.get("series_key")
+        if not k:
+            out.append(w)
+            continue
+        if k in seen:
+            continue
+        seen.add(k)
+        out.extend(sorted([x for x in rows if x.get("series_key") == k], key=series_sort_key))
+    return out
+
+
+def works_cells(rows, joined, attr_of):
+    """'두 폭 붙이기' 연작의 두 작품은 두 칸짜리 한 단위(.pair)로."""
+    html, i = [], 0
+    while i < len(rows):
+        r = rows[i]
+        n = rows[i + 1] if i + 1 < len(rows) else None
+        k = r.get("series_key")
+        if (n and k and k in joined and n.get("series_key") == k
+                and sum(1 for x in rows if x.get("series_key") == k) == 2):
+            html.append('<div class="pair">%s%s</div>' % (works_tile(r, attr_of(r, i)), works_tile(n, attr_of(n, i + 1))))
+            i += 2
+        else:
+            html.append(works_tile(r, attr_of(r, i)))
+            i += 1
+    return "".join(html)
+
+
 def work_tiles(rows, href_prefix, asset_base):
     """index.html / works/index.html 의 renderWorkTiles 와 같은 마크업."""
     out = []
@@ -155,11 +211,33 @@ def prerender():
     exhibitions = load("data", "exhibitions.json", default=[])
     press = load("data", "press.json", default=[])
     press = sorted(press, key=lambda p: str(p.get("date") or ""), reverse=True)  # 최신 날짜순(press 화면과 같음)
+    series = load("data", "series.json", default=[])
+    joined = {r["key"] for r in series if r.get("joined")}
+    page = load("data", "works-page.json", default={"selected": []})
 
     changed = []
     if replace_block(ROOT / "index.html", "home-recent", work_tiles(index[:HOME_RECENT], "works/", "")):
         changed.append("index.html")
-    if replace_block(ROOT / "works" / "index.html", "works-grid", work_tiles(index, "", "../")):
+    grouped = group_series(index)
+    by_id = {w["id"]: w for w in index}
+    sel, added = [], set()
+    for wid in page.get("selected") or []:
+        w = by_id.get(wid)
+        if not w or w["id"] in added:
+            continue
+        k = w.get("series_key")
+        group = sorted([x for x in index if x.get("series_key") == k], key=series_sort_key) if k in joined else [w]
+        if k in joined and len(group) != 2:
+            group = [w]
+        for x in group:
+            if x["id"] not in added:
+                added.add(x["id"])
+                sel.append(x)
+    a = replace_block(ROOT / "works" / "index.html", "works-grid",
+                      works_cells(grouped, joined, lambda r, i: 'data-idx="%d"' % i))
+    b = replace_block(ROOT / "works" / "index.html", "works-selected",
+                      works_cells(sel, joined, lambda r, i: 'data-id="%s"' % e(r["id"])))
+    if a or b:
         changed.append("works/index.html")
     if press:
         featured = next((p for p in press if p.get("featured")), press[0])
