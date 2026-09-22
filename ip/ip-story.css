@@ -105,8 +105,8 @@ body>nav{position:absolute;top:0;left:0;right:0;background:transparent;border-bo
 .beach{position:absolute;inset:-25px;background:url('assets/beach.webp') center 44%/cover;z-index:-2;transform:translateY(var(--shore-y,0px));will-change:transform}
 .hero-inner{height:100%;position:relative;padding:calc(55px + var(--nav-h)) 6% 55px}
 .hero .eyebrow{margin-bottom:22px}
+html:not([lang="en"]) .hero h1{word-spacing:-.05em}
 .hero h1{font-family:'Noto Sans KR',sans-serif;font-weight:900;font-size:clamp(64px,8.7vw,142px);line-height:.89;letter-spacing:-.05em;position:relative;z-index:2;max-width:1000px}
-.title-dot{color:#dc7495}
 .hero-name{font-size:26px;font-weight:700;margin-top:22px;letter-spacing:-.04em}
 .hero-character{position:absolute;width:clamp(250px,29vw,445px);right:10%;bottom:68px;transform:translateY(var(--char-y,0px));z-index:1}
 .hero-character img{position:relative;z-index:1;filter:drop-shadow(4px 12px 6px #58695514);animation:arrive 1.2s .25s both;transform-origin:50% 92%} /* 발끝을 축으로 기울게(마우스 반응, ip-story.js) */
