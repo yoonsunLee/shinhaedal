@@ -39,7 +39,8 @@
   var realFetch = window.fetch.bind(window);
   window.fetch = function(input, init){
     var u;
-    try{ u = new URL(typeof input === 'string' ? input : input.url, location.href); }
+    // 영문 페이지(/en/…)는 <base href>로 국문 폴더 기준 주소를 쓴다 — fetch와 같은 기준(document.baseURI)으로 푼다
+    try{ u = new URL(typeof input === 'string' ? input : input.url, document.baseURI || location.href); }
     catch(e){ return realFetch(input, init); }
     var m = u.origin === location.origin && /^\/data\/(.+\.json)$/.exec(u.pathname);
     if(!m) return realFetch(input, init);

@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
+<base href="/ip/">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script>/*lang-route*/(function(){var s=location.search,m=/[?&]lang=(en|ko)(?=&|$)/.exec(s),l=m&&m[1];try{if(l==='ko')localStorage.setItem('site_lang','ko');else if(!l)l=localStorage.getItem('site_lang')}catch(e){}if(l!=='en')return;window.__SH_LANG_REDIRECT=1;document.documentElement.style.visibility='hidden';location.replace('/en'+location.pathname+s.replace(/([?&])lang=en(&|$)/,function(a,p,e){return e?p:''})+location.hash)})()</script>
+<script>/*lang-route*/(function(){var s=location.search;if(!/[?&]lang=ko(&|$)/.test(s))return;window.__SH_LANG_REDIRECT=1;document.documentElement.style.visibility='hidden';location.replace(location.pathname.replace(/^\/en(?=\/)/,'')+s+location.hash)})()</script>
 <script>
 (function(){
   try{
@@ -14,15 +15,15 @@
   }catch(e){}
 })();
 </script>
-<title>SPACED-OUT SEA OTTER — 얼빵해달 | SHIN HAEDAL</title>
-<meta name="description" content="멍때리다 수영을 못 배운 해달, 조개배달부 얼빵해달. 신해달의 오리지널 캐릭터 세계관.">
+<title>SPACED-OUT SEA OTTER | SHIN HAEDAL</title>
+<meta name="description" content="A spaced-out sea otter who never learned to swim. Meet it by the sea.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="SPACED-OUT SEA OTTER — 얼빵해달">
-<meta property="og:description" content="멍때리다 수영을 못 배운 해달, 조개배달부 얼빵해달. 신해달의 오리지널 캐릭터 세계관.">
+<meta property="og:title" content="SPACED-OUT SEA OTTER | SHIN HAEDAL">
+<meta property="og:description" content="A spaced-out sea otter who never learned to swim. Meet it by the sea.">
 <meta property="og:image" content="https://shinhaedal.com/ip/assets/og_character.jpg">
-<meta property="og:url" content="https://shinhaedal.com/ip/">
+<meta property="og:url" content="https://shinhaedal.com/en/ip/">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://shinhaedal.com/ip/">
+<link rel="canonical" href="https://shinhaedal.com/en/ip/">
 <link rel="alternate" hreflang="ko" href="https://shinhaedal.com/ip/">
 <link rel="alternate" hreflang="en" href="https://shinhaedal.com/en/ip/">
 <link rel="alternate" hreflang="x-default" href="https://shinhaedal.com/ip/">
@@ -37,28 +38,28 @@
 
 <nav>
   <div class="logo-block">
-    <a class="logo" href="../"><span class="logo-c">ⓒ</span><span class="logo-name">SHIN HAEDAL</span></a>
-    <span class="logo-tag" data-i="logo_tag">나전칠기 아티스트</span>
+    <a class="logo" href="/en/"><span class="logo-c">ⓒ</span><span class="logo-name">SHIN HAEDAL</span></a>
+    <span class="logo-tag" data-i="logo_tag">Najeonchilgi Artist</span>
   </div>
   <div class="nav-right">
     <ul class="nav-menu">
-      <li><a href="../">Home</a></li>
-      <li><a href="../about/">About</a></li>
-      <li><a href="../works/">Works</a></li>
-      <li><a href="./" class="on" aria-current="page">IP</a></li>
-      <li><a href="../press/">Press</a></li>
+      <li><a href="/en/">Home</a></li>
+      <li><a href="/en/about/">About</a></li>
+      <li><a href="/en/works/">Works</a></li>
+      <li><a href="/en/ip/" class="on" aria-current="page">IP</a></li>
+      <li><a href="/en/press/">Press</a></li>
       <li><a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop</a></li>
-      <li><a href="../contact/">Contact</a></li>
+      <li><a href="/en/contact/">Contact</a></li>
     </ul>
     <div class="lang" role="group" aria-label="Language">
-      <button id="langKo" class="on">KO</button>
+      <button id="langKo">KO</button>
       <span class="lang-sep" aria-hidden="true">/</span>
-      <button id="langEn">EN</button>
+      <button id="langEn" class="on">EN</button>
     </div>
-    <a class="icon-btn" aria-label="인스타그램" data-i-aria="aria_instagram" href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener">
+    <a class="icon-btn" aria-label="Instagram" data-i-aria="aria_instagram" href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.4"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor"/></svg>
     </a>
-    <button class="icon-btn menu-btn" id="btnMenu" aria-label="메뉴" data-i-aria="aria_menu" aria-expanded="false">
+    <button class="icon-btn menu-btn" id="btnMenu" aria-label="Menu" data-i-aria="aria_menu" aria-expanded="false">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 6H17M3 10H17M3 14H17" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
     </button>
   </div>
@@ -66,15 +67,15 @@
 
 <div class="nav-backdrop" id="navBackdrop"></div>
 <div class="nav-overlay" id="navOverlay">
-  <button class="icon-btn overlay-close" id="btnMenuClose" aria-label="닫기" data-i-aria="aria_close_menu">✕</button>
+  <button class="icon-btn overlay-close" id="btnMenuClose" aria-label="Close" data-i-aria="aria_close_menu">✕</button>
   <nav class="overlay-links">
-    <a href="../">Home</a>
-    <a href="../about/">About</a>
-    <a href="../works/">Works</a>
-    <a href="./">IP</a>
-    <a href="../press/">Press</a>
+    <a href="/en/">Home</a>
+    <a href="/en/about/">About</a>
+    <a href="/en/works/">Works</a>
+    <a href="/en/ip/">IP</a>
+    <a href="/en/press/">Press</a>
     <a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop</a>
-    <a href="../contact/">Contact</a>
+    <a href="/en/contact/">Contact</a>
     <a href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener" class="overlay-ig">Instagram ↗</a>
   </nav>
 </div>
@@ -85,15 +86,15 @@
   <div class="hero-inner">
     <p class="eyebrow">AN ORIGINAL CHARACTER BY SHIN HAEDAL</p>
     <h1>SPACED-OUT<br>SEA OTTER<span class="title-dot">.</span></h1>
-    <p class="hero-name" data-i="hero_name">얼빵해달</p>
+    <p class="hero-name" data-i="hero_name">Eolbbang Haedal (얼빵해달)</p>
     <div class="hero-character">
-      <img src="assets/hero_face.webp" alt="조개를 안고 있는 얼빵해달" data-i-alt="alt_hero" fetchpriority="high">
+      <img src="assets/hero_face.webp" alt="Spaced-out Sea Otter holding a shell" data-i-alt="alt_hero" fetchpriority="high">
       <span class="character-shadow"></span>
     </div>
-    <div class="hero-note"><p data-i="hero_note">멍때리다 수영을 배우지 못한 해달.<br>해변에서 만나요.</p></div>
+    <div class="hero-note"><p data-i="hero_note">A spaced-out sea otter who never learned to swim.<br>Meet it by the sea.</p></div>
     <div class="hero-actions">
-      <a class="scroll-link" href="#story"><span data-i="hero_scroll">얼빵해달의 이야기</span><span>↓</span></a>
-      <button type="button" class="profile-open" id="profileOpen" aria-haspopup="dialog" aria-controls="profileSheet"><span data-i="hero_profile">프로필 보기</span><span class="profile-open-plus" aria-hidden="true">+</span></button>
+      <a class="scroll-link" href="#story"><span data-i="hero_scroll">THE STORY</span><span>↓</span></a>
+      <button type="button" class="profile-open" id="profileOpen" aria-haspopup="dialog" aria-controls="profileSheet"><span data-i="hero_profile">Profile</span><span class="profile-open-plus" aria-hidden="true">+</span></button>
     </div>
     <span class="hero-index">01 — MEET</span>
   </div>
@@ -101,20 +102,20 @@
 
 <dialog class="profile-sheet" id="profileSheet" aria-labelledby="profileName">
   <div class="profile-inner">
-    <button type="button" class="profile-close" id="profileClose" aria-label="프로필 닫기" data-i-aria="aria_close_profile">✕</button>
+    <button type="button" class="profile-close" id="profileClose" aria-label="Close profile" data-i-aria="aria_close_profile">✕</button>
     <div class="profile-figure"><img src="assets/hero_face.webp" alt="" decoding="async"><span class="profile-figure-shadow" aria-hidden="true"></span></div>
     <div class="profile-intro">
-      <h2 class="profile-name" id="profileName" data-i="profile_name">얼빵해달</h2>
-      <p class="profile-name-sub" data-i="profile_name_sub">SPACED-OUT SEA OTTER</p>
-      <p class="profile-job" data-i="id_job">조개배달부</p>
+      <h2 class="profile-name" id="profileName" data-i="profile_name">Spaced-out Sea Otter</h2>
+      <p class="profile-name-sub" data-i="profile_name_sub">얼빵해달</p>
+      <p class="profile-job" data-i="id_job">Shell Delivery Worker</p>
     </div>
     <div class="profile-delivers">
       <span class="profile-label">DELIVERS</span>
-      <p class="profile-delivers-text" data-i="id_delivers">사랑 · 용기 · 위로</p>
+      <p class="profile-delivers-text" data-i="id_delivers">Love · Encouragement · Comfort</p>
     </div>
     <dl class="profile-facts">
-      <div><dt>SPECIES</dt><dd data-i="id_species">해달</dd></div>
-      <div><dt>SIGNATURE</dt><dd data-i="id_sig">조개</dd></div>
+      <div><dt>SPECIES</dt><dd data-i="id_species">Sea Otter</dd></div>
+      <div><dt>SIGNATURE</dt><dd data-i="id_sig">Shell</dd></div>
       <div><dt>CREATED</dt><dd>2020</dd></div>
     </dl>
   </div>
@@ -123,29 +124,29 @@
 <section id="story" class="story section">
   <div class="section-top reveal">
     <span class="eyebrow">01 / THE SHELL DELIVERY WORKER</span>
-    <h2 data-i="s1_h2">조개를 줍고,<br>작가님에게 건네요.</h2>
+    <h2 data-i="s1_h2">A shell from the shore.<br>A delivery to the artist.</h2>
   </div>
   <div class="story-grid">
     <article class="story-piece reveal">
-      <div class="comic-crop first"><img src="assets/story-collect.webp" alt="해변에서 조개를 줍는 얼빵해달" data-i-alt="alt_collect" loading="lazy" decoding="async"></div>
-      <div class="caption"><span>01</span><div><h3 data-i="s1_h3a">수영 대신, 두 발로.</h3><p data-i="s1_pa">얼빵해달은 해변을 걸어 다니며 조개를 주워요.</p></div></div>
+      <div class="comic-crop first"><img src="assets/story-collect.webp" alt="Spaced-out Sea Otter picking up a shell on the beach" data-i-alt="alt_collect" loading="lazy" decoding="async"></div>
+      <div class="caption"><span>01</span><div><h3 data-i="s1_h3a">On two feet.</h3><p data-i="s1_pa">Spaced-out Sea Otter walks along the beach, picking up shells.</p></div></div>
     </article>
     <article class="story-piece reveal second">
-      <div class="comic-crop next"><img src="assets/story-deliver.webp" alt="주워온 조개를 작가님에게 전달하는 얼빵해달" data-i-alt="alt_deliver" loading="lazy" decoding="async"></div>
-      <div class="caption"><span>02</span><div><h3 data-i="s1_h3b">직업은 조개배달부.</h3><p data-i="s1_pb">이렇게 주워온 조개를 작가님에게 가져다줘요. 그래서 조개배달부예요.</p></div></div>
+      <div class="comic-crop next"><img src="assets/story-deliver.webp" alt="Spaced-out Sea Otter delivering a shell to the artist" data-i-alt="alt_deliver" loading="lazy" decoding="async"></div>
+      <div class="caption"><span>02</span><div><h3 data-i="s1_h3b">A shell delivery worker.</h3><p data-i="s1_pb">It brings the shells it finds to the artist. That is why it is a shell delivery worker.</p></div></div>
     </article>
     <article class="story-piece reveal third">
-      <div class="comic-crop"><img src="assets/story-craft.webp" alt="자개를 옻칠 위에 한 조각씩 붙이는 작가" data-i-alt="alt_craft" loading="lazy" decoding="async"></div>
-      <div class="caption"><span>03</span><div><h3 data-i="s1_h3c">조개는 자개가 되고,</h3><p data-i="s1_pc">작가님은 조개를 얇게 다듬어 옻칠 위에 한 조각씩 붙여요.</p></div></div>
+      <div class="comic-crop"><img src="assets/story-craft.webp" alt="The artist setting mother-of-pearl onto lacquer, piece by piece" data-i-alt="alt_craft" loading="lazy" decoding="async"></div>
+      <div class="caption"><span>03</span><div><h3 data-i="s1_h3c">Shells become mother-of-pearl,</h3><p data-i="s1_pc">The artist cuts the shells into thin pieces and sets them onto lacquer, one by one.</p></div></div>
     </article>
     <article class="story-piece reveal fourth">
-      <div class="comic-crop"><img src="assets/story-artwork.webp" alt="완성된 나전칠기 작품을 들고 있는 얼빵해달" data-i-alt="alt_artwork" loading="lazy" decoding="async"></div>
-      <div class="caption"><span>04</span><div><h3 data-i="s1_h3d">자개는 작품이 돼요.</h3><p data-i="s1_pd">얼빵해달이 배달한 조개가 반짝이는 나전칠기 작품이 됐어요.</p></div></div>
+      <div class="comic-crop"><img src="assets/story-artwork.webp" alt="Spaced-out Sea Otter holding a finished najeonchilgi piece" data-i-alt="alt_artwork" loading="lazy" decoding="async"></div>
+      <div class="caption"><span>04</span><div><h3 data-i="s1_h3d">and mother-of-pearl becomes art.</h3><p data-i="s1_pd">The shells Spaced-out Sea Otter delivered are now a shimmering najeonchilgi work.</p></div></div>
     </article>
   </div>
   <div class="delivery-meaning reveal">
-    <span class="eyebrow" data-i="s1_deliver_label" style="display:none"></span>
-    <p data-i="s1_delivery">조개와 함께, 사랑·용기·위로를 배달해요.</p>
+    <span class="eyebrow" data-i="s1_deliver_label">DELIVERS</span>
+    <p data-i="s1_delivery">Along with shells, it delivers love, encouragement and comfort.</p>
   </div>
 </section>
 
@@ -153,16 +154,16 @@
   <div class="pool-layout">
     <div class="pool-copy reveal">
       <span class="eyebrow">02 / MORNING SWIMMING</span>
-      <h2 data-i="pool_h2">더 빨리 조개를 배달할 수 있다면,</h2>
-      <p data-i="pool_p">작가님께 조개를 더 빨리 배달하고 싶어서,<br>얼빵해달은 현대사회스포츠센터에 등록했어요.<br>지금은 실내수영을 배우는 중이에요.</p>
+      <h2 data-i="pool_h2">“If only I could deliver shells faster…”</h2>
+      <p data-i="pool_p">Spaced-out Sea Otter wants to deliver shells to the artist faster.<br>So it signed up at Hyundae Social Sports Center.<br>It is now learning to swim indoors.</p>
     </div>
     <div class="pool-art reveal">
-      <img class="swim-image" src="assets/swimming-hq.webp" alt="실내수영장에서 수영을 배우는 얼빵해달" data-i-alt="alt_swim" loading="lazy" decoding="async">
-      <img class="membership" src="assets/membership.webp" alt="현대사회스포츠센터 회원등록증" data-i-alt="alt_membership" loading="lazy" decoding="async">
+      <img class="swim-image" src="assets/swimming-hq.webp" alt="Spaced-out Sea Otter learning to swim at an indoor pool" data-i-alt="alt_swim" loading="lazy" decoding="async">
+      <img class="membership" src="assets/membership.webp" alt="Hyundae Social Sports Center membership card" data-i-alt="alt_membership" loading="lazy" decoding="async">
     </div>
   </div>
   <div class="pool-quote reveal">
-    <h2 data-i="pool_quote_h2">해달도 배워야 <br class="slogan-break">수영을 한다.</h2>
+    <h2 data-i="pool_quote_h2">Even sea otters have to learn to swim.</h2>
     <span>SPACED-OUT SEA OTTER</span>
   </div>
 </section>
@@ -170,21 +171,21 @@
 <section class="identity section" id="identity">
   <div class="identity-head reveal">
     <span class="eyebrow">03 / A LITTLE MORE ABOUT ME</span>
-    <h2 data-i="id_h2">이름에도 의미가 있어요.</h2>
-    <p class="identity-subtitle" data-i="id_sub">'Spaced-out Sea Otter'는 이름뿐 아니라, 캐릭터의 성격까지 담아낸 번역이에요.</p>
+    <h2 data-i="id_h2">A name with meaning.</h2>
+    <p class="identity-subtitle" data-i="id_sub">Spaced-out Sea Otter is not only a translation of a name. It is a translation of the character itself.</p>
   </div>
   <div class="naming">
     <article class="name-part reveal">
       <h3 class="name-word">얼빵</h3>
       <p class="name-gloss">→ SPACED-OUT</p>
-      <div class="name-art"><img src="assets/hero_logo.webp" alt="Spaced-out Sea Otter 공식 로고" data-i-alt="alt_logo" loading="lazy" decoding="async"></div>
-      <p class="name-desc" data-i="id_card1_p">'얼빵'을 소리 그대로 Eolbbang이라 쓰는 대신, 조금 얼빠져 있고 어딘가 엇박자지만 그래서 사랑스러운 느낌을 'Spaced-out'으로 옮겼어요. 이름 자체가 성격 소개가 되도록요.</p>
+      <div class="name-art"><img src="assets/hero_logo.webp" alt="Spaced-out Sea Otter official logo" data-i-alt="alt_logo" loading="lazy" decoding="async"></div>
+      <p class="name-desc" data-i="id_card1_p">Rather than romanizing ‘얼빵’ as Eolbbang, it was translated as ‘Spaced-out’ — slightly absent-minded, a little offbeat, and endearing. The name itself introduces the personality.</p>
     </article>
     <article class="name-part reveal">
       <h3 class="name-word">해달</h3>
       <p class="name-gloss">→ SUN + MOON</p>
-      <div class="name-art name-art--symbol"><img src="assets/name_haedal.webp" alt="해와 달, 조개" data-i-alt="alt_name" loading="lazy" decoding="async"></div>
-      <p class="name-desc" data-i="id_card2_p">'해달'은 동물 해달이면서, 해(☀︎)와 달(☾︎)로도 읽혀요. 하나의 이름 안에 동물과 하늘, 두 겹의 의미가 함께 들어 있어요.</p>
+      <div class="name-art name-art--symbol"><img src="assets/name_haedal.webp" alt="Sun, moon, and a shell" data-i-alt="alt_name" loading="lazy" decoding="async"></div>
+      <p class="name-desc" data-i="id_card2_p">In Korean, ‘해달’ (haedal) means sea otter. But it can also be read as 해 (sun) + 달 (moon) — one name carrying two layers: the animal, and the sky.</p>
     </article>
   </div>
 </section>
@@ -192,25 +193,25 @@
 <section class="toy section" id="toy">
   <div class="toy-heading reveal">
     <span class="eyebrow">04 / FROM 2D TO 3D</span>
-    <h2 data-i="toy_h2">그림 밖에서<br>만난 얼빵해달.</h2>
-    <p data-i="toy_p">자개와 옻칠을 사용한 아트토이로도 만들어졌어요.<br>시그니처 조개는 자석으로 떼고 붙일 수 있어요.</p>
-    <a class="toy-link" href="../works/?w=HD-2026-012"><span data-i="toy_cta">아트토이 보러 가기</span><span>↗</span></a>
+    <h2 data-i="toy_h2">Meet it<br>off the page.</h2>
+    <p data-i="toy_p">Spaced-out Sea Otter has also been made into a 3D collectible art toy finished entirely in mother-of-pearl and lacquer.<br>Its signature shell has been recreated as a magnetically detachable part.</p>
+    <a class="toy-link" href="/en/works/?w=HD-2026-012"><span data-i="toy_cta">View the art toy</span><span>↗</span></a>
   </div>
   <div class="toy-main reveal">
-    <button class="photo-open" data-photo="assets/arttoy_1.jpg" aria-label="아트토이 사진 크게 보기" data-i-aria="aria_toy_view">
-      <img src="assets/arttoy_1.jpg" alt="조개배달부 얼빵해달 나전칠기 아트토이" data-i-alt="alt_toy_main" loading="lazy" decoding="async"><span>VIEW ↗</span>
+    <button class="photo-open" data-photo="assets/arttoy_1.jpg" aria-label="View art toy photo enlarged" data-i-aria="aria_toy_view">
+      <img src="assets/arttoy_1.jpg" alt="Spaced-out Sea Otter najeonchilgi art toy" data-i-alt="alt_toy_main" loading="lazy" decoding="async"><span>VIEW ↗</span>
     </button>
   </div>
   <div class="toy-bottom">
     <div class="toy-spec">
       <span>NAJEONCHILGI ART TOY</span>
       <p>2026 · 10 × 9 × 6 cm</p>
-      <p data-i="toy_spec">천연자개 · 옻칠 · 굴패각 친환경 수지</p>
+      <p data-i="toy_spec">Natural mother-of-pearl · Lacquer · Eco-friendly oyster shell resin</p>
     </div>
     <div class="toy-thumbs">
-      <button class="photo-open" data-photo="assets/arttoy_2.jpg" aria-label="아트토이 상세 사진 2" data-i-aria="aria_toy_detail2"><img src="assets/arttoy_2.jpg" alt="아트토이 디테일" data-i-alt="alt_toy_detail" loading="lazy" decoding="async"></button>
-      <button class="photo-open" data-photo="assets/arttoy_3.jpg" aria-label="아트토이 상세 사진 3" data-i-aria="aria_toy_detail3"><img src="assets/arttoy_3.jpg" alt="아트토이 디테일" data-i-alt="alt_toy_detail" loading="lazy" decoding="async"></button>
-      <button class="photo-open" data-photo="assets/arttoy_4.jpg" aria-label="아트토이 상세 사진 4" data-i-aria="aria_toy_detail4"><img src="assets/arttoy_4.jpg" alt="아트토이 디테일" data-i-alt="alt_toy_detail" loading="lazy" decoding="async"></button>
+      <button class="photo-open" data-photo="assets/arttoy_2.jpg" aria-label="Art toy detail photo 2" data-i-aria="aria_toy_detail2"><img src="assets/arttoy_2.jpg" alt="Art toy detail" data-i-alt="alt_toy_detail" loading="lazy" decoding="async"></button>
+      <button class="photo-open" data-photo="assets/arttoy_3.jpg" aria-label="Art toy detail photo 3" data-i-aria="aria_toy_detail3"><img src="assets/arttoy_3.jpg" alt="Art toy detail" data-i-alt="alt_toy_detail" loading="lazy" decoding="async"></button>
+      <button class="photo-open" data-photo="assets/arttoy_4.jpg" aria-label="Art toy detail photo 4" data-i-aria="aria_toy_detail4"><img src="assets/arttoy_4.jpg" alt="Art toy detail" data-i-alt="alt_toy_detail" loading="lazy" decoding="async"></button>
     </div>
   </div>
 </section>
@@ -219,74 +220,74 @@
   <div class="friends-top">
     <div class="reveal">
       <span class="eyebrow">05 / IRWOROBONGDAN</span>
-      <h2 data-i="fr_h2">혼자가 아니에요.</h2>
-      <p class="friends-lead" data-i="fr_lead">얼빵해달에게는<br>일월오봉단 친구들이 있어요.</p>
-      <p data-i="fr_p">일월오봉단은 조선 왕실과 깊이 연결된 전통 회화인 일월오봉도에서 영감을 받은 신해달 작가의 오리지널 캐릭터 그룹이에요. 해와 달, 다섯 봉우리, 소나무와 물이 그 세계의 출발점이에요.</p>
-      <p data-i="fr_p2">캐릭터와 이야기는 학·토끼·호랑이·사슴 등 한국의 전통적인 소재에서 출발했어요. 각자의 역할에는 신해달 작가가 존중하고 동경하는 직업과 삶의 방식을 담았어요.</p>
+      <h2 data-i="fr_h2">Not alone.</h2>
+      <p class="friends-lead" data-i="fr_lead">Meet the friends of<br>Irworobongdan.</p>
+      <p data-i="fr_p">Irworobongdan (일월오봉단) is Shin Haedal’s original character group, inspired by Irworobongdo (일월오봉도, Sun, Moon and Five Peaks). This traditional Korean painting motif depicts the sun, moon, five mountain peaks, pine trees and water, and is closely associated with the royal court of the Joseon dynasty.</p>
+      <p data-i="fr_p2">Its characters and stories draw from traditional Korean motifs, including the crane, rabbit, tiger and deer. Their roles reflect occupations and ways of life that Shin Haedal personally respects and admires.</p>
     </div>
-    <div class="group-art reveal"><img src="assets/friends.webp" alt="일월오봉단 다섯 친구들" data-i-alt="alt_friends" loading="lazy" decoding="async"></div>
+    <div class="group-art reveal"><img src="assets/friends.webp" alt="The five friends of Irworobongdan" data-i-alt="alt_friends" loading="lazy" decoding="async"></div>
   </div>
   <div class="member-controls">
     <span>MEET THE FIVE</span>
-    <div><button id="prev" aria-label="이전 친구" data-i-aria="aria_prev_friend">←</button><span id="member-count">1 / 5</span><button id="next" aria-label="다음 친구" data-i-aria="aria_next_friend">→</button></div>
+    <div><button id="prev" aria-label="Previous friend" data-i-aria="aria_prev_friend">←</button><span id="member-count">1 / 5</span><button id="next" aria-label="Next friend" data-i-aria="aria_next_friend">→</button></div>
   </div>
   <div class="members" id="members">
     <article class="member">
       <span class="eyebrow">SUN</span>
-      <img src="assets/crane-cutout.webp" alt="학두루미" data-i-alt="fr1_h3" loading="lazy" decoding="async">
-      <h3 data-i="fr1_h3">학두루미</h3>
-      <p data-i="fr1_p">경호원</p>
-      <small data-i="fr1_sig">아이템: ㅎ</small>
+      <img src="assets/crane-cutout.webp" alt="Crane Crane" data-i-alt="fr1_h3" loading="lazy" decoding="async">
+      <h3 data-i="fr1_h3">Crane Crane</h3>
+      <p data-i="fr1_p">Guard</p>
+      <small data-i="fr1_sig">Item: ㅎ (hieut, a Korean letter)</small>
     </article>
     <article class="member">
       <span class="eyebrow">MOON</span>
-      <img src="assets/rabbit-cutout.webp" alt="정월토끼" data-i-alt="fr2_h3" loading="lazy" decoding="async">
-      <h3 data-i="fr2_h3">정월토끼</h3>
-      <p data-i="fr2_p">신분을 숨긴 공주</p>
-      <small data-i="fr2_sig">아이템: 달맞이꽃</small>
+      <img src="assets/rabbit-cutout.webp" alt="First-Moon Rabbit" data-i-alt="fr2_h3" loading="lazy" decoding="async">
+      <h3 data-i="fr2_h3">First-Moon Rabbit</h3>
+      <p data-i="fr2_p">Princess in Disguise</p>
+      <small data-i="fr2_sig">Item: Evening Primrose</small>
     </article>
     <article class="member">
       <span class="eyebrow">MOUNTAIN</span>
-      <img src="assets/tiger-cutout.webp" alt="선한백호" data-i-alt="fr3_h3" loading="lazy" decoding="async">
-      <h3 data-i="fr3_h3">선한백호</h3>
-      <p data-i="fr3_p">산지기</p>
-      <small data-i="fr3_sig">아이템: 곶감</small>
+      <img src="assets/tiger-cutout.webp" alt="Gentle Tiger" data-i-alt="fr3_h3" loading="lazy" decoding="async">
+      <h3 data-i="fr3_h3">Gentle Tiger</h3>
+      <p data-i="fr3_p">Mountain Keeper</p>
+      <small data-i="fr3_sig">Item: Dried Persimmon</small>
     </article>
     <article class="member">
       <span class="eyebrow">PINE</span>
-      <img src="assets/deer-cutout.webp" alt="솔직사슴" data-i-alt="fr4_h3" loading="lazy" decoding="async">
-      <h3 data-i="fr4_h3">솔직사슴</h3>
-      <p data-i="fr4_p">짐꾼</p>
-      <small data-i="fr4_sig">아이템: 솔방울</small>
+      <img src="assets/deer-cutout.webp" alt="Blunt Deer" data-i-alt="fr4_h3" loading="lazy" decoding="async">
+      <h3 data-i="fr4_h3">Blunt Deer</h3>
+      <p data-i="fr4_p">Porter</p>
+      <small data-i="fr4_sig">Item: Pine Cone</small>
     </article>
     <article class="member">
       <span class="eyebrow">SEA</span>
-      <img src="assets/otter-cutout.webp" alt="얼빵해달" data-i-alt="fr5_h3" loading="lazy" decoding="async">
-      <h3 data-i="fr5_h3">얼빵해달</h3>
-      <p data-i="fr5_p">조개배달부</p>
-      <small data-i="fr5_sig">아이템: 자개</small>
+      <img src="assets/otter-cutout.webp" alt="Spaced-out Sea Otter" data-i-alt="fr5_h3" loading="lazy" decoding="async">
+      <h3 data-i="fr5_h3">Spaced-out Sea Otter</h3>
+      <p data-i="fr5_p">Shell Delivery Worker</p>
+      <small data-i="fr5_sig">Item: Mother-of-Pearl</small>
     </article>
   </div>
 </section>
 
 <section id="licensing" class="closing section">
   <span class="eyebrow">LICENSING &amp; COLLABORATION</span>
-  <h2 data-i="close_h2">얼빵해달과 함께.</h2>
-  <p data-i="close_p">캐릭터 라이선싱 · 브랜드 협업 · 아트토이 · 전시 프로젝트</p>
-  <a class="contact-link" href="../contact/?type=licensing"><span data-i="close_cta">협업 문의</span><span>↗</span></a>
+  <h2 data-i="close_h2">Together with<br>Spaced-out Sea Otter.</h2>
+  <p data-i="close_p">Character licensing · Brand collaboration · Art toys · Exhibition projects</p>
+  <a class="contact-link" href="/en/contact/?type=licensing"><span data-i="close_cta">LET’S TALK</span><span>↗</span></a>
 </section>
 </main>
 
 <footer>
-  <span>© SHIN HAEDAL &nbsp;&nbsp;&nbsp;&nbsp; All rights reserved.<a class="ft-privacy" href="../privacy/"><span class="ft-ko">개인정보 처리방침</span><span class="ft-en">Privacy Policy</span></a></span>
+  <span>© SHIN HAEDAL &nbsp;&nbsp;&nbsp;&nbsp; All rights reserved.<a class="ft-privacy" href="/en/privacy/"><span class="ft-ko">개인정보 처리방침</span><span class="ft-en">Privacy Policy</span></a></span>
   <a href="#intro">BACK TO TOP ↑</a>
 </footer>
 
 <dialog id="viewer">
-  <button id="close-viewer" aria-label="사진 닫기" data-i-aria="aria_close_viewer">✕</button>
-  <button type="button" class="viewer-nav viewer-prev" id="viewerPrev" aria-label="이전 사진" data-i-aria="aria_prev_photo">‹</button>
+  <button id="close-viewer" aria-label="Close photo" data-i-aria="aria_close_viewer">✕</button>
+  <button type="button" class="viewer-nav viewer-prev" id="viewerPrev" aria-label="Previous photo" data-i-aria="aria_prev_photo">‹</button>
   <img id="viewer-image" alt="얼빵해달 아트토이 상세">
-  <button type="button" class="viewer-nav viewer-next" id="viewerNext" aria-label="다음 사진" data-i-aria="aria_next_photo">›</button>
+  <button type="button" class="viewer-nav viewer-next" id="viewerNext" aria-label="Next photo" data-i-aria="aria_next_photo">›</button>
   <div class="viewer-rail" id="viewerRail"></div>
   <p><span id="viewerCount">1 / 4</span> · SHIN HAEDAL · NAJEONCHILGI ART TOY</p>
 </dialog>
@@ -438,7 +439,7 @@ function applyLang(l, opts){
 document.getElementById('langKo').onclick=()=>applyLang('ko');
 document.getElementById('langEn').onclick=()=>applyLang('en');
 (function(){
-  var initLang = null;
+  var initLang = 'en';
   try{
     var urlLang = new URLSearchParams(location.search).get('lang');
     if(urlLang === 'en' || urlLang === 'ko') initLang = urlLang;

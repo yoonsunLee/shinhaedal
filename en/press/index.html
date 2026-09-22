@@ -1,20 +1,21 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
+<base href="/press/">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script>/*lang-route*/(function(){var s=location.search,m=/[?&]lang=(en|ko)(?=&|$)/.exec(s),l=m&&m[1];try{if(l==='ko')localStorage.setItem('site_lang','ko');else if(!l)l=localStorage.getItem('site_lang')}catch(e){}if(l!=='en')return;window.__SH_LANG_REDIRECT=1;document.documentElement.style.visibility='hidden';location.replace('/en'+location.pathname+s.replace(/([?&])lang=en(&|$)/,function(a,p,e){return e?p:''})+location.hash)})()</script>
+<script>/*lang-route*/(function(){var s=location.search;if(!/[?&]lang=ko(&|$)/.test(s))return;window.__SH_LANG_REDIRECT=1;document.documentElement.style.visibility='hidden';location.replace(location.pathname.replace(/^\/en(?=\/)/,'')+s+location.hash)})()</script>
 <!-- 아카이브 미리보기(iframe·?pv=1)일 때만 데이터 바꿔 끼우기 스크립트를 먼저 불러온다. 평소 방문에는 아무것도 안 함 -->
 <script>try{if(window.top!==window&&(/[?&]pv=1(&|$)/.test(location.search)||sessionStorage.getItem('sh_pv')==='1'))document.write('<script src="/assets/preview.js"><\/script>')}catch(e){}</script>
-<title>Press — 신해달 나전칠기 아티스트</title>
-<meta name="description" content="저의 작업이 다른 시선으로 읽히고 소개된 기록입니다.">
+<title>Press — Shin Haedal, Najeonchilgi Artist</title>
+<meta name="description" content="Press coverage of my work and artistic practice.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Press — 신해달 나전칠기 아티스트">
-<meta property="og:description" content="저의 작업이 다른 시선으로 읽히고 소개된 기록입니다.">
+<meta property="og:title" content="Press — Shin Haedal, Najeonchilgi Artist">
+<meta property="og:description" content="Press coverage of my work and artistic practice.">
 <meta property="og:image" content="https://shinhaedal.com/ip/assets/og_character.jpg">
-<meta property="og:url" content="https://shinhaedal.com/press/">
+<meta property="og:url" content="https://shinhaedal.com/en/press/">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://shinhaedal.com/press/">
+<link rel="canonical" href="https://shinhaedal.com/en/press/">
 <link rel="alternate" hreflang="ko" href="https://shinhaedal.com/press/">
 <link rel="alternate" hreflang="en" href="https://shinhaedal.com/en/press/">
 <link rel="alternate" hreflang="x-default" href="https://shinhaedal.com/press/">
@@ -89,43 +90,43 @@
 
 <nav>
   <div class="logo-block">
-    <a class="logo" href="../"><span class="logo-c">ⓒ</span><span class="logo-name">SHIN HAEDAL</span></a>
-    <span class="logo-tag" data-i="logo_tag">나전칠기 아티스트</span>
+    <a class="logo" href="/en/"><span class="logo-c">ⓒ</span><span class="logo-name">SHIN HAEDAL</span></a>
+    <span class="logo-tag" data-i="logo_tag">Najeonchilgi Artist</span>
   </div>
   <div class="nav-icons">
     <ul class="nav-menu">
-      <li><a href="../">Home</a></li>
-      <li><a href="../about/">About</a></li>
-      <li><a href="../works/">Works</a></li>
-      <li><a href="../ip/">IP</a></li>
-      <li><a href="./" class="on" aria-current="page">Press</a></li>
+      <li><a href="/en/">Home</a></li>
+      <li><a href="/en/about/">About</a></li>
+      <li><a href="/en/works/">Works</a></li>
+      <li><a href="/en/ip/">IP</a></li>
+      <li><a href="/en/press/" class="on" aria-current="page">Press</a></li>
       <li><a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop</a></li>
-      <li><a href="../contact/">Contact</a></li>
+      <li><a href="/en/contact/">Contact</a></li>
     </ul>
     <div class="lang" role="group" aria-label="Language">
-      <button id="langKo" class="on">KO</button>
+      <button id="langKo">KO</button>
       <span class="lang-sep" aria-hidden="true">/</span>
-      <button id="langEn">EN</button>
+      <button id="langEn" class="on">EN</button>
     </div>
-    <a class="icon-btn" aria-label="인스타그램" data-i-aria="aria_instagram" href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener">
+    <a class="icon-btn" aria-label="Instagram" data-i-aria="aria_instagram" href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.4"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor"/></svg>
     </a>
-    <button class="icon-btn menu-btn" id="btnMenu" aria-label="메뉴" data-i-aria="aria_menu" aria-expanded="false">
+    <button class="icon-btn menu-btn" id="btnMenu" aria-label="Menu" data-i-aria="aria_menu" aria-expanded="false">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 6H17M3 10H17M3 14H17" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
     </button>
   </div>
 
   <div class="nav-backdrop" id="navBackdrop"></div>
   <div class="nav-overlay" id="navOverlay">
-    <button class="icon-btn overlay-close" id="btnMenuClose" aria-label="메뉴 닫기" data-i-aria="aria_menu_close">✕</button>
+    <button class="icon-btn overlay-close" id="btnMenuClose" aria-label="Close menu" data-i-aria="aria_menu_close">✕</button>
     <nav class="overlay-links">
-      <a href="../">Home</a>
-      <a href="../about/">About</a>
-      <a href="../works/">Works</a>
-      <a href="../ip/">IP</a>
-      <a href="./">Press</a>
+      <a href="/en/">Home</a>
+      <a href="/en/about/">About</a>
+      <a href="/en/works/">Works</a>
+      <a href="/en/ip/">IP</a>
+      <a href="/en/press/">Press</a>
       <a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop</a>
-      <a href="../contact/">Contact</a>
+      <a href="/en/contact/">Contact</a>
       <a href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener" class="overlay-ig">Instagram ↗</a>
     </nav>
   </div>
@@ -133,16 +134,16 @@
 
 <div class="press-intro">
   <h1 data-i="page_h">Press</h1>
-  <p data-i="page_sub">저의 작업이 다른 시선으로 읽히고 소개된 기록입니다.</p>
-  <p class="press-en-note" id="enNote" data-i="en_note" hidden></p>
+  <p data-i="page_sub">Press coverage of my work and artistic practice.</p>
+  <p class="press-en-note" id="enNote" data-i="en_note">Article titles are translated for this website.</p>
 </div>
 
 <!-- 발행 때 scripts/prerender_lists.py가 채운다(검색 로봇용). JS가 같은 모양으로 다시 그린다 -->
-<section class="press-feature" id="pressFeature"><!-- GEN:press-feature --><div class="press-feature-grid" data-no="PR-2026-001"><div class="press-feature-media"><img src="https://www.issuemaker.kr/news/photo/202606/51514_52289_127.png" alt="" onerror="onMediaError(this)"></div><div class="press-feature-body"><p class="press-feature-meta"><span>이슈메이커</span><span class="dot"></span><span>2026-06-01</span></p><h2 class="press-feature-title"><a href="https://www.issuemaker.kr/news/articleView.html?idxno=51514" target="_blank" rel="noopener">차가운 법 조문을 영롱한 자개로 번역하는 다정한 예술가</a></h2><p class="press-feature-dek">차가운 법 조문들을 가장 시각적이고 직관적인 예술의 형태로 번역</p><div class="press-feature-links"><a class="press-link link-sub" href="https://www.issuemaker.kr/news/articleView.html?idxno=51514" target="_blank" rel="noopener">기사 원문 보기 ↗</a></div></div></div><!-- /GEN:press-feature --></section>
-<section class="press-list" id="pressList"><!-- GEN:press-list --><article class="press-row" data-no="PR-2026-006"><div class="press-row-media"><img src="https://cdn.artkoreatv.com/news/photo/202607/103511_329860_4031.jpg" alt="" loading="lazy" onerror="onMediaError(this)"></div><div class="press-row-text"><p class="press-row-meta"><span>아트코리아방송</span><span class="dot"></span><span>2026-07-16</span></p><h3 class="press-row-title">여름, 빛을 켜다 – 당신의 하루를 밝히는 특별한 전시</h3></div><div class="press-row-links"><a class="press-link link-sub" href="https://www.artkoreatv.com/news/articleView.html?idxno=103511" target="_blank" rel="noopener">기사 원문 보기 ↗</a><a class="press-link link-go" href="../works/?ex=EX-2026-04">전시 작품 보기 →</a></div></article><article class="press-row" data-no="PR-2026-005"><div class="press-row-media"><img src="https://cdn.d-art.co.kr/news/photo/202605/5575_17735_1225.jpg" alt="" loading="lazy" onerror="onMediaError(this)"></div><div class="press-row-text"><p class="press-row-meta"><span>데일리아트</span><span class="dot"></span><span>2026-05-13</span></p><h3 class="press-row-title">라트, &#x27;재료의 언어&#x27; 통해 신진 작가들의 물성과 감각 탐구 조명</h3></div><div class="press-row-links"><a class="press-link link-sub" href="https://www.d-art.co.kr/news/articleView.html?idxno=5575" target="_blank" rel="noopener">기사 원문 보기 ↗</a><a class="press-link link-go" href="../works/?ex=EX-2026-07">전시 작품 보기 →</a></div></article><article class="press-row" data-no="PR-2026-003"><div class="press-row-media"><img src="https://newsx.ecn.cdn.infralab.net/www.thekorean.today/imgdata/smilestory_kr/202604/2026043015333141.jpg" alt="" loading="lazy" onerror="onMediaError(this)"></div><div class="press-row-text"><p class="press-row-meta"><span>코리안투데이</span><span class="dot"></span><span>2026-04-30</span></p><h3 class="press-row-title">나전칠기 신해달 작가, 법학적 사유를 자개의 빛으로 시각화하다</h3><p class="press-row-dek">법학적 사유를 자개의 빛으로 시각화하다</p></div><div class="press-row-links"><a class="press-link link-sub" href="https://m.thekorean.today/49646" target="_blank" rel="noopener">기사 원문 보기 ↗</a></div></article><article class="press-row" data-no="PR-2026-004"><div class="press-row-media"><img src="https://www.thekorean.today/imgdata/smilestory_kr/202604/2026040101196920.jpg" alt="" loading="lazy" onerror="onMediaError(this)"></div><div class="press-row-text"><p class="press-row-meta"><span>코리안투데이</span><span class="dot"></span><span>2026-04-01</span></p><h3 class="press-row-title">까루젤 드 루브르 아트쇼핑에서 한국 현대미술의 정수를 선보이는 갤러리미쉘</h3></div><div class="press-row-links"><a class="press-link link-sub" href="https://thekorean.today/48869" target="_blank" rel="noopener">기사 원문 보기 ↗</a><a class="press-link link-go" href="../works/?ex=EX-2026-10">전시 작품 보기 →</a></div></article><article class="press-row" data-no="PR-2026-002"><div class="press-row-media"><img src="https://cdn.branditmag.co.kr/news/photo/202507/415_618_413.jpg" alt="" loading="lazy" onerror="onMediaError(this)"></div><div class="press-row-text"><p class="press-row-meta"><span>브랜딧매거진</span><span class="dot"></span><span>2025-07-14</span></p><h3 class="press-row-title">전통과 현대의 멋스러운 조화, 나전칠기 브랜드 &#x27;해달자개&#x27;</h3><p class="press-row-dek">해달이 조개를 주워와 자개 작품을 만든다는 스토리텔링에서 붙여진 &#x27;해달자개&#x27;</p></div><div class="press-row-links"><a class="press-link link-sub" href="https://www.branditmag.co.kr/news/articleView.html?idxno=415" target="_blank" rel="noopener">기사 원문 보기 ↗</a><a class="press-link link-sub" href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">브랜드 샵 바로가기 ↗</a></div></article><!-- /GEN:press-list --></section>
+<section class="press-feature" id="pressFeature"><!-- GEN:press-feature --><div class="press-feature-grid" data-no="PR-2026-001"><div class="press-feature-media"><img src="https://www.issuemaker.kr/news/photo/202606/51514_52289_127.png" alt="" onerror="onMediaError(this)"></div><div class="press-feature-body"><p class="press-feature-meta"><span>Issuemaker</span><span class="dot"></span><span>2026-06-01</span></p><h2 class="press-feature-title"><a href="https://www.issuemaker.kr/news/articleView.html?idxno=51514" target="_blank" rel="noopener">The Warm-Hearted Artist Who Translates Cold Legal Text into Luminous Mother-of-Pearl</a></h2><div class="press-feature-links"><a class="press-link link-sub" href="https://www.issuemaker.kr/news/articleView.html?idxno=51514" target="_blank" rel="noopener">Read the article ↗</a></div></div></div><!-- /GEN:press-feature --></section>
+<section class="press-list" id="pressList"><!-- GEN:press-list --><article class="press-row" data-no="PR-2026-006"><div class="press-row-media"><img src="https://cdn.artkoreatv.com/news/photo/202607/103511_329860_4031.jpg" alt="" loading="lazy" onerror="onMediaError(this)"></div><div class="press-row-text"><p class="press-row-meta"><span>Art Korea</span><span class="dot"></span><span>2026-07-16</span></p><h3 class="press-row-title">Summer, Turn On the Light – A Special Exhibition That Brightens Your Day</h3></div><div class="press-row-links"><a class="press-link link-sub" href="https://www.artkoreatv.com/news/articleView.html?idxno=103511" target="_blank" rel="noopener">Read the article ↗</a><a class="press-link link-go" href="/en/works/?ex=EX-2026-04">See exhibited works →</a></div></article><article class="press-row" data-no="PR-2026-005"><div class="press-row-media"><img src="https://cdn.d-art.co.kr/news/photo/202605/5575_17735_1225.jpg" alt="" loading="lazy" onerror="onMediaError(this)"></div><div class="press-row-text"><p class="press-row-meta"><span>Daily Art</span><span class="dot"></span><span>2026-05-13</span></p><h3 class="press-row-title">LART Spotlights Emerging Artists&#x27; Exploration of Material and Sensation Through &#x27;The Language of Material&#x27;</h3></div><div class="press-row-links"><a class="press-link link-sub" href="https://www.d-art.co.kr/news/articleView.html?idxno=5575" target="_blank" rel="noopener">Read the article ↗</a><a class="press-link link-go" href="/en/works/?ex=EX-2026-07">See exhibited works →</a></div></article><article class="press-row" data-no="PR-2026-003"><div class="press-row-media"><img src="https://newsx.ecn.cdn.infralab.net/www.thekorean.today/imgdata/smilestory_kr/202604/2026043015333141.jpg" alt="" loading="lazy" onerror="onMediaError(this)"></div><div class="press-row-text"><p class="press-row-meta"><span>Korean Today</span><span class="dot"></span><span>2026-04-30</span></p><h3 class="press-row-title">Najeonchilgi Artist Shin Haedal Visualizes Legal Thought Through the Light of Mother-of-Pearl</h3></div><div class="press-row-links"><a class="press-link link-sub" href="https://m.thekorean.today/49646" target="_blank" rel="noopener">Read the article ↗</a></div></article><article class="press-row" data-no="PR-2026-004"><div class="press-row-media"><img src="https://www.thekorean.today/imgdata/smilestory_kr/202604/2026040101196920.jpg" alt="" loading="lazy" onerror="onMediaError(this)"></div><div class="press-row-text"><p class="press-row-meta"><span>Korean Today</span><span class="dot"></span><span>2026-04-01</span></p><h3 class="press-row-title">Gallery Michelle Presents the Essence of Korean Contemporary Art at Carrousel du Louvre Art Shopping</h3></div><div class="press-row-links"><a class="press-link link-sub" href="https://thekorean.today/48869" target="_blank" rel="noopener">Read the article ↗</a><a class="press-link link-go" href="/en/works/?ex=EX-2026-10">See exhibited works →</a></div></article><article class="press-row" data-no="PR-2026-002"><div class="press-row-media"><img src="https://cdn.branditmag.co.kr/news/photo/202507/415_618_413.jpg" alt="" loading="lazy" onerror="onMediaError(this)"></div><div class="press-row-text"><p class="press-row-meta"><span>Brandit Magazine</span><span class="dot"></span><span>2025-07-14</span></p><h3 class="press-row-title">A Stylish Harmony of Tradition and Modernity: The Najeonchilgi Brand &#x27;Haedal Jagae&#x27;</h3></div><div class="press-row-links"><a class="press-link link-sub" href="https://www.branditmag.co.kr/news/articleView.html?idxno=415" target="_blank" rel="noopener">Read the article ↗</a><a class="press-link link-sub" href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Visit the brand shop ↗</a></div></article><!-- /GEN:press-list --></section>
 
 <footer>
-  <span>© SHIN HAEDAL &nbsp;&nbsp;&nbsp;&nbsp; All rights reserved.<a class="ft-privacy" href="../privacy/"><span class="ft-ko">개인정보 처리방침</span><span class="ft-en">Privacy Policy</span></a></span>
+  <span>© SHIN HAEDAL &nbsp;&nbsp;&nbsp;&nbsp; All rights reserved.<a class="ft-privacy" href="/en/privacy/"><span class="ft-ko">개인정보 처리방침</span><span class="ft-en">Privacy Policy</span></a></span>
   <a href="#">BACK TO TOP ↑</a>
 </footer>
 
@@ -153,7 +154,7 @@ var I18N = {
   ko: { aria_instagram:'인스타그램', aria_menu:'메뉴', aria_menu_close:'메뉴 닫기', logo_tag:'나전칠기 아티스트', page_h:'Press', page_sub:'저의 작업이 다른 시선으로 읽히고 소개된 기록입니다.', press_link:'기사 원문 보기 ↗', ex_link:'전시 작품 보기 →', shop_link:'브랜드 샵 바로가기 ↗', loading:'불러오는 중…', empty:'아직 등록된 기사가 없어요', error:'기사를 불러오지 못했어요', ko_flag:'', en_note:'', page_title:'Press — 신해달 나전칠기 아티스트' },
   en: { aria_instagram:'Instagram', aria_menu:'Menu', aria_menu_close:'Close menu', logo_tag:'Najeonchilgi Artist', page_h:'Press', page_sub:'Press coverage of my work and artistic practice.', press_link:'Read the article ↗', ex_link:'See exhibited works →', shop_link:'Visit the brand shop ↗', loading:'Loading…', empty:'No press coverage yet', error:'Could not load press coverage', ko_flag:'Article in Korean', en_note:'Article titles are translated for this website.', page_title:'Press — Shin Haedal, Najeonchilgi Artist' }
 };
-var LANG = 'ko';
+var LANG = 'en';
 try{
   var urlLang = new URLSearchParams(location.search).get('lang');
   if(urlLang === 'en' || urlLang === 'ko') LANG = urlLang;

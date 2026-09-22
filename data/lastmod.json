@@ -1,90 +1,118 @@
 {
  "": {
   "date": "2026-09-22",
-  "hash": "3e07fc16786adcc9"
+  "hash": "9ff478567fe88cf1"
  },
  "about/": {
   "date": "2026-09-22",
-  "hash": "1551219be3105c04"
+  "hash": "57bd0d1df8aec2dd"
  },
  "contact/": {
   "date": "2026-09-22",
-  "hash": "973fa53d365e8455"
+  "hash": "242e76cd4fed8ce3"
+ },
+ "en/": {
+  "date": "2026-09-22",
+  "hash": "73e1f4b79a3d499f"
+ },
+ "en/about/": {
+  "date": "2026-09-22",
+  "hash": "6bd2854cb8381f05"
+ },
+ "en/contact/": {
+  "date": "2026-09-22",
+  "hash": "2ccb85aa41abd695"
+ },
+ "en/ip/": {
+  "date": "2026-09-22",
+  "hash": "1bb88510a1769eab"
+ },
+ "en/press/": {
+  "date": "2026-09-22",
+  "hash": "82b1c4533ea92aa1"
+ },
+ "en/privacy/": {
+  "date": "2026-09-22",
+  "hash": "87fde878cd015086"
+ },
+ "en/works/": {
+  "date": "2026-09-22",
+  "hash": "fff669e62a88516d"
  },
  "ip/": {
-  "date": "2026-09-18",
-  "hash": "80deb49bf76d4ccc"
+  "date": "2026-09-22",
+  "hash": "762d951684684df0"
  },
  "press/": {
   "date": "2026-09-22",
-  "hash": "cc0355a183c1a424"
+  "hash": "8ef9f8e5ed6419b6"
  },
  "privacy/": {
   "date": "2026-09-22",
-  "hash": "adfa1088c9d962a5"
+  "hash": "8be23d9a1a882e71"
  },
  "works/": {
   "date": "2026-09-22",
-  "hash": "f83959655895316a"
+  "hash": "646347e24960684a"
  },
  "works/w/HD-2025-001/": {
-  "date": "2026-09-18",
-  "hash": "5c0ebbac9a28a0bb"
+  "date": "2026-09-22",
+  "hash": "55f728a86f490e4d"
  },
  "works/w/HD-2025-002/": {
-  "date": "2026-09-18",
-  "hash": "eaee8773973b02fd"
+  "date": "2026-09-22",
+  "hash": "fad09631a98ce129"
  },
  "works/w/HD-2025-004/": {
-  "date": "2026-09-18",
-  "hash": "e418b286894f9d62"
+  "date": "2026-09-22",
+  "hash": "5d7ad33bc5f46cb4"
  },
  "works/w/HD-2026-001/": {
-  "date": "2026-09-18",
-  "hash": "e5bee529de8f8d4e"
+  "date": "2026-09-22",
+  "hash": "b6c27d2c09eb3aea"
  },
  "works/w/HD-2026-002/": {
-  "date": "2026-09-18",
-  "hash": "5e24710f91149609"
+  "date": "2026-09-22",
+  "hash": "4659d40383889763"
  },
  "works/w/HD-2026-003/": {
-  "date": "2026-09-18",
-  "hash": "b30af5585af028a1"
+  "date": "2026-09-22",
+  "hash": "81cf84752e564702"
  },
  "works/w/HD-2026-004/": {
-  "date": "2026-09-18",
-  "hash": "bfa48343b05c0db8"
+  "date": "2026-09-22",
+  "hash": "507b26e975daad3e"
  },
  "works/w/HD-2026-005/": {
-  "date": "2026-09-18",
-  "hash": "9facbd6a2e492479"
+  "date": "2026-09-22",
+  "hash": "136c905d4f7f0a90"
  },
  "works/w/HD-2026-006/": {
-  "date": "2026-09-18",
-  "hash": "4e7229f813ad39b1"
+  "date": "2026-09-22",
+  "hash": "7a27d7a757eec53f"
  },
  "works/w/HD-2026-007/": {
-  "date": "2026-09-18",
-  "hash": "cee1e7c57859263a"
+  "date": "2026-09-22",
+  "hash": "7d5a9cd424ac513e"
  },
  "works/w/HD-2026-008/": {
-  "date": "2026-09-18",
-  "hash": "6792643f5895f6e5"
+  "date": "2026-09-22",
+  "hash": "acae676cd4182bc4"
  },
  "works/w/HD-2026-009/": {
-  "date": "2026-09-18",
-  "hash": "275c7cde3b243590"
+  "date": "2026-09-22",
+  "hash": "fb3763b5eef52c0b"
  },
  "works/w/HD-2026-010/": {
-  "date": "2026-09-18",
-  "hash": "637f47b356396a55"
+  "date": "2026-09-22",
+  "hash": "3e573f7d3ee300e7"
  },
  "works/w/HD-2026-011/": {
-  "date": "2026-09-18",
-  "hash": "861394b0bdf937f0"
+  "date": "2026-09-22",
+  "hash": "b1cecba74127122d"
  },
  "works/w/HD-2026-012/": {
-  "date": "2026-09-18",
-  "hash": "517446a9c4df3c1f"
+  "date": "2026-09-22",
+  "hash": "2950cdac62dff71b"
  }
 }

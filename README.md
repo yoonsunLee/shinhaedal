@@ -52,15 +52,18 @@ works/w/<id>/          작품 개별 페이지(검색·공유용 정적 HTML). g
 ip/                    IP — 얼빵해달/일월오봉단 세계관 (KO/EN, 별도 CSS/JS)
 press/                 Press — 매체 기사
 contact/                Contact — 문의 폼 (mailto 연동)
+en/                    영문 페이지(/en/, /en/works/ …) — build_en.py가 국문 7개 페이지로 만든다. 직접 편집 금지
 data/                  publish_sb.py가 생성하는 공개 정적 JSON
                        (works/*.json, works-index.json, exhibitions.json,
                         press.json, home-videos.json, series.json, works-page.json,
                         asset-sources.json — 미리보기용 원본 지문)
 assets/preview.js      아카이브 미리보기 전용(iframe·?pv=1일 때만 불림). data/*.json을 반영 전 데이터로 바꿔 끼움
+assets/lang.js         국문(/works/) ↔ 영문(/en/works/) 주소 전환 — KO/EN 버튼, 영문 페이지 안 링크
 assets/works/<id>/     작품별 thumb/detail/large WebP + (있으면) audio.mp3
 assets/home-video/<id>/  홈 영상별 video.mp4/video_mobile.mp4/poster.webp
 scripts/publish_sb.py   Archive(Supabase) → Publish 스크립트
 scripts/gen_work_share.py  작품 개별 페이지 + 공유용 og.jpg + sitemap.xml 생성
+scripts/build_en.py     영문 페이지(en/) 생성 + 국문 페이지의 hreflang·언어 전환 표시 맞춤(node 필요)
 .github/workflows/     publish 자동화 워크플로
 ```
 
@@ -72,6 +75,8 @@ Home / About / Works / IP / Press / Brand Shop(외부 링크, 아이디어스) /
   직접 편집하지 않는다(다음 자동 publish 때 덮어써짐). `works/w/*`와 `sitemap.xml`도
   발행 때 다시 만들어지므로 모양을 바꾸려면 `scripts/gen_work_share.py`와
   `assets/work-page.css`를 고친다.
+- `en/`도 발행 때 국문 페이지로 다시 만들어진다. 국문 페이지나 그 안의 `I18N.en`을 고친 뒤
+  `python scripts/build_en.py`를 돌려 같이 커밋한다(안 돌려도 다음 발행 때 맞춰짐).
 - 디자인/카피는 이 repo에서 직접 관리한다.
 - 민감정보(실거래가·소장자·결제방식 등)는 `publish_sb.py`의 whitelist 단계에서
   차단되며, 애초에 이 repo에 존재하지 않는다.

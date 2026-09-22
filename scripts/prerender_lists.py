@@ -9,7 +9,8 @@
 HTML 파일 안의 표시 사이만 바꾼다:
     <!-- GEN:이름 -->  …여기가 바뀜…  <!-- /GEN:이름 -->
 표시가 없거나 두 번 이상 있으면 발행을 멈춘다(엉뚱한 곳을 덮어쓰지 않도록).
-국문 화면 기준으로 쓴다. 영문으로 보는 사람에게는 JS가 영문으로 다시 그린다.
+국문 페이지에는 국문으로 쓰고, 영문 페이지(/en/…)용 영문 목록은 build_en.py가
+blocks("en")으로 받아 간다.
 
   python scripts/prerender_lists.py      (gen_work_share.py --all 안에서도 불린다)
 """
@@ -35,9 +36,10 @@ def load(*parts, default=None):
     return json.loads(p.read_text(encoding="utf-8"))
 
 
-def primary_title(r):
+def primary_title(r, lang="ko"):
     ko = str(r.get("title") or "").strip()
-    return ko or str(r.get("title_en") or "").strip()
+    en = str(r.get("title_en") or "").strip()
+    return (en or ko) if lang == "en" else (ko or en)
 
 
 def size_label(v):
@@ -45,9 +47,9 @@ def size_label(v):
     return v + " cm" if v and "cm" not in v.lower() else v
 
 
-def works_tile(r, attr):
+def works_tile(r, attr, lang="ko"):
     """works/index.html 의 tileHtml 과 같은 마크업(캡션 둘째 줄: 연도 · 크기)."""
-    title = primary_title(r)
+    title = primary_title(r, lang)
     img = ("../" + r["thumb"]) if r.get("thumb") else ""
     dims = (' width="%s" height="%s"' % (r["tw"], r["th"])) if r.get("tw") and r.get("th") else ""
     media = ('<img src="%s"%s alt="" loading="lazy" draggable="false" '
@@ -64,7 +66,7 @@ def series_sort_key(r):
     return (o is None, o if o is not None else 0, str(r["id"]))
 
 
-def works_cells(rows, joined, attr_of):
+def works_cells(rows, joined, attr_of, lang="ko"):
     """'두 폭 붙이기' 연작의 두 작품은 두 칸짜리 한 단위(.pair)로 — Selected에서만 쓴다."""
     html, i = [], 0
     while i < len(rows):
@@ -73,19 +75,19 @@ def works_cells(rows, joined, attr_of):
         k = r.get("series_key")
         if (n and k and k in joined and n.get("series_key") == k
                 and sum(1 for x in rows if x.get("series_key") == k) == 2):
-            html.append('<div class="pair">%s%s</div>' % (works_tile(r, attr_of(r, i)), works_tile(n, attr_of(n, i + 1))))
+            html.append('<div class="pair">%s%s</div>' % (works_tile(r, attr_of(r, i), lang), works_tile(n, attr_of(n, i + 1), lang)))
             i += 2
         else:
-            html.append(works_tile(r, attr_of(r, i)))
+            html.append(works_tile(r, attr_of(r, i), lang))
             i += 1
     return "".join(html)
 
 
-def work_tiles(rows, href_prefix, asset_base):
+def work_tiles(rows, href_prefix, asset_base, lang="ko"):
     """index.html / works/index.html 의 renderWorkTiles 와 같은 마크업."""
     out = []
     for i, r in enumerate(rows):
-        title = primary_title(r)
+        title = primary_title(r, lang)
         img = (asset_base + r["thumb"]) if r.get("thumb") else ""
         media = ('<img src="%s" alt="" loading="lazy" draggable="false" '
                  'onerror="this.style.visibility=\'hidden\'">' % e(img)) if img else ""
@@ -97,6 +99,11 @@ def work_tiles(rows, href_prefix, asset_base):
 
 
 # ── Press: press/index.html 의 renderFeatured / renderRow 와 같은 마크업 ──
+# 문구는 press/index.html 의 I18N과 같아야 한다(영문은 build_en.py가 그 I18N.en을 넘겨준다)
+PRESS_LABELS = {"press_link": "기사 원문 보기 ↗", "shop_link": "브랜드 샵 바로가기 ↗",
+                "ex_link": "전시 작품 보기 →", "ko_flag": ""}
+
+
 def archive_img_url(v, size=900):
     v = str(v or "").strip()
     if not v:
@@ -132,45 +139,64 @@ def match_exhibition(p, exhibitions):
     return None
 
 
-def press_links(p, exhibitions):
+def press_links(p, exhibitions, labels=PRESS_LABELS):
     shop = match_brand_shop(p)
     ex = None if shop else match_exhibition(p, exhibitions)
     links = []
     url = safe_url(p.get("url"))
     if url:
-        links.append('<a class="press-link link-sub" href="%s" target="_blank" rel="noopener">기사 원문 보기 ↗</a>' % e(url))
+        links.append('<a class="press-link link-sub" href="%s" target="_blank" rel="noopener">%s</a>' % (e(url), e(labels["press_link"])))
     if shop:
-        links.append('<a class="press-link link-sub" href="%s" target="_blank" rel="noopener">브랜드 샵 바로가기 ↗</a>' % e(safe_url(shop)))
+        links.append('<a class="press-link link-sub" href="%s" target="_blank" rel="noopener">%s</a>' % (e(safe_url(shop)), e(labels["shop_link"])))
     elif ex:
-        links.append('<a class="press-link link-go" href="../works/?ex=%s">전시 작품 보기 →</a>' % e(ex["id"]))
+        links.append('<a class="press-link link-go" href="../works/?ex=%s">%s</a>' % (e(ex["id"]), e(labels["ex_link"])))
     return "".join(links)
 
 
-def press_featured(p, exhibitions):
+def press_text(p, lang, labels):
+    """(매체명, 제목, 인용구, 한글 기사 표시) — press 화면의 outletFor / dekFor / langFlag 와 같은 규칙."""
+    if lang != "en":
+        return p.get("outlet"), p.get("title"), str(p.get("quote") or "").strip(), ""
+    flag = "" if p.get("title_en") else '<span class="press-lang-flag">%s</span>' % e(labels["ko_flag"])
+    return (p.get("outlet_en") or p.get("outlet"), p.get("title_en") or p.get("title"),
+            str(p.get("quote_en") or "").strip(), flag)
+
+
+def press_featured(p, exhibitions, lang="ko", labels=PRESS_LABELS):
     img = archive_img_url(p.get("image"))
     url = safe_url(p.get("url"))
-    title = e(p.get("title"))
+    outlet, title, dek, flag = press_text(p, lang, labels)
+    title = e(title)
     title_html = '<a href="%s" target="_blank" rel="noopener">%s</a>' % (e(url), title) if url else title
-    dek = str(p.get("quote") or "").strip()
     media = ('<div class="press-feature-media"><img src="%s" alt="" onerror="onMediaError(this)"></div>' % e(img)) if img else ""
     return ('<div class="press-feature-grid%s" data-no="%s">%s<div class="press-feature-body">'
             '<p class="press-feature-meta"><span>%s</span><span class="dot"></span><span>%s</span></p>'
-            '<h2 class="press-feature-title">%s</h2>%s'
+            '<h2 class="press-feature-title">%s%s</h2>%s'
             '<div class="press-feature-links">%s</div></div></div>'
-            % ("" if img else " no-media", e(p.get("no")), media, e(p.get("outlet")), e(p.get("date")), title_html,
-               ('<p class="press-feature-dek">%s</p>' % e(dek)) if dek else "", press_links(p, exhibitions)))
+            % ("" if img else " no-media", e(p.get("no")), media, e(outlet), e(p.get("date")), title_html, flag,
+               ('<p class="press-feature-dek">%s</p>' % e(dek)) if dek else "", press_links(p, exhibitions, labels)))
 
 
-def press_row(p, exhibitions):
+def press_row(p, exhibitions, lang="ko", labels=PRESS_LABELS):
     img = archive_img_url(p.get("image"))
-    dek = str(p.get("quote") or "").strip()
+    outlet, title, dek, flag = press_text(p, lang, labels)
     media = ('<div class="press-row-media"><img src="%s" alt="" loading="lazy" onerror="onMediaError(this)"></div>' % e(img)) if img else ""
     return ('<article class="press-row%s" data-no="%s">%s<div class="press-row-text">'
             '<p class="press-row-meta"><span>%s</span><span class="dot"></span><span>%s</span></p>'
-            '<h3 class="press-row-title">%s</h3>%s</div>'
+            '<h3 class="press-row-title">%s%s</h3>%s</div>'
             '<div class="press-row-links">%s</div></article>'
-            % ("" if img else " no-media", e(p.get("no")), media, e(p.get("outlet")), e(p.get("date")), e(p.get("title")),
-               ('<p class="press-row-dek">%s</p>' % e(dek)) if dek else "", press_links(p, exhibitions)))
+            % ("" if img else " no-media", e(p.get("no")), media, e(outlet), e(p.get("date")), e(title), flag,
+               ('<p class="press-row-dek">%s</p>' % e(dek)) if dek else "", press_links(p, exhibitions, labels)))
+
+
+def fill_block(text, name, inner, where):
+    """text 안의 GEN 표시 사이를 inner로 바꾼 새 text."""
+    start, end = "<!-- GEN:%s -->" % name, "<!-- /GEN:%s -->" % name
+    if text.count(start) != 1 or text.count(end) != 1:
+        sys.exit("%s: GEN:%s 표시가 없거나 여러 개입니다 — 발행 중단" % (where, name))
+    a = text.index(start) + len(start)
+    b = text.index(end)
+    return text[:a] + inner + text[b:]
 
 
 def replace_block(path, name, inner):
@@ -179,19 +205,15 @@ def replace_block(path, name, inner):
     raw = path.read_bytes()
     eol = "\r\n" if b"\r\n" in raw else "\n"
     text = raw.decode("utf-8").replace("\r\n", "\n")
-    start, end = "<!-- GEN:%s -->" % name, "<!-- /GEN:%s -->" % name
-    if text.count(start) != 1 or text.count(end) != 1:
-        sys.exit("%s: GEN:%s 표시가 없거나 여러 개입니다 — 발행 중단" % (path.relative_to(ROOT), name))
-    a = text.index(start) + len(start)
-    b = text.index(end)
-    new = text[:a] + inner + text[b:]
+    new = fill_block(text, name, inner, path.relative_to(ROOT))
     if new != text:
         path.write_bytes(new.replace("\n", eol).encode("utf-8"))
         return True
     return False
 
 
-def prerender():
+def blocks(lang="ko", press_labels=PRESS_LABELS):
+    """{"index.html": {"home-recent": …}, "works/index.html": {…}, "press/index.html": {…}} — 페이지별 GEN 블록 내용."""
     index = load("data", "works-index.json")
     exhibitions = load("data", "exhibitions.json", default=[])
     press = load("data", "press.json", default=[])
@@ -200,9 +222,7 @@ def prerender():
     joined = {r["key"] for r in series if r.get("joined")}
     page = load("data", "works-page.json", default={"selected": []})
 
-    changed = []
-    if replace_block(ROOT / "index.html", "home-recent", work_tiles(index[:HOME_RECENT], "works/", "")):
-        changed.append("index.html")
+    out = {"index.html": {"home-recent": work_tiles(index[:HOME_RECENT], "works/", "", lang)}}
     by_id = {w["id"]: w for w in index}
     sel, added = [], set()
     for wid in page.get("selected") or []:
@@ -218,19 +238,28 @@ def prerender():
                 added.add(x["id"])
                 sel.append(x)
     # All works: 연작도 한 점씩(두 폭으로 붙이는 건 Selected에 넣었을 때만 — 작가 결정 2026-09-22)
-    a = replace_block(ROOT / "works" / "index.html", "works-grid",
-                      "".join(works_tile(r, 'data-idx="%d"' % i) for i, r in enumerate(index)))
-    b = replace_block(ROOT / "works" / "index.html", "works-selected",
-                      works_cells(sel, joined, lambda r, i: 'data-id="%s"' % e(r["id"])))
-    if a or b:
-        changed.append("works/index.html")
+    out["works/index.html"] = {
+        "works-grid": "".join(works_tile(r, 'data-idx="%d"' % i, lang) for i, r in enumerate(index)),
+        "works-selected": works_cells(sel, joined, lambda r, i: 'data-id="%s"' % e(r["id"]), lang),
+    }
     if press:
         featured = next((p for p in press if p.get("featured")), press[0])
         rest = [p for p in press if p is not featured]
-        a = replace_block(ROOT / "press" / "index.html", "press-feature", press_featured(featured, exhibitions))
-        b = replace_block(ROOT / "press" / "index.html", "press-list", "".join(press_row(p, exhibitions) for p in rest))
-        if a or b:
-            changed.append("press/index.html")
+        out["press/index.html"] = {
+            "press-feature": press_featured(featured, exhibitions, lang, press_labels),
+            "press-list": "".join(press_row(p, exhibitions, lang, press_labels) for p in rest),
+        }
+    return out
+
+
+def prerender():
+    changed = []
+    for rel, parts in blocks("ko").items():
+        hit = False
+        for name, inner in parts.items():
+            hit = replace_block(ROOT / rel, name, inner) or hit
+        if hit:
+            changed.append(rel)
     print("미리 쓰기: %s" % (", ".join(changed) if changed else "바뀐 것 없음"))
     return changed
 

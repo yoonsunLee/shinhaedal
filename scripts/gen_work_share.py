@@ -26,6 +26,7 @@ from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from prerender_lists import prerender  # noqa: E402
+import build_en  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE_BASE = "https://shinhaedal.com"
@@ -424,13 +425,22 @@ def lastmod_dates(paths, today):
 
 def write_sitemap(index, today):
     pages = [(path, prio) for path, prio in STATIC_PAGES]
+    # 영문 페이지(build_en.py가 만든 en/…) — 국문·영문 짝은 xhtml:link로 서로 알린다
+    en_of = {path: "en/" + path for path, _ in STATIC_PAGES if _page_file("en/" + path).exists()}
+    pages += [(en_of[path], prio) for path, prio in STATIC_PAGES if path in en_of]
     pages += [(f"works/w/{w['id']}/", "0.8") for w in index]
     dates = lastmod_dates([p for p, _ in pages], today)
-    urls = [(f"{SITE_BASE}/{path}", prio, dates.get(path)) for path, prio in pages]
+    alt = {}
+    for ko, en in en_of.items():
+        links = "".join(f'<xhtml:link rel="alternate" hreflang="{lang}" href="{SITE_BASE}/{p}"/>'
+                        for lang, p in (("ko", ko), ("en", en), ("x-default", ko)))
+        alt[ko] = alt[en] = links
+    urls = [(f"{SITE_BASE}/{path}", prio, dates.get(path), alt.get(path, "")) for path, prio in pages]
     body = "\n".join(
-        f"  <url><loc>{e(loc)}</loc>" + (f"<lastmod>{d}</lastmod>" if d else "") + f"<priority>{prio}</priority></url>"
-        for loc, prio, d in urls)
-    xml = f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{body}\n</urlset>\n'
+        f"  <url><loc>{e(loc)}</loc>" + (f"<lastmod>{d}</lastmod>" if d else "") + f"<priority>{prio}</priority>{links}</url>"
+        for loc, prio, d, links in urls)
+    xml = ('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '
+           f'xmlns:xhtml="http://www.w3.org/1999/xhtml">\n{body}\n</urlset>\n')
     (ROOT / "sitemap.xml").write_text(xml, encoding="utf-8", newline="\n")
     print(f"sitemap.xml: {len(urls)} URLs")
 
@@ -465,6 +475,12 @@ def main(argv):
             gen_page(meta, index, exhibitions, today)
         cleanup_stale({w["id"] for w in index})
         prerender()  # 작품 목록·홈 Recent·Press를 HTML에 미리 쓰기(검색 로봇용)
+        # 영문 페이지(en/…)를 방금 쓴 국문 페이지로 다시 만든다. 실패해도 국문 발행은 막지 않는다
+        # (영문은 지난번 것이 그대로 남는다) — Actions 화면에 경고로 보인다.
+        try:
+            build_en.build()
+        except (Exception, SystemExit) as ex:
+            print(f"::warning::영문 페이지(en/) 만들기 실패 — 지난번 영문 페이지 유지: {ex}")
         write_sitemap(index, today)
     else:
         meta = next((w for w in index if w["id"] == argv[0]), None)

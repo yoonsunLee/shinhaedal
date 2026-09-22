@@ -19,7 +19,7 @@
     if(running) return;
     running=true;
     var targetUrl=href;
-    var assetsBase=href+'assets/';
+    var assetsBase=href.replace(/^\/en\//,'/')+'assets/'; // 영문 IP(/en/ip/)도 그림은 /ip/assets/에 있다
     var navigated=false;
     function go(){
       if(navigated) return;
@@ -155,7 +155,7 @@
     document.querySelectorAll('.ip-transition-canvas').forEach(function(c){ c.remove(); });
   });
 
-  document.querySelectorAll('a[href="ip/"], a[href="../ip/"]').forEach(function(a){
+  document.querySelectorAll('a[href="ip/"], a[href="../ip/"], a[href="/en/ip/"]').forEach(function(a){
     if(a.target==='_blank') return;
     a.addEventListener('click', function(e){
       if(!isPlainClick(e)) return;

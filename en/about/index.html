@@ -1,20 +1,21 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
+<base href="/about/">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script>/*lang-route*/(function(){var s=location.search,m=/[?&]lang=(en|ko)(?=&|$)/.exec(s),l=m&&m[1];try{if(l==='ko')localStorage.setItem('site_lang','ko');else if(!l)l=localStorage.getItem('site_lang')}catch(e){}if(l!=='en')return;window.__SH_LANG_REDIRECT=1;document.documentElement.style.visibility='hidden';location.replace('/en'+location.pathname+s.replace(/([?&])lang=en(&|$)/,function(a,p,e){return e?p:''})+location.hash)})()</script>
+<script>/*lang-route*/(function(){var s=location.search;if(!/[?&]lang=ko(&|$)/.test(s))return;window.__SH_LANG_REDIRECT=1;document.documentElement.style.visibility='hidden';location.replace(location.pathname.replace(/^\/en(?=\/)/,'')+s+location.hash)})()</script>
 <!-- 아카이브 미리보기(iframe·?pv=1)일 때만 데이터 바꿔 끼우기 스크립트를 먼저 불러온다. 평소 방문에는 아무것도 안 함 -->
 <script>try{if(window.top!==window&&(/[?&]pv=1(&|$)/.test(location.search)||sessionStorage.getItem('sh_pv')==='1'))document.write('<script src="/assets/preview.js"><\/script>')}catch(e){}</script>
-<title>작가 소개 — 신해달 나전칠기 아티스트</title>
-<meta name="description" content="법과 사회의 규범, 그리고 그 안을 살아가는 개인의 이야기를 나전칠기로 표현하는 작가, 신해달 소개.">
+<title>About — Shin Haedal, Najeonchilgi Artist</title>
+<meta name="description" content="About Shin Haedal, an artist who expresses the norms of law and society, and the stories of the individuals who live within them, through najeonchilgi.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="작가 소개 — 신해달 나전칠기 아티스트">
-<meta property="og:description" content="법과 사회의 규범, 그리고 그 안을 살아가는 개인의 이야기를 나전칠기로 표현하는 작가, 신해달 소개.">
+<meta property="og:title" content="About — Shin Haedal, Najeonchilgi Artist">
+<meta property="og:description" content="About Shin Haedal, an artist who expresses the norms of law and society, and the stories of the individuals who live within them, through najeonchilgi.">
 <meta property="og:image" content="https://shinhaedal.com/ip/assets/og_character.jpg">
-<meta property="og:url" content="https://shinhaedal.com/about/">
+<meta property="og:url" content="https://shinhaedal.com/en/about/">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://shinhaedal.com/about/">
+<link rel="canonical" href="https://shinhaedal.com/en/about/">
 <link rel="alternate" hreflang="ko" href="https://shinhaedal.com/about/">
 <link rel="alternate" hreflang="en" href="https://shinhaedal.com/en/about/">
 <link rel="alternate" hreflang="x-default" href="https://shinhaedal.com/about/">
@@ -118,43 +119,43 @@
 
 <nav>
   <div class="logo-block">
-    <a class="logo" href="../"><span class="logo-c">ⓒ</span><span class="logo-name">SHIN HAEDAL</span></a>
-    <span class="logo-tag" data-i="logo_tag">나전칠기 아티스트</span>
+    <a class="logo" href="/en/"><span class="logo-c">ⓒ</span><span class="logo-name">SHIN HAEDAL</span></a>
+    <span class="logo-tag" data-i="logo_tag">Najeonchilgi Artist</span>
   </div>
   <div class="nav-icons">
     <ul class="nav-menu">
-      <li><a href="../">Home</a></li>
-      <li><a href="./" class="on" aria-current="page">About</a></li>
-      <li><a href="../works/">Works</a></li>
-      <li><a href="../ip/">IP</a></li>
-      <li><a href="../press/">Press</a></li>
+      <li><a href="/en/">Home</a></li>
+      <li><a href="/en/about/" class="on" aria-current="page">About</a></li>
+      <li><a href="/en/works/">Works</a></li>
+      <li><a href="/en/ip/">IP</a></li>
+      <li><a href="/en/press/">Press</a></li>
       <li><a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop</a></li>
-      <li><a href="../contact/">Contact</a></li>
+      <li><a href="/en/contact/">Contact</a></li>
     </ul>
     <div class="lang" role="group" aria-label="Language">
-      <button id="langKo" class="on">KO</button>
+      <button id="langKo">KO</button>
       <span class="lang-sep" aria-hidden="true">/</span>
-      <button id="langEn">EN</button>
+      <button id="langEn" class="on">EN</button>
     </div>
-    <a class="icon-btn" aria-label="인스타그램" data-i-aria="aria_instagram" href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener">
+    <a class="icon-btn" aria-label="Instagram" data-i-aria="aria_instagram" href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.4"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor"/></svg>
     </a>
-    <button class="icon-btn menu-btn" id="btnMenu" aria-label="메뉴" data-i-aria="aria_menu" aria-expanded="false">
+    <button class="icon-btn menu-btn" id="btnMenu" aria-label="Menu" data-i-aria="aria_menu" aria-expanded="false">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 6H17M3 10H17M3 14H17" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
     </button>
   </div>
 
   <div class="nav-backdrop" id="navBackdrop"></div>
   <div class="nav-overlay" id="navOverlay">
-    <button class="icon-btn overlay-close" id="btnMenuClose" aria-label="메뉴 닫기" data-i-aria="aria_menu_close">✕</button>
+    <button class="icon-btn overlay-close" id="btnMenuClose" aria-label="Close menu" data-i-aria="aria_menu_close">✕</button>
     <nav class="overlay-links">
-      <a href="../">Home</a>
-      <a href="./">About</a>
-      <a href="../works/">Works</a>
-      <a href="../ip/">IP</a>
-      <a href="../press/">Press</a>
+      <a href="/en/">Home</a>
+      <a href="/en/about/">About</a>
+      <a href="/en/works/">Works</a>
+      <a href="/en/ip/">IP</a>
+      <a href="/en/press/">Press</a>
       <a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop</a>
-      <a href="../contact/">Contact</a>
+      <a href="/en/contact/">Contact</a>
       <a href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener" class="overlay-ig">Instagram ↗</a>
     </nav>
   </div>
@@ -162,18 +163,14 @@
 
 <div class="ab-hero">
   <div class="ab-portrait ab-anim-photo" data-reveal>
-    <img src="assets/artist-profile-1.webp" alt="신해달 작가" data-i-alt="alt_artist_1" width="700" height="1050" draggable="false">
+    <img src="assets/artist-profile-1.webp" alt="The artist Shin Haedal" data-i-alt="alt_artist_1" width="700" height="1050" draggable="false">
   </div>
   <div class="ab-hero-text ab-anim-text" data-reveal>
-    <h1 data-i="about_h1">신해달</h1>
-    <p class="ab-role" data-i="about_role">나전칠기 아티스트</p>
+    <h1 data-i="about_h1">SHIN HAEDAL</h1>
+    <p class="ab-role" data-i="about_role">Najeonchilgi Artist</p>
     <p class="ab-eng-name">SHIN HAEDAL</p>
-    <p class="ab-lede" data-i="about_lede">독해하고, 해석하고, 번역하는 것.<br>저는 법을 읽고 의미를 찾아, 그것을 나전칠기의 언어로 옮깁니다.</p>
-    <div class="ab-body" data-i="about_body">
-      <p>오랫동안 법을 공부하고 가르치며 텍스트의 의미를 읽고 해석해왔습니다.</p>
-      <p>우연히 마주한 옻칠의 느리고 정직한 공정에 마음을 빼앗겼고, 텍스트 속에 살던 시간은 버려지는 대신 손의 시간과 하나로 이어졌습니다.</p>
-      <p>예전에는 법을 논문과 강의로 설명했다면, 지금은 옻칠과 자개로 이야기합니다.</p>
-    </div>
+    <p class="ab-lede" data-i="about_lede">To read, interpret, and translate.<br>I read the law, seek out its meaning, and translate it into the language of najeonchilgi.</p>
+    <div class="ab-body" data-i="about_body"><p>For many years, I studied and taught law, reading and interpreting the meanings held within texts.</p><p>Then, by chance, I encountered the slow and honest process of lacquerwork and was drawn to it. The years I had spent immersed in texts were not abandoned; they simply continued in another form, through the work of my hands.</p><p>Where I once explained law through academic papers and lectures, I now speak through lacquer and mother-of-pearl.</p></div>
   </div>
 </div>
 
@@ -181,26 +178,11 @@
   <div class="ab-note-layout">
     <div class="ab-note-text">
       <h2 class="ab-section-title ab-anim-title" data-reveal>Artist Note</h2>
-      <p class="ab-note-hook" data-i="about_note_hook">쉽게 들어와서 오래 머무는 작업.<br>순서가 다를 뿐, 깊이는 같습니다.</p>
-      <div class="ab-body" data-i="about_note_body">
-        <p>제 작업은 법과 사회의 규범 안에서 살아가는 개인에 대한 이야기입니다.</p>
-        <p>저에게 법은 차갑고 어려운 규칙에 머무는 것이 아니라, 결국 사람을 위해 사람들이 만든 규칙입니다. 그리고 그 안을 살아가는 개인은 저마다 다른 모습과 빛깔을 지닙니다.</p>
-        <p>그래서 작업은 이미지보다 먼저 법학적 개념과 텍스트에서 시작합니다.</p>
-        <p>개념을 고르고, 제목과 서사를 먼저 씁니다.<br>그 이야기를 하나의 장면으로 구상한 뒤, 나전칠기의 시각언어로 번역합니다.</p>
-        <p>법학적 개념 → 제목과 서사 → 시각화.</p>
-        <p>논문을 쓰던 사고의 구조가 자연스럽게 작업의 구조로 이어진 셈입니다.</p>
-        <p>천연자개는 같은 조각도 빛과 바라보는 각도에 따라 다른 색을 보여줍니다. 작게 자르고 쪼개어도 고유의 영롱한 빛은 사라지지 않습니다.</p>
-        <p>저는 그 모습에서 사회의 규범 안에서도 저마다의 빛깔로 살아가는 개인을 떠올립니다.</p>
-        <p>옻칠은 여러 번 칠하고 말리고 갈아내며 깊이를 만듭니다. 옻칠의 깊이는 자개의 빛을 돋보이게 하고, 자개의 영롱함은 다시 옻칠의 깊이를 드러냅니다.</p>
-        <p>그리고 그 이야기에는 현대인의 일상과 저의 페르소나인 '얼빵해달'이 함께 살아갑니다. 어렵게 느껴질 수 있는 법도 얼빵해달의 이야기를 통하면 조금 더 친근하고 다정하게 다가갈 수 있다고 생각합니다.</p>
-        <p>처음부터 어렵게 이해할 필요는 없습니다.</p>
-        <p>얼빵해달이 귀여워서,<br>자개가 반짝여서 작품 앞에 멈춰 서도 좋습니다.</p>
-        <p>그 다음 제목을 읽고, 그 안에 법과 전통의 이야기가 있다는 것을 발견하고, 조금 더 오래 바라보게 되기를 바랍니다.</p>
-        <p>그리고 작품을 떠날 때에는<br>사회 속의 자기 자신을 한 번쯤 다정하게 바라볼 수 있었으면 합니다.</p>
-      </div>
+      <p class="ab-note-hook" data-i="about_note_hook">Easy to enter, hard to leave.<br>Different ways in, the same depth within.</p>
+      <div class="ab-body" data-i="about_note_body"><p>My work is about individuals living within the rules and norms of society.</p><p>To me, law is not simply a set of cold and difficult rules. It is, ultimately, a system created by people, for people. And within that system, each individual lives in their own way, with their own distinct character and color.</p><p>That is why my work begins not with an image, but with legal concepts and texts.</p><p>I begin by choosing a concept, then writing the title and narrative.</p><p>From there, I imagine the story as a scene and translate it into the visual language of najeonchilgi.</p><p>Legal concept → title and narrative → visual form.</p><p>The structure of thought I once used to write academic papers has naturally carried over into the structure of my work.</p><p>Even the same piece of natural mother-of-pearl reveals different colors depending on the light and the angle from which it is viewed. Even when cut into small fragments, its distinctive iridescence does not disappear.</p><p>In this quality, I see the individual—living within the rules of society while retaining a light and color of their own.</p><p>Lacquer gains depth through repeated cycles of coating, drying, and polishing. The depth of the lacquer brings out the light of the mother-of-pearl, while the iridescence of the mother-of-pearl, in turn, reveals the depth of the lacquer.</p><p>Within these stories also live scenes from contemporary everyday life and my persona, Eolbbang Haedal—the Spaced-out Sea Otter.</p><p>Even law, which can seem difficult or distant, can feel a little more familiar and gentle when encountered through Eolbbang Haedal's stories.</p><p>There is no need to understand everything from the outset.</p><p>It is enough to stop in front of a work because Eolbbang Haedal catches your eye,<br>or because the mother-of-pearl shimmers.</p><p>Then perhaps you read the title, discover the stories of law and tradition within it, and stay with the work a little longer.</p><p>And when you leave the work, I hope you might look at yourself within society with a little more kindness.</p></div>
     </div>
     <div class="ab-photo-inner ab-anim-photo" data-reveal>
-      <img src="assets/artist-profile-2-bg.webp" alt="자개를 만지는 손" data-i-alt="alt_artist_2" width="845" height="1268" draggable="false">
+      <img src="assets/artist-profile-2-bg.webp" alt="Hands working with mother-of-pearl" data-i-alt="alt_artist_2" width="845" height="1268" draggable="false">
     </div>
   </div>
 </section>
@@ -208,26 +190,21 @@
 <section class="ab-credentials ab-anim-block" data-reveal>
   <div class="ab-edu">
     <h2 class="ab-section-title">Education &amp; Qualifications</h2>
-    <ul data-i="bio_list">
-      <li>국가유산수리기능자 <span class="sub">(칠공)</span></li>
-      <li>중앙대학교 일반대학원 법학과 박사수료 <span class="sub">(지식재산권법 전공)</span></li>
-      <li>중앙대학교 일반대학원 법학과 석사 <span class="sub">(지식재산권법 전공)</span></li>
-      <li>단국대학교 법학과 학사</li>
-    </ul>
+    <ul data-i="bio_list"><li>National Heritage Repair Technician <span class="sub">(Lacquerware)</span></li><li>Ph.D. Coursework Completed, Chung-Ang University Graduate School of Law <span class="sub">(Intellectual Property Law)</span></li><li>M.A., Chung-Ang University Graduate School of Law <span class="sub">(Intellectual Property Law)</span></li><li>LL.B., Dankook University</li></ul>
   </div>
   <div class="ab-ex">
     <h2 class="ab-section-title">Selected Exhibitions</h2>
-    <div id="exList"><p class="ab-ex-empty" data-i="ex_loading">불러오는 중…</p></div>
+    <div id="exList"><p class="ab-ex-empty" data-i="ex_loading">Loading…</p></div>
   </div>
 </section>
 
 <section class="ab-links">
-  <a class="link-go" href="../works/" data-i="link_works">작품 보기 →</a>
-  <a class="link-go" href="../contact/" data-i="link_contact">전시·협업 문의 →</a>
+  <a class="link-go" href="/en/works/" data-i="link_works">Explore works →</a>
+  <a class="link-go" href="/en/contact/" data-i="link_contact">Exhibition & collaboration inquiries →</a>
 </section>
 
 <footer>
-  <span>© SHIN HAEDAL &nbsp;&nbsp;&nbsp;&nbsp; All rights reserved.<a class="ft-privacy" href="../privacy/"><span class="ft-ko">개인정보 처리방침</span><span class="ft-en">Privacy Policy</span></a></span>
+  <span>© SHIN HAEDAL &nbsp;&nbsp;&nbsp;&nbsp; All rights reserved.<a class="ft-privacy" href="/en/privacy/"><span class="ft-ko">개인정보 처리방침</span><span class="ft-en">Privacy Policy</span></a></span>
   <a href="#">BACK TO TOP ↑</a>
 </footer>
 
@@ -317,7 +294,7 @@ var I18N = {
     page_title:'About — Shin Haedal, Najeonchilgi Artist'
   }
 };
-var LANG = 'ko';
+var LANG = 'en';
 try{
   var urlLang = new URLSearchParams(location.search).get('lang');
   if(urlLang === 'en' || urlLang === 'ko') LANG = urlLang;

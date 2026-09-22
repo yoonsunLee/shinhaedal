@@ -25,14 +25,16 @@
   window.shStat = function(){}; window.shStatWork = function(){};
 
   var nav = window.navigator || {};
-  var skip = !ENDPOINT || window.__SH_PREVIEW || nav.webdriver || nav.globalPrivacyControl === true ||
+  // __SH_LANG_REDIRECT: 영문 주소로 옮겨 가는 중인 국문 페이지(옮겨 간 페이지에서 센다)
+  var skip = !ENDPOINT || window.__SH_PREVIEW || window.__SH_LANG_REDIRECT || nav.webdriver || nav.globalPrivacyControl === true ||
     nav.doNotTrack === '1' || window.doNotTrack === '1' || nav.msDoNotTrack === '1' || get(OFF_KEY) === '1' ||
     /bot|crawl|spider|slurp|headless|lighthouse|preview/i.test(nav.userAgent || '');
   if(skip) return;
 
   /* ---------- 페이지·언어·기기 ---------- */
+  // 영문 페이지(/en/works/)도 같은 페이지로 센다 — 언어는 따로(l) 보낸다
   function pageKey(){
-    var p = location.pathname.replace(/index\.html$/, '');
+    var p = location.pathname.replace(/index\.html$/, '').replace(/^\/en(?=\/)/, '');
     if(p.charAt(p.length - 1) !== '/') p += '/';
     return p;
   }
@@ -214,7 +216,7 @@
   }
   var RULES = [
     // 공통: 메뉴·언어·바깥 링크
-    ['body > nav .nav-menu a, #navOverlay a', function(el){ var k = outKind(el); return ['menu', k || (el.getAttribute('href') || '').replace(/^(\.\.\/)+|^\.\//, '/').replace(/^\/?/, '/')]; }],
+    ['body > nav .nav-menu a, #navOverlay a', function(el){ var k = outKind(el); return ['menu', k || (el.getAttribute('href') || '').replace(/^(\.\.\/)+|^\.\//, '/').replace(/^\/?/, '/').replace(/^\/en(?=\/)/, '')]; }],
     ['#langKo, #langEn', function(el){ return ['lang', el.id === 'langEn' ? 'en' : 'ko']; }],
     // 홈
     ['.hh-credit', function(el){ return ['hero_work', workNoFromHref(el)]; }],
