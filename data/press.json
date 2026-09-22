@@ -2,6 +2,7 @@
  {
   "no": "PR-2026-001",
   "outlet": "이슈메이커",
+  "outlet_en": "Issuemaker",
   "date": "2026-06-01",
   "title": "차가운 법 조문을 영롱한 자개로 번역하는 다정한 예술가",
   "url": "https://www.issuemaker.kr/news/articleView.html?idxno=51514",
@@ -17,6 +18,7 @@
  {
   "no": "PR-2026-002",
   "outlet": "브랜딧매거진",
+  "outlet_en": "Brandit Magazine",
   "date": "2025-07-14",
   "title": "전통과 현대의 멋스러운 조화, 나전칠기 브랜드 '해달자개'",
   "url": "https://www.branditmag.co.kr/news/articleView.html?idxno=415",
@@ -32,6 +34,7 @@
  {
   "no": "PR-2026-003",
   "outlet": "코리안투데이",
+  "outlet_en": "Korean Today",
   "date": "2026-04-30",
   "title": "나전칠기 신해달 작가, 법학적 사유를 자개의 빛으로 시각화하다",
   "url": "https://m.thekorean.today/49646",
@@ -47,6 +50,7 @@
  {
   "no": "PR-2026-004",
   "outlet": "코리안투데이",
+  "outlet_en": "Korean Today",
   "date": "2026-04-01",
   "title": "까루젤 드 루브르 아트쇼핑에서 한국 현대미술의 정수를 선보이는 갤러리미쉘",
   "url": "https://thekorean.today/48869",
@@ -62,6 +66,7 @@
  {
   "no": "PR-2026-005",
   "outlet": "데일리아트",
+  "outlet_en": "Daily Art",
   "date": "2026-05-13",
   "title": "라트, '재료의 언어' 통해 신진 작가들의 물성과 감각 탐구 조명",
   "url": "https://www.d-art.co.kr/news/articleView.html?idxno=5575",
@@ -77,6 +82,7 @@
  {
   "no": "PR-2026-006",
   "outlet": "아트코리아방송",
+  "outlet_en": "Art Korea",
   "date": "2026-07-16",
   "title": "여름, 빛을 켜다 – 당신의 하루를 밝히는 특별한 전시",
   "url": "https://www.artkoreatv.com/news/articleView.html?idxno=103511",
