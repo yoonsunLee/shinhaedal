@@ -172,15 +172,21 @@
   .about-teaser-lede, .ip-teaser-lede{font-family:'Black Han Sans',sans-serif; font-weight:400; font-size:clamp(20px,2.6vw,28px); line-height:1.4; color:var(--ivory); margin:0;}
   .ip-teaser-lede{white-space:nowrap;}
   .ip-teaser-sub{font-size:16px; font-weight:500; line-height:1.6; color:var(--ivory-dim); margin:6px 0 0;}
-  .about-teaser-cta, .ip-teaser-cta{display:inline-block; margin-top:20px; font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--accent); text-underline-offset:5px;}
-  .cta-arrow{display:inline-block; transition:transform .25s ease;}
-  /* 링크 반응: 블록 어디에 올려도 밑줄 + 화살표 3px. 폰에서는 탭 뒤에 남지 않게 마우스 환경에서만 */
-  .about-teaser:focus-visible .about-teaser-cta, .ip-teaser:focus-visible .ip-teaser-cta{text-decoration:underline;}
+  /* 이동 버튼(2026-09-22 작가 요청: 작은 글자 링크 → 테두리 버튼). 블록 어디에 올려도 버튼이 아이보리로 차오르고
+     글자는 바탕색으로, 화살표는 4px 앞으로. 폰에서는 누르는 동안만 차오른다(탭 뒤에 남지 않게) */
+  .about-teaser-cta, .ip-teaser-cta{display:inline-flex; align-items:center; gap:10px; margin-top:26px;
+    padding:13px 26px; border:1px solid rgba(245,240,230,.72); border-radius:12px;
+    font-family:'Noto Sans KR',sans-serif; font-size:15px; font-weight:600; letter-spacing:.2px; line-height:1.2;
+    color:var(--ivory); background:transparent;
+    transition:background-color .28s ease, color .28s ease, border-color .28s ease;}
+  .cta-arrow{display:inline-block; transition:transform .28s ease;}
+  .about-teaser:focus-visible .about-teaser-cta, .ip-teaser:focus-visible .ip-teaser-cta,
+  .about-teaser:active .about-teaser-cta, .ip-teaser:active .ip-teaser-cta{background:var(--ivory); border-color:var(--ivory); color:var(--bg);}
   @media (hover:hover){
-    .about-teaser:hover .about-teaser-cta, .ip-teaser:hover .ip-teaser-cta{text-decoration:underline;}
+    .about-teaser:hover .about-teaser-cta, .ip-teaser:hover .ip-teaser-cta{background:var(--ivory); border-color:var(--ivory); color:var(--bg);}
   }
   @media (hover:hover) and (prefers-reduced-motion: no-preference){
-    .about-teaser:hover .cta-arrow, .ip-teaser:hover .cta-arrow{transform:translateX(3px);}
+    .about-teaser:hover .cta-arrow, .ip-teaser:hover .cta-arrow{transform:translateX(4px);}
   }
   @media(max-width:720px){
     .about-teaser-wrap, .ip-teaser-wrap{padding:0 32px 72px;}
