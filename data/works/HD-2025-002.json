@@ -10,7 +10,9 @@
  "caption_en": "The inverted canvas, and the chrome surface reflecting back whoever stands before it, capture the exact legal moment of reversal — the instant the artist's rights are exhausted (\"Bye\") and the owner's rights begin (\"Hi\"). A funky object set against an orderly grid announces the work's liberation: once it leaves the artist's control, it belongs, entirely, to its owner.",
  "material_en": "Natural mother-of-pearl, lacquer, chrome-effect film, etc.",
  "images": {
+  "thumb320": "assets/works/HD-2025-002/thumb320.webp",
   "thumb": "assets/works/HD-2025-002/thumb.webp",
+  "thumb700": "assets/works/HD-2025-002/thumb700.webp",
   "detail": "assets/works/HD-2025-002/detail.webp",
   "large": "assets/works/HD-2025-002/large.webp"
  },

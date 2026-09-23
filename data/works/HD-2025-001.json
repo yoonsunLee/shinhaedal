@@ -10,7 +10,9 @@
  "caption_en": "Built through the repeated layering of mother-of-pearl and resin, this sturdy grid symbolizes both the discipline of society and the order the artist pursues. It structurally reveals a process in which a right, once flat and abstract, accumulates into a three-dimensional, tangible form.",
  "material_en": "Natural mother-of-pearl, lacquer, hemp, etc.",
  "images": {
+  "thumb320": "assets/works/HD-2025-001/thumb320.webp",
   "thumb": "assets/works/HD-2025-001/thumb.webp",
+  "thumb700": "assets/works/HD-2025-001/thumb700.webp",
   "detail": "assets/works/HD-2025-001/detail.webp",
   "large": "assets/works/HD-2025-001/large.webp"
  },
