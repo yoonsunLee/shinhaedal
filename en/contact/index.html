@@ -74,13 +74,13 @@
     .contact-work-preview[hidden]{display:none;}   /* [hidden] 자체는 즉시 치운다(사라지는 전환은 클래스로, 다 끝난 뒤에 hidden을 붙인다) */
     .contact-work-preview:not([hidden]){
       display:block; margin-top:26px; padding-top:24px; border-top:1px solid var(--line);
+      text-align:center;   /* 문구를 뺀 자리에 작품과 제목만 남으므로 둘을 같이 가운데로 (작가 요청) */
       opacity:0; transform:translateY(10px); transition:opacity .38s ease, transform .38s ease;
     }
     .contact-work-preview.cwp-show{opacity:1; transform:translateY(0);}
   }
-  .contact-work-preview img{width:100%; max-width:280px; aspect-ratio:1; object-fit:cover; border-radius:10px; display:block; -webkit-user-select:none; user-select:none;}
-  .cwp-label{margin-top:16px;}
-  .cwp-title{font-size:19px; line-height:1.5;}
+  .contact-work-preview img{width:100%; max-width:280px; aspect-ratio:1; object-fit:cover; border-radius:10px; display:block; margin-inline:auto; -webkit-user-select:none; user-select:none;}
+  .cwp-title{margin-top:16px; font-size:19px; line-height:1.5;}
   /* 폰·태블릿에서는 폼 안의 작은 카드만 쓴다(선택한 자리 바로 아래라 스크롤 없이 바로 보인다) */
   @media(min-width:1024px){ .work-inquiry-card{display:none;} }
 
@@ -210,7 +210,6 @@
   </div>
   <div class="contact-work-preview" id="contactWorkPreview" hidden>
     <img id="cwpThumb" alt="" draggable="false">
-    <div class="cwp-label" data-i="wic_label">You are inquiring about this work.</div>
     <div class="cwp-title" id="cwpTitle"></div>
   </div>
 </div>
@@ -238,7 +237,6 @@
     <div class="work-inquiry-card" id="workInquiryCard" hidden>
       <img id="wicThumb" alt="" draggable="false">
       <div>
-        <div class="wic-label" data-i="wic_label">You are inquiring about this work.</div>
         <div class="wic-title" id="wicTitle"></div>
       </div>
     </div>
@@ -328,7 +326,6 @@ var I18N = {
     type_hint_Other:'작가에게 전하고 싶은 내용을 남겨주세요.',
     select_artwork:'작품 선택',
     opt_general_inquiry:'특정 작품 없이 일반 문의',
-    wic_label:'이 작품에 대해 문의하고 있습니다.',
     lbl_message:'문의 내용<span class="req-mark">*</span>',
     ph_name:'성함 또는 소속',
     ph_email:'회신받으실 이메일',
@@ -388,7 +385,6 @@ var I18N = {
     type_hint_Other:'Let us know what you\'d like to share with the artist.',
     select_artwork:'Select Artwork',
     opt_general_inquiry:'General artwork inquiry (no specific work)',
-    wic_label:'You are inquiring about this work.',
     lbl_message:'Message<span class="req-mark">*</span>',
     ph_name:'Your name or organization',
     ph_email:'Email address for reply',
@@ -452,17 +448,43 @@ function setCardVisible(el, show){
     el._cwpTimer = setTimeout(function(){ el.hidden = true; }, 400);
   }
 }
+/* 이미 떠 있는 상태에서 다른 작품을 고르면 그림만 툭 갈리므로, 처음 고를 때와 같은 등장을 다시 준다.
+   먼저 옅어지게 하고(.cwp-show 제거) 다 옅어진 뒤에 내용을 바꾼 다음 setCardVisible로 다시 띄운다.
+   모션을 줄인 환경에서는 전환이 없으니 기다리지 않고 바로 갈아끼운다(멈춘 것처럼 보이지 않게). */
+var CARD_SHOWN_ID = null;
 function renderWorkInquiryCard(){
   var show = !!CURRENT_WORK;
-  var wic = document.getElementById('workInquiryCard');
-  var cwp = document.getElementById('contactWorkPreview');
-  if(show){
-    var primary = LANG === 'en' ? (CURRENT_WORK.title_en || CURRENT_WORK.title_ko) : (CURRENT_WORK.title_ko || CURRENT_WORK.title_en);
+  var id = show ? CURRENT_WORK.id : null;
+  var cards = [document.getElementById('workInquiryCard'), document.getElementById('contactWorkPreview')];
+  var primary = show
+    ? (LANG === 'en' ? (CURRENT_WORK.title_en || CURRENT_WORK.title_ko) : (CURRENT_WORK.title_ko || CURRENT_WORK.title_en))
+    : '';
+  var entry = show && WORKS_INDEX ? WORKS_INDEX.find(function(r){ return r.id === id; }) : null;
+  var thumb = entry && entry.thumb ? '../' + entry.thumb : '';
+
+  function fill(){
     document.getElementById('wicTitle').textContent = primary;
     document.getElementById('cwpTitle').textContent = primary;
+    if(thumb){
+      document.getElementById('wicThumb').src = thumb;
+      document.getElementById('cwpThumb').src = thumb;
+    }
   }
-  setCardVisible(wic, show);
-  setCardVisible(cwp, show);
+
+  var swapping = show && CARD_SHOWN_ID && CARD_SHOWN_ID !== id &&
+    cards.some(function(el){ return el && el.classList.contains('cwp-show'); });
+  CARD_SHOWN_ID = id;
+
+  if(swapping && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)){
+    cards.forEach(function(el){ if(el){ clearTimeout(el._cwpTimer); el.classList.remove('cwp-show'); } });
+    setTimeout(function(){
+      fill();
+      cards.forEach(function(el){ setCardVisible(el, true); });
+    }, 260);   // 옅어지는 전환(.38s)이 거의 끝난 시점
+    return;
+  }
+  fill();
+  cards.forEach(function(el){ setCardVisible(el, show); });
 }
 function loadWorksIndex(){
   if(WORKS_INDEX) return Promise.resolve(WORKS_INDEX);
@@ -520,11 +542,7 @@ function selectWork(workId){
         title_en: String(w.title_en || '').trim(),
         year: w.year
       };
-      var entry = WORKS_INDEX && WORKS_INDEX.find(function(r){ return r.id === workId; });
-      if(entry && entry.thumb){
-        document.getElementById('wicThumb').src = '../' + entry.thumb;
-        document.getElementById('cwpThumb').src = '../' + entry.thumb;
-      }
+      // 그림은 renderWorkInquiryCard()가 넣는다 — 여기서 미리 바꾸면 옅어지기 전에 그림만 갈려 버린다
       renderWorkInquiryCard();
       applyAutoSubject(LANG === 'en' ? (CURRENT_WORK.title_en || CURRENT_WORK.title_ko) : (CURRENT_WORK.title_ko || CURRENT_WORK.title_en));
     })

@@ -55,3 +55,20 @@ html:not([lang="en"]) .t-en{display:none !important;}
   .wp-photos, .wp-series, .wp-pager{margin-top:56px;}
   .wp-photo-grid{grid-template-columns:repeat(2, minmax(0,1fr)); gap:12px;}
 }
+
+/* 페이지가 열릴 때: 작품이 먼저 떠오르고 글이 따라 올라온다(90ms·200ms 시차).
+   목록의 작품 창과 같은 곡선·같은 시차를 쓴다 — 창으로 보든 페이지로 보든 몸짓이 같아야 한다.
+   스크롤 감지가 아니라 열릴 때 한 번만 재생되므로, 끝나면 페이지는 그대로 멈춰 있다.
+   .wp-media·.wp-info 안에는 position:fixed 요소가 없어 transform을 걸어도 안전하다. */
+@media (prefers-reduced-motion: no-preference){
+  .wp-media{animation:wp-rise .56s cubic-bezier(.22,1,.36,1) .09s both;}
+  .wp-info{animation:wp-rise-text .52s cubic-bezier(.22,1,.36,1) .2s both;}
+}
+@keyframes wp-rise{
+  from{opacity:0; transform:translateY(30px) scale(.985);}
+  to{opacity:1; transform:none;}
+}
+@keyframes wp-rise-text{
+  from{opacity:0; transform:translateY(22px);}
+  to{opacity:1; transform:none;}
+}
