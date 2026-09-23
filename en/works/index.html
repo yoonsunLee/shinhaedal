@@ -879,15 +879,24 @@ function loadAllWorks(){
 }
 loadAllWorks();
 
-/* 목록에서 작품을 누르면 작품 창을 띄우지 않고 그 작품의 페이지(works/w/작품번호/)로 간다.
-   타일은 원래부터 그 주소를 가진 <a>였고, 여기서 클릭을 가로채 창을 열던 것을 걷어냈다.
-   이유는 공유다 — 창은 주소가 바뀌지 않아 링크를 보내면 받는 사람이 목록을 보게 된다.
-   작품 페이지는 주소·미리보기 이미지·다음 작품 이동을 모두 갖고 있고,
-   열릴 때의 등장 효과도 창과 같은 곡선·같은 시차를 쓴다(assets/work-page.css).
-
-   작품 창 자체는 없애지 않았다. 주소에 ?w=작품번호 가 붙어 들어오면 여전히 열린다 —
-   작품 페이지의 '작품 뷰어로 보기' 링크와, 예전에 그 형태로 공유된 링크가 그 경로다.
-   openFromUrlIfPresent / handlePopState 참고. */
+document.getElementById('selGrid').addEventListener('click', function(e){
+  var tile = e.target.closest('.tile[data-id]');
+  if(!tile) return;
+  if(e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  var idx = VISIBLE_WORKS.findIndex(function(r){ return r.id === tile.dataset.id; });
+  if(idx < 0) return; // 아직 데이터 전이거나 목록에 없으면 링크대로 작품 페이지로
+  e.preventDefault();
+  openWorkModal(idx);
+});
+document.getElementById('workGrid').addEventListener('click', function(e){
+  var tile = e.target.closest('.tile[data-idx]');
+  if(!tile) return;
+  // 가운데클릭/Ctrl/Cmd/Shift-클릭은 브라우저 기본 동작(새 탭 등)을 그대로 둔다
+  if(e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  if(!VISIBLE_WORKS.length) return; // 아직 데이터 전(미리 쓴 목록) — 링크대로 작품 페이지로 간다
+  e.preventDefault();
+  openWorkModal(parseInt(tile.dataset.idx, 10));
+});
 </script>
 
 <script>
