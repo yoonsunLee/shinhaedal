@@ -1179,7 +1179,9 @@ function renderWorkModal(){
   shareBtn.hidden = !shareStub;
   if(shareStub){
     var useNativeShare = shouldUseNativeShare();
-    shareBtn.dataset.shareUrl = 'https://shinhaedal.com/works/' + shareStub;
+    /* 영문으로 보는 중이면 주소에 ?lang=en 을 실어 보낸다. 받는 사람에게는 이 사이트를 본 기록이 없어
+       무엇을 보여줄지 알 단서가 링크뿐이다 — 안 실으면 영문 화면에서 보낸 링크가 한글로 열린다. */
+    shareBtn.dataset.shareUrl = 'https://shinhaedal.com/works/' + shareStub + (LANG === 'en' ? '?lang=en' : '');
     shareBtn.dataset.shareTitle = metaPrimary;
     shareBtn.dataset.useNativeShare = useNativeShare ? '1' : '';
     shareBtn.innerHTML = (useNativeShare ? ICON_SHARE : ICON_COPY) +
