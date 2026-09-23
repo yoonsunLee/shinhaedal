@@ -61,6 +61,8 @@
   }
   .work-inquiry-card[hidden]{display:none;}
   .work-inquiry-card.cwp-show{opacity:1; transform:translateY(0);}
+  /* 작품을 바꿀 때 사라지는 효과 없이 처음 상태로 되돌리는 한 프레임용 (연락하기 스크립트에서만 붙였다 뗀다) */
+  .work-inquiry-card.cwp-instant, .contact-work-preview.cwp-instant{transition:none !important;}
   .work-inquiry-card img{width:56px; height:56px; object-fit:cover; border-radius:4px; flex-shrink:0; -webkit-user-select:none; user-select:none;}
   .wic-label, .cwp-label{font-family:'Space Mono','Noto Sans KR', monospace; font-size:11px; letter-spacing:1px; color:var(--accent); text-transform:uppercase; margin-bottom:4px;}
   .wic-title, .cwp-title{font-size:14px; color:var(--ivory); line-height:1.4;}
@@ -448,8 +450,8 @@ function setCardVisible(el, show){
   }
 }
 /* 이미 떠 있는 상태에서 다른 작품을 고르면 그림만 툭 갈리므로, 처음 고를 때와 같은 등장을 다시 준다.
-   먼저 옅어지게 하고(.cwp-show 제거) 다 옅어진 뒤에 내용을 바꾼 다음 setCardVisible로 다시 띄운다.
-   모션을 줄인 환경에서는 전환이 없으니 기다리지 않고 바로 갈아끼운다(멈춘 것처럼 보이지 않게). */
+   단 사라지는 효과는 주지 않는다(작가 요청) — 옅어지기를 기다리면 고르고 나서 반 박자 늦게 반응한다.
+   그래서 .cwp-instant 로 전환을 한 프레임만 끄고 처음 상태로 되돌린 뒤, 내용을 바꾸고 등장만 재생한다. */
 var CARD_SHOWN_ID = null;
 function renderWorkInquiryCard(){
   var show = !!CURRENT_WORK;
@@ -474,12 +476,17 @@ function renderWorkInquiryCard(){
     cards.some(function(el){ return el && el.classList.contains('cwp-show'); });
   CARD_SHOWN_ID = id;
 
-  if(swapping && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)){
-    cards.forEach(function(el){ if(el){ clearTimeout(el._cwpTimer); el.classList.remove('cwp-show'); } });
-    setTimeout(function(){
-      fill();
-      cards.forEach(function(el){ setCardVisible(el, true); });
-    }, 260);   // 옅어지는 전환(.38s)이 거의 끝난 시점
+  if(swapping){
+    cards.forEach(function(el){
+      if(!el) return;
+      clearTimeout(el._cwpTimer);
+      el.classList.add('cwp-instant');    // 이 한 프레임만 전환을 끈다
+      el.classList.remove('cwp-show');    // 사라지는 효과 없이 곧바로 처음 상태로
+      void el.offsetWidth;                // 여기서 '아직 안 보이는 상태'가 확정된다
+      el.classList.remove('cwp-instant');
+    });
+    fill();
+    cards.forEach(function(el){ setCardVisible(el, true); });   // 등장만 다시 재생
     return;
   }
   fill();
