@@ -2,3 +2,7 @@ __pycache__/
 *.pyc
 /proto/
 config.php
+
+# 혼자 보려고 만든 시안·실험 파일(홈페이지에 올리지 않는다)
+_*.html
+**/_*.html
