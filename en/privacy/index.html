@@ -75,6 +75,18 @@
   .pp-optbtn{font:inherit; font-size:15px; padding:8px 14px; border:1px solid var(--ivory-dim); border-radius:6px; background:none; color:var(--ivory); cursor:pointer;}
   .pp-optbtn:hover{border-color:var(--ivory);}
   .pp-optbtn:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+  /* 지난 개정 이력은 길어서 접어 둔다. 시행일과 변경 고지 규칙은 방침의 효력에 관한 내용이라 접지 않는다.
+     내용은 접혀 있어도 페이지 안에 그대로 있어 검색엔진과 화면낭독기가 읽는다.
+     다만 종이나 PDF로 남길 때 빠지면 안 되는 문서라, 인쇄 직전에 펴는 처리를 따로 둔다(아래 스크립트). */
+  .pp-hist{margin:14px 0 0;}
+  .pp-hist summary{display:inline-block; list-style:none; cursor:pointer; padding:8px 0;
+    font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px;
+    color:var(--ivory-dim); text-decoration:underline; text-underline-offset:5px;}
+  .pp-hist summary::-webkit-details-marker{display:none;}
+  .pp-hist summary::before{content:'+ ';}
+  .pp-hist[open] summary::before{content:'\2212 ';}
+  .pp-hist summary:hover, .pp-hist summary:focus-visible{color:var(--ivory);}
+  .pp-hist > ul{margin-top:10px;}
   .pp-history{margin-top:40px; padding-top:24px; border-top:1px solid var(--line);}
 
   @media(max-width:720px){
@@ -335,13 +347,18 @@
     <ul>
       <li>이 처리방침은 2026년 9월 24일부터 적용됩니다.</li>
       <li>내용을 추가·삭제·수정할 때에는 시행 7일 전부터 이 페이지에 변경 내용과 시행일을 함께 올립니다. 정보주체의 권리에 중대한 영향을 주는 변경은 시행 30일 전부터 알리고, 동의가 필요한 변경은 다시 동의를 받습니다. 다만 처리하는 개인정보를 줄이는 변경과, 이미 하고 있는 처리를 실제에 맞게 바로잡아 밝히는 변경은 즉시 시행할 수 있습니다.</li>
-      <li>2026. 9. 18. 최초 제정</li>
-      <li>2026. 9. 18. 1차 개정 — 문의 접수 경로를 국내로 옮기면서 <b>국외 이전을 중단</b>하고, 문의 내용을 <b>별도로 저장하지 않도록</b> 변경. 처리를 줄이는 변경이어서 사전 예고 기간 없이 즉시 시행했습니다. (이전 판: 접수·저장 Supabase, 알림 메일 Resend(미국), 자동 등록 방지 Cloudflare Turnstile(미국)) — <a href="history/2026-09-18-1.html">최초 제정판 보기</a></li>
-      <li>2026. 9. 18. 2차 개정 — 이메일로 직접 받은 문의를 방침 범위에 넣고, 자동 접수 방지 처리의 근거와 Press 화면의 외부 이미지 사용을 밝혔습니다. 열람 등 요구의 처리 기한을 <b>요청을 받은 날부터</b> 10일로 바로잡았습니다. 고지 범위를 넓히는 변경이어서 즉시 시행했습니다. — <a href="history/2026-09-18-2.html">1차 개정판 보기</a></li>
-      <li>2026. 9. 22. 3차 개정 — 방침을 실제 동작에 맞게 바로잡았습니다. 이메일 문의의 처리 근거(3항), 반복 접수 방지 처리가 시작되는 시점(3항), 반복 접수 확인값의 성격과 효력 시간(20분 → 10분, 2·4·10항), 문의 유형 이름(1항). 접수 서버의 접속 기록 보관(최대 7일)을 밝혔습니다(4·7·11항). 처리를 늘리지 않고 고지를 바로잡는 변경이어서 즉시 시행했습니다. — <a href="history/2026-09-18-3.html">2차 개정판 보기</a></li>
-      <li>2026. 9. 22. 4차 개정 — 방문 통계(합계만 저장, IP 주소 미저장, 국내 서버)를 도입하면서 처리 목적·항목·근거·보유 기간(1~4항), 위탁·국외 이전(7·8항), 권리 행사와 안전성 확보조치(9·10항), 브라우저 저장 항목과 통계에서 빠지는 방법(11항)을 밝혔습니다. 같은 날 2026. 9. 29. 시행으로 예고했으나, 예고 기간을 두지 않고 앞당겨 시행했습니다. — <a href="history/2026-09-22-4.html">3차 개정판 보기</a></li>
-      <li>2026. 9. 24. 5차 개정 — 이미 하고 있던 처리를 밝히고 고지를 실제에 맞게 바로잡았습니다. 권리 침해 신고와 작품 매매 계약의 처리 목적·항목·근거·보유 기간(1~4항), 법령에 따른 보존 기간, 보유 기간을 달의 말일 기준으로 정하고 그 뒤 5일 이내에 파기하는 기한(4·5항), 택배사와 GitHub의 처리 위탁·국외 이전(7·8항), 변경을 즉시 시행할 수 있는 경우(14항)를 정했습니다. 운영자 표기를 신해달로 맞추고, 읽는 사람을 높이는 표현을 정리했습니다. 이미 하고 있던 처리를 바로잡아 밝히는 변경이어서 즉시 시행했습니다. — <a href="history/2026-09-22-5.html">4차 개정판 보기</a></li>
     </ul>
+    <details class="pp-hist">
+      <summary>지난 개정 이력 6건 보기</summary>
+      <ul>
+        <li>2026. 9. 18. 최초 제정</li>
+        <li>2026. 9. 18. 1차 개정 — 문의 접수 경로를 국내로 옮기면서 <b>국외 이전을 중단</b>하고, 문의 내용을 <b>별도로 저장하지 않도록</b> 변경. 처리를 줄이는 변경이어서 사전 예고 기간 없이 즉시 시행했습니다. (이전 판: 접수·저장 Supabase, 알림 메일 Resend(미국), 자동 등록 방지 Cloudflare Turnstile(미국)) — <a href="history/2026-09-18-1.html">최초 제정판 보기</a></li>
+        <li>2026. 9. 18. 2차 개정 — 이메일로 직접 받은 문의를 방침 범위에 넣고, 자동 접수 방지 처리의 근거와 Press 화면의 외부 이미지 사용을 밝혔습니다. 열람 등 요구의 처리 기한을 <b>요청을 받은 날부터</b> 10일로 바로잡았습니다. 고지 범위를 넓히는 변경이어서 즉시 시행했습니다. — <a href="history/2026-09-18-2.html">1차 개정판 보기</a></li>
+        <li>2026. 9. 22. 3차 개정 — 방침을 실제 동작에 맞게 바로잡았습니다. 이메일 문의의 처리 근거(3항), 반복 접수 방지 처리가 시작되는 시점(3항), 반복 접수 확인값의 성격과 효력 시간(20분 → 10분, 2·4·10항), 문의 유형 이름(1항). 접수 서버의 접속 기록 보관(최대 7일)을 밝혔습니다(4·7·11항). 처리를 늘리지 않고 고지를 바로잡는 변경이어서 즉시 시행했습니다. — <a href="history/2026-09-18-3.html">2차 개정판 보기</a></li>
+        <li>2026. 9. 22. 4차 개정 — 방문 통계(합계만 저장, IP 주소 미저장, 국내 서버)를 도입하면서 처리 목적·항목·근거·보유 기간(1~4항), 위탁·국외 이전(7·8항), 권리 행사와 안전성 확보조치(9·10항), 브라우저 저장 항목과 통계에서 빠지는 방법(11항)을 밝혔습니다. 같은 날 2026. 9. 29. 시행으로 예고했으나, 예고 기간을 두지 않고 앞당겨 시행했습니다. — <a href="history/2026-09-22-4.html">3차 개정판 보기</a></li>
+        <li>2026. 9. 24. 5차 개정 — 이미 하고 있던 처리를 밝히고 고지를 실제에 맞게 바로잡았습니다. 권리 침해 신고와 작품 매매 계약의 처리 목적·항목·근거·보유 기간(1~4항), 법령에 따른 보존 기간, 보유 기간을 달의 말일 기준으로 정하고 그 뒤 5일 이내에 파기하는 기한(4·5항), 택배사와 GitHub의 처리 위탁·국외 이전(7·8항), 변경을 즉시 시행할 수 있는 경우(14항)를 정했습니다. 운영자 표기를 신해달로 맞추고, 읽는 사람을 높이는 표현을 정리했습니다. 이미 하고 있던 처리를 바로잡아 밝히는 변경이어서 즉시 시행했습니다. — <a href="history/2026-09-22-5.html">4차 개정판 보기</a></li>
+      </ul>
+    </details>
   </section>
 </article>
 
@@ -548,12 +565,19 @@
     <ul>
       <li>This Policy applies from September 24, 2026.</li>
       <li>When content is added, removed or changed, the change and its effective date are posted on this page at least 7 days in advance — at least 30 days in advance for changes that materially affect data subjects' rights — and consent is asked for again where consent is required. Changes that reduce the personal information processed, and changes that correct the disclosure of processing already taking place, may take effect immediately.</li>
-      <li>September 18, 2026: first version</li>
-      <li>September 18, 2026 (first revision) — the inquiry path was moved to servers in Korea, <b>ending transfers outside Korea</b> and <b>no longer storing inquiry content separately</b>. Because the change reduces processing, it took effect immediately without the advance-notice period. (Previous version: submissions stored on Supabase, notification email via Resend (US), bot check via Cloudflare Turnstile (US).) — <a href="history/2026-09-18-1.html">view the first version</a></li>
-      <li>September 18, 2026 (second revision) — direct email inquiries were brought into the scope of this Policy, the basis for anti-spam processing and the external images on the Press page were disclosed, and the deadline for access requests was corrected to 10 days <b>from receipt of the request</b>. As the change widens disclosure, it took effect immediately. — <a href="history/2026-09-18-2.html">view the first revision</a></li>
-      <li>September 22, 2026 (third revision) — the Policy was corrected to match how the Website actually works: the legal basis for direct email inquiries (section 3), when anti-spam processing starts (section 3), the nature and validity period of the repeat-submission records (20 → 10 minutes; sections 2, 4 and 10), and the inquiry type name (section 1). The receiving server's access logs (kept up to 7 days) are now disclosed (sections 4, 7 and 11). As the change corrects disclosure without adding processing, it took effect immediately. — <a href="history/2026-09-18-3.html">view the second revision</a></li>
-      <li>September 22, 2026 (fourth revision) — with the introduction of visit statistics (totals only, IP addresses not stored, servers in Korea), the purposes, items, legal basis and retention (sections 1–4), outsourcing and transfers (sections 7 and 8), rights and security measures (sections 9 and 10), and browser storage and how to opt out (section 11) were disclosed. It was announced the same day with an effective date of September 29, 2026, but was brought forward and took effect without the advance-notice period. — <a href="history/2026-09-22-4.html">view the third revision</a></li>
-      <li>September 24, 2026 (fifth revision) — processing already taking place was disclosed and the Policy corrected to match it: the purposes, items, legal basis and retention for reports of infringement and artwork sale contracts (sections 1–4); statutory retention periods, and a destruction deadline of 5 days after retention periods that now end on the last day of a month (sections 4 and 5); outsourcing to courier companies and to GitHub, and the transfer to GitHub (sections 7 and 8); and when changes may take effect immediately (section 14). The Operator's name was aligned to Shin Haedal, and the Korean text was revised to drop honorifics addressed to the reader. As the change corrects the disclosure of processing already taking place, it took effect immediately. — <a href="history/2026-09-22-5.html">view the fourth revision</a></li>
+    </ul>
+    <details class="pp-hist">
+      <summary>Show the 6 earlier revisions</summary>
+      <ul>
+        <li>September 18, 2026: first version</li>
+        <li>September 18, 2026 (first revision) — the inquiry path was moved to servers in Korea, <b>ending transfers outside Korea</b> and <b>no longer storing inquiry content separately</b>. Because the change reduces processing, it took effect immediately without the advance-notice period. (Previous version: submissions stored on Supabase, notification email via Resend (US), bot check via Cloudflare Turnstile (US).) — <a href="history/2026-09-18-1.html">view the first version</a></li>
+        <li>September 18, 2026 (second revision) — direct email inquiries were brought into the scope of this Policy, the basis for anti-spam processing and the external images on the Press page were disclosed, and the deadline for access requests was corrected to 10 days <b>from receipt of the request</b>. As the change widens disclosure, it took effect immediately. — <a href="history/2026-09-18-2.html">view the first revision</a></li>
+        <li>September 22, 2026 (third revision) — the Policy was corrected to match how the Website actually works: the legal basis for direct email inquiries (section 3), when anti-spam processing starts (section 3), the nature and validity period of the repeat-submission records (20 → 10 minutes; sections 2, 4 and 10), and the inquiry type name (section 1). The receiving server's access logs (kept up to 7 days) are now disclosed (sections 4, 7 and 11). As the change corrects disclosure without adding processing, it took effect immediately. — <a href="history/2026-09-18-3.html">view the second revision</a></li>
+        <li>September 22, 2026 (fourth revision) — with the introduction of visit statistics (totals only, IP addresses not stored, servers in Korea), the purposes, items, legal basis and retention (sections 1–4), outsourcing and transfers (sections 7 and 8), rights and security measures (sections 9 and 10), and browser storage and how to opt out (section 11) were disclosed. It was announced the same day with an effective date of September 29, 2026, but was brought forward and took effect without the advance-notice period. — <a href="history/2026-09-22-4.html">view the third revision</a></li>
+        <li>September 24, 2026 (fifth revision) — processing already taking place was disclosed and the Policy corrected to match it: the purposes, items, legal basis and retention for reports of infringement and artwork sale contracts (sections 1–4); statutory retention periods, and a destruction deadline of 5 days after retention periods that now end on the last day of a month (sections 4 and 5); outsourcing to courier companies and to GitHub, and the transfer to GitHub (sections 7 and 8); and when changes may take effect immediately (section 14). The Operator's name was aligned to Shin Haedal, and the Korean text was revised to drop honorifics addressed to the reader. As the change corrects the disclosure of processing already taking place, it took effect immediately. — <a href="history/2026-09-22-5.html">view the fourth revision</a></li>
+      </ul>
+    </details>
+    <ul>
       <li>This English version is provided for convenience. If it differs from the Korean version, the Korean version prevails.</li>
     </ul>
   </section>
@@ -640,5 +664,18 @@ if(LANG!=='ko') applyLang(LANG, {skipUrl:true});
 </script>
 <script src="../assets/ip-nav-transition.js"></script>
 <script src="../assets/lang.js"></script>
+<script>
+/* 처리방침은 종이나 PDF로 남겨 두는 문서다. 접힌 채로 인쇄되면 개정 이력이 통째로 빠지므로
+   인쇄 직전에 펴고, 끝나면 원래대로 되돌린다. (인쇄용 CSS만으로는 브라우저마다 동작이 다르다) */
+(function(){
+  function each(fn){ Array.prototype.forEach.call(document.querySelectorAll('details.pp-hist'), fn); }
+  window.addEventListener('beforeprint', function(){
+    each(function(d){ d.dataset.wasOpen = d.open ? '1' : ''; d.open = true; });
+  });
+  window.addEventListener('afterprint', function(){
+    each(function(d){ if(!d.dataset.wasOpen) d.open = false; });
+  });
+})();
+</script>
 </body>
 </html>
