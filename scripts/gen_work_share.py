@@ -120,6 +120,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <html lang="ko" data-title-ko="{page_title_ko}" data-title-en="{page_title_en}">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; font-src 'self'; connect-src 'self' https://shinhaedalapi.mycafe24.com; frame-src https://www.youtube-nocookie.com; object-src 'none'; base-uri 'self'; upgrade-insecure-requests">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>
 (function(){{
