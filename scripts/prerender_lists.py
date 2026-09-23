@@ -48,13 +48,32 @@ def size_label(v):
     return v + " cm" if v and "cm" not in v.lower() else v
 
 
+# ── 목록 칸 이미지: 화면 크기와 픽셀밀도에 맞는 파일을 브라우저가 고르게 한다 ──
+# thumb_set 은 publish_sb.py 가 넣어 주는 [[경로, 실제 가로폭], ...] 목록이다.
+# 세로로 긴 작품은 긴 변 기준으로 줄어 가로폭이 320·700보다 작으므로 실제 폭을 적는다.
+# sizes 는 칸이 화면에서 실제 몇 px로 보이는지다(.work-grid 의 칸 수와 여백에서 계산).
+SIZES_WORKS = ("(min-width:1244px) 324px, (min-width:901px) calc((100vw - 208px) / 3), "
+               "(min-width:481px) calc((100vw - 104px) / 2), calc((100vw - 80px) / 2)")
+SIZES_HOME = ("(min-width:1244px) 345px, (min-width:901px) calc((100vw - 144px) / 3), "
+              "calc((100vw - 92px) / 2)")
+
+
+def srcset_attr(r, prefix, sizes):
+    tset = r.get("thumb_set") or []
+    if len(tset) < 2:
+        return ""
+    cands = ", ".join("%s %dw" % (e(prefix + path), w) for path, w in tset)
+    return ' srcset="%s" sizes="%s"' % (cands, sizes)
+
+
 def works_tile(r, attr, lang="ko"):
     """works/index.html 의 tileHtml 과 같은 마크업(캡션 둘째 줄: 연도 · 크기)."""
     title = primary_title(r, lang)
     img = ("../" + r["thumb"]) if r.get("thumb") else ""
     dims = (' width="%s" height="%s"' % (r["tw"], r["th"])) if r.get("tw") and r.get("th") else ""
-    media = ('<img src="%s"%s alt="" loading="lazy" draggable="false" '
-             'onerror="this.style.visibility=\'hidden\'">' % (e(img), dims)) if img else ""
+    media = ('<img src="%s"%s%s alt="" loading="lazy" draggable="false" '
+             'onerror="this.style.visibility=\'hidden\'">'
+             % (e(img), srcset_attr(r, "../", SIZES_WORKS), dims)) if img else ""
     size = size_label(r.get("size"))
     meta = e(r.get("year") or "") + (('<span class="sep"> · </span><span class="sz">%s</span>' % e(size)) if size else "")
     return ('<a class="tile" href="w/%s/" %s aria-label="%s"><div class="tile-media">%s<div class="tile-sheen"></div></div>'
@@ -90,8 +109,9 @@ def work_tiles(rows, href_prefix, asset_base, lang="ko"):
     for i, r in enumerate(rows):
         title = primary_title(r, lang)
         img = (asset_base + r["thumb"]) if r.get("thumb") else ""
-        media = ('<img src="%s" alt="" loading="lazy" draggable="false" '
-                 'onerror="this.style.visibility=\'hidden\'">' % e(img)) if img else ""
+        media = ('<img src="%s"%s alt="" loading="lazy" draggable="false" '
+                 'onerror="this.style.visibility=\'hidden\'">'
+                 % (e(img), srcset_attr(r, asset_base, SIZES_HOME))) if img else ""
         out.append('<a class="tile" href="%sw/%s/" data-idx="%d" aria-label="%s">'
                    '<div class="tile-media">%s<div class="tile-sheen"></div></div>'
                    '<span class="tile-cap"><span class="tile-title">%s</span></span></a>'
@@ -238,7 +258,7 @@ def ld_home(lang):
         "@id": ORG_ID,
         "name": "해달자개" if ko else "Haedaljagae",
         "url": SITE_BASE + "/",
-        "email": "contact@shinhaedal.com",
+        "email": "haedarney@naver.com",
         "founder": {"@id": ARTIST_ID},
     }
     site = {

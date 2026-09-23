@@ -10,7 +10,21 @@
   "series_key": "n-th-derivative",
   "series_order": null,
   "tw": 560,
-  "th": 555
+  "th": 555,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-011/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2026-011/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2026-011/thumb700.webp",
+    700
+   ]
+  ]
  },
  {
   "id": "HD-2026-009",
@@ -23,7 +37,21 @@
   "series_key": "territory",
   "series_order": null,
   "tw": 560,
-  "th": 558
+  "th": 558,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-009/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2026-009/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2026-009/thumb700.webp",
+    700
+   ]
+  ]
  },
  {
   "id": "HD-2026-008",
@@ -36,7 +64,21 @@
   "series_key": "",
   "series_order": null,
   "tw": 414,
-  "th": 560
+  "th": 560,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-008/thumb320.webp",
+    237
+   ],
+   [
+    "assets/works/HD-2026-008/thumb.webp",
+    414
+   ],
+   [
+    "assets/works/HD-2026-008/thumb700.webp",
+    518
+   ]
+  ]
  },
  {
   "id": "HD-2026-005",
@@ -49,7 +91,21 @@
   "series_key": "",
   "series_order": null,
   "tw": 555,
-  "th": 560
+  "th": 560,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-005/thumb320.webp",
+    317
+   ],
+   [
+    "assets/works/HD-2026-005/thumb.webp",
+    555
+   ],
+   [
+    "assets/works/HD-2026-005/thumb700.webp",
+    694
+   ]
+  ]
  },
  {
   "id": "HD-2026-007",
@@ -62,7 +118,21 @@
   "series_key": "pov",
   "series_order": null,
   "tw": 560,
-  "th": 560
+  "th": 560,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-007/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2026-007/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2026-007/thumb700.webp",
+    700
+   ]
+  ]
  },
  {
   "id": "HD-2026-006",
@@ -75,7 +145,21 @@
   "series_key": "pov",
   "series_order": null,
   "tw": 560,
-  "th": 560
+  "th": 560,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-006/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2026-006/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2026-006/thumb700.webp",
+    700
+   ]
+  ]
  },
  {
   "id": "HD-2026-010",
@@ -88,7 +172,21 @@
   "series_key": "pov",
   "series_order": null,
   "tw": 560,
-  "th": 558
+  "th": 558,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-010/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2026-010/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2026-010/thumb700.webp",
+    700
+   ]
+  ]
  },
  {
   "id": "HD-2026-012",
@@ -101,7 +199,21 @@
   "series_key": "",
   "series_order": null,
   "tw": 448,
-  "th": 560
+  "th": 560,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-012/thumb320.webp",
+    256
+   ],
+   [
+    "assets/works/HD-2026-012/thumb.webp",
+    448
+   ],
+   [
+    "assets/works/HD-2026-012/thumb700.webp",
+    560
+   ]
+  ]
  },
  {
   "id": "HD-2026-004",
@@ -114,7 +226,21 @@
   "series_key": "territory",
   "series_order": null,
   "tw": 560,
-  "th": 544
+  "th": 544,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-004/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2026-004/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2026-004/thumb700.webp",
+    700
+   ]
+  ]
  },
  {
   "id": "HD-2026-003",
@@ -127,7 +253,21 @@
   "series_key": "pov",
   "series_order": null,
   "tw": 560,
-  "th": 550
+  "th": 550,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-003/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2026-003/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2026-003/thumb700.webp",
+    700
+   ]
+  ]
  },
  {
   "id": "HD-2026-002",
@@ -140,7 +280,21 @@
   "series_key": "n-th-derivative",
   "series_order": null,
   "tw": 560,
-  "th": 558
+  "th": 558,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-002/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2026-002/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2026-002/thumb700.webp",
+    700
+   ]
+  ]
  },
  {
   "id": "HD-2026-001",
@@ -153,7 +307,21 @@
   "series_key": "",
   "series_order": null,
   "tw": 560,
-  "th": 553
+  "th": 553,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-001/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2026-001/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2026-001/thumb700.webp",
+    700
+   ]
+  ]
  },
  {
   "id": "HD-2025-004",
@@ -166,7 +334,21 @@
   "series_key": "n-th-derivative",
   "series_order": null,
   "tw": 560,
-  "th": 555
+  "th": 555,
+  "thumb_set": [
+   [
+    "assets/works/HD-2025-004/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2025-004/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2025-004/thumb700.webp",
+    700
+   ]
+  ]
  },
  {
   "id": "HD-2025-002",
@@ -179,7 +361,21 @@
   "series_key": "",
   "series_order": null,
   "tw": 560,
-  "th": 547
+  "th": 547,
+  "thumb_set": [
+   [
+    "assets/works/HD-2025-002/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2025-002/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2025-002/thumb700.webp",
+    700
+   ]
+  ]
  },
  {
   "id": "HD-2025-001",
@@ -192,6 +388,20 @@
   "series_key": "",
   "series_order": null,
   "tw": 560,
-  "th": 560
+  "th": 560,
+  "thumb_set": [
+   [
+    "assets/works/HD-2025-001/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2025-001/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2025-001/thumb700.webp",
+    700
+   ]
+  ]
  }
 ]

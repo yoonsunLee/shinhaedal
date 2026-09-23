@@ -22,7 +22,10 @@ DATA_DIR = os.path.join(ROOT, "data")
 ASSETS_DIR = os.path.join(ROOT, "assets", "works")
 HOME_VIDEO_ASSETS_DIR = os.path.join(ROOT, "assets", "home-video")
 
-IMG_TIERS = {"thumb": 560, "detail": 1600, "large": 2400}
+# 목록 칸(정사각·contain)은 긴 변이 곧 필요한 해상도다. 폰은 320, 보통 PC는 560, 레티나 PC는 700을 쓴다
+# (srcset으로 브라우저가 고른다 — 자세한 건 prerender_lists.py thumb_srcset)
+IMG_TIERS = {"thumb320": 320, "thumb": 560, "thumb700": 700, "detail": 1600, "large": 2400}
+TILE_TIERS = ("thumb320", "thumb", "thumb700")   # 목록 칸 srcset 후보
 
 # 전시 유형은 DB에 코드로 있고 홈페이지는 한국어/영어를 각각 쓴다.
 EX_TYPE_KO = {"solo": "개인전", "group": "단체전", "curated": "기획전",
@@ -130,7 +133,7 @@ def make_image_tiers(no, image_file, out_root):
         scale = min(1.0, max_edge / max(w0, h0))
         im2 = im.resize((max(1, int(w0 * scale)), max(1, int(h0 * scale))),
                         Image.LANCZOS) if scale < 1.0 else im
-        quality = 90 if tier == "large" else (80 if tier == "thumb" else 85)
+        quality = 90 if tier == "large" else (80 if tier.startswith("thumb") else 85)
         im2.save(os.path.join(out_dir, tier + ".webp"), "WEBP", quality=quality)
         paths[tier] = "assets/works/%s/%s.webp" % (no, tier)
     return paths
@@ -164,7 +167,7 @@ def make_photo_tiers(no, idx, image_file, out_root):
         scale = min(1.0, max_edge / max(w0, h0))
         im2 = im.resize((max(1, int(w0 * scale)), max(1, int(h0 * scale))),
                         Image.LANCZOS) if scale < 1.0 else im
-        quality = 90 if tier == "large" else (80 if tier == "thumb" else 85)
+        quality = 90 if tier == "large" else (80 if tier.startswith("thumb") else 85)
         im2.save(os.path.join(out_dir, tier + ".webp"), "WEBP", quality=quality)
         paths[tier] = "assets/works/%s/%s/%s.webp" % (no, tag, tier)
     return paths
@@ -600,6 +603,26 @@ def main():
                     entry["tw"], entry["th"] = im.size
             except Exception:
                 pass
+        # srcset 후보: [주소, 실제 너비]. 긴 변 기준으로 줄이므로 세로 작품은 너비가 320보다 작다 —
+        # 그래서 이름이 아니라 실제로 만들어진 너비를 적는다. 같은 너비가 겹치면(원본이 작아 확대가 없을 때) 하나만 남긴다
+        tset, seen = [], set()
+        for tier in TILE_TIERS:
+            rel = images.get(tier, "")
+            ap = os.path.join(ROOT, rel) if rel else ""
+            if not ap or not os.path.exists(ap):
+                continue
+            try:
+                from PIL import Image
+                with Image.open(ap) as im:
+                    w = im.size[0]
+            except Exception:
+                continue
+            if w in seen:
+                continue
+            seen.add(w)
+            tset.append([rel, w])
+        if len(tset) > 1:
+            entry["thumb_set"] = tset
         index_entries.append(entry)
 
     write_json(os.path.join(data_dir, "works-index.json"), index_entries)
