@@ -16,6 +16,7 @@ og 이미지는 data/works/<id>.json의 large 사진을 브랜드 배경(#0b0b0f
 import datetime
 import hashlib
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -312,22 +313,43 @@ def render_page(meta, detail, index, exhibitions, today):
     main_img = detail["images"].get("large") or detail["images"].get("detail")
     dims = image_size(main_img)
     url = f"{SITE_BASE}/works/w/{wid}/"
-    jsonld = {
-        "@context": "https://schema.org",
+    art = {
         "@type": "VisualArtwork",
+        "@id": url,
         "name": title_ko,
         "url": url,
         "image": [f"{SITE_BASE}/{main_img}", f"{SITE_BASE}/assets/works/{wid}/og.jpg"],
-        "creator": {"@type": "Person", "name": "신해달", "alternateName": "Shin Haedal", "url": f"{SITE_BASE}/"},
+        "thumbnailUrl": f"{SITE_BASE}/assets/works/{wid}/thumb.webp",
+        "creator": {"@type": "Person", "@id": f"{SITE_BASE}/#artist", "name": "신해달",
+                    "alternateName": "Shin Haedal", "url": f"{SITE_BASE}/"},
+        "artform": "Najeonchilgi",
+        "creditText": "© SHIN HAEDAL",
+        "copyrightHolder": {"@id": f"{SITE_BASE}/#artist"},
+        "acquireLicensePage": f"{SITE_BASE}/copyright/",   # 저작권·이용 안내로 보낸다
+        "inLanguage": "ko",
     }
+    # 크기: "38 × 38"처럼 두 수일 때만 쓴다(세 수는 어느 쪽이 깊이인지 자료에 없다)
+    nums = re.findall(r"[\d.]+", str(meta.get("size") or ""))
+    if len(nums) == 2:
+        art["width"] = {"@type": "QuantitativeValue", "value": float(nums[0]), "unitCode": "CMT"}
+        art["height"] = {"@type": "QuantitativeValue", "value": float(nums[1]), "unitCode": "CMT"}
+    crumbs = {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": f"{SITE_BASE}/"},
+            {"@type": "ListItem", "position": 2, "name": "Works", "item": f"{SITE_BASE}/works/"},
+            {"@type": "ListItem", "position": 3, "name": title_ko, "item": url},
+        ],
+    }
+    jsonld = {"@context": "https://schema.org", "@graph": [art, crumbs]}
     if title_en:
-        jsonld["alternateName"] = title_en
+        art["alternateName"] = title_en
     if caption_ko:
-        jsonld["description"] = caption_ko
+        art["description"] = caption_ko
     if detail.get("material"):
-        jsonld["artMedium"] = clean(detail.get("material"))
+        art["artMedium"] = clean(detail.get("material"))
     if year:
-        jsonld["dateCreated"] = year
+        art["dateCreated"] = year
     jsonld_text = json.dumps(jsonld, ensure_ascii=False).replace("</", "<\\/")
 
     return PAGE_TEMPLATE.format(

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>절충안 시안 (비공개, git 미커밋)</title>
+<link rel="stylesheet" href="assets/fonts.css">
+<style>
+  :root{
+    --bg:#0b0b0f; --bg-2:#111420; --gold:#c9a227; --gold-dim:rgba(201,162,39,0.35);
+    --ivory:#f5f0e6; --ivory-dim:rgba(245,240,230,0.62); --ivory-faint:rgba(245,240,230,0.32);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--bg); color:var(--ivory); font-family:'Noto Sans KR', sans-serif; -webkit-font-smoothing:antialiased; word-break:keep-all;}
+  .note{background:#000; border-bottom:1px solid var(--gold-dim); padding:14px 32px; font-family:'Space Mono','Noto Sans KR',monospace; font-size:11.5px; color:var(--ivory-faint); line-height:1.6;}
+  .label{max-width:1180px; margin:40px auto 0; padding:0 32px; font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; letter-spacing:1.5px; color:var(--gold); text-transform:uppercase;}
+
+  /* ---------- nav (실제 사이트와 동일 + 애스터리스크 마크만 추가) ---------- */
+  nav{position:relative; display:flex; align-items:center; justify-content:space-between; padding:26px 32px; max-width:1180px; margin:0 auto;}
+  .logo-block{display:flex; align-items:center; gap:10px;}
+  .logo{font-family:'Black Han Sans', sans-serif; font-size:20px; letter-spacing:1px; color:var(--ivory); text-decoration:none;}
+  .brand-mark{color:var(--gold); font-size:15px; display:inline-block;}
+  .nav-menu{display:flex; gap:24px; list-style:none; margin:0; padding:0; align-items:center; font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px;}
+  .nav-menu a{color:var(--ivory-dim); text-decoration:none;}
+
+  /* ---------- Recent works: 얇은 프레임만 추가, 나머지 동일 ---------- */
+  .grid-section{max-width:1180px; margin:0 auto; padding:20px 32px 60px;}
+  .grid-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:28px;}
+  .grid-head h2{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:22px; margin:0;}
+  .work-grid{display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:34px 14px;}
+  .tile{display:block; width:100%; margin:0; cursor:pointer; text-decoration:none; color:inherit;}
+  .tile-media{
+    position:relative; aspect-ratio:1/1; overflow:hidden; background:var(--bg-2);
+    border:1px solid rgba(245,240,230,.22); border-radius:1px;
+    box-shadow:0 0 0 5px var(--bg), 0 0 0 6px rgba(245,240,230,.1); /* 프레임 여백 + 아주 얇은 이중선 */
+  }
+  .tile-media img{width:100%; height:100%; object-fit:cover; display:block;}
+  .tile-cap{padding-top:14px; font-size:13.5px; color:var(--ivory-dim);}
+  .tile-cap b{display:block; color:var(--ivory); font-weight:400; margin-bottom:2px;}
+
+  /* ---------- IP 페이지 전용: 마퀴 배너 (무지개 대신 금색/아이보리 톤) ---------- */
+  .ip-marquee-wrap{overflow:hidden; background:var(--bg-2); border-top:1px solid var(--gold-dim); border-bottom:1px solid var(--gold-dim); padding:16px 0; margin:0 auto 0;}
+  .ip-marquee{display:flex; white-space:nowrap; animation:marquee 22s linear infinite; width:max-content;}
+  .ip-marquee span{
+    font-family:'Space Mono','Noto Sans KR',monospace; font-size:13px; letter-spacing:2px; text-transform:uppercase;
+    color:var(--ivory-dim); padding:0 26px; display:inline-flex; align-items:center; gap:26px;
+  }
+  .ip-marquee .mk{color:var(--gold);}
+  @keyframes marquee{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
+  @media (prefers-reduced-motion: reduce){ .ip-marquee{animation:none;} }
+</style>
+</head>
+<body>
+
+<div class="note">
+  절충안 시안입니다 (실제 사이트와 연결 안 됨, git 미커밋). ① 로고 옆 애스터리스크 마크 ② 작품 타일 얇은 프레임 ③ IP 페이지 전용 마퀴 배너(금색 톤, 무지개 아님) — 그 외 배경·타이포·인터랙션은 전부 실제 사이트 그대로입니다.
+</div>
+
+<nav>
+  <div class="logo-block">
+    <a class="logo" href="#">ⓒSHIN HAEDAL</a>
+    <span class="brand-mark">✳</span>
+  </div>
+  <ul class="nav-menu">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Works</a></li>
+    <li><a href="#">IP</a></li>
+    <li><a href="#">Press</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="label">① 브랜드 마크 — 로고 옆 하나만</div>
+
+<div class="label" style="margin-top:60px">② Recent works — 얇은 프레임 추가</div>
+<section class="grid-section">
+  <div class="grid-head"><h2>Recent works</h2></div>
+  <div class="work-grid">
+    <a class="tile" href="#"><div class="tile-media"><img src="assets/works/HD-2026-012/thumb.webp" alt=""></div>
+      <div class="tile-cap"><b>조개배달부 얼빵해달 2026 Limited Edition</b>2026</div></a>
+    <a class="tile" href="#"><div class="tile-media"><img src="assets/works/HD-2026-009/thumb.webp" alt=""></div>
+      <div class="tile-cap"><b>무주의 바다</b>2026</div></a>
+    <a class="tile" href="#"><div class="tile-media"><img src="assets/works/HD-2026-008/thumb.webp" alt=""></div>
+      <div class="tile-cap"><b>이 세계의 얼빵해달</b>2026</div></a>
+  </div>
+</section>
+
+<div class="label">③ IP 페이지 전용 — 마퀴 배너 (금색 톤)</div>
+<div class="ip-marquee-wrap">
+  <div class="ip-marquee">
+    <span><span class="mk">✳</span>SHIN HAEDAL<span class="mk">✳</span>얼빵해달<span class="mk">✳</span>SPACED-OUT SEA OTTER<span class="mk">✳</span>일월오봉단<span class="mk">✳</span></span>
+    <span aria-hidden="true"><span class="mk">✳</span>SHIN HAEDAL<span class="mk">✳</span>얼빵해달<span class="mk">✳</span>SPACED-OUT SEA OTTER<span class="mk">✳</span>일월오봉단<span class="mk">✳</span></span>
+  </div>
+</div>
+
+</body>
+</html>

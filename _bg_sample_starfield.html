@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>배경 시안 A — 우주/파티클 (비공개, git 미커밋)</title>
+<link rel="stylesheet" href="assets/fonts.css">
+<style>
+  :root{
+    --bg:#0b0b0f; --bg-2:#111420; --navy:#1b2a4a; --gold:#c9a227; --gold-dim:rgba(201,162,39,0.35);
+    --ivory:#f5f0e6; --ivory-dim:rgba(245,240,230,0.62); --ivory-faint:rgba(245,240,230,0.32);
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{margin:0; background:var(--bg); color:var(--ivory); font-family:'Noto Sans KR', sans-serif; -webkit-font-smoothing:antialiased; word-break:keep-all; overflow:hidden;}
+  #bg{position:fixed; inset:0; z-index:0; display:block;}
+  .note{position:relative; z-index:2; background:rgba(0,0,0,.55); backdrop-filter:blur(4px); border-bottom:1px solid var(--gold-dim); padding:14px 32px; font-family:'Space Mono','Noto Sans KR',monospace; font-size:11.5px; color:var(--ivory-faint); line-height:1.6;}
+  .stage{position:relative; z-index:1; max-width:900px; margin:14vh auto 0; padding:0 32px; text-align:center;}
+  .eyebrow{font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; letter-spacing:2px; color:var(--gold); text-transform:uppercase; margin-bottom:18px;}
+  h1{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:clamp(32px,6vw,64px); margin:0 0 16px; letter-spacing:1px;}
+  p.sub{color:var(--ivory-dim); font-size:15px; line-height:1.7; max-width:520px; margin:0 auto;}
+</style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+
+<div class="note">
+  배경 시안 A — 우주/파티클 (실제 사이트와 연결 안 됨, git 미커밋). 별 트윙클 + 은은한 성운 글로우 + 가끔 지나가는 유성. 마우스를 움직이면 시차(패럴랙스)가 살짝 붙습니다.
+</div>
+
+<div class="stage">
+  <div class="eyebrow">SHIN HAEDAL — Najeonchilgi Artist</div>
+  <h1>ⓒSHIN HAEDAL</h1>
+  <p class="sub">이 텍스트 영역 위에 실제 콘텐츠(로고·헤드라인·CTA)가 얹힌다고 가정하고 배경 움직임을 확인하세요.</p>
+</div>
+
+<script>
+(function(){
+  var canvas = document.getElementById('bg');
+  var ctx = canvas.getContext('2d');
+  var W, H, DPR;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function resize(){
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth; H = window.innerHeight;
+    canvas.width = W * DPR; canvas.height = H * DPR;
+    canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // ---- nebula blobs (very low opacity, slow drift) ----
+  var nebulae = [
+    { x:0.2, y:0.3, r:0.55, color:'27,42,74',  phase:0 },
+    { x:0.8, y:0.6, r:0.5,  color:'201,162,39', phase:2.1 },
+    { x:0.5, y:0.85,r:0.6,  color:'17,20,32',  phase:4.2 }
+  ];
+
+  // ---- stars ----
+  var STAR_COUNT = 220;
+  var stars = [];
+  for (var i=0;i<STAR_COUNT;i++){
+    var depth = Math.random(); // 0 = far/small, 1 = near/large
+    stars.push({
+      x: Math.random(),
+      y: Math.random(),
+      depth: depth,
+      r: 0.4 + depth*1.6,
+      phase: Math.random()*Math.PI*2,
+      speed: 0.6 + Math.random()*1.2,
+      gold: Math.random() < 0.18
+    });
+  }
+
+  // ---- shooting stars ----
+  var shooters = [];
+  function spawnShooter(){
+    shooters.push({
+      x: Math.random()*0.6 + 0.1,
+      y: Math.random()*0.3,
+      vx: 0.55 + Math.random()*0.25,
+      vy: 0.28 + Math.random()*0.12,
+      life: 0,
+      maxLife: 0.9 + Math.random()*0.4
+    });
+  }
+  var nextShooterAt = 3 + Math.random()*4;
+
+  var mouseX = 0.5, mouseY = 0.5, targetX = 0.5, targetY = 0.5;
+  window.addEventListener('mousemove', function(e){
+    targetX = e.clientX / W; targetY = e.clientY / H;
+  });
+
+  var t0 = performance.now();
+  var lastT = t0;
+
+  function frame(now){
+    var t = (now - t0) / 1000;
+    var dt = Math.min((now - lastT) / 1000, 0.05);
+    lastT = now;
+
+    mouseX += (targetX - mouseX) * 0.03;
+    mouseY += (targetY - mouseY) * 0.03;
+    var parX = (mouseX - 0.5) * 24;
+    var parY = (mouseY - 0.5) * 16;
+
+    // background base gradient
+    var g = ctx.createRadialGradient(W*0.5, H*0.4, 0, W*0.5, H*0.4, Math.max(W,H)*0.8);
+    g.addColorStop(0, '#111420');
+    g.addColorStop(1, '#05050a');
+    ctx.fillStyle = g;
+    ctx.fillRect(0,0,W,H);
+
+    // nebulae
+    ctx.globalCompositeOperation = 'lighter';
+    nebulae.forEach(function(n){
+      var nx = n.x*W + Math.sin(t*0.05 + n.phase)*40;
+      var ny = n.y*H + Math.cos(t*0.04 + n.phase)*30;
+      var r = n.r * Math.max(W,H);
+      var ng = ctx.createRadialGradient(nx, ny, 0, nx, ny, r);
+      ng.addColorStop(0, 'rgba(' + n.color + ',0.10)');
+      ng.addColorStop(1, 'rgba(' + n.color + ',0)');
+      ctx.fillStyle = ng;
+      ctx.fillRect(0,0,W,H);
+    });
+    ctx.globalCompositeOperation = 'source-over';
+
+    // stars
+    stars.forEach(function(s){
+      var tw = reduceMotion ? 1 : (0.55 + 0.45*Math.sin(t*s.speed + s.phase));
+      var px = s.x*W + parX * s.depth;
+      var py = s.y*H + parY * s.depth;
+      var alpha = (0.15 + 0.7*s.depth) * tw;
+      ctx.beginPath();
+      ctx.arc(px, py, s.r, 0, Math.PI*2);
+      ctx.fillStyle = s.gold
+        ? 'rgba(201,162,39,' + alpha + ')'
+        : 'rgba(245,240,230,' + alpha + ')';
+      ctx.fill();
+      if (s.depth > 0.75){
+        ctx.beginPath();
+        ctx.arc(px, py, s.r*3, 0, Math.PI*2);
+        var glow = ctx.createRadialGradient(px,py,0,px,py,s.r*3);
+        glow.addColorStop(0, 'rgba(245,240,230,'+ (alpha*0.25) +')');
+        glow.addColorStop(1, 'rgba(245,240,230,0)');
+        ctx.fillStyle = glow;
+        ctx.fill();
+      }
+    });
+
+    // shooting stars
+    if (!reduceMotion){
+      nextShooterAt -= dt;
+      if (nextShooterAt <= 0){ spawnShooter(); nextShooterAt = 4 + Math.random()*6; }
+      shooters.forEach(function(sh){ sh.life += dt; });
+      shooters = shooters.filter(function(sh){ return sh.life < sh.maxLife; });
+      shooters.forEach(function(sh){
+        var p = sh.life / sh.maxLife;
+        var sx = (sh.x + sh.vx*p) * W;
+        var sy = (sh.y + sh.vy*p) * H;
+        var tailX = sx - sh.vx*W*0.12;
+        var tailY = sy - sh.vy*H*0.12;
+        var fade = Math.sin(p*Math.PI);
+        var grad = ctx.createLinearGradient(tailX, tailY, sx, sy);
+        grad.addColorStop(0, 'rgba(245,240,230,0)');
+        grad.addColorStop(1, 'rgba(245,240,230,' + (0.85*fade) + ')');
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        ctx.moveTo(tailX, tailY);
+        ctx.lineTo(sx, sy);
+        ctx.stroke();
+      });
+    }
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+
+</body>
+</html>

@@ -22,6 +22,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 HOME_RECENT = 6  # 홈 Recent works 칸 수 — index.html의 ALL_WORKS.slice(0, 6)과 같아야 한다
+SITE_BASE = "https://shinhaedal.com"
 BRAND_SHOP_URL = "https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product"
 
 
@@ -189,6 +190,113 @@ def press_row(p, exhibitions, lang="ko", labels=PRESS_LABELS):
                ('<p class="press-row-dek">%s</p>' % e(dek)) if dek else "", press_links(p, exhibitions, labels)))
 
 
+# ── 검색엔진·AI가 읽는 구조화 데이터(JSON-LD) ──
+# 사람 눈에는 안 보이지만, 검색엔진과 AI 답변은 이 값으로 "누가·무엇을·언제"를 읽는다.
+# 국문 페이지와 영문 페이지가 각자 자기 주소를 쓰도록 여기서 언어별로 만든다.
+ARTIST_ID = SITE_BASE + "/#artist"
+ORG_ID = SITE_BASE + "/#haedaljagae"
+
+
+def ld_script(obj):
+    """<script>에 넣을 수 있게 JSON으로. </ 를 막아 스크립트가 일찍 닫히지 않게 한다."""
+    return ('<script type="application/ld+json">%s</script>'
+            % json.dumps(obj, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/"))
+
+
+def home_url(lang):
+    return SITE_BASE + ("/en/" if lang == "en" else "/")
+
+
+def ld_home(lang):
+    ko = lang != "en"
+    person = {
+        "@type": "Person",
+        "@id": ARTIST_ID,
+        "name": "신해달" if ko else "Shin Haedal",
+        "alternateName": "Shin Haedal" if ko else "신해달",
+        "url": home_url(lang),
+        "mainEntityOfPage": home_url(lang),
+        "image": SITE_BASE + "/about/assets/artist-profile-1.webp",
+        "jobTitle": "나전칠기 아티스트" if ko else "Najeonchilgi Artist",
+        "description": ("법과 사회의 규범, 그리고 그 안을 살아가는 개인의 이야기를 나전칠기의 언어로 옮기는 작가."
+                        if ko else
+                        "An artist who translates the norms of law and society, and the stories of the individuals "
+                        "living within them, into the language of najeonchilgi."),
+        "knowsAbout": (["나전칠기", "옻칠", "지식재산권법", "캐릭터 IP"] if ko else
+                       ["Najeonchilgi", "Korean lacquer", "Intellectual property law", "Character IP"]),
+        "alumniOf": [
+            {"@type": "CollegeOrUniversity",
+             "name": "중앙대학교 일반대학원 법학과" if ko else "Chung-Ang University, Graduate School of Law"},
+            {"@type": "CollegeOrUniversity",
+             "name": "단국대학교 법학과" if ko else "Dankook University, Department of Law"},
+        ],
+        "sameAs": ["https://www.instagram.com/haedal_space/", BRAND_SHOP_URL],
+        "inLanguage": lang,
+    }
+    org = {
+        "@type": "Organization",
+        "@id": ORG_ID,
+        "name": "해달자개" if ko else "Haedaljagae",
+        "url": SITE_BASE + "/",
+        "email": "contact@shinhaedal.com",
+        "founder": {"@id": ARTIST_ID},
+    }
+    site = {
+        "@type": "WebSite",
+        "@id": SITE_BASE + "/#website",
+        "url": home_url(lang),
+        "name": "신해달 — 나전칠기 아티스트" if ko else "Shin Haedal — Najeonchilgi Artist",
+        "inLanguage": lang,
+        "publisher": {"@id": ORG_ID},
+        "about": {"@id": ARTIST_ID},
+    }
+    return ld_script({"@context": "https://schema.org", "@graph": [person, org, site]})
+
+
+def ld_about(lang, exhibitions):
+    """전시 이력을 ExhibitionEvent로. 날짜가 있는 것만, 최근 것부터."""
+    ko = lang != "en"
+    rows = [x for x in exhibitions if x.get("start_date") and x.get("end_date")]
+    rows = sorted(rows, key=lambda x: str(x.get("start_date")), reverse=True)
+    out = []
+    for x in rows:
+        name = (x.get("title") if ko else (x.get("title_en") or x.get("title"))) or ""
+        venue = (x.get("venue") if ko else (x.get("venue_en") or x.get("venue"))) or ""
+        ev = {
+            "@type": "ExhibitionEvent",
+            "name": name,
+            "startDate": x.get("start_date"),
+            "endDate": x.get("end_date"),
+            "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+            "performer": {"@id": ARTIST_ID},
+            "organizer": {"@id": ORG_ID},
+            "inLanguage": lang,
+        }
+        alt = (x.get("title_en") if ko else x.get("title"))
+        if alt and alt != name:
+            ev["alternateName"] = alt
+        if venue:
+            place = {"@type": "Place", "name": venue.split(",")[0].strip()}
+            parts = [p.strip() for p in venue.split(",")]
+            if len(parts) >= 2:
+                addr = {"@type": "PostalAddress", "addressLocality": parts[1]}
+                if len(parts) >= 3:
+                    addr["addressCountry"] = "KR" if parts[2] in ("대한민국", "KR") else parts[2]
+                place["address"] = addr
+            if x.get("map_url"):
+                place["hasMap"] = x["map_url"]
+            ev["location"] = place
+        if x.get("poster_url") and not str(x["poster_url"]).startswith("http"):
+            ev["image"] = SITE_BASE + "/" + str(x["poster_url"]).lstrip("/")
+        kind = (x.get("type") if ko else (x.get("type_en") or x.get("type"))) or ""
+        if kind:
+            ev["description"] = kind
+        out.append(ev)
+    if not out:
+        return ""
+    return ld_script({"@context": "https://schema.org", "@graph": out})
+
+
 def fill_block(text, name, inner, where):
     """text 안의 GEN 표시 사이를 inner로 바꾼 새 text."""
     start, end = "<!-- GEN:%s -->" % name, "<!-- /GEN:%s -->" % name
@@ -222,7 +330,9 @@ def blocks(lang="ko", press_labels=PRESS_LABELS):
     joined = {r["key"] for r in series if r.get("joined")}
     page = load("data", "works-page.json", default={"selected": []})
 
-    out = {"index.html": {"home-recent": work_tiles(index[:HOME_RECENT], "works/", "", lang)}}
+    out = {"index.html": {"home-recent": work_tiles(index[:HOME_RECENT], "works/", "", lang),
+                          "home-ld": ld_home(lang)},
+           "about/index.html": {"about-ld": ld_about(lang, exhibitions)}}
     by_id = {w["id"]: w for w in index}
     sel, added = [], set()
     for wid in page.get("selected") or []:
