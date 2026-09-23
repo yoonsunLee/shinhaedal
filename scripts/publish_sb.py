@@ -618,6 +618,15 @@ def main():
     no_by_uuid = {w["id"]: s(w["work_no"]) for w in works}
     selected = [no_by_uuid[i] for i in (settings.get("works_selected") or []) if i in no_by_uuid]
     write_json(os.path.join(data_dir, "works-page.json"), {"selected": selected})
+
+    # 홈 첫 화면 Recent works 점수: 작가가 2~6점 사이로 정한다(site_settings 'home_recent_count', 기본 6).
+    # index.html의 ALL_WORKS.slice(0, HOME_RECENT_COUNT)와 prerender_lists.py가 같이 읽는다.
+    try:
+        home_recent_count = int(settings.get("home_recent_count") or 6)
+    except (TypeError, ValueError):
+        home_recent_count = 6
+    home_recent_count = max(2, min(6, home_recent_count))
+    write_json(os.path.join(data_dir, "site-settings.json"), {"homeRecentCount": home_recent_count})
     print("works-page.json: Selected %d점" % len(selected))
 
     # 전시: 홈페이지는 여전히 work_nos 문자열을 읽으므로 관계에서 되만들어 준다.

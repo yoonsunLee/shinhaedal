@@ -329,8 +329,11 @@ def blocks(lang="ko", press_labels=PRESS_LABELS):
     series = load("data", "series.json", default=[])
     joined = {r["key"] for r in series if r.get("joined")}
     page = load("data", "works-page.json", default={"selected": []})
+    site_settings = load("data", "site-settings.json", default={})
+    # 작가가 홈 운영 화면에서 2~6점 사이로 정한 값(publish_sb.py가 같은 열쇠로 쓴다). 없으면 기본 HOME_RECENT.
+    home_recent_n = max(2, min(6, int(site_settings.get("homeRecentCount") or HOME_RECENT)))
 
-    out = {"index.html": {"home-recent": work_tiles(index[:HOME_RECENT], "works/", "", lang),
+    out = {"index.html": {"home-recent": work_tiles(index[:home_recent_n], "works/", "", lang),
                           "home-ld": ld_home(lang)},
            "about/index.html": {"about-ld": ld_about(lang, exhibitions)}}
     by_id = {w["id"]: w for w in index}

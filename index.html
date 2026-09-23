@@ -898,6 +898,7 @@ var ALL_WORKS = [];
 var HOME_LIST = [];
 var DETAIL_CACHE = {};
 var HOME_STATE = { mode:'recent', exhibition:null, works:[] };
+var HOME_RECENT_COUNT = 6; // 작가가 홈 운영에서 2~6점 사이로 정한다(data/site-settings.json). 못 받아오면 6.
 
 function formatDateRange(start, end){
   function fmt(d){ return String(d||'').replace(/-/g,'.'); }
@@ -966,11 +967,11 @@ function renderHomeGrid(){
     moreBtn.hidden = false;
   }else{
     titleEl.textContent = 'Recent works';
-    HOME_LIST = ALL_WORKS.slice(0, 6);
+    HOME_LIST = ALL_WORKS.slice(0, HOME_RECENT_COUNT);
     renderWorkTiles(HOME_LIST);
     moreBtn.href = 'works/';
     moreBtn.textContent = I18N[LANG].browse_all;
-    moreBtn.hidden = ALL_WORKS.length <= 6;
+    moreBtn.hidden = ALL_WORKS.length <= HOME_RECENT_COUNT;
   }
 }
 function loadExhibitionAndRender(){
@@ -1002,10 +1003,15 @@ function loadExhibitionAndRender(){
     .then(renderHomeGrid);
 }
 function loadRecentWorks(){
-  fetch(DATA_BASE + 'works-index.json')
-    .then(function(res){ return res.json(); })
-    .then(function(rows){
-      ALL_WORKS = rows || [];
+  Promise.all([
+    fetch(DATA_BASE + 'works-index.json').then(function(res){ return res.json(); }),
+    // 없거나 못 받아와도 기본값 6으로 계속 진행(작가가 아직 정하지 않은 경우와 같다)
+    fetch(DATA_BASE + 'site-settings.json').then(function(res){ return res.ok ? res.json() : {}; }).catch(function(){ return {}; })
+  ])
+    .then(function(results){
+      ALL_WORKS = results[0] || [];
+      var n = parseInt(results[1] && results[1].homeRecentCount, 10);
+      if(n >= 2 && n <= 6) HOME_RECENT_COUNT = n;
       return loadExhibitionAndRender();
     })
     .then(function(){ openFromUrlIfPresent(); })
