@@ -148,13 +148,14 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <link rel="icon" type="image/png" sizes="32x32" href="../../../favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="../../../favicon-16.png">
 <link rel="apple-touch-icon" href="../../../apple-touch-icon.png">
-<link rel="stylesheet" href="../../../assets/fonts.css">
+<link rel="preload" href="../../../assets/fonts.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="../../../assets/fonts.css"></noscript>
 <link rel="stylesheet" href="../../../assets/site.css">
 <link rel="stylesheet" href="../../../assets/work-page.css">
 <script type="application/ld+json">{jsonld}</script>
 </head>
 <body>
-<script src="../../../assets/starfield.js"></script>
+<script src="../../../assets/starfield.js" defer></script>
 <!-- scripts/gen_work_share.py가 발행 때마다 생성하는 파일. 직접 고치면 다음 발행 때 덮어써진다. -->
 
 <nav>

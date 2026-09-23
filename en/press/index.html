@@ -22,7 +22,8 @@
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
-<link rel="stylesheet" href="../assets/fonts.css">
+<link rel="preload" href="../assets/fonts.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="../assets/fonts.css"></noscript>
 <link rel="stylesheet" href="../assets/site.css">
 <style>
   /* press intro — 간결한 제목 영역 (기존 대형 Hero 대체) */
@@ -86,7 +87,7 @@
 </style>
 </head>
 <body>
-<script src="../assets/starfield.js"></script>
+<script src="../assets/starfield.js" defer></script>
 
 <nav>
   <div class="logo-block">
