@@ -50,15 +50,36 @@
     .contact-wrap #contact-form-section{padding-bottom:0;}
   }
 
+  /* 작품을 고르면 카드가 빡 나오지 않고 옅어졌다 떠오르며 나타난다(작가 요청) — JS setCardVisible() 참고 */
   .work-inquiry-card{
     display:flex; gap:14px; align-items:center;
     background:var(--bg-2); border:1px solid rgba(245,240,230,.14); border-radius:8px;
     padding:14px;
+    opacity:0; transform:translateY(8px); transition:opacity .3s ease, transform .3s ease;
   }
   .work-inquiry-card[hidden]{display:none;}
+  .work-inquiry-card.cwp-show{opacity:1; transform:translateY(0);}
   .work-inquiry-card img{width:56px; height:56px; object-fit:cover; border-radius:4px; flex-shrink:0; -webkit-user-select:none; user-select:none;}
-  .wic-label{font-family:'Space Mono','Noto Sans KR', monospace; font-size:11px; letter-spacing:1px; color:var(--accent); text-transform:uppercase; margin-bottom:4px;}
-  .wic-title{font-size:14px; color:var(--ivory); line-height:1.4;}
+  .wic-label, .cwp-label{font-family:'Space Mono','Noto Sans KR', monospace; font-size:11px; letter-spacing:1px; color:var(--accent); text-transform:uppercase; margin-bottom:4px;}
+  .wic-title, .cwp-title{font-size:14px; color:var(--ivory); line-height:1.4;}
+
+  /* 작품 선택 시 큰 미리보기 — 1024px 이상에서만, 왼쪽 소개글 아래(스크롤을 따라오는 sticky 영역).
+     좁은 화면에서는 위 work-inquiry-card(폼 안, 작품 선택 바로 아래)가 그 역할을 한다.
+     hidden을 바로 없애지/붙이지 않고 opacity·이동으로 부드럽게 나타났다 사라지게 한다(작가 요청) — contact.js의 setWorkPreview() 참고 */
+  .contact-work-preview{display:none;}
+  @media(min-width:1024px){
+    .contact-work-preview[hidden]{display:none;}   /* [hidden] 자체는 즉시 치운다(사라지는 전환은 클래스로, 다 끝난 뒤에 hidden을 붙인다) */
+    .contact-work-preview:not([hidden]){
+      display:block; margin-top:26px; padding-top:24px; border-top:1px solid var(--line);
+      opacity:0; transform:translateY(10px); transition:opacity .38s ease, transform .38s ease;
+    }
+    .contact-work-preview.cwp-show{opacity:1; transform:translateY(0);}
+  }
+  .contact-work-preview img{width:100%; max-width:280px; aspect-ratio:1; object-fit:cover; border-radius:10px; display:block; -webkit-user-select:none; user-select:none;}
+  .cwp-label{margin-top:16px;}
+  .cwp-title{font-size:19px; line-height:1.5;}
+  /* 폰·태블릿에서는 폼 안의 작은 카드만 쓴다(선택한 자리 바로 아래라 스크롤 없이 바로 보인다) */
+  @media(min-width:1024px){ .work-inquiry-card{display:none;} }
 
   .contact-form{display:flex; flex-direction:column; gap:18px;}
   .contact-form[hidden]{display:none;}
@@ -183,6 +204,11 @@
     <a class="direct-email" href="mailto:haedarney@naver.com">haedarney@naver.com</a>
     <button type="button" class="copy-btn link-sub" id="copyEmailBtn" data-i="copy_email">이메일 복사</button>
     <a class="direct-ig link-sub" href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener">Instagram ↗</a>
+  </div>
+  <div class="contact-work-preview" id="contactWorkPreview" hidden>
+    <img id="cwpThumb" alt="" draggable="false">
+    <div class="cwp-label" data-i="wic_label">이 작품에 대해 문의하고 있습니다.</div>
+    <div class="cwp-title" id="cwpTitle"></div>
   </div>
 </div>
 
@@ -409,11 +435,31 @@ function esc(s){
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
   });
 }
+/* 카드를 즉시 켜고 끄지 않고 옅어졌다 떠오르며 나타나게/사라지게 한다.
+   보일 때: hidden을 먼저 없애 opacity:0 상태를 한 프레임 그리게 한 뒤 .cwp-show를 더해 전환을 건다(동시에 하면 전환이 안 걸림).
+   숨길 때: .cwp-show만 먼저 떼 옅어지게 하고, 전환이 끝날 시간(400ms)을 준 뒤에 hidden을 붙여 자리까지 치운다. */
+function setCardVisible(el, show){
+  if(!el) return;
+  clearTimeout(el._cwpTimer);
+  if(show){
+    el.hidden = false;
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ el.classList.add('cwp-show'); }); });
+  }else{
+    el.classList.remove('cwp-show');
+    el._cwpTimer = setTimeout(function(){ el.hidden = true; }, 400);
+  }
+}
 function renderWorkInquiryCard(){
-  if(!CURRENT_WORK){ document.getElementById('workInquiryCard').hidden = true; return; }
-  var primary = LANG === 'en' ? (CURRENT_WORK.title_en || CURRENT_WORK.title_ko) : (CURRENT_WORK.title_ko || CURRENT_WORK.title_en);
-  document.getElementById('wicTitle').textContent = primary;
-  document.getElementById('workInquiryCard').hidden = false;
+  var show = !!CURRENT_WORK;
+  var wic = document.getElementById('workInquiryCard');
+  var cwp = document.getElementById('contactWorkPreview');
+  if(show){
+    var primary = LANG === 'en' ? (CURRENT_WORK.title_en || CURRENT_WORK.title_ko) : (CURRENT_WORK.title_ko || CURRENT_WORK.title_en);
+    document.getElementById('wicTitle').textContent = primary;
+    document.getElementById('cwpTitle').textContent = primary;
+  }
+  setCardVisible(wic, show);
+  setCardVisible(cwp, show);
 }
 function loadWorksIndex(){
   if(WORKS_INDEX) return Promise.resolve(WORKS_INDEX);
@@ -472,7 +518,10 @@ function selectWork(workId){
         year: w.year
       };
       var entry = WORKS_INDEX && WORKS_INDEX.find(function(r){ return r.id === workId; });
-      if(entry && entry.thumb) document.getElementById('wicThumb').src = '../' + entry.thumb;
+      if(entry && entry.thumb){
+        document.getElementById('wicThumb').src = '../' + entry.thumb;
+        document.getElementById('cwpThumb').src = '../' + entry.thumb;
+      }
       renderWorkInquiryCard();
       applyAutoSubject(LANG === 'en' ? (CURRENT_WORK.title_en || CURRENT_WORK.title_ko) : (CURRENT_WORK.title_ko || CURRENT_WORK.title_en));
     })
