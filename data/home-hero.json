@@ -1,12 +1,17 @@
 {
  "slides": [
   {
-   "id": "default",
+   "id": "439cb3cc-56dd-4334-9627-4721c8ed7988",
    "kind": "image",
-   "image": "assets/landing/hero-bg.webp",
+   "image": "assets/home-hero/439cb3cc-56dd-4334-9627-4721c8ed7988/image.webp",
    "w": 1448,
    "h": 1086,
-   "work": null
+   "work": {
+    "no": "HD-2026-001",
+    "title": "이 세계의 얼빵해달, 저작인접권자가 되었다!",
+    "title_en": "Spaced-out Sea Otter: Invoked as a Neighboring Rights Holder in An Other World",
+    "year": 2026
+   }
   }
  ]
 }
