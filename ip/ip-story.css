@@ -278,6 +278,9 @@ html[lang="en"] .profile-sheet .profile-name-sub{font:13px/1.5 'Noto Sans KR',sa
 footer{display:flex;justify-content:space-between;gap:25px;padding:30px 6%;font:12px/1.6 'Space Mono',monospace;background:#EAF0F2} /* 바로 위 라이선싱과 같은 색으로 이어지게 */
 footer .ft-privacy{font-family:'Space Mono','Noto Sans KR',monospace;font-weight:700;color:#183544;margin-left:28px;white-space:nowrap} /* 개인정보 처리방침: 다른 푸터 글자와 구분 */
 footer .ft-privacy:hover{text-decoration:underline;text-underline-offset:4px}
+/* 저작권·이용 안내는 굵게 하지 않는다(site.css와 같은 이유). IP는 이 파일만 쓰므로 여기에도 둔다 */
+footer .ft-privacy ~ .ft-privacy{font-weight:400;color:var(--muted)}
+footer .ft-privacy ~ .ft-privacy:hover{color:var(--navy)}
 html[lang="en"] .ft-ko,html:not([lang="en"]) .ft-en{display:none}
 dialog{border:0;background:#10151bf5;color:white;width:100vw;height:100dvh;max-width:none;max-height:none;margin:0;padding:60px 5vw 25px}
 dialog::backdrop{background:#10151b}

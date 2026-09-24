@@ -151,4 +151,11 @@ footer a:hover{color:var(--ivory);}
 /* 개인정보 처리방침 링크: 다른 푸터 글자보다 밝고 굵게 해서 한눈에 구분되게 (언어는 html[lang]로 전환) */
 footer .ft-privacy{color:var(--ivory); font-weight:700; margin-left:28px; white-space:nowrap;}
 footer .ft-privacy:hover{text-decoration:underline; text-underline-offset:4px;}
+/* 저작권·이용 안내는 법정 고지가 아니다. 굵게 하는 것은 개인정보 처리방침을 다른 링크와
+   구분하라는 지침을 따른 것인데, 둘 다 굵으면 그 구분이 사라진다(작가 지적).
+   푸터는 페이지 24곳(작품 페이지 15개는 발행 때 생성)에 같은 마크업으로 들어 있고 개인정보가
+   늘 먼저다. 그래서 클래스를 새로 붙이는 대신 "앞에 형제가 있는 쪽"으로 고른다 —
+   자기 페이지에서 주소가 ./ 로 바뀌어도 순서는 그대로라 안전하다. */
+footer .ft-privacy ~ .ft-privacy{font-weight:400; color:var(--ivory-muted);}
+footer .ft-privacy ~ .ft-privacy:hover{color:var(--ivory);}
 html[lang="en"] .ft-ko, html:not([lang="en"]) .ft-en{display:none;}
