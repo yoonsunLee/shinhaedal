@@ -109,8 +109,23 @@ html:not([lang="en"]) .hero h1{word-spacing:-.05em}
 .hero h1{font-family:'Noto Sans KR',sans-serif;font-weight:900;font-size:clamp(64px,8.7vw,142px);line-height:.89;letter-spacing:-.05em;position:relative;z-index:2;max-width:1000px}
 .hero-name{font-size:26px;font-weight:700;margin-top:22px;letter-spacing:-.04em}
 .hero-character{position:absolute;width:clamp(250px,29vw,445px);right:10%;bottom:68px;transform:translateY(var(--char-y,0px));z-index:1}
-.hero-character img{position:relative;z-index:1;filter:drop-shadow(4px 12px 6px #58695514);animation:arrive 1.2s .25s both;transform-origin:50% 92%} /* 발끝을 축으로 기울게(마우스 반응, ip-story.js) */
-html.no-hero-arrive .hero-character img{animation:none}
+.hero-character img{position:relative;z-index:1;filter:drop-shadow(4px 12px 6px #58695514);animation:arrive-char .95s .34s both cubic-bezier(.22,1,.36,1);transform-origin:50% 92%} /* 발끝을 축으로 기울게(마우스 반응, ip-story.js) */
+/* 막이 위에서 내려와 덮은 뒤, 도착한 이 화면에서 글과 캐릭터가 아래에서 위로 떠오른다.
+   내려온 것과 반대 방향이라 넘겨받는 느낌이 난다(작가 제안).
+   전에는 캐릭터 하나만 떠올랐고, 전환으로 들어오면 그마저 껐다(no-hero-arrive) —
+   조개가 커지며 이미 화면을 다 보여준 뒤라 한 번 더 움직이면 군더더기였기 때문이다.
+   막으로 바뀌면서 그 이유가 없어졌으므로 끄지 않고, 텍스트까지 함께 떠오르게 한다.
+   위에서부터 차례로 0.07초씩 늦춰 시선이 따라 내려오게 한다. */
+/* 세 박자 — ① 이름표·제목·얼빵해달 글자  ② 캐릭터  ③ 나머지 글자들.
+   간격만 벌려서는 순서가 안 읽힌다. 각 요소가 0.9초씩 움직이면 0.1초 간격으로는
+   0.8초를 겹쳐 사실상 동시에 움직인다(작가 지적). 그래서 하나하나를 짧게(0.62초)
+   만들고 간격을 0.24초로 벌렸다 — 다음 무리가 앞 무리의 40%쯤에서 출발한다. */
+.hero-inner .eyebrow,
+.hero-inner h1,
+.hero-inner .hero-name{animation:arrive .62s .10s both cubic-bezier(.22,1,.36,1)}
+.hero-inner .hero-note,
+.hero-inner .hero-actions,
+.hero-inner .hero-index{animation:arrive .62s .58s both cubic-bezier(.22,1,.36,1)}
 .character-shadow{position:absolute;bottom:-5px;left:16%;width:75%;height:26px;border-radius:50%;background:#786b5940;filter:blur(11px);transform:rotate(-8deg)}
 .hero-note{position:absolute;left:6%;bottom:155px;max-width:380px}
 .hero-note p{font-size:18px;line-height:1.9}
@@ -312,7 +327,16 @@ html:has(#viewer[open]){overscroll-behavior-x:none}
 .reveal{opacity:1;transform:none}
 .motion-ready .reveal:not(.seen){opacity:0;transform:translateY(28px)}
 .motion-ready .reveal{transition:opacity .8s,transform .8s}
-@keyframes arrive{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes arrive{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+/* 상단 메뉴도 함께 들어온다. 이 페이지의 메뉴는 다른 페이지와 글자색이 아예 달라서(아이보리 → 진한 청록)
+   막으로 덮을 수밖에 없는데, 덮고 난 뒤 혼자만 완성된 채로 나타나 튀어 보였다(작가 지적).
+   본문은 아래에서 올라오고 메뉴는 위에서 내려앉는다 — 막이 내려온 방향을 이어받아
+   위아래가 가운데에서 만나는 모양이 된다. 메뉴는 차림이지 주인공이 아니므로 8px만 움직인다. */
+@keyframes nav-arrive{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+/* 캐릭터는 주인공이라 글자보다 천천히 들어온다(작가 요청).
+   같은 거리를 더 오래 움직이면 떠 있는 것처럼 보이므로 오는 거리도 함께 늘린다(30 → 34px). */
+@keyframes arrive-char{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:none}}
+body>nav{animation:nav-arrive .55s .04s both cubic-bezier(.22,1,.36,1)}
 @media(hover:hover) and (pointer:fine){
   .photo-open:hover>span{background:#fff;color:#123548}
   .nav-menu a:hover{color:#0867ba}
