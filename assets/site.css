@@ -79,14 +79,19 @@ nav{
 @media (hover:hover) and (pointer:fine) and (prefers-reduced-motion: no-preference){
   .nav-menu a:not([aria-current="page"]) .nav-sweep{
     background-image:linear-gradient(90deg,
-      var(--ivory) 0%, var(--ivory) 33%,
-      var(--sweep-lavender) 40%, var(--sweep-pearl) 47%, var(--sweep-teal) 54%,
-      var(--ivory-dim) 67%, var(--ivory-dim) 100%);
+      var(--ivory) 0%, var(--ivory) 38%,
+      var(--sweep-lavender) 44%, var(--sweep-pearl) 48%, var(--sweep-teal) 52%,
+      var(--ivory-dim) 60%, var(--ivory-dim) 100%);
     background-size:300% 100%;
     background-position:100% 0;
     -webkit-background-clip:text; background-clip:text;
     color:var(--ivory-dim); -webkit-text-fill-color:transparent;
-    transition:background-position .3s ease, color .3s ease;
+        /* 0.3초 ease 로는 색 띠가 글자를 스치는 시간이 150ms 도 안 돼 있는 줄도 몰랐다(작가 지적).
+       시간만 늘려서는 부족하다 — ease 는 앞에서 폭주하고 끝에서 기는데, 하필 색 띠가
+       지나가는 구간이 그 폭주 구간이다. 등속에 가까운 곡선으로 바꿔 일정한 속도로 미끄러지게 한다.
+       띠도 14%%에서 8%%로 좁혔다. 넓으면 글자 전체가 물드는 것처럼 보이고,
+       좁아야 선이 지나가는 것으로 읽힌다 — 자개의 광택도 각도에 따라 한 줄로 번쩍인다. */
+    transition:background-position 1.15s cubic-bezier(.35,.55,.45,1), color .8s ease;
   }
   .nav-menu a:not([aria-current="page"]):hover .nav-sweep{
     background-position:0% 0;
