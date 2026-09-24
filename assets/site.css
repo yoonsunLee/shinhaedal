@@ -60,7 +60,7 @@ nav{
 .lang button.on{color:var(--ivory);}
 .lang .lang-sep{color:var(--ivory-faint); font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px;}
 .nav-menu{display:flex; gap:24px; list-style:none; margin:0 8px 0 0; padding:0; align-items:center; font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px;}
-.nav-menu a{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-dim); text-decoration:none;}
+.nav-menu a{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-dim); text-decoration:none; transition:color .5s ease;}
 .nav-menu a:hover, .nav-menu a.on{color:var(--ivory);}
 .nav-menu .soon{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-faint); cursor:default;}
 /* 메뉴 글자에 자개빛이 한 번 스치는 호버 효과. 포인터가 있는 PC 환경 +
@@ -77,25 +77,29 @@ nav{
    줄 안 글자 칸이 반 높이로 잡혀, 글자 안에만 칠하는 자개빛(background-clip:text)이 대문자 윗부분을 못 칠하던 것(2026-09-22) */
 .nav-menu .nav-sweep{display:inline-block;}
 @media (hover:hover) and (pointer:fine) and (prefers-reduced-motion: no-preference){
-  .nav-menu a:not([aria-current="page"]) .nav-sweep{
+  @keyframes nav-shimmer{
+    0%{background-position:100% 0}
+    55%{background-position:0% 0}
+    100%{background-position:0% 0}
+  }
+    /* 올려 둔 동안 같은 방향으로 계속 지나간다(작가 요청). 전에는 전환이라 뗄 때 빛이
+       왔던 길을 되감았다 — 왕복은 광택이 아니라 스위치처럼 보인다.
+       반복이 이어 붙으려면 그라디언트의 양 끝이 같은 색이어야 한다. 한쪽이 어둡고 반대쪽이
+       밝으면 한 바퀴 돌아 처음으로 갈 때 툭 끊긴다. 그래서 양 끝을 올렸을 때의 색으로 맞추고
+       가운데 띠만 자개빛으로 뒀다 — 이음매가 보이지 않는다.
+       한 번 지나간 뒤 잠깐 쉰다(55% 지점에서 끝나고 나머지는 정지). 쉼 없이 계속 흐르면
+       부산해 보인다. 자개의 광택도 각도가 맞을 때 한 번 번쩍이지 늘 흐르지 않는다.
+       바탕색은 여기서 칠하지 않는다 — 뗄 때 위 .nav-menu a 규칙의 색 전환으로 자연스럽게
+       돌아가게 하려면, 올렸을 때만 글자를 그라디언트로 그려야 한다. */
+  .nav-menu a:not([aria-current="page"]):hover .nav-sweep{
     background-image:linear-gradient(90deg,
       var(--ivory) 0%, var(--ivory) 38%,
       var(--sweep-lavender) 44%, var(--sweep-pearl) 48%, var(--sweep-teal) 52%,
-      var(--ivory-dim) 60%, var(--ivory-dim) 100%);
+      var(--ivory) 60%, var(--ivory) 100%);
     background-size:300% 100%;
-    background-position:100% 0;
     -webkit-background-clip:text; background-clip:text;
-    color:var(--ivory-dim); -webkit-text-fill-color:transparent;
-        /* 0.3초 ease 로는 색 띠가 글자를 스치는 시간이 150ms 도 안 돼 있는 줄도 몰랐다(작가 지적).
-       시간만 늘려서는 부족하다 — ease 는 앞에서 폭주하고 끝에서 기는데, 하필 색 띠가
-       지나가는 구간이 그 폭주 구간이다. 등속에 가까운 곡선으로 바꿔 일정한 속도로 미끄러지게 한다.
-       띠도 14%%에서 8%%로 좁혔다. 넓으면 글자 전체가 물드는 것처럼 보이고,
-       좁아야 선이 지나가는 것으로 읽힌다 — 자개의 광택도 각도에 따라 한 줄로 번쩍인다. */
-    transition:background-position 1.15s cubic-bezier(.35,.55,.45,1), color .8s ease;
-  }
-  .nav-menu a:not([aria-current="page"]):hover .nav-sweep{
-    background-position:0% 0;
-    color:var(--ivory);
+    -webkit-text-fill-color:transparent;
+    animation:nav-shimmer 2.1s linear infinite;
   }
 }
 /* 상단 메뉴 움직임(assets/nav-glide.js) — 올린 메뉴 뒤 옅은 판 + 밑줄(지금 페이지 고정 · 올린 메뉴 따라감) */
