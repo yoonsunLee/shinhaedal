@@ -100,7 +100,7 @@
          움직임이 눈이 있는 곳에서 시작해야 따라가지 않아도 된다(작가 지적).
          덮고 나면 도착한 IP 페이지에서 글과 캐릭터가 아래에서 위로 떠오른다 —
          내려온 것과 반대 방향이라 넘겨받는 느낌이 난다(ip-story.css @keyframes arrive). */
-      var duration=1050;
+      var duration=1200;
       var start;
       function easeInOut(x){ return x<0.5 ? 4*x*x*x : 1-Math.pow(-2*x+2,3)/2; }
 
@@ -114,9 +114,15 @@
         ctx.fillStyle='rgba(10,15,20,'+(Math.min(t/0.30,1)*0.28)+')';
         ctx.fillRect(0,0,w,h);
 
-        if(t>0.14){
-          var wp=Math.min((t-0.14)/0.72,1);
-          var edge=h*easeInOut(wp), soft=110;
+        if(t>0.10){
+          /* 화면 높이보다 25% 더 내려보낸다. 감속 곡선은 끝 속도가 0이라, 딱 화면 높이까지만
+             보내면 맨 아래에서 기어가다 멈춘 것처럼 보인다(작가 지적 — 실측으로 마지막 10%
+             구간에서 3px 움직이며 중간보다 61배 느렸다). 더 멀리 보내면 화면 아래를 지날 때
+             아직 빠른 구간에 있어 끝까지 시원하게 내려간다.
+             화면 밖에서의 나머지 움직임은 보이지 않으므로, 그 시간이 곧 다 덮인 채로 머무는
+             한 박자가 된다 — 따로 정지 구간을 두지 않아도 된다. */
+          var wp=Math.min((t-0.10)/0.90,1);
+          var edge=h*1.25*easeInOut(wp), soft=110;
           rl.clearRect(0,0,w,h);
           rl.drawImage(scene,0,0,w,h);
           rl.globalCompositeOperation='destination-in';
