@@ -29,12 +29,15 @@
     }
 
     var canvas,frame,timeout,done=false;
-    function finish(){
+    // keepCover=true 면 그림만 멈추고 덮개는 화면에 남긴다.
+    // 이동을 시작해도 새 페이지가 그려지기까지는 시간이 걸린다. 그 사이에 덮개를 걷으면
+    // 원래 보던 페이지가 한 번 드러났다가 넘어간다(작가 지적, 첫 방문처럼 목적지가 느릴 때).
+    // 덮개는 페이지가 실제로 바뀔 때 문서와 함께 사라지고, 뒤로가기로 되돌아온 경우는
+    // 아래 pageshow 핸들러가 지운다 — 여기서 굳이 지울 이유가 없다.
+    function finish(keepCover){
       if(done) return; done=true;
       cancelAnimationFrame(frame); clearTimeout(timeout);
-      // 캔버스를 지우지 않으면, location.href로 이동한 뒤 IP 페이지에서 뒤로가기를 눌렀을 때
-      // 브라우저가 이 페이지를 bfcache에서 복원하면서 마지막 프레임(확대된 해변 장면)이 그대로 남아있게 된다.
-      if(canvas){ canvas.remove(); canvas=null; }
+      if(!keepCover && canvas){ canvas.remove(); canvas=null; }
     }
 
     Promise.race([
@@ -133,14 +136,15 @@
           rl.globalCompositeOperation='source-over';
           ctx.drawImage(revealLayer,0,0,w,h);
 
-          if(p2>.92) go();
+          // 화면을 완전히 덮은 뒤에 이동한다. 덜 덮은 채로 넘어가면 가장자리가 비친다.
+          if(p2>=1){ go(); finish(true); return; }
         }
 
-        if(t>=1){ go(); finish(); return; }
+        if(t>=1){ go(); finish(true); return; }
         frame=requestAnimationFrame(draw);
       }
 
-      timeout=setTimeout(function(){ go(); finish(); }, duration+500);
+      timeout=setTimeout(function(){ go(); finish(true); }, duration+500);   // 늦어져도 덮개는 남긴다
       frame=requestAnimationFrame(draw);
     }).catch(function(){
       finish();
@@ -155,8 +159,27 @@
     document.querySelectorAll('.ip-transition-canvas').forEach(function(c){ c.remove(); });
   });
 
+  /* 그림 세 장(304KB)을 누른 뒤에야 받기 시작하면, 받는 동안 화면에 아무 변화가 없어
+     눌렀는데 멈춘 것처럼 보인다(느린 연결에서 1초 넘게 걸리는 것을 확인했다).
+     그렇다고 모든 페이지에서 미리 받으면 IP로 가지 않는 사람에게도 304KB를 물리게 된다.
+     그래서 "갈 것 같을 때"만 받는다 — 링크에 마우스를 올리거나 키보드 포커스가 닿는 순간,
+     그리고 터치에서는 손가락이 닿는 순간. 누르기까지의 짧은 시간이 머리를 벌어 준다. */
+  var warmed=false;
+  function warmAssets(href){
+    if(warmed || reduceMotion.matches) return;
+    warmed=true;
+    var base=href.replace(/^\/en\//,'/')+'assets/';
+    ['transition-character.webp','transition-shell.webp','beach.webp'].forEach(function(n){
+      load(base+n).catch(function(){});
+    });
+  }
+
   document.querySelectorAll('a[href="ip/"], a[href="../ip/"], a[href="/en/ip/"]').forEach(function(a){
     if(a.target==='_blank') return;
+    var href=a.getAttribute('href');
+    ['pointerenter','focus','touchstart'].forEach(function(ev){
+      a.addEventListener(ev, function(){ warmAssets(href); }, {passive:true, once:true});
+    });
     a.addEventListener('click', function(e){
       if(!isPlainClick(e)) return;
       if(reduceMotion.matches) return; // let the link navigate normally, no forced transition
