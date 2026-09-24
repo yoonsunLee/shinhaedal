@@ -130,10 +130,15 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
        브라우저 언어까지 보는 이유 — 이 페이지는 공유로 처음 들어오는 사람이 많은데,
        그 사람에게는 앞의 두 단서가 없어 영어권이어도 한글이 떴다. 주소는 바꾸지 않는다(같은 주소, 보이는 말만 다름). */
     var nav = (navigator.language || '').toLowerCase();
+    /* 검색·미리보기 로봇은 브라우저 언어를 보지 않는다. 구글봇은 영어로 동작하는데 그걸 따르면
+       이 페이지가 영문으로 색인되고, 정적으로 박힌 제목·설명(한글)과도 어긋난다.
+       로봇에게는 이 주소의 기본인 한국어를 보여준다. 사람에게만 브라우저 언어를 쓴다. */
+    var bot = /bot|crawl|spider|slurp|yeti|facebookexternalhit|kakaotalk|embedly|preview|lighthouse/i
+              .test(navigator.userAgent || '');
     var l = (p === 'en' || p === 'ko') ? p
           : (localStorage.getItem('site_lang') === 'en' ? 'en'
           : (localStorage.getItem('site_lang') === 'ko' ? 'ko'
-          : (nav && nav.indexOf('ko') !== 0 ? 'en' : 'ko')));
+          : (!bot && nav && nav.indexOf('ko') !== 0 ? 'en' : 'ko')));
     document.documentElement.lang = l;
   }}catch(err){{}}
 }})();
