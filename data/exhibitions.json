@@ -282,7 +282,7 @@
   "featured_work_nos": "HD-2026-001",
   "about_selected": false,
   "home_mode": "auto",
-  "home_lead_days": 12
+  "home_lead_days": 17
  },
  {
   "id": "EX-2026-17",
@@ -301,7 +301,7 @@
   "featured_work_nos": "",
   "about_selected": false,
   "home_mode": "auto",
-  "home_lead_days": null
+  "home_lead_days": 10
  },
  {
   "id": "EX-2027-01",
