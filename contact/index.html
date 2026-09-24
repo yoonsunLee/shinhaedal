@@ -61,8 +61,12 @@
   }
   .work-inquiry-card[hidden]{display:none;}
   .work-inquiry-card.cwp-show{opacity:1; transform:translateY(0);}
-  /* 작품을 바꿀 때 사라지는 효과 없이 처음 상태로 되돌리는 한 프레임용 (연락하기 스크립트에서만 붙였다 뗀다) */
-  .work-inquiry-card.cwp-instant, .contact-work-preview.cwp-instant{transition:none !important;}
+  /* 떠오르는 것은 칸이 아니라 그 안의 작품과 제목이다. 갈아끼울 때는 .cwp-replay 를 한 프레임만 붙여
+     안쪽만 처음 자리로 돌려놓고 떼어 다시 떠오르게 한다 — 바깥 칸(구분선)은 건드리지 않는다. */
+  .contact-work-preview > *, .work-inquiry-card > *{transition:opacity .38s ease, transform .38s ease;}
+  .contact-work-preview.cwp-replay > *, .work-inquiry-card.cwp-replay > *{
+    opacity:0; transform:translateY(12px); transition:none;
+  }
   .work-inquiry-card img{width:56px; height:56px; object-fit:cover; border-radius:4px; flex-shrink:0; -webkit-user-select:none; user-select:none;}
   .wic-label, .cwp-label{font-family:'Space Mono','Noto Sans KR', monospace; font-size:11px; letter-spacing:1px; color:var(--accent); text-transform:uppercase; margin-bottom:4px;}
   .wic-title, .cwp-title{font-size:14px; color:var(--ivory); line-height:1.4;}
@@ -76,9 +80,11 @@
     .contact-work-preview:not([hidden]){
       display:block; margin-top:26px; padding-top:24px; border-top:1px solid var(--line);
       text-align:center;   /* 문구를 뺀 자리에 작품과 제목만 남으므로 둘을 같이 가운데로 (작가 요청) */
-      opacity:0; transform:translateY(10px); transition:opacity .38s ease, transform .38s ease;
+      /* 구분선이 이 칸에 붙어 있으므로 여기에는 transform 을 주지 않는다 — 주면 선까지 같이 떠오른다(작가 지적).
+         떠오르는 것은 안쪽의 작품과 제목뿐이고, 이 칸은 나타나고 사라질 때 옅어지기만 한다. */
+      opacity:0; transition:opacity .38s ease;
     }
-    .contact-work-preview.cwp-show{opacity:1; transform:translateY(0);}
+    .contact-work-preview.cwp-show{opacity:1;}
   }
   .contact-work-preview img{width:100%; max-width:280px; aspect-ratio:1; object-fit:cover; border-radius:10px; display:block; margin-inline:auto; -webkit-user-select:none; user-select:none;}
   .cwp-title{margin-top:16px; font-size:19px; line-height:1.5;}
@@ -436,22 +442,33 @@ function esc(s){
   });
 }
 /* 카드를 즉시 켜고 끄지 않고 옅어졌다 떠오르며 나타나게/사라지게 한다.
-   보일 때: hidden을 먼저 없애 opacity:0 상태를 한 프레임 그리게 한 뒤 .cwp-show를 더해 전환을 건다(동시에 하면 전환이 안 걸림).
+   보일 때: hidden을 없애고 .cwp-replay로 안쪽을 처음 자리에 둔 다음, 한 프레임 뒤에 .cwp-show를 더하고
+   .cwp-replay를 떼면 칸은 옅어지며 들어오고 안쪽(작품·제목)은 떠오른다(동시에 하면 전환이 안 걸린다).
    숨길 때: .cwp-show만 먼저 떼 옅어지게 하고, 전환이 끝날 시간(400ms)을 준 뒤에 hidden을 붙여 자리까지 치운다. */
 function setCardVisible(el, show){
   if(!el) return;
   clearTimeout(el._cwpTimer);
   if(show){
     el.hidden = false;
-    requestAnimationFrame(function(){ requestAnimationFrame(function(){ el.classList.add('cwp-show'); }); });
+    resetCardInner(el);
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){
+      el.classList.add('cwp-show');
+      el.classList.remove('cwp-replay');
+    }); });
   }else{
     el.classList.remove('cwp-show');
     el._cwpTimer = setTimeout(function(){ el.hidden = true; }, 400);
   }
 }
+/* 안쪽(작품·제목)만 전환 없이 처음 자리로 돌려놓는다. 구분선을 가진 바깥 칸은 건드리지 않는다. */
+function resetCardInner(el){
+  el.classList.add('cwp-replay');
+  void el.offsetWidth;   // 여기서 그 상태가 확정된다
+}
 /* 이미 떠 있는 상태에서 다른 작품을 고르면 그림만 툭 갈리므로, 처음 고를 때와 같은 등장을 다시 준다.
    단 사라지는 효과는 주지 않는다(작가 요청) — 옅어지기를 기다리면 고르고 나서 반 박자 늦게 반응한다.
-   그래서 .cwp-instant 로 전환을 한 프레임만 끄고 처음 상태로 되돌린 뒤, 내용을 바꾸고 등장만 재생한다. */
+   그래서 안쪽만 한 프레임 처음 자리로 돌려놓고(.cwp-replay) 내용을 바꾼 뒤 떼어 떠오르게 한다.
+   바깥 칸은 손대지 않으므로 그 칸에 붙은 구분선은 제자리에 그대로 있다(작가 지적). */
 var CARD_SHOWN_ID = null;
 function renderWorkInquiryCard(){
   var show = !!CURRENT_WORK;
@@ -477,16 +494,11 @@ function renderWorkInquiryCard(){
   CARD_SHOWN_ID = id;
 
   if(swapping){
-    cards.forEach(function(el){
-      if(!el) return;
-      clearTimeout(el._cwpTimer);
-      el.classList.add('cwp-instant');    // 이 한 프레임만 전환을 끈다
-      el.classList.remove('cwp-show');    // 사라지는 효과 없이 곧바로 처음 상태로
-      void el.offsetWidth;                // 여기서 '아직 안 보이는 상태'가 확정된다
-      el.classList.remove('cwp-instant');
-    });
+    cards.forEach(function(el){ if(el){ clearTimeout(el._cwpTimer); resetCardInner(el); } });
     fill();
-    cards.forEach(function(el){ setCardVisible(el, true); });   // 등장만 다시 재생
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){
+      cards.forEach(function(el){ if(el) el.classList.remove('cwp-replay'); });   // 안쪽만 다시 떠오른다
+    }); });
     return;
   }
   fill();
