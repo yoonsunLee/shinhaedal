@@ -38,7 +38,9 @@
     color:var(--ivory); font-family:'Noto Sans KR',sans-serif; font-size:13px; padding:8px 11px;
     max-width:100%;
   }
-  .ex-filter-row select:focus{outline:none; border-color:var(--accent);}
+  /* 테두리 색만 바꾸면 포커스가 어디 있는지 알기 어렵다. 연락하기 입력칸과 같은 방식으로
+     box-shadow 를 한 겹 더 둘러 테두리를 2px로 보이게 한다(사이트 안에서 형식을 맞춘다). */
+  .ex-filter-row select:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 1px var(--accent);}
   .ex-filter-notice{
     font-family:'Space Mono','Noto Sans KR', monospace; font-size:12px; letter-spacing:.5px; color:var(--accent);
     opacity:0; transition:opacity .3s ease;
