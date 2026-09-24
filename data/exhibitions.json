@@ -14,7 +14,9 @@
   "poster_url": "assets/exhibitions/EX-2026-01/poster.webp",
   "map_url": "https://naver.me/5LQ10ta4",
   "featured_work_nos": "",
-  "about_selected": true
+  "about_selected": true,
+  "home_mode": "auto",
+  "home_lead_days": null
  },
  {
   "id": "EX-2026-02",
@@ -31,7 +33,9 @@
   "poster_url": "assets/exhibitions/EX-2026-02/poster.webp",
   "map_url": "",
   "featured_work_nos": "",
-  "about_selected": false
+  "about_selected": false,
+  "home_mode": "auto",
+  "home_lead_days": null
  },
  {
   "id": "EX-2026-03",
@@ -48,7 +52,9 @@
   "poster_url": "assets/exhibitions/EX-2026-03/poster.webp",
   "map_url": "",
   "featured_work_nos": "",
-  "about_selected": true
+  "about_selected": true,
+  "home_mode": "auto",
+  "home_lead_days": null
  },
  {
   "id": "EX-2026-04",
@@ -65,7 +71,9 @@
   "poster_url": "assets/exhibitions/EX-2026-04/poster.webp",
   "map_url": "",
   "featured_work_nos": "",
-  "about_selected": false
+  "about_selected": false,
+  "home_mode": "auto",
+  "home_lead_days": null
  },
  {
   "id": "EX-2026-05",
@@ -82,7 +90,9 @@
   "poster_url": "assets/exhibitions/EX-2026-05/poster.webp",
   "map_url": "",
   "featured_work_nos": "",
-  "about_selected": true
+  "about_selected": true,
+  "home_mode": "auto",
+  "home_lead_days": null
  },
  {
   "id": "EX-2026-06",
@@ -99,7 +109,9 @@
   "poster_url": "assets/exhibitions/EX-2026-06/poster.webp",
   "map_url": "",
   "featured_work_nos": "",
-  "about_selected": false
+  "about_selected": false,
+  "home_mode": "auto",
+  "home_lead_days": null
  },
  {
   "id": "EX-2026-07",
@@ -116,7 +128,9 @@
   "poster_url": "assets/exhibitions/EX-2026-07/poster.webp",
   "map_url": "",
   "featured_work_nos": "",
-  "about_selected": true
+  "about_selected": true,
+  "home_mode": "auto",
+  "home_lead_days": null
  },
  {
   "id": "EX-2026-08",
@@ -133,7 +147,9 @@
   "poster_url": "assets/exhibitions/EX-2026-08/poster.webp",
   "map_url": "",
   "featured_work_nos": "",
-  "about_selected": false
+  "about_selected": false,
+  "home_mode": "auto",
+  "home_lead_days": null
  },
  {
   "id": "EX-2026-09",
@@ -150,7 +166,9 @@
   "poster_url": "",
   "map_url": "",
   "featured_work_nos": "",
-  "about_selected": false
+  "about_selected": false,
+  "home_mode": "auto",
+  "home_lead_days": null
  },
  {
   "id": "EX-2026-10",
@@ -167,7 +185,9 @@
   "poster_url": "assets/exhibitions/EX-2026-10/poster.webp",
   "map_url": "",
   "featured_work_nos": "",
-  "about_selected": false
+  "about_selected": false,
+  "home_mode": "auto",
+  "home_lead_days": null
  },
  {
   "id": "EX-2026-11",
@@ -184,7 +204,9 @@
   "poster_url": "",
   "map_url": "",
   "featured_work_nos": "",
-  "about_selected": false
+  "about_selected": false,
+  "home_mode": "auto",
+  "home_lead_days": null
  },
  {
   "id": "EX-2026-12",
@@ -201,7 +223,9 @@
   "poster_url": "assets/exhibitions/EX-2026-12/poster.webp",
   "map_url": "",
   "featured_work_nos": "",
-  "about_selected": false
+  "about_selected": false,
+  "home_mode": "auto",
+  "home_lead_days": null
  },
  {
   "id": "EX-2026-13",
@@ -218,7 +242,9 @@
   "poster_url": "assets/exhibitions/EX-2026-13/poster.webp",
   "map_url": "",
   "featured_work_nos": "",
-  "about_selected": false
+  "about_selected": false,
+  "home_mode": "auto",
+  "home_lead_days": null
  },
  {
   "id": "EX-2026-14",
@@ -235,7 +261,9 @@
   "poster_url": "assets/exhibitions/EX-2026-14/poster.webp",
   "map_url": "",
   "featured_work_nos": "",
-  "about_selected": false
+  "about_selected": false,
+  "home_mode": "auto",
+  "home_lead_days": null
  },
  {
   "id": "EX-2026-16",
@@ -252,7 +280,9 @@
   "poster_url": "",
   "map_url": "https://naver.me/xVBxKTTa",
   "featured_work_nos": "HD-2026-001",
-  "about_selected": false
+  "about_selected": false,
+  "home_mode": "auto",
+  "home_lead_days": null
  },
  {
   "id": "EX-2026-17",
@@ -269,7 +299,9 @@
   "poster_url": "",
   "map_url": "https://naver.me/5hua3oQi",
   "featured_work_nos": "",
-  "about_selected": false
+  "about_selected": false,
+  "home_mode": "auto",
+  "home_lead_days": null
  },
  {
   "id": "EX-2027-01",
@@ -286,6 +318,8 @@
   "poster_url": "",
   "map_url": "https://naver.me/55rmrD29",
   "featured_work_nos": "",
-  "about_selected": false
+  "about_selected": false,
+  "home_mode": "auto",
+  "home_lead_days": null
  }
 ]

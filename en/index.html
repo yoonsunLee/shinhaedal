@@ -620,6 +620,7 @@
     <h2 id="gridTitle">Recent works</h2>
     <a class="link-go" href="/en/works/" id="btnMoreWorks" data-i="browse_all" hidden>Browse all works →</a>
   </div>
+  <p class="ex-also" id="exAlso" hidden></p>
   <div class="work-grid" id="workGrid">
     <!-- 발행 때 scripts/prerender_lists.py가 채운다(검색 로봇용). JS가 같은 모양으로 다시 그린다 -->
     <!-- GEN:home-recent --><a class="tile" href="works/w/HD-2026-011/" data-idx="0" aria-label="N-th Degree Derivative Works B"><div class="tile-media"><img src="assets/works/HD-2026-011/thumb.webp" srcset="assets/works/HD-2026-011/thumb320.webp 320w, assets/works/HD-2026-011/thumb.webp 560w, assets/works/HD-2026-011/thumb700.webp 700w" sizes="(min-width:1244px) 345px, (min-width:901px) calc((100vw - 144px) / 3), calc((100vw - 92px) / 2)" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">N-th Degree Derivative Works B</span></span></a><a class="tile" href="works/w/HD-2026-009/" data-idx="1" aria-label="High Seas"><div class="tile-media"><img src="assets/works/HD-2026-009/thumb.webp" srcset="assets/works/HD-2026-009/thumb320.webp 320w, assets/works/HD-2026-009/thumb.webp 560w, assets/works/HD-2026-009/thumb700.webp 700w" sizes="(min-width:1244px) 345px, (min-width:901px) calc((100vw - 144px) / 3), calc((100vw - 92px) / 2)" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">High Seas</span></span></a><a class="tile" href="works/w/HD-2026-008/" data-idx="2" aria-label="The Bluebook"><div class="tile-media"><img src="assets/works/HD-2026-008/thumb.webp" srcset="assets/works/HD-2026-008/thumb320.webp 237w, assets/works/HD-2026-008/thumb.webp 414w, assets/works/HD-2026-008/thumb700.webp 518w" sizes="(min-width:1244px) 345px, (min-width:901px) calc((100vw - 144px) / 3), calc((100vw - 92px) / 2)" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">The Bluebook</span></span></a><a class="tile" href="works/w/HD-2026-005/" data-idx="3" aria-label="Article 10 of the Constitution: The Right to Pursue Happiness*"><div class="tile-media"><img src="assets/works/HD-2026-005/thumb.webp" srcset="assets/works/HD-2026-005/thumb320.webp 317w, assets/works/HD-2026-005/thumb.webp 555w, assets/works/HD-2026-005/thumb700.webp 694w" sizes="(min-width:1244px) 345px, (min-width:901px) calc((100vw - 144px) / 3), calc((100vw - 92px) / 2)" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">Article 10 of the Constitution: The Right to Pursue Happiness*</span></span></a><!-- /GEN:home-recent -->
@@ -927,7 +928,7 @@ function renderWorkTiles(rows){
 var ALL_WORKS = [];
 var HOME_LIST = [];
 var DETAIL_CACHE = {};
-var HOME_STATE = { mode:'recent', exhibition:null, works:[] };
+var HOME_STATE = { mode:'recent', exhibition:null, works:[], also:[] };
 var HOME_RECENT_COUNT = 6; // 작가가 홈 운영에서 2~6점 사이로 정한다(data/site-settings.json). 못 받아오면 6.
 
 function formatDateRange(start, end){
@@ -937,29 +938,40 @@ function formatDateRange(start, end){
 function todayKST(){
   return new Intl.DateTimeFormat('en-CA', {timeZone:'Asia/Seoul'}).format(new Date());
 }
-function pickActiveExhibition(list){
-  var today = todayKST();
-  for(var i=0;i<list.length;i++){
-    var ex = list[i];
-    if(ex.start_date && ex.end_date && today >= ex.start_date && today <= ex.end_date) return ex;
-  }
-  return null;
-}
 function addDays(dateStr, days){
   var d = new Date(dateStr + 'T00:00:00Z');
   d.setUTCDate(d.getUTCDate() + days);
   return d.toISOString().slice(0, 10);
 }
-function pickUpcomingExhibition(list){
-  var today = todayKST();
-  var UPCOMING_WINDOW_DAYS = 30; // 개막 30일 전부터 홈에 전시 예고(2026-09-22 운영자 결정)
-  var candidates = list.filter(function(ex){
-    if(!ex.start_date) return false;
-    var windowStart = addDays(ex.start_date, -UPCOMING_WINDOW_DAYS);
-    return today >= windowStart && today < ex.start_date;
+var HOME_UPCOMING_DAYS = 30; // 전시별로 따로 정하지 않았을 때의 예고 기간
+var HOME_ALSO_MAX = 2;       // 큰 카드 하나 + 한 줄 2건 = 모두 3건까지(2026-09-25 운영자 결정)
+/* 겹칠 때의 차례 — 유형이 앞선 전시를 앞세운다 */
+function homeTypeRank(t){
+  t = String(t||'');
+  if(t === '개인전') return 0;
+  if(t === '단체전' || t === '기획전' || t === '특별전') return 1;
+  if(t === '아트페어' || t === '팝업') return 2;
+  return 3;
+}
+function homeLead(ex){
+  var n = ex.home_lead_days;
+  return (n === null || n === undefined || n === '') ? HOME_UPCOMING_DAYS : Number(n);
+}
+/* 오늘 홈에 나갈 수 있는 전시를 앞선 차례대로.
+   이 규칙은 아카이브 admin.html 의 hvCandidates 와 글자 그대로 같아야 한다 —
+   다르면 관리 화면 미리보기와 실제 홈페이지가 서로 다른 전시를 가리킨다. */
+function homeCandidates(list, today){
+  return list.filter(function(ex){
+    if(!ex.start_date || !ex.end_date) return false;
+    if(ex.home_mode === 'hide') return false;
+    return today <= ex.end_date && today >= addDays(ex.start_date, -homeLead(ex));
+  }).sort(function(a, b){
+    return ((a.home_mode==='pin'?0:1) - (b.home_mode==='pin'?0:1))
+        || (homeTypeRank(a.type) - homeTypeRank(b.type))
+        || ((today>=a.start_date?0:1) - (today>=b.start_date?0:1))
+        || String(a.start_date||'').localeCompare(String(b.start_date||''))
+        || String(a.id||'').localeCompare(String(b.id||''));
   });
-  candidates.sort(function(a, b){ return String(a.start_date||'').localeCompare(String(b.start_date||'')); });
-  return candidates[0] || null;
 }
 function exhibitionCardHtml(ex){
   var title = LANG === 'en' ? (ex.title_en || ex.title) : ex.title;
@@ -978,6 +990,24 @@ function exhibitionCardHtml(ex){
     (links.length ? '<span class="ex-links">' + links.join('<span class="sep">·</span>') + '</span>' : '') +
     '</div>';
 }
+/* 같은 때에 겹치는 다른 전시 — 큰 카드는 하나뿐이라 나머지는 여기 한 줄로 적는다 */
+function renderHomeAlso(){
+  var box = document.getElementById('exAlso');
+  if(!box) return;
+  var list = HOME_STATE.also || [];
+  if(!list.length){ box.hidden = true; box.textContent = ''; return; }
+  var today = todayKST();
+  box.innerHTML = (LANG==='en' ? 'Also on: ' : '같은 때 전시: ') + list.map(function(ex){
+    var t = LANG==='en' ? (ex.title_en || ex.title) : ex.title;
+    var v = LANG==='en' ? (ex.venue_en || ex.venue) : ex.venue;
+    var when = today >= ex.start_date ? (LANG==='en' ? 'now' : '진행 중')
+                                      : (LANG==='en' ? 'from ' : '') + formatDateRange(ex.start_date, ex.end_date).split(' – ')[0] + (LANG==='en' ? '' : ' 개막');
+    // 전시 사이 구분이 전시 안 구분과 같아 보이지 않도록 딸린 정보는 괄호로 묶는다
+    return '<span class="ex-also-item"><b>' + esc(t||'') + '</b> <span class="ex-also-meta">(' +
+           (v ? esc(v) + ' · ' : '') + esc(when) + ')</span></span>';
+  }).join('<span class="sep">·</span>');
+  box.hidden = false;
+}
 function renderHomeGrid(){
   var titleEl = document.getElementById('gridTitle');
   var moreBtn = document.getElementById('btnMoreWorks');
@@ -995,6 +1025,7 @@ function renderHomeGrid(){
     moreBtn.href = 'works/?ex=' + encodeURIComponent(HOME_STATE.exhibition.id);
     moreBtn.textContent = I18N[LANG].browse_ex;
     moreBtn.hidden = false;
+    renderHomeAlso();
   }else{
     titleEl.textContent = 'Recent works';
     HOME_LIST = ALL_WORKS.slice(0, HOME_RECENT_COUNT);
@@ -1002,6 +1033,8 @@ function renderHomeGrid(){
     moreBtn.href = 'works/';
     moreBtn.textContent = I18N[LANG].browse_all;
     moreBtn.hidden = ALL_WORKS.length <= HOME_RECENT_COUNT;
+    var alsoBox = document.getElementById('exAlso');
+    if(alsoBox){ alsoBox.hidden = true; alsoBox.textContent = ''; }
   }
 }
 function loadExhibitionAndRender(){
@@ -1009,24 +1042,23 @@ function loadExhibitionAndRender(){
     .then(function(res){ return res.json(); })
     .then(function(list){
       list = list || [];
-      var mode = 'now';
-      var ex = pickActiveExhibition(list);
-      if(!ex){
-        ex = pickUpcomingExhibition(list);
-        mode = 'upcoming';
-      }
-      if(ex){
+      var today = todayKST();
+      var cand = homeCandidates(list, today);
+      // 공개 출품작이 없으면 카드를 그릴 수 없으니 다음 후보로 넘어간다
+      for(var i = 0; i < cand.length; i++){
+        var ex = cand[i];
         var allIds = String(ex.work_nos||'').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
         var allWorks = allIds.map(function(id){ return ALL_WORKS.filter(function(w){ return w.id===id; })[0]; }).filter(Boolean);
-        if(allWorks.length){
-          var featIds = String(ex.featured_work_nos||'').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
-          var featured = featIds.length
-            ? featIds.map(function(id){ return allWorks.filter(function(w){ return w.id===id; })[0]; }).filter(Boolean)
-            : allWorks.slice(0, 5);
-          HOME_STATE.mode = mode;
-          HOME_STATE.exhibition = ex;
-          HOME_STATE.works = featured.slice(0, 5);
-        }
+        if(!allWorks.length) continue;
+        var featIds = String(ex.featured_work_nos||'').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+        var featured = featIds.length
+          ? featIds.map(function(id){ return allWorks.filter(function(w){ return w.id===id; })[0]; }).filter(Boolean)
+          : allWorks.slice(0, 5);
+        HOME_STATE.mode = today >= ex.start_date ? 'now' : 'upcoming';
+        HOME_STATE.exhibition = ex;
+        HOME_STATE.works = featured.slice(0, 5);
+        HOME_STATE.also = cand.filter(function(x){ return x.id !== ex.id; }).slice(0, HOME_ALSO_MAX);
+        break;
       }
     })
     .catch(function(e){ console.error('전시 정보를 불러오지 못했습니다:', e); })
