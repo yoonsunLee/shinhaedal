@@ -181,3 +181,15 @@ main:focus{outline:none;}
   font-family:'Space Mono','Noto Sans KR',monospace; font-size:13px; font-weight:700;
   text-decoration:none; transition:top .18s ease;}
 .skip-link:focus{top:12px;}
+
+/* 같은 때에 겹치는 다른 전시 — 큰 카드는 하나뿐이라 나머지는 한 줄로 적는다 */
+.ex-also{margin:-6px 0 18px; font-size:.82rem; line-height:1.7; color:var(--ivory-muted);}
+.ex-also .ex-also-item{white-space:nowrap;}
+.ex-also b{font-weight:600; color:var(--ivory);}
+.ex-also .ex-also-meta{opacity:.8;}
+.ex-also .sep{margin:0 8px; opacity:.45;}
+@media (max-width:560px){
+  .ex-also{font-size:.78rem;}
+  .ex-also .ex-also-item{white-space:normal;}
+  .ex-also .sep{display:block; height:0; margin:2px 0; overflow:hidden; text-indent:-999px;}
+}

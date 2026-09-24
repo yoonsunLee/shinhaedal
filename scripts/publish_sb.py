@@ -685,6 +685,10 @@ def main():
             "map_url": s(e.get("map_url")),
             "featured_work_nos": s(e.get("featured_work_nos")),
             "about_selected": bool(e.get("about_selected")),
+            # 홈 첫 화면 노출 조절(exhibitions_home_2026-09.sql). 열이 아직 없으면 기본값으로 나간다.
+            # affiliation(소속·계약)은 비공개 메모라 일부러 여기 넣지 않는다.
+            "home_mode": s(e.get("home_mode")) or "auto",
+            "home_lead_days": e.get("home_lead_days"),
         })
     write_json(os.path.join(data_dir, "exhibitions.json"), ex_out)
     print("exhibitions.json: %d건" % len(ex_out))
