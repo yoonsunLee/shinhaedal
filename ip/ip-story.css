@@ -436,3 +436,13 @@ body>nav{animation:nav-arrive .55s .04s both cubic-bezier(.22,1,.36,1)}
   .motion-ready .reveal:not(.seen){opacity:1;transform:none}
   .beach,.hero-character{transform:none!important}
 }
+/* 본문 건너뛰기 — IP 페이지는 site.css 를 쓰지 않아 여기에도 둔다 */
+/* 건너뛰기 링크처럼 한 파일에 두 언어를 같이 넣은 곳을 html[lang] 으로 가른다 */
+html[lang="en"] .t-ko{display:none!important}
+html:not([lang="en"]) .t-en{display:none!important}
+/* 건너뛰기로 본문에 초점이 올 때 본문 전체에 테두리가 그려지지 않게 한다 — 화면이 본문으로 옮겨간 것 자체가 신호다 */
+main:focus{outline:none}
+.skip-link{position:absolute;left:16px;top:-64px;z-index:200;padding:10px 16px;border-radius:4px;
+  background:var(--navy);color:var(--paper);font-family:'Space Mono','Noto Sans KR',monospace;
+  font-size:13px;font-weight:700;text-decoration:none;transition:top .18s ease}
+.skip-link:focus{top:12px}

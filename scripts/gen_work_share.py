@@ -168,6 +168,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <script type="application/ld+json">{jsonld}</script>
 </head>
 <body>
+<a class="skip-link" href="#main"><span class="t-ko">본문으로 건너뛰기</span><span class="t-en" lang="en">Skip to content</span></a>
 <script src="../../../assets/starfield.js" defer></script>
 <!-- scripts/gen_work_share.py가 발행 때마다 생성하는 파일. 직접 고치면 다음 발행 때 덮어써진다. -->
 
@@ -215,7 +216,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
   </div>
 </nav>
 
-<main class="wp">
+<main id="main" tabindex="-1" class="wp">
   <a class="wp-back" href="../../">{back_label}</a>
 
   <article class="wp-work">

@@ -168,3 +168,16 @@ footer .ft-privacy:hover{text-decoration:underline; text-underline-offset:4px;}
 footer .ft-privacy ~ .ft-privacy{font-weight:400; color:var(--ivory-muted);}
 footer .ft-privacy ~ .ft-privacy:hover{color:var(--ivory);}
 html[lang="en"] .ft-ko, html:not([lang="en"]) .ft-en{display:none;}
+/* 본문 건너뛰기 — 평소에는 화면 밖에 있다가 Tab 을 처음 누르면 나타난다.
+   이게 없으면 페이지를 열 때마다 상단 메뉴를 Tab 으로 11번 지나야 본문에 닿는다. */
+/* 건너뛰기 링크처럼 한 파일에 두 언어를 같이 넣은 곳을 html[lang] 으로 가른다 */
+html[lang="en"] .t-ko{display:none !important;}
+html:not([lang="en"]) .t-en{display:none !important;}
+/* 건너뛰기로 본문에 초점이 올 때 본문 전체에 테두리가 그려지지 않게 한다 — 화면이 본문으로 옮겨간 것 자체가 신호다 */
+main:focus{outline:none;}
+.skip-link{position:absolute; left:16px; top:-64px; z-index:200;
+  padding:10px 16px; border-radius:4px;
+  background:var(--accent); color:#06070c;
+  font-family:'Space Mono','Noto Sans KR',monospace; font-size:13px; font-weight:700;
+  text-decoration:none; transition:top .18s ease;}
+.skip-link:focus{top:12px;}
