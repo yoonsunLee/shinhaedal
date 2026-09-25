@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; font-src 'self'; connect-src 'self' https://shinhaedalapi.mycafe24.com; frame-src https://www.youtube-nocookie.com; object-src 'none'; base-uri 'self'; upgrade-insecure-requests">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script>/*lang-route*/(function(){var s=location.search,m=/[?&]lang=(en|ko)(?=&|$)/.exec(s),l=m&&m[1];try{if(l==='ko')localStorage.setItem('site_lang','ko');else if(!l)l=localStorage.getItem('site_lang')}catch(e){}if(l!=='en')return;window.__SH_LANG_REDIRECT=1;document.documentElement.style.visibility='hidden';location.replace('/en'+location.pathname+s.replace(/([?&])lang=en(&|$)/,function(a,p,e){return e?p:''})+location.hash)})()</script>
+<script>/*lang-route*/(function(){var s=location.search,m=/[?&]lang=(en|ko)(?=&|$)/.exec(s),l=m&&m[1];try{if(l==='ko')localStorage.setItem('site_lang','ko');else if(!l)l=localStorage.getItem('site_lang')}catch(e){}if(!l){try{var b=/bot|crawl|spider|slurp|yeti|facebookexternalhit|kakaotalk|embedly|preview|lighthouse|headless/i.test(navigator.userAgent||'');var g=(navigator.languages&&navigator.languages.length)?navigator.languages:[navigator.language||''];var k=false,i;for(i=0;i<g.length;i++){if(/^ko/i.test(g[i]||''))k=true}if(!b&&!k&&g[0])l='en'}catch(e){}}if(l!=='en')return;window.__SH_LANG_REDIRECT=1;document.documentElement.style.visibility='hidden';location.replace('/en'+location.pathname+s.replace(/([?&])lang=en(&|$)/,function(a,p,e){return e?p:''})+location.hash)})()</script>
 <script>document.documentElement.classList.add('js')</script>
 <!-- 아카이브 미리보기(iframe·?pv=1)일 때만 데이터 바꿔 끼우기 스크립트를 먼저 불러온다. 평소 방문에는 아무것도 안 함 -->
 <script>try{if(window.top!==window&&(/[?&]pv=1(&|$)/.test(location.search)||sessionStorage.getItem('sh_pv')==='1'))document.write('<script src="/assets/preview.js"><\/script>')}catch(e){}</script>
@@ -301,12 +301,9 @@
   .tile-cap{padding-top:16px;}
   .tile-title{font-size:14px; color:var(--ivory-dim); font-weight:500; line-height:1.4;}
   .tile-ex{
-    /* 네모난 카드를 기본으로 하되, 글이 길면 카드가 늘어난다.
-       overflow:hidden 이 걸린 격자 칸은 최소 높이가 0으로 잡혀 내용이 잘리므로
-       min-height 로 받쳐 준다 — 휴대폰에서 전시명 윗줄이 잘리던 원인(2026-09-25) */
-    /* 높이를 1:1 로 못 박으면 글이 길 때 잘린다(overflow:hidden 인 격자 칸은 최소 높이가 0으로 잡힌다).
-       격자 칸은 원래 줄 높이에 맞춰 늘어나므로, 바닥값만 두고 나머지는 격자에 맡긴다.
-       — 휴대폰에서 전시명 윗줄이 잘리던 원인(2026-09-25) */
+    /* 높이를 1:1 로 못 박으면 글이 길 때 잘린다 — overflow:hidden 인 격자 칸은 최소 높이가 0으로 잡힌다.
+       격자 칸은 원래 줄 높이에 맞춰 늘어나므로 바닥값만 두고 나머지는 격자에 맡긴다.
+       휴대폰에서 전시명 윗줄이 잘리던 원인이다(2026-09-25). */
     min-height:210px;
     border-radius:2px; border:1px solid rgba(134,182,232,.18); background:var(--bg-2);
     padding:20px 18px; display:flex; flex-direction:column; justify-content:center; gap:6px;

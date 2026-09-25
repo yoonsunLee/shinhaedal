@@ -56,8 +56,21 @@ def en_desc(path, en):
 # ── 머리(head)에 넣는 것 ──
 # 국문 페이지: ?lang=en으로 왔거나 전에 EN을 고른 사람은 영문 주소로 보낸다(브라우저 언어로 자동 전환은 하지 않는다).
 # 옮겨 가는 동안 국문 화면이 번쩍이지 않게 가리고, 방문 통계는 세지 않는다(__SH_LANG_REDIRECT).
+# 국문 페이지: 어느 말로 보여줄지 정한다.
+#   ① 주소의 ?lang= — 공유 링크가 못을 박는다
+#   ② 전에 고른 언어(site_lang) — 사람이 직접 누른 것이라 브라우저 설정보다 세다
+#   ③ 브라우저 언어 — 처음 오는 사람에게만. 목록 어딘가에 한국어가 있으면 한글로 둔다
+#      (한국분이 폰을 영어로 쓰는 경우가 흔해서 첫 낱말만 보면 한글을 못 본다)
+#   ④ 그래도 모르면 한국어
+# 검색 로봇은 ③을 건너뛴다 — 구글봇은 영어로 동작하는데 그걸 따르면 한글 페이지가
+# 영문으로 색인되고 정적으로 박힌 제목·설명(한글)과도 어긋난다(2026-09 실제로 났던 일).
 KO_ROUTE = ("<script>/*lang-route*/(function(){var s=location.search,m=/[?&]lang=(en|ko)(?=&|$)/.exec(s),l=m&&m[1];"
             "try{if(l==='ko')localStorage.setItem('site_lang','ko');else if(!l)l=localStorage.getItem('site_lang')}catch(e){}"
+            "if(!l){try{"
+            "var b=/bot|crawl|spider|slurp|yeti|facebookexternalhit|kakaotalk|embedly|preview|lighthouse|headless/i.test(navigator.userAgent||'');"
+            "var g=(navigator.languages&&navigator.languages.length)?navigator.languages:[navigator.language||''];"
+            "var k=false,i;for(i=0;i<g.length;i++){if(/^ko/i.test(g[i]||''))k=true}"
+            "if(!b&&!k&&g[0])l='en'}catch(e){}}"
             "if(l!=='en')return;window.__SH_LANG_REDIRECT=1;document.documentElement.style.visibility='hidden';"
             "location.replace('/en'+location.pathname+s.replace(/([?&])lang=en(&|$)/,function(a,p,e){return e?p:''})+location.hash)})()</script>")
 # 영문 페이지: ?lang=ko로 오면 국문 주소로(국문 쪽이 site_lang을 ko로 적는다)

@@ -302,10 +302,32 @@
   .tile-cap{padding-top:16px;}
   .tile-title{font-size:14px; color:var(--ivory-dim); font-weight:500; line-height:1.4;}
   .tile-ex{
-    aspect-ratio:1/1; border-radius:2px; border:1px solid rgba(134,182,232,.18); background:var(--bg-2);
+    /* 높이를 1:1 로 못 박으면 글이 길 때 잘린다 — overflow:hidden 인 격자 칸은 최소 높이가 0으로 잡힌다.
+       격자 칸은 원래 줄 높이에 맞춰 늘어나므로 바닥값만 두고 나머지는 격자에 맡긴다.
+       휴대폰에서 전시명 윗줄이 잘리던 원인이다(2026-09-25). */
+    min-height:210px;
+    border-radius:2px; border:1px solid rgba(134,182,232,.18); background:var(--bg-2);
     padding:20px 18px; display:flex; flex-direction:column; justify-content:center; gap:6px;
     position:relative; overflow:hidden;
+    transition:border-color .18s ease, background .18s ease;
   }
+  /* 개인전만 강조 — 전복 블루(--accent)는 사이트에서 '여기를 보라'는 뜻으로 이미 쓰인다.
+     나머지 유형은 서로 같은 모양으로 둔다. 셋 다 색을 주면 홈이 알록달록해진다. */
+  .tile-ex.is-solo{ border-color:var(--accent-dim); background:linear-gradient(180deg, rgba(134,182,232,.07), transparent 60%), var(--bg-2); }
+  .tile-ex:hover{ border-color:rgba(134,182,232,.45); }
+  .tile-ex .ex-badge{
+    position:absolute; top:12px; right:12px; z-index:2;
+    font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; letter-spacing:.5px;
+    padding:3px 9px; border-radius:20px; border:1px solid var(--line);
+    color:var(--ivory-muted); background:rgba(11,11,15,.55);
+  }
+  .tile-ex .ex-badge.on{ color:var(--accent); border-color:var(--accent-dim); }
+  /* 제목을 감싼 링크가 카드 전체를 덮는다. 안쪽 링크는 그 위에 얹혀 따로 눌린다. */
+  .tile-ex .ex-go{ text-decoration:none; color:inherit; }
+  .tile-ex .ex-go::after{ content:''; position:absolute; inset:0; z-index:1; }
+  .tile-ex .ex-go:focus-visible{ outline:none; }
+  .tile-ex:has(.ex-go:focus-visible){ outline:2px solid var(--accent); outline-offset:3px; }
+  .tile-ex .ex-links{ z-index:2; }
   .tile-ex .ex-bg{
     position:absolute; inset:-10px; background-size:cover; background-position:center;
     filter:blur(7px); z-index:0;
@@ -313,8 +335,10 @@
   .tile-ex .ex-bg::after{ content:''; position:absolute; inset:0; background:rgba(11,11,15,.7); }
   .tile-ex > *{ position:relative; z-index:1; }
   .tile-ex .ex-title{
+    display:block;
     font-family:'Black Han Sans',sans-serif; font-weight:400; font-size:21px; color:var(--ivory); line-height:1.35;
     margin:0 0 16px; padding-bottom:16px; border-bottom:1px solid var(--line);
+    padding-right:62px;   /* 오른쪽 위 배지와 겹치지 않게 자리를 비워 둔다 */
   }
   .tile-ex .ex-meta{font-size:13px; color:var(--ivory-dim); line-height:1.6;}
   .tile-ex .ex-links{display:flex; align-items:center; gap:10px; margin-top:12px; padding-top:12px; border-top:1px solid var(--line);}
@@ -620,7 +644,6 @@
     <h2 id="gridTitle">Recent works</h2>
     <a class="link-go" href="/en/works/" id="btnMoreWorks" data-i="browse_all" hidden>Browse all works →</a>
   </div>
-  <p class="ex-also" id="exAlso" hidden></p>
   <div class="work-grid" id="workGrid">
     <!-- 발행 때 scripts/prerender_lists.py가 채운다(검색 로봇용). JS가 같은 모양으로 다시 그린다 -->
     <!-- GEN:home-recent --><a class="tile" href="works/w/HD-2026-011/" data-idx="0" aria-label="N-th Degree Derivative Works B"><div class="tile-media"><img src="assets/works/HD-2026-011/thumb.webp" srcset="assets/works/HD-2026-011/thumb320.webp 320w, assets/works/HD-2026-011/thumb.webp 560w, assets/works/HD-2026-011/thumb700.webp 700w" sizes="(min-width:1244px) 345px, (min-width:901px) calc((100vw - 144px) / 3), calc((100vw - 92px) / 2)" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">N-th Degree Derivative Works B</span></span></a><a class="tile" href="works/w/HD-2026-009/" data-idx="1" aria-label="High Seas"><div class="tile-media"><img src="assets/works/HD-2026-009/thumb.webp" srcset="assets/works/HD-2026-009/thumb320.webp 320w, assets/works/HD-2026-009/thumb.webp 560w, assets/works/HD-2026-009/thumb700.webp 700w" sizes="(min-width:1244px) 345px, (min-width:901px) calc((100vw - 144px) / 3), calc((100vw - 92px) / 2)" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">High Seas</span></span></a><a class="tile" href="works/w/HD-2026-008/" data-idx="2" aria-label="The Bluebook"><div class="tile-media"><img src="assets/works/HD-2026-008/thumb.webp" srcset="assets/works/HD-2026-008/thumb320.webp 237w, assets/works/HD-2026-008/thumb.webp 414w, assets/works/HD-2026-008/thumb700.webp 518w" sizes="(min-width:1244px) 345px, (min-width:901px) calc((100vw - 144px) / 3), calc((100vw - 92px) / 2)" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">The Bluebook</span></span></a><a class="tile" href="works/w/HD-2026-005/" data-idx="3" aria-label="Article 10 of the Constitution: The Right to Pursue Happiness*"><div class="tile-media"><img src="assets/works/HD-2026-005/thumb.webp" srcset="assets/works/HD-2026-005/thumb320.webp 317w, assets/works/HD-2026-005/thumb.webp 555w, assets/works/HD-2026-005/thumb700.webp 694w" sizes="(min-width:1244px) 345px, (min-width:901px) calc((100vw - 144px) / 3), calc((100vw - 92px) / 2)" alt="" loading="lazy" draggable="false" onerror="this.style.visibility='hidden'"><div class="tile-sheen"></div></div><span class="tile-cap"><span class="tile-title">Article 10 of the Constitution: The Right to Pursue Happiness*</span></span></a><!-- /GEN:home-recent -->
@@ -928,7 +951,7 @@ function renderWorkTiles(rows){
 var ALL_WORKS = [];
 var HOME_LIST = [];
 var DETAIL_CACHE = {};
-var HOME_STATE = { mode:'recent', exhibition:null, works:[], also:[] };
+var HOME_STATE = { exhibitions:[], works:[] };
 var HOME_RECENT_COUNT = 6; // 작가가 홈 운영에서 2~6점 사이로 정한다(data/site-settings.json). 못 받아오면 6.
 
 function formatDateRange(start, end){
@@ -944,7 +967,8 @@ function addDays(dateStr, days){
   return d.toISOString().slice(0, 10);
 }
 var HOME_UPCOMING_DAYS = 30; // 전시별로 따로 정하지 않았을 때의 예고 기간
-var HOME_ALSO_MAX = 2;       // 큰 카드 하나 + 한 줄 2건 = 모두 3건까지(2026-09-25 운영자 결정)
+var HOME_CARDS_MAX = 3;      // 겹칠 때 홈에 함께 보여 줄 전시 수(2026-09-25 운영자 결정)
+var HOME_TILES = 6;          // 전시 카드 + 작품을 합쳐 채울 칸 수(3열 × 2줄)
 /* 겹칠 때의 차례 — 유형이 앞선 전시를 앞세운다 */
 function homeTypeRank(t){
   t = String(t||'');
@@ -973,7 +997,14 @@ function homeCandidates(list, today){
         || String(a.id||'').localeCompare(String(b.id||''));
   });
 }
-function exhibitionCardHtml(ex){
+/* 카드 오른쪽 위 배지 — 진행 중인지, 개막까지 며칠인지 */
+function exBadgeHtml(ex, today){
+  if(today >= ex.start_date)
+    return '<span class="ex-badge on">' + (LANG==='en' ? 'On view' : '진행 중') + '</span>';
+  var d = Math.round((Date.parse(ex.start_date + 'T00:00:00Z') - Date.parse(today + 'T00:00:00Z')) / 86400000);
+  return '<span class="ex-badge">D-' + d + '</span>';
+}
+function exhibitionCardHtml(ex, today){
   var title = LANG === 'en' ? (ex.title_en || ex.title) : ex.title;
   var venue = LANG === 'en' ? (ex.venue_en || ex.venue) : ex.venue;
   var mapHref = ex.map_url || (venue ? 'https://www.google.com/maps/search/' + encodeURIComponent(venue) : '');
@@ -983,49 +1014,43 @@ function exhibitionCardHtml(ex){
   var bg = ex.poster_url
     ? '<div class="ex-bg" style="background-image:url(\'' + esc(ex.poster_url) + '\')"></div>'
     : '';
-  return '<div class="tile-ex">' +
+  // 개인전만 강조색으로 둘러 준다. 나머지 유형은 서로 같은 모양이다.
+  var solo = (ex.type === '개인전' || ex.type_en === 'Solo Exhibition') ? ' is-solo' : '';
+  var href = 'works/?ex=' + encodeURIComponent(ex.id || '');
+  // 제목을 감싼 링크가 카드 전체를 덮는다(ex-go::after). 안쪽 링크는 그 위에 얹혀 따로 눌린다.
+  return '<div class="tile-ex' + solo + '">' +
     bg +
-    '<span class="ex-title">' + esc(title||'') + '</span>' +
+    exBadgeHtml(ex, today) +
+    '<a class="ex-go" href="' + esc(href) + '"><span class="ex-title">' + esc(title||'') + '</span></a>' +
     '<span class="ex-meta">' + esc(venue||'') + '<br>' + esc(formatDateRange(ex.start_date, ex.end_date)) + (ex.type ? '<br>' + esc(LANG==='en' ? (ex.type_en || ex.type) : ex.type) : '') + '</span>' +
     (links.length ? '<span class="ex-links">' + links.join('<span class="sep">·</span>') + '</span>' : '') +
     '</div>';
 }
-/* 같은 때에 겹치는 다른 전시 — 큰 카드는 하나뿐이라 나머지는 여기 한 줄로 적는다 */
-function renderHomeAlso(){
-  var box = document.getElementById('exAlso');
-  if(!box) return;
-  var list = HOME_STATE.also || [];
-  if(!list.length){ box.hidden = true; box.textContent = ''; return; }
-  var today = todayKST();
-  box.innerHTML = (LANG==='en' ? 'Also on: ' : '같은 때 전시: ') + list.map(function(ex){
-    var t = LANG==='en' ? (ex.title_en || ex.title) : ex.title;
-    var v = LANG==='en' ? (ex.venue_en || ex.venue) : ex.venue;
-    var when = today >= ex.start_date ? (LANG==='en' ? 'now' : '진행 중')
-                                      : (LANG==='en' ? 'from ' : '') + formatDateRange(ex.start_date, ex.end_date).split(' – ')[0] + (LANG==='en' ? '' : ' 개막');
-    // 전시 사이 구분이 전시 안 구분과 같아 보이지 않도록 딸린 정보는 괄호로 묶는다
-    return '<span class="ex-also-item"><b>' + esc(t||'') + '</b> <span class="ex-also-meta">(' +
-           (v ? esc(v) + ' · ' : '') + esc(when) + ')</span></span>';
-  }).join('<span class="sep">·</span>');
-  box.hidden = false;
-}
 function renderHomeGrid(){
   var titleEl = document.getElementById('gridTitle');
   var moreBtn = document.getElementById('btnMoreWorks');
-  if((HOME_STATE.mode === 'now' || HOME_STATE.mode === 'upcoming') && HOME_STATE.exhibition){
-    titleEl.textContent = HOME_STATE.mode === 'upcoming' ? 'Upcoming exhibition' : 'Now on view';
+  var list = HOME_STATE.exhibitions || [];
+  if(list.length){
+    // 전시가 하나면 그 상태를 제목으로, 둘 이상이면 서로 상태가 달라 한 제목으로 못 덮는다
+    titleEl.textContent = list.length > 1 ? 'Exhibitions'
+      : (todayKST() >= list[0].start_date ? 'Now on view' : 'Upcoming exhibition');
     HOME_LIST = HOME_STATE.works;
     renderWorkTiles(HOME_LIST);
-    document.getElementById('workGrid').insertAdjacentHTML('afterbegin', exhibitionCardHtml(HOME_STATE.exhibition));
-    var posterLink = document.querySelector('.tile-ex .ex-poster-link');
-    if(posterLink) posterLink.onclick = function(e){
-      e.preventDefault();
-      var title = LANG === 'en' ? (HOME_STATE.exhibition.title_en || HOME_STATE.exhibition.title) : HOME_STATE.exhibition.title;
-      openLargeView(HOME_STATE.exhibition.poster_url, title);
-    };
-    moreBtn.href = 'works/?ex=' + encodeURIComponent(HOME_STATE.exhibition.id);
-    moreBtn.textContent = I18N[LANG].browse_ex;
+    var today = todayKST(), grid = document.getElementById('workGrid');
+    for(var i = list.length - 1; i >= 0; i--)
+      grid.insertAdjacentHTML('afterbegin', exhibitionCardHtml(list[i], today));
+    // 포스터는 새 창이 아니라 크게 보기로 연다
+    Array.prototype.forEach.call(document.querySelectorAll('.tile-ex .ex-poster-link'), function(a, i){
+      var ex = list[i];
+      a.onclick = function(e){
+        e.preventDefault(); e.stopPropagation();
+        openLargeView(ex.poster_url, LANG === 'en' ? (ex.title_en || ex.title) : ex.title);
+      };
+    });
+    // 카드가 저마다 제 전시로 가므로 한 곳만 가리키던 단추는 쓰지 않는다
+    moreBtn.href = 'works/';
+    moreBtn.textContent = I18N[LANG].browse_all;
     moreBtn.hidden = false;
-    renderHomeAlso();
   }else{
     titleEl.textContent = 'Recent works';
     HOME_LIST = ALL_WORKS.slice(0, HOME_RECENT_COUNT);
@@ -1033,8 +1058,6 @@ function renderHomeGrid(){
     moreBtn.href = 'works/';
     moreBtn.textContent = I18N[LANG].browse_all;
     moreBtn.hidden = ALL_WORKS.length <= HOME_RECENT_COUNT;
-    var alsoBox = document.getElementById('exAlso');
-    if(alsoBox){ alsoBox.hidden = true; alsoBox.textContent = ''; }
   }
 }
 function loadExhibitionAndRender(){
@@ -1043,23 +1066,31 @@ function loadExhibitionAndRender(){
     .then(function(list){
       list = list || [];
       var today = todayKST();
-      var cand = homeCandidates(list, today);
-      // 공개 출품작이 없으면 카드를 그릴 수 없으니 다음 후보로 넘어간다
-      for(var i = 0; i < cand.length; i++){
-        var ex = cand[i];
+      // 개막이 이른 차례로 보여 준다(어느 것을 앞세울지는 homeCandidates 가 이미 정했고,
+      // 화면에서는 일어나는 차례대로 읽는 편이 자연스럽다)
+      var cand = homeCandidates(list, today).slice(0, HOME_CARDS_MAX)
+        .sort(function(a, b){ return String(a.start_date||'').localeCompare(String(b.start_date||'')); });
+      if(!cand.length) return;
+      HOME_STATE.exhibitions = cand;
+
+      // 아래 작품 = 보여 주는 전시들의 출품작을 합친 것. 모자라면 최근 작품으로 채운다.
+      // (아트페어처럼 출품작이 한두 점뿐인 전시만 떠도 칸이 비어 보이지 않게)
+      var seen = {}, works = [];
+      cand.forEach(function(ex){
         var allIds = String(ex.work_nos||'').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
-        var allWorks = allIds.map(function(id){ return ALL_WORKS.filter(function(w){ return w.id===id; })[0]; }).filter(Boolean);
-        if(!allWorks.length) continue;
+        var mine = allIds.map(function(id){ return ALL_WORKS.filter(function(w){ return w.id===id; })[0]; }).filter(Boolean);
         var featIds = String(ex.featured_work_nos||'').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
-        var featured = featIds.length
-          ? featIds.map(function(id){ return allWorks.filter(function(w){ return w.id===id; })[0]; }).filter(Boolean)
-          : allWorks.slice(0, 5);
-        HOME_STATE.mode = today >= ex.start_date ? 'now' : 'upcoming';
-        HOME_STATE.exhibition = ex;
-        HOME_STATE.works = featured.slice(0, 5);
-        HOME_STATE.also = cand.filter(function(x){ return x.id !== ex.id; }).slice(0, HOME_ALSO_MAX);
-        break;
-      }
+        if(featIds.length){
+          var pick = featIds.map(function(id){ return mine.filter(function(w){ return w.id===id; })[0]; }).filter(Boolean);
+          if(pick.length) mine = pick;
+        }
+        mine.forEach(function(w){ if(!seen[w.id]){ seen[w.id] = 1; works.push(w); } });
+      });
+      // 격자가 3열이라 카드와 작품을 합친 칸 수가 3의 배수여야 줄이 꽉 찬다.
+      // 두 줄(6칸)을 채우는 만큼만 쓴다 — 카드 1개면 작품 5점, 3개면 3점.
+      var room = Math.max(0, HOME_TILES - cand.length);
+      ALL_WORKS.forEach(function(w){ if(works.length < room && !seen[w.id]){ seen[w.id] = 1; works.push(w); } });
+      HOME_STATE.works = works.slice(0, room);
     })
     .catch(function(e){ console.error('전시 정보를 불러오지 못했습니다:', e); })
     .then(renderHomeGrid);
