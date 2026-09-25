@@ -154,11 +154,23 @@ nav{
 .link-sub:hover, .link-sub:focus-visible{color:var(--ivory);}
 button.link-go, button.link-sub{background:none; border:none; padding:0; margin:0; cursor:pointer;}
 
-footer{border-top:1px solid var(--line); padding:30px max(32px, calc((100% - 1180px) / 2 + 32px)) 44px; /* 선은 화면 끝까지, 글자는 로고와 같은 선에서 시작 */ display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-muted);}
+/* 두 줄로 나눈다 — 첫 줄 저작권·BACK TO TOP, 둘째 줄 처리방침·이용안내.
+   한 줄에 다 넣으면 좁은 화면에서 저작권 문장 안으로 링크가 끼어들어 제멋대로 접혔다. */
+footer{border-top:1px solid var(--line); padding:30px max(32px, calc((100% - 1180px) / 2 + 32px)) 44px; /* 선은 화면 끝까지, 글자는 로고와 같은 선에서 시작 */
+  display:grid; grid-template-columns:1fr auto; align-items:baseline; row-gap:14px; column-gap:16px;
+  font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-muted);}
+footer .ft-copy{grid-column:1;}
+footer .ft-top{grid-column:2; justify-self:end;}
+footer .ft-links{grid-column:1 / -1; display:flex; flex-wrap:wrap; gap:8px 28px;}
+@media (max-width:620px){
+  /* 좁으면 저작권과 BACK TO TOP 이 한 줄에 못 들어간다 — 세 줄로 세우고 차례만 바꾼다 */
+  footer{grid-template-columns:1fr; row-gap:12px;}
+  footer .ft-copy{order:1;} footer .ft-links{order:2;} footer .ft-top{order:3; grid-column:1; justify-self:start;}
+}
 footer a{color:var(--ivory-muted); text-decoration:none;}
 footer a:hover{color:var(--ivory);}
 /* 개인정보 처리방침 링크: 다른 푸터 글자보다 밝고 굵게 해서 한눈에 구분되게 (언어는 html[lang]로 전환) */
-footer .ft-privacy{color:var(--ivory); font-weight:700; margin-left:28px; white-space:nowrap;}
+footer .ft-privacy{color:var(--ivory); font-weight:700; white-space:nowrap;}
 footer .ft-privacy:hover{text-decoration:underline; text-underline-offset:4px;}
 /* 저작권·이용 안내는 법정 고지가 아니다. 굵게 하는 것은 개인정보 처리방침을 다른 링크와
    구분하라는 지침을 따른 것인데, 둘 다 굵으면 그 구분이 사라진다(작가 지적).
