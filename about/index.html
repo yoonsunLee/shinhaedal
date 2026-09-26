@@ -378,9 +378,15 @@ function todayKST(){
 }
 function renderExhibitions(rows){
   var today = todayKST();
-  var upcoming = rows.filter(function(r){ return String(r.start_date||'') > today; })
+  /* 전시 관리에서 'About 페이지 노출'을 체크한 전시만 싣는다.
+     하나도 체크하지 않았으면 예전처럼 알아서 고른다(예정 전부 + 최근 두셋).
+     예전에는 예정된 전시가 체크와 상관없이 늘 나와서, 체크한 넷만 보이길 바라는데
+     예정 넷이 통째로 끼어들었다(2026-09-26). */
+  var marked = rows.filter(function(r){ return r.about_selected; });
+  var list = marked.length ? marked : rows;
+  var upcoming = list.filter(function(r){ return String(r.start_date||'') > today; })
     .sort(function(a, b){ return String(a.start_date||'').localeCompare(String(b.start_date||'')); });
-  var past = rows.filter(function(r){ return String(r.start_date||'') <= today; });
+  var past = list.filter(function(r){ return String(r.start_date||'') <= today; });
 
   function exTitle(r){ return LANG === 'en' ? (r.title_en || r.title) : r.title; }
   function exVenue(r){ return LANG === 'en' ? (r.venue_en || r.venue) : r.venue; }
@@ -392,14 +398,8 @@ function renderExhibitions(rows){
   }).join('');
 
   var sorted = past.slice().sort(function(a, b){ return String(b.start_date||'').localeCompare(String(a.start_date||'')); });
-  var selected = sorted.filter(function(r){ return r.about_selected; });
-  var picked;
-  if(selected.length){
-    picked = selected;
-  }else{
-    var LIMIT = upcoming.length ? 2 : 3;
-    picked = sorted.slice(0, LIMIT);
-  }
+  // 체크한 게 있으면 위에서 이미 걸렀으니 그대로 다 싣고, 없을 때만 최근 것으로 줄인다
+  var picked = marked.length ? sorted : sorted.slice(0, upcoming.length ? 2 : 3);
 
   if(!picked.length && !upcoming.length){
     document.getElementById('exList').innerHTML = '<p class="ab-ex-empty">' + I18N[LANG].ex_empty + '</p>';
