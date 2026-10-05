@@ -914,17 +914,10 @@ function seriesKey(title){
   if(!key) return null;
   return key.replace(/^[nN]+(?=차적)/, 'n');
 }
-var MANUAL_SERIES_GROUPS = [
-  ["HD-2026-004", "HD-2026-009"]
-];
 function seriesSiblings(meta){
   if(meta.series_key){
     var byKey = ALL_WORKS.filter(function(w){ return w.series_key === meta.series_key; });
     return byKey.filter(function(w){ return w.id !== meta.id; });
-  }
-  var manualGroup = MANUAL_SERIES_GROUPS.filter(function(ids){ return ids.indexOf(meta.id) !== -1; })[0];
-  if(manualGroup){
-    return ALL_WORKS.filter(function(w){ return manualGroup.indexOf(w.id) !== -1 && w.id !== meta.id; });
   }
   var key = seriesKey(meta.title);
   if(!key) return [];
