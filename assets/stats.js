@@ -2,6 +2,7 @@
    처리방침 11항(방문 통계).
 
    세는 것: 페이지뷰 · 방문(30분 넘게 쉬었거나 다른 사이트에서 들어오면 새 방문) · 방문자(하루에 한 번)
+            — 방문·방문자는 '봤다'는 신호(스크롤·누름·10초 머무름)가 있을 때만 센다. 페이지뷰는 그대로 다 센다.
             · 스크롤 깊이(25·50·75·100%) · 머문 시간(화면이 실제로 보이는 동안) · 버튼 클릭(수 · 누른 방문 수)
             · 구역 도달 · 작품별 열람과 머문 시간 · 들어온 곳(사이트 종류·캠페인 표시) · 언어 · 기기 종류
    세지 않는 경우: 아카이브 미리보기 · 브라우저의 추적 거부 신호(GPC·Do Not Track) · '이 브라우저를 통계에서 제외'
@@ -14,6 +15,8 @@
   var ENDPOINT = window.__SH_STATS_ENDPOINT || 'https://shinhaedalapi.mycafe24.com/stats/collect.php';
   var KEY = 'sh_stat', OFF_KEY = 'sh_stat_off';
   var VISIT_GAP = 30 * 60 * 1000, FLUSH_MS = 15000, MAX_EVENTS = 40;
+  var ENGAGE_MS = 10000;        // 스크롤도 누름도 없을 때, 화면에 보인 채 이만큼 지나면 '봤다'로 친다
+  var ENGAGE_SCROLL_PX = 40;    // 이만큼 움직여야 사람이 민 스크롤로 본다(브라우저가 되돌린 위치는 뺀다)
   var ls = null;
   try{ ls = window.localStorage; }catch(e){}
   function get(k){ try{ return ls ? ls.getItem(k) : null; }catch(e){ return null; } }
@@ -86,7 +89,8 @@
   var newVisit = !st.t || now - st.t > VISIT_GAP || !isOwn(host) || campaign;
   if(newVisit){ st.s = sourceOf(isOwn(host) ? '' : host); st.b = {}; }
   var newVisitor = st.d !== today;
-  st.d = today; st.t = now;
+  // st.d(마지막으로 센 날짜) · st.t(마지막 활동 시각)는 실제로 센 다음에 적는다(countVisit).
+  // 첫 페이지를 그냥 지나친 사람이 다음 페이지에서 신호를 보내면 그 방문이 빠지지 않게 하기 위해서다.
   if(!st.b || typeof st.b !== 'object') st.b = {};
   function save(){ set(KEY, JSON.stringify(st)); }
   save();
@@ -105,9 +109,32 @@
   setInterval(function(){ if(!document.hidden) flush(); }, FLUSH_MS);
 
   push(['pv', PAGE]);
-  if(newVisit) push(['visit', PAGE]);
-  if(newVisitor) push(['visitor', PAGE]);
   flush();
+
+  /* ---------- 방문·방문자는 '봤다'는 신호가 있을 때만 센다 ----------
+     페이지를 열자마자 떠나는 자동 접속(크롤러·수집기)을 빼기 위해서다. 신호는 셋 중 하나:
+       · 사람이 실제로 민 스크롤(ENGAGE_SCROLL_PX 넘게)   · 누름(클릭·탭·키)
+       · 화면에 보인 채로 ENGAGE_MS 를 넘김
+     페이지뷰(pv)는 그대로 다 센다 — 자동 접속이 어느 나라·어느 경로로 얼마나 오는지
+     관리 화면의 '머문 시간·스크롤 25%' 칸으로 계속 보려면 분모가 있어야 한다.
+     브라우저에 새로 두는 값은 없다(처리방침 11항의 목록 그대로). */
+  var counted = false, engageT = null;
+  function countVisit(){
+    if(counted) return;
+    counted = true;
+    engageDisarm();
+    if(newVisit) push(['visit', PAGE]);
+    if(newVisitor){ st.d = today; push(['visitor', PAGE]); }
+    st.t = Date.now(); save();
+    flush();
+  }
+  function engageArm(){ if(!counted && engageT === null && !document.hidden) engageT = setTimeout(countVisit, ENGAGE_MS); }
+  function engageDisarm(){ if(engageT !== null){ clearTimeout(engageT); engageT = null; } }
+  var scrollFrom = window.scrollY || document.documentElement.scrollTop || 0;
+  ['pointerdown', 'keydown', 'touchstart'].forEach(function(t){
+    window.addEventListener(t, countVisit, {passive:true, once:true});
+  });
+  engageArm();
 
   /* 버튼·링크: x=1이면 이번 방문에서 처음 누른 것(서버가 '누른 방문 수'에 더한다) */
   function clean(v){ return String(v == null ? '' : v).replace(/[^A-Za-z0-9_\-.\/:]/g, '').slice(0, 64); }
@@ -128,7 +155,11 @@
     [25, 50, 75, 100].forEach(function(m){ if(pct >= m - (m === 100 ? 2 : 0) && !marks[m]){ marks[m] = 1; push(['scroll', PAGE, String(m)]); } });
   }
   var sT = 0;
-  window.addEventListener('scroll', function(){ if(!sT) sT = setTimeout(function(){ sT = 0; onScroll(); }, 250); }, {passive:true});
+  window.addEventListener('scroll', function(){
+    // 화면보다 짧은 페이지는 열자마자 깊이 표시가 다 차므로, 깊이가 아니라 '움직인 거리'로 본다
+    if(!counted && Math.abs((window.scrollY || document.documentElement.scrollTop || 0) - scrollFrom) > ENGAGE_SCROLL_PX) countVisit();
+    if(!sT) sT = setTimeout(function(){ sT = 0; onScroll(); }, 250);
+  }, {passive:true});
   window.addEventListener('load', function(){ setTimeout(onScroll, 500); });
 
   /* ---------- 머문 시간(화면이 보이는 동안만) — 처음 화면을 떠날 때 한 번 보낸다 ---------- */
@@ -191,12 +222,12 @@
       Object.keys(zoneMs).forEach(function(z){ if(zoneMs[z] >= 1000) push(['zdwell', PAGE, z, Math.round(zoneMs[z] / 1000)]); });
       if(work) workEnd();
     }
-    st.t = Date.now(); save();
+    if(counted){ st.t = Date.now(); save(); }   // 세지 않은 방문은 활동 시각도 남기지 않는다(위 설명)
     flush();
   }
   document.addEventListener('visibilitychange', function(){
-    if(document.hidden) onHide();
-    else{ visFrom = Date.now(); if(work) workFrom = Date.now(); }
+    if(document.hidden){ engageDisarm(); onHide(); }
+    else{ visFrom = Date.now(); if(work) workFrom = Date.now(); engageArm(); }
   });
   window.addEventListener('pagehide', onHide);
 
