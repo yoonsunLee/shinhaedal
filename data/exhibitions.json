@@ -1,5 +1,24 @@
 [
  {
+  "id": "EX-2022-01",
+  "title": "효시",
+  "venue": "신도림 고리",
+  "start_date": "2022-09-15",
+  "end_date": "2022-09-18",
+  "work_nos": "",
+  "type": "개인전",
+  "type_en": "Solo Exhibition",
+  "note_public": "",
+  "title_en": "Hyosi",
+  "venue_en": "Gori, Sindorim",
+  "poster_url": "",
+  "map_url": "",
+  "featured_work_nos": "",
+  "about_selected": false,
+  "home_mode": "auto",
+  "home_lead_days": null
+ },
+ {
   "id": "EX-2026-01",
   "title": "나전칠기로 아트하는 法",
   "venue": "갤러리 비브, 서울, 대한민국",
