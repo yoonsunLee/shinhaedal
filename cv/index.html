@@ -45,8 +45,10 @@
   .cv-d{font-family:'Space Mono','Noto Sans KR',monospace; font-size:13px; letter-spacing:.3px; color:var(--ivory-muted); white-space:nowrap;}
   .cv-dash{margin:0 .7em;}
   .cv-t{font-family:'Noto Sans KR',sans-serif; color:var(--ivory-dim); word-break:keep-all;}
-  /* 괄호 보충(전공·자격번호)은 늘 다음 줄에 통째로 — 괄호 안에서 줄이 끊기지 않게(작가 요청) */
-  .cv-sub{display:block; font-size:13px; color:var(--ivory-muted); white-space:nowrap;}
+  .cv-sub{font-size:13px; color:var(--ivory-muted);}
+  /* 두 칸 화면(PC·태블릿)에서만 괄호 보충(전공·자격번호)을 다음 줄에 통째로 — 괄호 안에서 줄이 끊기지 않게.
+     폰(날짜 위·내용 아래)은 예전처럼 같은 줄에 이어 쓴다(작가 요청) */
+  @media(min-width:561px){ .cv-sub{display:block; white-space:nowrap;} }
   .cv-up{margin-left:.35em; color:var(--ivory-muted);}
   @media(max-width:900px){
     .cv{grid-template-columns:1fr; row-gap:48px;}
@@ -96,7 +98,7 @@
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.4"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor"/></svg>
     </a>
     <a class="icon-btn" aria-label="Brand Shop" title="Brand Shop" href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 8h14l-1.2 12.1a1 1 0 0 1-1 .9H7.2a1 1 0 0 1-1-.9L5 8Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M9 10V6.5a3 3 0 0 1 6 0V10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="8" width="16" height="13" rx="3.5" stroke="currentColor" stroke-width="1.4"/><path d="M8.5 11V7a3.5 3.5 0 0 1 7 0v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
     </a>
     <button class="icon-btn menu-btn" id="btnMenu" aria-label="메뉴" data-i-aria="aria_menu" aria-expanded="false">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 6H17M3 10H17M3 14H17" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
