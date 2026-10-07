@@ -98,7 +98,9 @@
   .hh-lower{display:flex; flex-direction:column; align-items:flex-start; gap:14px;}
   .statement{
     font-family:'Black Han Sans', sans-serif; font-weight:400;
-    font-size:clamp(30px, 5.1vw, 64px);
+    /* 폰에서도 두 문장이 한 줄씩 들어가게: 긴 줄이 글자 크기의 약 12.5배이고 좌우 여백이 합쳐 40px이라,
+       화면 폭에 맞춰 글자를 줄인다(390px 폰 ≈ 27px, 320px ≈ 22px). 넓은 화면은 위 clamp 값이 그대로 쓰인다 */
+    font-size:min(clamp(30px, 5.1vw, 64px), calc((100vw - 40px) / 12.8));
     line-height:1.16;
     margin:0;
     color:var(--ivory);
