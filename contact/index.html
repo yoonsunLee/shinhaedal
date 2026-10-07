@@ -119,13 +119,20 @@
   .cf-row textarea{min-height:180px; resize:vertical; font-family:inherit;}
   .cf-row .hint{font-size:13px; color:var(--ivory-dim); margin-top:8px; line-height:1.6;}
   .type-hint{font-size:13px; color:var(--ivory-dim); margin:10px 0 0; line-height:1.6;}
+  /* 홈 '만나러 가기'와 같은 테두리 버튼 — 올리면 아이보리로 차오르고 화살표가 4px 앞으로.
+     글자는 JS가 textContent로 바꾸므로 화살표는 ::after 로 붙인다(보내는 중에는 숨김) */
   .cf-submit{
-    align-self:flex-start; margin-top:6px;
-    font-family:'Space Mono','Noto Sans KR', monospace; font-size:12px; letter-spacing:.5px;
-    color:var(--bg); background:var(--ivory); border:none; border-radius:24px;
-    padding:13px 32px; cursor:pointer;
+    align-self:flex-start; margin-top:6px; display:inline-flex; align-items:center; gap:10px;
+    padding:13px 26px; border:1px solid rgba(245,240,230,.72); border-radius:12px;
+    font-family:'Noto Sans KR',sans-serif; font-size:15px; font-weight:600; letter-spacing:.2px; line-height:1.2;
+    color:var(--ivory); background:transparent; cursor:pointer;
+    transition:background-color .28s ease, color .28s ease, border-color .28s ease;
   }
-  .cf-submit:hover{opacity:.9;}
+  .cf-submit::after{content:'\2192'; display:inline-block; transition:transform .28s ease;}
+  .cf-submit:disabled::after{display:none;}
+  .cf-submit:focus-visible, .cf-submit:active:not(:disabled){background:var(--ivory); border-color:var(--ivory); color:var(--bg);}
+  @media (hover:hover){ .cf-submit:hover:not(:disabled){background:var(--ivory); border-color:var(--ivory); color:var(--bg);} }
+  @media (hover:hover) and (prefers-reduced-motion: no-preference){ .cf-submit:hover:not(:disabled)::after{transform:translateX(4px);} }
   .cf-note{font-size:13px; color:var(--ivory-dim); margin-top:14px;}
   .cf-fallback{margin-top:10px; padding-top:16px; border-top:1px solid var(--line);}
   .cf-fallback[hidden]{display:none;}
@@ -297,7 +304,7 @@
       <input type="text" id="cfWebsite" name="website" tabindex="-1" autocomplete="off">
     </div>
     <div class="cf-actions">
-      <button type="submit" class="cf-submit" id="cfSubmit" data-i="cf_submit">메일 앱에서 계속하기 →</button>
+      <button type="submit" class="cf-submit" id="cfSubmit" data-i="cf_submit">메일 앱에서 계속하기</button>
       <a class="link-sub" href="mailto:haedarney@naver.com" data-i="direct_mail_link">이메일로 문의 ↗</a>
     </div>
     <p class="cf-note" id="cfNote" role="status" aria-live="polite"></p>
@@ -355,13 +362,13 @@ var I18N = {
     ph_subject:'문의 제목',
     ph_message:'문의 내용을 작성해 주세요.',
     cf_hint:'전시·협업 문의 시 일정, 장소, 프로젝트 개요를 함께 보내주시면 도움이 됩니다. 관련 자료는 문의 내용을 확인한 후 필요한 범위에서 전달드립니다.',
-    cf_submit:'메일 앱에서 계속하기 →',
+    cf_submit:'메일 앱에서 계속하기',
     cf_sent:'메일 앱이 열립니다. 내용을 확인하고 전송해 주세요.',
     fallback_note:'메일 앱이 열리지 않았다면, 아래 버튼으로 문의 내용을 복사해서 메일이나 웹메일에 붙여넣어 보내주세요.',
     copy_content:'문의 내용 복사',
     copy_content_done:'복사됨 — 메일이나 웹메일에 붙여넣어 주세요',
     page_title:'연락하기 — 신해달 나전칠기 아티스트',
-    cf_send:'문의 보내기 →',
+    cf_send:'문의 보내기',
     cf_sending:'보내는 중…',
     consent1_label:'<span class="req">[필수]</span> 개인정보 수집·이용에 동의합니다.',
     consent1_detail:'<li><span class="k">목적</span>문의 확인과 회신에만 이용합니다. 홍보·소식 메일에는 이용하지 않습니다.</li>'
@@ -414,13 +421,13 @@ var I18N = {
     ph_subject:'Subject',
     ph_message:'Please write your message.',
     cf_hint:'For exhibition or collaboration inquiries, it helps to include the schedule, venue, and a brief project outline. Related materials will be shared, within the necessary scope, after reviewing your inquiry.',
-    cf_submit:'CONTINUE TO EMAIL →',
+    cf_submit:'CONTINUE TO EMAIL',
     cf_sent:'Your email app will open. Please review and send.',
     fallback_note:'If your mail app didn\'t open, copy your message below and paste it into an email or webmail.',
     copy_content:'Copy inquiry content',
     copy_content_done:'Copied — paste it into your email or webmail',
     page_title:'Contact — Shin Haedal, Najeonchilgi Artist',
-    cf_send:'SEND INQUIRY →',
+    cf_send:'SEND INQUIRY',
     cf_sending:'Sending…',
     consent1_label:'<span class="req">[Required]</span> I agree to the collection and use of my personal information.',
     consent1_detail:'<li><span class="k">Purpose</span>Reviewing and replying to your inquiry (never for news or promotional email)</li>'
