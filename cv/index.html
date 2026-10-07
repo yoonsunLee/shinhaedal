@@ -45,7 +45,8 @@
   .cv-d{font-family:'Space Mono','Noto Sans KR',monospace; font-size:13px; letter-spacing:.3px; color:var(--ivory-muted); white-space:nowrap;}
   .cv-dash{margin:0 .7em;}
   .cv-t{font-family:'Noto Sans KR',sans-serif; color:var(--ivory-dim); word-break:keep-all;}
-  .cv-sub{font-size:13px; color:var(--ivory-muted);}
+  /* 괄호 보충(전공·자격번호)은 늘 다음 줄에 통째로 — 괄호 안에서 줄이 끊기지 않게(작가 요청) */
+  .cv-sub{display:block; font-size:13px; color:var(--ivory-muted); white-space:nowrap;}
   .cv-up{margin-left:.35em; color:var(--ivory-muted);}
   .cv-links{max-width:1180px; margin:0 auto; padding:0 32px 96px; display:flex; flex-wrap:wrap; gap:14px 32px;}
   @media(max-width:900px){
