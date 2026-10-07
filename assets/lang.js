@@ -5,7 +5,7 @@
      ① JS가 만든 국문 페이지 링크(예: '../works/?ex=…')는 누르기 직전에 /en/…으로 바꾸고
      ② 같은 페이지 안 이동(#…, BACK TO TOP)이 국문 페이지로 새지 않게 여기서 처리한다 */
 (function(){
-  var PAGES = ['/', '/works/', '/about/', '/press/', '/contact/', '/privacy/', '/ip/'];
+  var PAGES = ['/', '/works/', '/about/', '/cv/', '/press/', '/contact/', '/privacy/', '/ip/'];
   var path = location.pathname.replace(/index\.html$/, '');
   var isEn = /^\/en\//.test(path);
   var koPath = path.replace(/^\/en(?=\/)/, '');

@@ -168,7 +168,7 @@
   /* ---------- 구역 도달·구역별 머문 시간 ---------- */
   var ZONES = {
     '/': [['recent', '#works'], ['about', '.about-teaser-wrap'], ['ip', '.ip-teaser-wrap']],
-    '/about/': [['note', '.ab-note'], ['credentials', '.ab-credentials'], ['exhibitions', '#exList']],
+    '/about/': [['note', '.ab-note']],   // 학력·전시 구역은 CV(/cv/)로 옮겼다(2026-10-07)
     '/ip/': [['intro', '#intro'], ['story', '#story'], ['pool', '#pool'], ['identity', '#identity'], ['toy', '#toy'], ['friends', '#friends'], ['licensing', '#licensing']]
   }[PAGE] || [];
   var zoneOn = {}, zoneMs = {}, zoneFrom = {};

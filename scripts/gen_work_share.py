@@ -36,7 +36,7 @@ BG_COLOR = (11, 11, 15)  # site.css --bg: #0b0b0f
 MARGIN_Y = 20  # 위아래 여백(px). 정사각/세로 작품 사진이 레터박스로 들어갈 때의 최소 여백.
 DESCRIPTION_LIMIT = 110  # 카톡·페북 모두 대략 150~200자에서 잘라버리니, 문장 중간에 끊기지 않도록 미리 짧게 자른다.
 SHOP_URL = "https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product"
-STATIC_PAGES = [("", "1.0"), ("works/", "0.9"), ("about/", "0.7"), ("ip/", "0.7"), ("press/", "0.6"), ("contact/", "0.6"), ("privacy/", "0.3"), ("copyright/", "0.3")]
+STATIC_PAGES = [("", "1.0"), ("works/", "0.9"), ("about/", "0.7"), ("cv/", "0.7"), ("ip/", "0.7"), ("press/", "0.6"), ("contact/", "0.6"), ("privacy/", "0.3"), ("copyright/", "0.3")]
 
 
 def e(s):
@@ -179,12 +179,11 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
   </div>
   <div class="nav-icons">
     <ul class="nav-menu">
-      <li><a href="../../../">Home</a></li>
       <li><a href="../../../about/">About</a></li>
+      <li><a href="../../../cv/">CV</a></li>
       <li><a href="../../" class="on" aria-current="page">Works</a></li>
       <li><a href="../../../ip/">IP</a></li>
       <li><a href="../../../press/">Press</a></li>
-      <li><a href="{shop_url}" target="_blank" rel="noopener">Brand Shop</a></li>
       <li><a href="../../../contact/">Contact</a></li>
     </ul>
     <div class="lang" role="group" aria-label="Language">
@@ -195,6 +194,9 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
     <a class="icon-btn" aria-label="Instagram" href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.4"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor"/></svg>
     </a>
+    <a class="icon-btn" aria-label="Brand Shop" title="Brand Shop" href="{shop_url}" target="_blank" rel="noopener">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 8h14l-1.2 12.1a1 1 0 0 1-1 .9H7.2a1 1 0 0 1-1-.9L5 8Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M9 10V6.5a3 3 0 0 1 6 0V10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+    </a>
     <button class="icon-btn menu-btn" id="btnMenu" aria-label="Menu" aria-expanded="false">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 6H17M3 10H17M3 14H17" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
     </button>
@@ -204,14 +206,14 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
   <div class="nav-overlay" id="navOverlay">
     <button class="icon-btn overlay-close" id="btnMenuClose" aria-label="Close">✕</button>
     <nav class="overlay-links">
-      <a href="../../../">Home</a>
       <a href="../../../about/">About</a>
+      <a href="../../../cv/">CV</a>
       <a href="../../">Works</a>
       <a href="../../../ip/">IP</a>
       <a href="../../../press/">Press</a>
-      <a href="{shop_url}" target="_blank" rel="noopener">Brand Shop</a>
       <a href="../../../contact/">Contact</a>
       <a href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener" class="overlay-ig">Instagram ↗</a>
+      <a href="{shop_url}" target="_blank" rel="noopener" class="overlay-ig">Brand Shop ↗</a>
     </nav>
   </div>
 </nav>
