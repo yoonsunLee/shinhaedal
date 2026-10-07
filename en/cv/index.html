@@ -40,9 +40,10 @@
   .cv-h3{font-family:'Noto Sans KR',sans-serif; font-weight:500; font-size:15px; color:var(--ivory); margin:28px 0 10px;}
   .cv-h + .cv-h3{margin-top:4px;}
   .cv-list{list-style:none; margin:0; padding:0;}
-  .cv-list li{display:grid; grid-template-columns:var(--cv-dw, 84px) minmax(0,1fr); column-gap:22px; padding:5px 0; font-size:15px; line-height:1.6;}
+  /* 날짜(13px 고정폭)와 내용(15px)은 크기·서체가 달라 위쪽을 맞추면 글자 바닥이 어긋난다 — 첫 줄 바닥선(baseline)으로 맞춘다 */
+  .cv-list li{display:grid; grid-template-columns:var(--cv-dw, 84px) minmax(0,1fr); column-gap:22px; align-items:baseline; padding:5px 0; font-size:15px; line-height:1.6;}
   .cv-ex{--cv-dw:170px;}
-  .cv-d{font-family:'Space Mono','Noto Sans KR',monospace; font-size:13px; letter-spacing:.3px; color:var(--ivory-muted); white-space:nowrap; padding-top:1px;}
+  .cv-d{font-family:'Space Mono','Noto Sans KR',monospace; font-size:13px; letter-spacing:.3px; color:var(--ivory-muted); white-space:nowrap;}
   .cv-dash{margin:0 .7em;}
   .cv-t{font-family:'Noto Sans KR',sans-serif; color:var(--ivory-dim); word-break:keep-all;}
   .cv-sub{font-size:13px; color:var(--ivory-muted);}
