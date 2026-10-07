@@ -88,32 +88,6 @@
     .ab-photo-inner{position:static; flex-basis:auto; width:min(100%, 320px); margin:0; align-self:flex-start;}
   }
 
-  /* ---------- 4. 학력·자격 + 전시 ---------- */
-  .ab-credentials{max-width:1180px; margin:0 auto; padding:46px 32px 56px; display:grid; grid-template-columns:1fr 1.55fr; column-gap:80px;}
-  .ab-edu ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px;}
-  .ab-edu li{font-family:'Noto Sans KR', sans-serif; font-size:16px; line-height:1.6; color:var(--ivory-dim); position:relative; padding-left:26px;}
-  .ab-edu li .sub{font-size:13px; color:var(--ivory-muted);}
-  .ab-edu li::before{content:'—'; position:absolute; left:0; color:var(--ivory-muted);}
-
-  .ab-ex-upcoming{margin-bottom:22px;}
-  /* 예정 전시는 제목 아래 날짜를 붙여 한 건으로 읽히게(구분선도 한 건에 하나) */
-  .ab-ex-date{display:block; margin-top:4px; font-family:'Space Mono','Noto Sans KR', monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-muted);}
-  .ab-ex-upcoming-label{font-family:'Space Mono','Noto Sans KR', monospace; font-size:11px; letter-spacing:1px; color:var(--ivory-muted); text-transform:uppercase; margin-bottom:8px;}
-  .ab-ex-year-group{margin-bottom:22px;}
-  .ab-ex-year-group:last-child{margin-bottom:0;}
-  .ab-ex-year{font-family:'Space Mono','Noto Sans KR', monospace; font-size:12px; color:var(--ivory-muted); margin-bottom:10px; letter-spacing:.5px;}
-  .ab-ex-item{display:flex; justify-content:space-between; align-items:baseline; gap:16px; padding:9px 0; border-bottom:1px solid var(--line); font-size:16px;}
-  .ab-ex-item .ab-ex-title{color:var(--ivory-dim); flex:1 1 auto; min-width:0;}
-  .ab-ex-item .ab-ex-venue{color:var(--ivory-muted); font-family:'Space Mono','Noto Sans KR', monospace; font-size:12px; letter-spacing:.5px; text-align:right; flex-shrink:0;}
-  .ab-ex-empty{font-family:'Space Mono','Noto Sans KR', monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-muted);}
-  @media(max-width:480px){
-    .ab-ex-item{flex-direction:column; align-items:flex-start; gap:3px;}
-    .ab-ex-item .ab-ex-venue{text-align:left;}
-  }
-  @media(max-width:720px){
-    .ab-credentials{grid-template-columns:1fr; row-gap:40px; padding:40px 32px 48px;}
-  }
-
   /* ---------- 5. 하단 링크 ---------- */
   .ab-links{max-width:1180px; margin:0 auto; padding:0 32px 96px; display:flex; flex-wrap:wrap; gap:14px 32px;}
   @media(max-width:720px){
@@ -146,12 +120,11 @@
   </div>
   <div class="nav-icons">
     <ul class="nav-menu">
-      <li><a href="../">Home</a></li>
       <li><a href="./" class="on" aria-current="page">About</a></li>
+      <li><a href="../cv/">CV</a></li>
       <li><a href="../works/">Works</a></li>
       <li><a href="../ip/">IP</a></li>
       <li><a href="../press/">Press</a></li>
-      <li><a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop</a></li>
       <li><a href="../contact/">Contact</a></li>
     </ul>
     <div class="lang" role="group" aria-label="Language">
@@ -162,6 +135,9 @@
     <a class="icon-btn" aria-label="인스타그램" data-i-aria="aria_instagram" href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.4"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor"/></svg>
     </a>
+    <a class="icon-btn" aria-label="Brand Shop" title="Brand Shop" href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 8h14l-1.2 12.1a1 1 0 0 1-1 .9H7.2a1 1 0 0 1-1-.9L5 8Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M9 10V6.5a3 3 0 0 1 6 0V10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+    </a>
     <button class="icon-btn menu-btn" id="btnMenu" aria-label="메뉴" data-i-aria="aria_menu" aria-expanded="false">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 6H17M3 10H17M3 14H17" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
     </button>
@@ -171,14 +147,14 @@
   <div class="nav-overlay" id="navOverlay">
     <button class="icon-btn overlay-close" id="btnMenuClose" aria-label="메뉴 닫기" data-i-aria="aria_menu_close">✕</button>
     <nav class="overlay-links">
-      <a href="../">Home</a>
       <a href="./">About</a>
+      <a href="../cv/">CV</a>
       <a href="../works/">Works</a>
       <a href="../ip/">IP</a>
       <a href="../press/">Press</a>
-      <a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener">Brand Shop</a>
       <a href="../contact/">Contact</a>
       <a href="https://www.instagram.com/haedal_space/" target="_blank" rel="noopener" class="overlay-ig">Instagram ↗</a>
+      <a href="https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product" target="_blank" rel="noopener" class="overlay-ig">Brand Shop ↗</a>
     </nav>
   </div>
 </nav>
@@ -230,23 +206,9 @@
   </div>
 </section>
 
-<section class="ab-credentials ab-anim-block" data-reveal>
-  <div class="ab-edu">
-    <h2 class="ab-section-title">Education &amp; Qualifications</h2>
-    <ul data-i="bio_list">
-      <li>국가유산수리기능자 <span class="sub">(칠공)</span></li>
-      <li>중앙대학교 일반대학원 법학과 박사수료 <span class="sub">(지식재산권법 전공)</span></li>
-      <li>중앙대학교 일반대학원 법학과 석사 <span class="sub">(지식재산권법 전공)</span></li>
-      <li>단국대학교 법학과 학사</li>
-    </ul>
-  </div>
-  <div class="ab-ex">
-    <h2 class="ab-section-title">Selected Exhibitions</h2>
-    <div id="exList"><p class="ab-ex-empty" data-i="ex_loading">불러오는 중…</p></div>
-  </div>
-</section>
 
 <section class="ab-links">
+  <a class="link-go" href="../cv/" data-i="link_cv">CV · 학력과 전시 이력 →</a>
   <a class="link-go" href="../works/" data-i="link_works">작품 보기 →</a>
   <a class="link-go" href="../contact/" data-i="link_contact">전시·협업 문의 →</a>
 </section>
@@ -293,12 +255,7 @@ var I18N = {
       + '<p>얼빵해달이 귀여워서,<br>자개가 반짝여서 작품 앞에 멈춰 서도 좋습니다.</p>'
       + '<p>그 다음 제목을 읽고, 그 안에 법과 전통의 이야기가 있다는 것을 발견하고, 조금 더 오래 바라보게 되기를 바랍니다.</p>'
       + '<p>그리고 작품을 떠날 때에는<br>사회 속의 자기 자신을 한 번쯤 다정하게 바라볼 수 있었으면 합니다.</p>',
-    bio_list:'<li>국가유산수리기능자 <span class="sub">(칠공)</span></li><li>중앙대학교 일반대학원 법학과 박사수료 <span class="sub">(지식재산권법 전공)</span></li><li>중앙대학교 일반대학원 법학과 석사 <span class="sub">(지식재산권법 전공)</span></li><li>단국대학교 법학과 학사</li>',
-    ex_loading:'불러오는 중…',
-    ex_error:'전시 이력을 불러오지 못했어요.',
-    ex_empty:'등록된 전시가 없습니다.',
-    ex_upcoming_solo:'예정된 개인전',
-    ex_upcoming:'예정된 전시',
+    link_cv:'CV · 학력과 전시 이력 →',
     link_works:'작품 보기 →',
     link_contact:'전시·협업 문의 →',
     page_title:'작가 소개 — 신해달 나전칠기 아티스트'
@@ -333,12 +290,7 @@ var I18N = {
       + '<p>It is enough to stop in front of a work because Eolbbang Haedal catches your eye,<br>or because the mother-of-pearl shimmers.</p>'
       + '<p>Then perhaps you read the title, discover the stories of law and tradition within it, and stay with the work a little longer.</p>'
       + '<p>And when you leave the work, I hope you might look at yourself within society with a little more kindness.</p>',
-    bio_list:'<li>National Heritage Repair Technician <span class="sub">(Lacquerware)</span></li><li>Ph.D. Coursework Completed, Chung-Ang University Graduate School of Law <span class="sub">(Intellectual Property Law)</span></li><li>M.A., Chung-Ang University Graduate School of Law <span class="sub">(Intellectual Property Law)</span></li><li>LL.B., Dankook University</li>',
-    ex_loading:'Loading…',
-    ex_error:'Could not load exhibitions.',
-    ex_empty:'No exhibitions registered yet.',
-    ex_upcoming_solo:'Upcoming Solo Exhibition',
-    ex_upcoming:'Upcoming Exhibition',
+    link_cv:'CV · Education & exhibitions →',
     link_works:'Explore works →',
     link_contact:'Exhibition & collaboration inquiries →',
     page_title:'About — Shin Haedal, Najeonchilgi Artist'
@@ -351,75 +303,6 @@ try{
   else if(localStorage.getItem('site_lang')==='en') LANG = 'en';
 }catch(e){}
 
-var EX_ROWS = [];
-function loadExhibitions(){
-  fetch('../data/exhibitions.json')
-    .then(function(res){ return res.json(); })
-    .then(function(rows){
-      EX_ROWS = rows || [];
-      renderExhibitions(EX_ROWS);
-    })
-    .catch(function(e){
-      console.error('전시 이력을 불러오지 못했습니다:', e);
-      document.getElementById('exList').innerHTML = '<p class="ab-ex-empty">' + I18N[LANG].ex_error + '</p>';
-    });
-}
-function formatDateRange(start, end){
-  start = String(start||''); end = String(end||'');
-  if(!start) return '';
-  var s = start.replace(/-/g, '.');
-  if(!end || end === start) return s;
-  var sameMonth = start.slice(0,7) === end.slice(0,7);
-  var e = sameMonth ? end.slice(5).replace(/-/g, '.') : end.replace(/-/g, '.');
-  return s + ' – ' + e;
-}
-function todayKST(){
-  return new Intl.DateTimeFormat('en-CA', {timeZone:'Asia/Seoul'}).format(new Date());
-}
-function renderExhibitions(rows){
-  var today = todayKST();
-  /* 전시 관리에서 'About 페이지 노출'을 체크한 전시만 싣는다.
-     하나도 체크하지 않았으면 예전처럼 알아서 고른다(예정 전부 + 최근 두셋).
-     예전에는 예정된 전시가 체크와 상관없이 늘 나와서, 체크한 넷만 보이길 바라는데
-     예정 넷이 통째로 끼어들었다(2026-09-26). */
-  var marked = rows.filter(function(r){ return r.about_selected; });
-  var list = marked.length ? marked : rows;
-  var upcoming = list.filter(function(r){ return String(r.start_date||'') > today; })
-    .sort(function(a, b){ return String(a.start_date||'').localeCompare(String(b.start_date||'')); });
-  var past = list.filter(function(r){ return String(r.start_date||'') <= today; });
-
-  function exTitle(r){ return LANG === 'en' ? (r.title_en || r.title) : r.title; }
-  function exVenue(r){ return LANG === 'en' ? (r.venue_en || r.venue) : r.venue; }
-
-  var upcomingHtml = upcoming.map(function(r){
-    var label = r.type === '개인전' ? I18N[LANG].ex_upcoming_solo : I18N[LANG].ex_upcoming;
-    return '<div class="ab-ex-upcoming"><div class="ab-ex-upcoming-label">' + esc(label) + '</div>' +
-      '<div class="ab-ex-item"><span class="ab-ex-title">' + esc(exTitle(r)) + '<span class="ab-ex-date">' + esc(formatDateRange(r.start_date, r.end_date)) + '</span></span><span class="ab-ex-venue">' + esc(exVenue(r)) + '</span></div></div>';
-  }).join('');
-
-  var sorted = past.slice().sort(function(a, b){ return String(b.start_date||'').localeCompare(String(a.start_date||'')); });
-  // 체크한 게 있으면 위에서 이미 걸렀으니 그대로 다 싣고, 없을 때만 최근 것으로 줄인다
-  var picked = marked.length ? sorted : sorted.slice(0, upcoming.length ? 2 : 3);
-
-  if(!picked.length && !upcoming.length){
-    document.getElementById('exList').innerHTML = '<p class="ab-ex-empty">' + I18N[LANG].ex_empty + '</p>';
-    return;
-  }
-  var groups = {};
-  picked.forEach(function(r){
-    var y = String(r.start_date||'').slice(0, 4) || '—';
-    (groups[y] = groups[y] || []).push(r);
-  });
-  var years = Object.keys(groups).sort(function(a, b){ return b.localeCompare(a); });
-  document.getElementById('exList').innerHTML = upcomingHtml + years.map(function(y){
-    return '<div class="ab-ex-year-group"><div class="ab-ex-year">' + esc(y) + '</div>' +
-      groups[y].map(function(r){
-        return '<div class="ab-ex-item"><span class="ab-ex-title">' + esc(exTitle(r)) + '</span><span class="ab-ex-venue">' + esc(exVenue(r)) + '</span></div>';
-      }).join('') +
-      '</div>';
-  }).join('');
-}
-loadExhibitions();
 
 function applyLang(l, opts){
   opts = opts || {};
@@ -448,7 +331,6 @@ function applyLang(l, opts){
   });
   document.getElementById('langKo').classList.toggle('on', l==='ko');
   document.getElementById('langEn').classList.toggle('on', l==='en');
-  if(EX_ROWS.length) renderExhibitions(EX_ROWS);
 }
 document.getElementById('langKo').onclick = function(){ applyLang('ko'); };
 document.getElementById('langEn').onclick = function(){ applyLang('en'); };

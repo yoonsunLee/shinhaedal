@@ -29,7 +29,7 @@ from prerender_lists import blocks, fill_block  # noqa: E402
 ROOT = Path(__file__).resolve().parent.parent
 SITE = "https://shinhaedal.com"
 HOST = "shinhaedal.com"
-PAGES = ["", "works/", "about/", "press/", "contact/", "privacy/", "copyright/", "ip/"]
+PAGES = ["", "works/", "about/", "cv/", "press/", "contact/", "privacy/", "copyright/", "ip/"]
 INDEX_TITLE_EN = "Shin Haedal — Najeonchilgi Artist"  # index.html applyLang의 영문 제목과 같게
 
 
@@ -45,6 +45,8 @@ def en_desc(path, en):
         "works/": strip_tags(en.get("page_sub")) + " Law, society and the individual, translated into najeonchilgi.",
         "about/": "About Shin Haedal, an artist who expresses the norms of law and society, and the stories "
                   "of the individuals who live within them, through najeonchilgi.",
+        "cv/": "CV of Shin Haedal, najeonchilgi artist: education, certifications, brand activities and exhibitions "
+               "(solo exhibitions, group exhibitions and art fairs).",
         "press/": strip_tags(en.get("page_sub")),
         "contact/": "Contact Shin Haedal about artworks, exhibitions, collaborations and licensing.",
         "privacy/": "Privacy policy of the official website of the artist Shin Haedal.",
