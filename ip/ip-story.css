@@ -221,9 +221,9 @@ html[lang="en"] .profile-sheet .profile-name-sub{font:13px/1.5 'Noto Sans KR',sa
 .toy{background:#F7F8FA;color:#172D3B;display:grid;grid-template-columns:1fr 1fr;gap:60px 9%;align-items:center}
 .toy-heading h2{margin:30px 0;color:#172D3B}
 .toy-heading p{color:#4D606C}
-.toy-link{display:inline-flex;align-items:center;gap:10px;margin-top:26px;font:13px 'Space Mono','Noto Sans KR',monospace;color:#245B73;border-bottom:1px solid #245B7370;padding-bottom:6px}
-.toy-link span:last-child{font-size:15px}
-.toy-link:hover{color:#173E52;border-color:#173E52}
+.toy-link,.contact-link{font:13px 'Space Mono','Noto Sans KR',monospace;letter-spacing:.5px;color:#245B73;text-decoration:none;text-underline-offset:5px;text-decoration-thickness:1px}
+.toy-link{display:inline-block;margin-top:26px}
+.toy-link:hover,.toy-link:focus-visible,.contact-link:focus-visible{color:#173E52;text-decoration:underline}
 .toy-main{max-width:530px}
 .photo-open{position:relative;border:0;background:none;padding:0;width:100%;display:block}
 .photo-open>span{position:absolute;bottom:20px;right:22px;font:12px 'Space Mono',monospace;background:#101a26d9;color:white;padding:12px 15px}
@@ -297,8 +297,7 @@ html[lang="en"] .profile-sheet .profile-name-sub{font:13px/1.5 'Noto Sans KR',sa
 .closing{background:#EAF0F2;text-align:center}
 .closing h2{margin:27px 0;font-size:clamp(40px,6vw,80px);color:#183544}
 .closing p{font-size:15px;color:#4D6570}
-.contact-link{margin:40px auto 0;display:flex;justify-content:space-between;align-items:center;gap:70px;width:max-content;max-width:100%;font-size:20px;border-bottom:1px solid;padding-bottom:15px;color:#245B73}
-.contact-link span:last-child{font-size:30px}
+.contact-link{display:table;margin:36px auto 0;font-size:15px}
 /* 두 줄로 나눈다 — 첫 줄 저작권·BACK TO TOP, 둘째 줄 처리방침·이용안내.
    이 페이지는 assets/site.css 를 읽지 않으므로 같은 규칙을 여기에도 둔다(site.css 와 함께 고칠 것). */
 footer{display:grid;grid-template-columns:1fr auto;align-items:baseline;row-gap:14px;column-gap:16px;
@@ -355,7 +354,7 @@ body>nav{animation:nav-arrive .55s .04s both cubic-bezier(.22,1,.36,1)}
 @media(hover:hover) and (pointer:fine){
   .photo-open:hover>span{background:#fff;color:#123548}
   .nav-menu a:hover{color:#0867ba}
-  .contact-link:hover{color:#173E52}
+  .contact-link:hover{color:#173E52;text-decoration:underline}
 }
 @media(min-width:1600px){.section{padding-left:max(6vw,calc((100vw - 1380px)/2));padding-right:max(6vw,calc((100vw - 1380px)/2))}}
 @media(max-width:850px){
@@ -433,7 +432,6 @@ body>nav{animation:nav-arrive .55s .04s both cubic-bezier(.22,1,.36,1)}
   .group-art{width:86%;margin:auto;transform:rotate(1deg)}
   .group-art img{box-shadow:10px 12px 0 #080D0F}
   .closing p{max-width:290px;margin:auto}
-  .contact-link{font-size:18px}
   /* 좁으면 저작권과 BACK TO TOP 이 한 줄에 못 들어간다 — 세 줄로 세우고 차례만 바꾼다 */
   footer{grid-template-columns:1fr;row-gap:12px;font-size:10px}
   footer .ft-copy{order:1} footer .ft-links{order:2}
