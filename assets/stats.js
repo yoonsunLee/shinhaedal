@@ -240,6 +240,7 @@
   function outKind(a){
     var h = '';
     try{ h = new URL(a.href, location.href).hostname; }catch(e){}
+    if(!h || h === location.hostname) return ''; // 사이트 안 링크(메뉴의 About·CV 등)는 바깥 링크가 아니다
     if(/instagram\.com$/.test(h)) return 'instagram';
     if(/idus\.com$/.test(h)) return 'brand_shop';
     if(/threads\./.test(h)) return 'threads';
