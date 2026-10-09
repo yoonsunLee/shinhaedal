@@ -168,16 +168,20 @@
     .reveal-photo.js-anim, .reveal-text.js-anim{transform:translateY(5px);}
   }
 
-  /* 홈 하단 안내 두 블록. 성격은 다르게(작가: 열린 구성 / 캐릭터: 장면 카드) 두고,
-     폭·라벨·제목→부제→링크 위계·링크 반응·간격은 같은 규칙을 쓴다 */
-  .about-teaser-wrap, .ip-teaser-wrap{max-width:1180px; margin:0 auto; padding:0 32px 96px;}
-  .about-teaser-label, .ip-teaser-label{font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--ivory-muted); margin:0 0 12px;}
-  .about-teaser-lede, .ip-teaser-lede{font-family:'Black Han Sans',sans-serif; font-weight:400; font-size:clamp(20px,2.6vw,28px); line-height:1.4; color:var(--ivory); margin:0;}
-  .ip-teaser-lede{white-space:nowrap;}
-  .ip-teaser-sub{font-size:16px; font-weight:500; line-height:1.6; color:var(--ivory-dim); margin:6px 0 0;}
+  /* 홈 하단 안내 두 블록(작가 · 캐릭터). 2026-10 작가 시안(home-editorial-concept)에서 크기와 여백만 가져왔다 —
+     카드 상자 대신 위에 선 하나, 사진·제목을 크게, 위아래 여백을 넉넉히. 글꼴·버튼·문구는 사이트 규칙 그대로.
+     블록 전체가 링크라 어디를 눌러도 이동한다. */
+  .about-teaser-wrap, .ip-teaser-wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+  .ip-teaser-wrap{overflow-x:clip;} /* 캐릭터 뒤 무늬가 화면 밖으로 넘쳐 가로 스크롤이 생기지 않게 */
+  .about-teaser, .ip-teaser{display:grid; align-items:center; text-decoration:none; color:inherit;
+    border-top:1px solid var(--line); padding:clamp(48px,6vw,84px) 0 clamp(96px,11vw,160px);}
+  .about-teaser:focus-visible, .ip-teaser:focus-visible{outline:2px solid var(--accent); outline-offset:8px;}
+  .about-teaser-label, .ip-teaser-label{font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--ivory-muted); margin:0 0 22px;}
+  .about-teaser-lede, .ip-teaser-lede{font-family:'Black Han Sans',sans-serif; font-weight:400; color:var(--ivory); margin:0;}
+  .ip-teaser-sub{font-size:clamp(16px,1.5vw,19px); font-weight:500; line-height:1.6; color:var(--ivory-dim); margin:14px 0 0;}
   /* 이동 버튼(2026-09-22 작가 요청: 작은 글자 링크 → 테두리 버튼). 블록 어디에 올려도 버튼이 아이보리로 차오르고
      글자는 바탕색으로, 화살표는 4px 앞으로. 폰에서는 누르는 동안만 차오른다(탭 뒤에 남지 않게) */
-  .about-teaser-cta, .ip-teaser-cta{display:inline-flex; align-items:center; gap:10px; margin-top:26px;
+  .about-teaser-cta, .ip-teaser-cta{display:inline-flex; align-items:center; gap:10px; margin-top:40px;
     padding:13px 26px; border:1px solid rgba(245,240,230,.72); border-radius:12px;
     font-family:'Noto Sans KR',sans-serif; font-size:15px; font-weight:600; letter-spacing:.2px; line-height:1.2;
     color:var(--ivory); background:transparent;
@@ -191,75 +195,53 @@
   @media (hover:hover) and (prefers-reduced-motion: no-preference){
     .about-teaser:hover .cta-arrow, .ip-teaser:hover .cta-arrow{transform:translateX(4px);}
   }
-  @media(max-width:720px){
-    .about-teaser-wrap, .ip-teaser-wrap{padding:0 32px 72px;}
-  }
 
-  /* About teaser — 사진과 글이 스크롤 진입 때 살짝 나타나는 것 외에는 움직이지 않는다 */
-  /* IP 배너와 같은 외곽 폭·모서리 규칙(8px)을 쓰되, 높이는 IP처럼 고정 비율을 두지 않고
-     사진+글 내용에 맞춰 자연스럽게 늘어난다. 반투명 먹남색이라 뒤편 별이 옅게 비친다 —
-     테두리·그림자·호버 상승 효과는 넣지 않는다(카드처럼 보이지 않게). */
-  .about-teaser{display:flex; align-items:center; gap:64px; text-decoration:none; color:inherit;
-    background:rgba(10,12,22,.70); border-radius:8px; padding:44px 48px;}
-  .about-teaser:focus-visible{outline:2px solid var(--accent); outline-offset:8px;}
-  .about-teaser-media{flex:0 0 220px;}
-  .about-teaser-media img{width:100%; height:auto; display:block; -webkit-user-select:none; user-select:none; -webkit-user-drag:none;}
-  .about-teaser-body{flex:1 1 auto; min-width:0;}
-  /* 1행 '독해·해석·번역'이 2·3행 '읽고·찾아·옮깁니다'와 짝을 이루도록 줄을 나누고, 굵은 제목체는 1행에만.
+  /* About teaser — 왼쪽 큰 세로 사진, 오른쪽 글. 사진과 글이 스크롤 진입 때 살짝 나타나는 것 외에는 움직이지 않는다 */
+  .about-teaser{grid-template-columns:minmax(0,.94fr) minmax(0,1.06fr); column-gap:clamp(52px,8vw,144px);}
+  .about-teaser-media{width:min(100%,485px); aspect-ratio:7/9.4; overflow:hidden;}
+  .about-teaser-media img{width:100%; height:100%; object-fit:cover; object-position:center 42%; display:block; -webkit-user-select:none; user-select:none; -webkit-user-drag:none;}
+  .about-teaser-body{min-width:0;}
+  /* 1행 '독해·해석·번역'은 굵은 제목체로 크게(쉼표마다 줄을 나눔), 2·3행 1인칭 문장은 본문체.
      1인칭 문장까지 포스터체로 쓰면 외치는 느낌이 난다 */
-  .about-teaser-lede .lede-1{display:block;}
-  .about-teaser-lede .lede-2{display:block; margin-top:12px; font-family:'Noto Sans KR',sans-serif; font-weight:500;
-    font-size:clamp(16px,1.5vw,19px); line-height:1.7; color:var(--ivory-dim); word-break:keep-all;}
-  @media(max-width:720px){
-    .about-teaser{flex-direction:column; align-items:flex-start; gap:26px; padding:32px 28px;}
-    .about-teaser-media{flex-basis:auto; width:160px;}
-  }
+  .about-teaser-lede .lede-1{display:block; font-size:clamp(40px,4.6vw,64px); line-height:1.3;}
+  .about-teaser-lede .lede-2{display:block; margin-top:34px; max-width:420px; font-family:'Noto Sans KR',sans-serif; font-weight:500;
+    font-size:clamp(16px,1.4vw,18px); line-height:1.9; color:var(--ivory-dim); word-break:keep-all;}
 
-  /* IP teaser */
-  .ip-teaser{
-    position:relative; display:flex; overflow:hidden; border-radius:8px;
-    aspect-ratio:21/9; text-decoration:none; isolation:isolate;
-    background:#0d0d12;
-  }
-  .ip-teaser:focus-visible{outline:2px solid var(--accent); outline-offset:4px;}
-  .ip-teaser-media{position:relative; flex:1 1 auto; overflow:hidden;}
-  .ip-teaser-bg{
-    position:absolute; inset:0;
-    background:linear-gradient(rgba(13,13,18,.86), rgba(13,13,18,.86)), url('assets/ip-teaser-bg.webp') center/cover no-repeat;
-  }
-  .ip-teaser-overlay{
-    position:absolute; inset:0;
-    background:linear-gradient(90deg, rgba(13,13,18,.7) 0%, rgba(13,13,18,0) 18%);
-  }
+  /* IP teaser — 왼쪽 글, 오른쪽 캐릭터. 캐릭터 뒤 무늬는 가장자리로 갈수록 사라지게 */
+  .ip-teaser{grid-template-columns:minmax(0,1fr) minmax(0,1fr); column-gap:clamp(52px,7vw,122px);}
+  .ip-teaser-body{min-width:0;}
+  .ip-teaser-lede{font-size:clamp(40px,4.6vw,64px); line-height:1.12; white-space:nowrap;} /* SPACED-OUT 이 하이픈에서 꺾이지 않게 — 줄은 <br> 로만 나눈다 */
+  .ip-teaser-media{position:relative; display:grid; place-items:center; min-height:clamp(420px,42vw,600px); isolation:isolate;}
+  .ip-teaser-bg{position:absolute; inset:-4% -12%; z-index:-1; opacity:.5;
+    background:url('assets/ip-teaser-bg.webp') center/cover no-repeat;
+    -webkit-mask-image:radial-gradient(ellipse at 52% 50%, #000 22%, transparent 72%); mask-image:radial-gradient(ellipse at 52% 50%, #000 22%, transparent 72%);}
+  .ip-teaser-overlay{display:none;}
   /* 캐릭터는 배경과 분리된 투명 이미지 — hover 시 캐릭터만 기울어지게 하기 위함 */
-  .ip-teaser-character{
-    position:absolute; top:50%; left:50%;
-    width:auto; height:82%; max-width:none;
-    transform:translate(-50%, -50%) rotate(0deg);
-    transform-origin:50% 85%;
-    pointer-events:none; -webkit-user-select:none; user-select:none;
-  }
+  .ip-teaser-character{display:block; width:min(86%,460px); height:auto; transform-origin:50% 85%;
+    pointer-events:none; -webkit-user-select:none; user-select:none;}
   /* 반응은 캐릭터 기울기 하나만 — 시선을 캐릭터에 모은다 */
   @media (hover:hover) and (pointer:fine) and (prefers-reduced-motion: no-preference){
     .ip-teaser-character{transition:transform .45s cubic-bezier(.22,1,.36,1);}
-    .ip-teaser:hover .ip-teaser-character{transform:translate(-50%, calc(-50% - 5px)) rotate(-2deg);}
+    .ip-teaser:hover .ip-teaser-character{transform:translateY(-5px) rotate(-2deg);}
   }
-  .ip-teaser-body{
-    position:relative; z-index:1; flex:0 0 42%; max-width:460px;
-    display:flex; flex-direction:column; justify-content:center; align-items:flex-start;
-    padding:0 6%;
+
+  @media(max-width:860px){
+    .about-teaser, .ip-teaser{grid-template-columns:1fr; padding-bottom:96px;}
+    .about-teaser-media{width:min(74%,420px);}
+    .about-teaser-body{padding-top:48px;}
+    .ip-teaser-media{min-height:420px; margin-top:24px;}
+    .ip-teaser-character{width:min(80%,420px);}
   }
-  @media(max-width:720px){
-    .ip-teaser{aspect-ratio:4/5; display:block;}
-    .ip-teaser-media{position:absolute; inset:0;}
-    .ip-teaser-overlay{background:linear-gradient(180deg, rgba(5,5,10,.9) 0%, rgba(5,5,10,.72) 32%, rgba(5,5,10,.1) 56%, rgba(5,5,10,.1) 100%);}
-    .ip-teaser-character{height:48%; top:70%;}
-    .ip-teaser-body{
-      position:relative; height:100%; flex:none; max-width:none;
-      justify-content:flex-start; align-items:flex-start;
-      padding:26px 24px 0;
-    }
-    .ip-teaser-lede{white-space:normal;}
+  @media(max-width:600px){
+    .about-teaser, .ip-teaser{padding:36px 0 84px;}
+    .about-teaser-media{width:min(86%,410px); aspect-ratio:7/9.2;}
+    .about-teaser-body{padding-top:44px;}
+    .about-teaser-lede .lede-1{font-size:clamp(32px,9vw,44px);}
+    .about-teaser-lede .lede-2{margin-top:24px; font-size:15px;}
+    .ip-teaser-lede{font-size:clamp(32px,9.6vw,46px);}
+    .ip-teaser-media{min-height:340px; margin-top:8px;}
+    .ip-teaser-character{width:min(92%,380px);}
+    .about-teaser-cta, .ip-teaser-cta{margin-top:30px;}
   }
 
   .work-grid{display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:64px 40px;} /* 제목 아래와 다음 줄 작품 사이를 넉넉히 */
@@ -659,7 +641,7 @@
     </div>
     <div class="about-teaser-body reveal-text" data-reveal>
       <p class="about-teaser-label">About the artist</p>
-      <p class="about-teaser-lede" data-i="about_teaser_lede"><span class="lede-1">독해하고, 해석하고, 번역하는 것.</span><span class="lede-2">저는 법을 읽고 의미를 찾아,<br>그것을 나전칠기의 언어로 옮깁니다.</span></p>
+      <p class="about-teaser-lede" data-i="about_teaser_lede"><span class="lede-1">독해하고,<br>해석하고,<br>번역하는 것.</span><span class="lede-2">저는 법을 읽고 의미를 찾아,<br>그것을 나전칠기의 언어로 옮깁니다.</span></p>
       <span class="about-teaser-cta" data-i="about_teaser_cta">작가 소개 보기 <span class="cta-arrow">→</span></span>
     </div>
   </a>
@@ -669,7 +651,7 @@
   <a class="ip-teaser" href="ip/" aria-label="Explore the Haedal IP world">
     <div class="ip-teaser-body">
       <p class="ip-teaser-label" data-i="ip_teaser_label">Original Character</p>
-      <p class="ip-teaser-lede" data-i="ip_teaser_lede">SPACED-OUT SEA OTTER</p>
+      <p class="ip-teaser-lede" data-i="ip_teaser_lede">SPACED-OUT<br>SEA OTTER</p>
       <p class="ip-teaser-sub" data-i="ip_teaser_sub">얼빵해달</p>
       <span class="ip-teaser-cta" data-i="ip_teaser_cta">만나러 가기 <span class="cta-arrow">→</span></span>
     </div>
@@ -780,12 +762,12 @@ var I18N = {
     wm_series_label:'시리즈 작품',
     video_default:'영상으로 보기',
     ip_teaser_label:'Original Character',
-    ip_teaser_lede:'SPACED-OUT SEA OTTER',
+    ip_teaser_lede:'SPACED-OUT<br>SEA OTTER',
     ip_teaser_sub:'얼빵해달',
     ip_teaser_cta:'만나러 가기 <span class="cta-arrow">→</span>',
     hv_view_work:'작품 보기 →',
     hv_play:'재생', hv_pause:'일시정지',
-    about_teaser_lede:'<span class="lede-1">독해하고, 해석하고, 번역하는 것.</span><span class="lede-2">저는 법을 읽고 의미를 찾아,<br>그것을 나전칠기의 언어로 옮깁니다.</span>',
+    about_teaser_lede:'<span class="lede-1">독해하고,<br>해석하고,<br>번역하는 것.</span><span class="lede-2">저는 법을 읽고 의미를 찾아,<br>그것을 나전칠기의 언어로 옮깁니다.</span>',
     about_teaser_cta:'작가 소개 보기 <span class="cta-arrow">→</span>',
   },
   en: {
@@ -817,12 +799,12 @@ var I18N = {
     wm_series_label:'Series',
     video_default:'Watch video',
     ip_teaser_label:'Original Character',
-    ip_teaser_lede:'SPACED-OUT SEA OTTER',
+    ip_teaser_lede:'SPACED-OUT<br>SEA OTTER',
     ip_teaser_sub:'Eolbbang Haedal',
     ip_teaser_cta:'Say hello <span class="cta-arrow">→</span>',
     hv_view_work:'View work →',
     hv_play:'Play', hv_pause:'Pause',
-    about_teaser_lede:'<span class="lede-1">To read, interpret, and translate.</span><span class="lede-2">I read the law, seek out its meaning,<br>and translate it into the language of najeonchilgi.</span>',
+    about_teaser_lede:'<span class="lede-1">To read,<br>interpret,<br>and translate.</span><span class="lede-2">I read the law, seek out its meaning,<br>and translate it into the language of najeonchilgi.</span>',
     about_teaser_cta:'Meet the artist <span class="cta-arrow">→</span>'
   }
 };
