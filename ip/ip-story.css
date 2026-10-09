@@ -300,13 +300,17 @@ html[lang="en"] .profile-sheet .profile-name-sub{font:13px/1.5 'Noto Sans KR',sa
 .contact-link{display:flex;width:max-content;align-items:center;gap:10px;margin:36px auto 0;padding:13px 26px;border:1px solid #245B73;border-radius:12px;font:600 15px/1.2 'Noto Sans KR',sans-serif;letter-spacing:.2px;color:#245B73;background:transparent;transition:background-color .28s ease,color .28s ease,border-color .28s ease}
 .contact-link .cta-arrow{display:inline-block;transition:transform .28s ease}
 .contact-link:focus-visible,.contact-link:active{background:#245B73;color:#fff}
-/* 두 줄로 나눈다 — 첫 줄 저작권·BACK TO TOP, 둘째 줄 처리방침·이용안내.
+/* 두 줄 × 좌우 — 첫 줄 저작권 | 인스타·샵 아이콘, 둘째 줄 처리방침·이용안내 | BACK TO TOP.
    이 페이지는 assets/site.css 를 읽지 않으므로 같은 규칙을 여기에도 둔다(site.css 와 함께 고칠 것). */
-footer{display:grid;grid-template-columns:1fr auto;align-items:baseline;row-gap:14px;column-gap:16px;
+footer{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:16px;
   padding:30px 6%;font:12px/1.6 'Space Mono',monospace;background:#EAF0F2} /* 바로 위 라이선싱과 같은 색으로 이어지게 */
-footer .ft-copy{grid-column:1}
-footer .ft-top{grid-column:2;justify-self:end}
-footer .ft-links{grid-column:1 / -1;display:flex;flex-wrap:wrap;gap:8px 28px}
+footer::after{content:'';order:3;flex-basis:100%;height:0}
+footer .ft-copy{order:1}
+footer .ft-social{order:2;margin:-6px -6px -6px auto;align-self:center;display:flex;gap:6px}
+footer .ft-social a{display:block;padding:6px;color:var(--muted)} footer .ft-social a:hover{color:var(--navy)}
+footer .ft-social svg{display:block}
+footer .ft-links{order:4;margin-top:14px;display:flex;flex-wrap:wrap;gap:8px 28px}
+footer .ft-top{order:5;margin-top:14px;margin-left:auto;white-space:nowrap}
 footer .ft-privacy{font-family:'Space Mono','Noto Sans KR',monospace;font-weight:700;color:#183544;white-space:nowrap} /* 개인정보 처리방침: 다른 푸터 글자와 구분 */
 footer .ft-privacy:hover{text-decoration:underline;text-underline-offset:4px}
 /* 저작권·이용 안내는 굵게 하지 않는다(site.css와 같은 이유). IP는 이 파일만 쓰므로 여기에도 둔다 */
@@ -434,10 +438,10 @@ body>nav{animation:nav-arrive .55s .04s both cubic-bezier(.22,1,.36,1)}
   .group-art{width:86%;margin:auto;transform:rotate(1deg)}
   .group-art img{box-shadow:10px 12px 0 #080D0F}
   .closing p{max-width:290px;margin:auto}
-  /* 좁으면 저작권과 BACK TO TOP 이 한 줄에 못 들어간다 — 세 줄로 세우고 차례만 바꾼다 */
-  footer{grid-template-columns:1fr;row-gap:12px;font-size:10px}
-  footer .ft-copy{order:1} footer .ft-links{order:2}
-  footer .ft-top{order:3;grid-column:1;justify-self:start}
+  /* 폰에서도 두 줄 × 좌우를 지키려고 글자와 간격만 줄인다 */
+  footer{column-gap:10px;font-size:10px}
+  footer .ft-links{gap:8px 12px}
+  footer .ft-social{gap:0;margin:-5px -5px -5px auto} footer .ft-social a{padding:5px}
 }
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -456,3 +460,9 @@ main:focus{outline:none}
   font-size:13px;font-weight:700;text-decoration:none;transition:top .18s ease}
 .skip-link:focus{top:12px}
 @media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){.contact-link:hover .cta-arrow{transform:translateX(4px)}}
+@media(max-width:340px){
+  /* 저작권 | 아이콘이 한 줄에 못 들어간다 — 저작권 / 처리방침 / 아이콘 … BACK TO TOP 세 줄 */
+  footer .ft-copy,footer .ft-links{flex-basis:100%}
+  footer .ft-social{order:6;margin:9px auto -5px -5px}
+  footer .ft-top{order:7}
+}

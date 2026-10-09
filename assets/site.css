@@ -154,18 +154,31 @@ nav{
 .link-sub:hover, .link-sub:focus-visible{color:var(--ivory);}
 button.link-go, button.link-sub{background:none; border:none; padding:0; margin:0; cursor:pointer;}
 
-/* 두 줄로 나눈다 — 첫 줄 저작권·BACK TO TOP, 둘째 줄 처리방침·이용안내.
-   한 줄에 다 넣으면 좁은 화면에서 저작권 문장 안으로 링크가 끼어들어 제멋대로 접혔다. */
+/* 두 줄 × 좌우 — 첫 줄 저작권 | 인스타·샵 아이콘, 둘째 줄 처리방침·이용안내 | BACK TO TOP.
+   한 줄에 다 넣으면 좁은 화면에서 저작권 문장 안으로 링크가 끼어들어 제멋대로 접혔다.
+   두 줄이 서로의 오른쪽 폭에 끌려가지 않게 grid 대신 flex 두 줄로 둔다(::after 가 줄바꿈).
+   폰에서도 그대로 두고, 저작권과 아이콘이 부딪히는 아주 좁은 화면에서만 세 줄로 접는다. */
 footer{border-top:1px solid var(--line); padding:30px max(32px, calc((100% - 1180px) / 2 + 32px)) 44px; /* 선은 화면 끝까지, 글자는 로고와 같은 선에서 시작 */
-  display:grid; grid-template-columns:1fr auto; align-items:baseline; row-gap:14px; column-gap:16px;
+  display:flex; flex-wrap:wrap; align-items:baseline; column-gap:16px;
   font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-muted);}
-footer .ft-copy{grid-column:1;}
-footer .ft-top{grid-column:2; justify-self:end;}
-footer .ft-links{grid-column:1 / -1; display:flex; flex-wrap:wrap; gap:8px 28px;}
+footer::after{content:''; order:3; flex-basis:100%; height:0;}
+footer .ft-copy{order:1;}
+footer .ft-social{order:2; margin:-6px -6px -6px auto; align-self:center; display:flex; gap:6px;}
+footer .ft-social a{display:block; padding:6px;} /* 누르기 쉬운 크기(28px) — 겉으로는 16px 아이콘 */
+footer .ft-social svg{display:block;}
+footer .ft-links{order:4; margin-top:14px; display:flex; flex-wrap:wrap; gap:8px 28px;}
+footer .ft-top{order:5; margin-top:14px; margin-left:auto; white-space:nowrap;}
 @media (max-width:620px){
-  /* 좁으면 저작권과 BACK TO TOP 이 한 줄에 못 들어간다 — 세 줄로 세우고 차례만 바꾼다 */
-  footer{grid-template-columns:1fr; row-gap:12px;}
-  footer .ft-copy{order:1;} footer .ft-links{order:2;} footer .ft-top{order:3; grid-column:1; justify-self:start;}
+  /* 폰에서도 두 줄 × 좌우를 지키려고 글자와 간격만 조금 줄인다 */
+  footer{font-size:11px; letter-spacing:.2px; column-gap:10px;}
+  footer .ft-links{gap:8px 12px;}
+  footer .ft-social{gap:0; margin:-5px -5px -5px auto;} footer .ft-social a{padding:5px;}
+}
+@media (max-width:372px){
+  /* 저작권 | 아이콘이 한 줄에 못 들어간다 — 저작권 / 처리방침 / 아이콘 … BACK TO TOP 세 줄 */
+  footer .ft-copy, footer .ft-links{flex-basis:100%;}
+  footer .ft-social{order:6; margin:9px auto -5px -5px;}
+  footer .ft-top{order:7;}
 }
 footer a{color:var(--ivory-muted); text-decoration:none;}
 footer a:hover{color:var(--ivory);}
