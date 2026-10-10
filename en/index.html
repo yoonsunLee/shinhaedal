@@ -171,7 +171,7 @@
 
   /* 홈 하단 안내 두 블록(작가 · 캐릭터) — 인덱스 목록(2026-10-11 작가 선택).
      굵은 글자 줄 두 개를 가는 선으로 나눈다. 평소엔 글자만 있고, 줄에 올리면 그림이 나타난다:
-     작가 사진은 제목과 버튼 사이에 살짝 기울어져, 얼빵해달은 오른쪽 '만나러 가기' 버튼 위로 올라온다(자리를 서로 다르게 — 작가).
+     작가 사진도 얼빵해달도 제목과 버튼 사이(버튼 왼쪽)에 살짝 기울어져 나타난다.
      작가 사진은 크게 보여 주지 않는다 — 작가 소개 페이지에 크게 있다(작가). 폰은 올릴 수 없으니 두 그림 다 오른쪽 위에 늘 작게 보여 준다.
      예전엔 반투명 남색 상자 + 검은 장면 카드로 두 블록의 상자 색·글 시작줄이 서로 달라 광고 배너 두 장처럼 보였다. */
   .about-teaser-wrap, .ip-teaser-wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
@@ -214,23 +214,20 @@
     opacity:0; transform:rotate(-4deg) translateY(10px) scale(.92); transition:opacity .3s ease, transform .5s cubic-bezier(.22,1,.36,1);}
   .about-teaser-media img{display:block; width:100%; height:auto; aspect-ratio:3/4; object-fit:cover; object-position:center 28%;
     box-shadow:0 18px 50px rgba(0,0,0,.55); -webkit-user-select:none; user-select:none; -webkit-user-drag:none;}
-  /* 얼빵해달 — 버튼과 같은 칸에 겹쳐 두고 버튼 윗변에 앉힌다. 버튼 안에 넣으면 언어를 바꿀 때(data-i 가 innerHTML 을 갈아 끼움) 지워진다.
-     -50% 는 그림 키의 절반, 19px 은 버튼 키(46px)의 절반에서 4px 걸터앉은 만큼 */
-  .ip-teaser-media{grid-column:3; grid-row:1 / span 2; justify-self:center; align-self:center; width:clamp(72px,7.5vw,96px); z-index:3; pointer-events:none;
-    opacity:0; transform:translateY(calc(-50% - 5px)); transition:opacity .3s ease, transform .5s cubic-bezier(.22,1,.36,1);}
-  .ip-teaser-character{display:block; width:100%; height:auto; transform-origin:50% 100%; filter:drop-shadow(0 12px 28px rgba(0,0,0,.45));
+  /* 얼빵해달 — 작가 사진과 같은 자리(제목과 버튼 사이)에 같은 방식으로. 처음엔 오른쪽 버튼 윗변에 앉혔다가
+     작가가 사진처럼 버튼 왼쪽으로 옮기자고 했다(2026-10-11). 크기는 폭에 맞춰 줄인다(좁은 PC 에서 줄 밖으로 나가지 않게).
+     그림은 버튼 안에 넣지 말 것 — 언어를 바꿀 때 data-i 가 버튼 innerHTML 을 갈아 끼워 지워진다 */
+  .ip-teaser-media{grid-column:2; grid-row:1 / span 2; justify-self:end; align-self:center; width:clamp(96px,10.3vw,132px); z-index:3; pointer-events:none;
+    opacity:0; transform:rotate(-4deg) translateY(10px) scale(.92); transition:opacity .3s ease, transform .5s cubic-bezier(.22,1,.36,1);}
+  .ip-teaser-character{display:block; width:100%; height:auto; filter:drop-shadow(0 12px 28px rgba(0,0,0,.45));
     -webkit-user-select:none; user-select:none; -webkit-user-drag:none;}
-  .about-teaser:hover .about-teaser-media, .about-teaser:focus-visible .about-teaser-media{opacity:1; transform:rotate(-4deg) translateY(0) scale(1);}
-  .ip-teaser:hover .ip-teaser-media, .ip-teaser:focus-visible .ip-teaser-media{opacity:1; transform:translateY(calc(-50% - 19px));}
-  @media (hover:hover) and (prefers-reduced-motion: no-preference){
-    .ip-teaser-character{transition:transform .5s cubic-bezier(.22,1,.36,1) .08s;}
-    .ip-teaser:hover .ip-teaser-character{transform:rotate(-4deg);}
-  }
+  .about-teaser:hover .about-teaser-media, .about-teaser:focus-visible .about-teaser-media,
+  .ip-teaser:hover .ip-teaser-media, .ip-teaser:focus-visible .ip-teaser-media{opacity:1; transform:rotate(-4deg) translateY(0) scale(1);}
   @media (prefers-reduced-motion: reduce){
     /* 움직임 없이 나타나기만 */
     .about-teaser-media, .ip-teaser-media, .about-teaser-lede .lede-1, .ip-teaser-lede{transition:opacity .2s linear;}
     .about-teaser-media, .about-teaser:hover .about-teaser-media, .about-teaser:focus-visible .about-teaser-media{transform:rotate(-4deg);}
-    .ip-teaser-media, .ip-teaser:hover .ip-teaser-media, .ip-teaser:focus-visible .ip-teaser-media{transform:translateY(calc(-50% - 19px));}
+    .ip-teaser-media, .ip-teaser:hover .ip-teaser-media, .ip-teaser:focus-visible .ip-teaser-media{transform:rotate(-4deg);}
   }
   @media(max-width:820px){
     .about-teaser, .ip-teaser{grid-template-columns:minmax(0,1fr); row-gap:0; padding:40px 0 44px;}
