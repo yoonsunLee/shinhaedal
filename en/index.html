@@ -347,6 +347,18 @@
   .tile-ex .ex-links a{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-dim); text-decoration:underline; text-underline-offset:5px; text-decoration-thickness:1px;}
   .tile-ex .ex-links a:hover{color:var(--ivory);}
   .tile-ex .ex-links .sep{color:var(--ivory-faint); font-size:11px;}
+  @media (max-width:560px){
+    /* 폰에서는 카드 폭이 130~170px 뿐이다. 오른쪽 위에 띄운 D-day 표시 자리(62px)를 비우면 글자 칸이
+       40px 안팎만 남고, 사이트 전체의 keep-all 때문에 「나전칠기로」 같은 긴 낱말이 그 칸을 뚫고 나가
+       표시 밑으로 들어갔다(2026-10-11, 360·375·390px). 좁을 때는 표시를 제목 윗줄로 내리고
+       '포스터 보기 ↗'·'찾아오는 길 ↗'도 낱말 중간에서 접히지 않게 한 줄씩 세운다. */
+    .tile-ex{padding:18px 14px;}
+    .tile-ex .ex-badge{position:relative; top:auto; right:auto; align-self:flex-start; margin-bottom:4px;}
+    .tile-ex .ex-title{padding-right:0; overflow-wrap:anywhere;}
+    .tile-ex .ex-links{flex-direction:column; align-items:flex-start; gap:10px;}
+    .tile-ex .ex-links .sep{display:none;}
+    .tile-ex .ex-links a{white-space:nowrap;}
+  }
 
 
   @media(max-width:900px){

@@ -512,7 +512,14 @@ def main():
         else:
             print("처리 중: " + no)
             images = make_image_tiers(no, w.get("image_file"), assets_dir)
-            audio = make_audio(no, w.get("audio_master"), assets_dir) if w.get("docent_enabled") else None
+            audio = None
+            if w.get("docent_enabled"):
+                try:
+                    audio = make_audio(no, w.get("audio_master"), assets_dir)
+                except Exception as e:
+                    # 홈 영상과 같은 원칙 — 음성 하나 때문에 작품·전시·Press 발행 전체를 멈추지 않는다.
+                    # ffmpeg 설치가 느려 워크플로가 건너뛴 날도 여기로 온다. 다음 발행 때 다시 만든다.
+                    print("도슨트 음성 처리 실패, 이번엔 건너뜀(%s): %s" % (no, e))
 
             photo_src = []
             photos = []

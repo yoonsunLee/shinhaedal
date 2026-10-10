@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   notify:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04   # publish.yml 과 같은 이유로 고정(10/19 Ubuntu 26 전환)
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4

@@ -303,7 +303,9 @@ html[lang="en"] .profile-sheet .profile-name-sub{font:13px/1.5 'Noto Sans KR',sa
 /* 두 줄 × 좌우 — 첫 줄 저작권 | 인스타·샵 아이콘, 둘째 줄 처리방침·이용안내 | BACK TO TOP.
    이 페이지는 assets/site.css 를 읽지 않으므로 같은 규칙을 여기에도 둔다(site.css 와 함께 고칠 것). */
 footer{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:16px;
-  padding:30px 6%;font:12px/1.6 'Space Mono',monospace;background:#EAF0F2} /* 바로 위 라이선싱과 같은 색으로 이어지게 */
+  /* 좌우 6% 는 이 페이지 본문 줄에 맞춘 것이라 그대로 둔다. 글자·자간·아래 여백은 site.css 와 같게(2026-10-11) */
+  padding:30px 6% 44px;font-family:'Space Mono','Noto Sans KR',monospace;font-size:12px;letter-spacing:.5px;
+  background:#EAF0F2} /* 바로 위 라이선싱과 같은 색으로 이어지게 */
 footer::after{content:'';order:3;flex-basis:100%;height:0}
 footer .ft-copy{order:1}
 footer .ft-social{order:2;margin:-6px -6px -6px auto;align-self:center;display:flex;gap:6px}
@@ -438,8 +440,11 @@ body>nav{animation:nav-arrive .55s .04s both cubic-bezier(.22,1,.36,1)}
   .group-art{width:86%;margin:auto;transform:rotate(1deg)}
   .group-art img{box-shadow:10px 12px 0 #080D0F}
   .closing p{max-width:290px;margin:auto}
-  /* 폰에서도 두 줄 × 좌우를 지키려고 글자와 간격만 줄인다 */
-  footer{column-gap:10px;font-size:10px}
+}
+@media(max-width:620px){
+  /* 폰에서도 두 줄 × 좌우를 지키려고 글자와 간격만 조금 줄인다 — site.css 와 같은 구간·같은 값.
+     예전엔 여기만 10px 이라 다른 페이지(11px)보다 작았다(2026-10-11) */
+  footer{column-gap:10px;font-size:11px;letter-spacing:.2px}
   footer .ft-links{gap:8px 12px}
   footer .ft-social{gap:0;margin:-5px -5px -5px auto} footer .ft-social a{padding:5px}
 }

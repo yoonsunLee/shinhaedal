@@ -25,7 +25,9 @@ concurrency:
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    # ubuntu-latest 는 2026-10-19 부터 Ubuntu 26 으로 바뀐다(GitHub 공지). 개인전(11/23) 앞에서 발행 환경이
+    # 저절로 바뀌지 않게 지금 버전에 묶어 둔다. 24.04 는 2029년까지 지원된다 — 전시가 끝난 뒤 올릴 것.
+    runs-on: ubuntu-24.04
     timeout-minutes: 20  # 기본값(360분)까지 매달려 있지 않도록 — 평소엔 몇 분이면 끝남
     steps:
       - uses: actions/checkout@v4
@@ -37,9 +39,14 @@ jobs:
       - name: Install dependencies
         run: pip install requests Pillow
 
-      # 홈 영상은 ffmpeg로 PC용·모바일용·포스터를 만든다. 러너 이미지에 보통 들어
-      # 있지만, 없으면 영상만 조용히 빠진 채로 발행된다(그 사고가 눈에 잘 안 띈다).
+      # 홈 영상·도슨트 음성은 ffmpeg로 만든다. 러너 이미지에 없어서 매번 apt 로 설치하는데,
+      # 그 서버가 느린 날은 17~20분이 걸려 작업 전체가 20분 제한에 잘렸다(10/2·10/7·10/8 —
+      # 두 번은 발행이 통째로 날아감). 8분에서 끊고, 설치를 못 해도 발행은 계속한다.
+      # 이미 만든 영상은 source.txt 로 재사용하므로 ffmpeg 가 필요 없고, 새로 만들어야 하는
+      # 영상·음성만 그날 건너뛰었다가 다음 발행 때 다시 만든다(publish_sb.py).
       - name: Ensure ffmpeg
+        timeout-minutes: 8
+        continue-on-error: true
         run: ffmpeg -version >/dev/null 2>&1 || (sudo apt-get update && sudo apt-get install -y ffmpeg)
 
       # 아카이브 원본은 Supabase에 있다. service_role 키는 RLS를 우회하므로
