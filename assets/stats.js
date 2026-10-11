@@ -10,7 +10,12 @@
    브라우저에 남기는 것(localStorage 'sh_stat'): 마지막으로 센 날짜, 마지막 활동 시각, 이번 방문의 들어온 곳,
             이번 방문에서 이미 누른 버튼 종류 — 모두 이 브라우저 안에서만 쓰고 서버로 보내지 않는다.
    다른 페이지 코드는 window.shStat(이름, 대상) · window.shStatWork(작품번호|null)만 부르면 된다. */
-(function(){
+/* 링크에 올렸을 때 브라우저가 미리 만들어 둔 페이지(site.js)는 실제로 화면에 나타날 때부터 센다(2026-10-12) —
+   안 그러면 올리기만 하고 들어가지 않은 페이지도 페이지뷰로 잡힌다. 그 사이 다른 코드가 불러도 되게 빈 함수를 먼저 둔다 */
+window.shStat = window.shStat || function(){}; window.shStatWork = window.shStatWork || function(){};
+(function(start){
+  if(document.prerendering) document.addEventListener('prerenderingchange', start, {once:true}); else start();
+})(function(){
   // 처리방침 4차 개정(2026-09-22 시행)부터 수집. __SH_STATS_ENDPOINT는 로컬 시험용
   var ENDPOINT = window.__SH_STATS_ENDPOINT || 'https://shinhaedalapi.mycafe24.com/stats/collect.php';
   var KEY = 'sh_stat', OFF_KEY = 'sh_stat_off';
@@ -313,4 +318,4 @@
   document.addEventListener('input', function(e){
     if(!typed && PAGE === '/contact/' && e.target && e.target.closest && e.target.closest('form')){ typed = true; click('contact_start', ''); }
   }, true);
-})();
+});

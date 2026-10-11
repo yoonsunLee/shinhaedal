@@ -57,18 +57,26 @@
   ];
 
   // ---- stars ----
+  // 별 자리는 페이지마다 같게 — 고정된 씨앗으로 뽑는다(2026-10-12). 예전엔 페이지마다 무작위라 옮길 때마다 하늘이 통째로 바뀌었다
+  var seed = 20260923;
+  function rand(){
+    seed = (seed + 0x6D2B79F5) | 0;
+    var t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  }
   var STAR_COUNT = 220;
   var stars = [];
   for (var i = 0; i < STAR_COUNT; i++){
-    var depth = Math.random(); // 0 = far/small, 1 = near/large
+    var depth = rand(); // 0 = far/small, 1 = near/large
     stars.push({
-      x: Math.random(),
-      y: Math.random(),
+      x: rand(),
+      y: rand(),
       depth: depth,
       r: 0.4 + depth * 1.6,
-      phase: Math.random() * Math.PI * 2,
-      speed: 0.6 + Math.random() * 1.2,
-      accent: Math.random() < 0.18
+      phase: rand() * Math.PI * 2,
+      speed: 0.6 + rand() * 1.2,
+      accent: rand() < 0.18
     });
   }
 
@@ -87,11 +95,17 @@
   var nextShooterAt = 3 + Math.random() * 4;
 
   var mouseX = 0.5, mouseY = 0.5, targetX = 0.5, targetY = 0.5;
+  // 앞 페이지의 마우스 위치에서 시작한다 — 시작할 때 별이 가운데로 튀지 않게
+  try{ var m0 = JSON.parse(sessionStorage.getItem('sf_mouse') || 'null'); if(m0){ mouseX = targetX = m0[0]; mouseY = targetY = m0[1]; } }catch(e){}
+  window.addEventListener('pagehide', function(){ try{ sessionStorage.setItem('sf_mouse', JSON.stringify([targetX, targetY])); }catch(e){} });
   window.addEventListener('mousemove', function(e){
     targetX = e.clientX / W; targetY = e.clientY / H;
   });
 
-  var t0 = performance.now();
+  // 반짝임·성운의 시간도 이어 간다 — 첫 페이지에서 정한 기준 시각을 다음 페이지가 이어 받는다(6시간 지나면 새로)
+  var epoch = Date.now();
+  try{ var e0 = +sessionStorage.getItem('sf_epoch'); if(e0 && Date.now() - e0 < 6 * 3600e3) epoch = e0; else sessionStorage.setItem('sf_epoch', String(epoch)); }catch(e){}
+  var t0 = performance.now() - (Date.now() - epoch);
   var lastT = t0;
 
   function frame(now){

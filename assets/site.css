@@ -211,3 +211,23 @@ main:focus{outline:none;}
   font-family:'Space Mono','Noto Sans KR',monospace; font-size:13px; font-weight:700;
   text-decoration:none; transition:top .18s ease;}
 .skip-link:focus{top:12px;}
+/* ---------- 페이지 사이 전환(작가 2026-10-12) — View Transitions ----------
+   같은 사이트 안에서 페이지를 옮길 때 브라우저가 지금 화면과 새 화면을 이어 준다(크롬·엣지·웨일·삼성 인터넷, 사파리 18.2+).
+   디졸브 — 화면이 흐릿하게 겹쳐 바뀐다(작품 창과 같은 말투).
+   IP 페이지는 이 스타일시트를 쓰지 않아 빠진다(IP 는 들어갈 때 자기 전환이 있다). 지원하지 않는 브라우저는 지금처럼 바로 바뀐다.
+   위 메뉴는 그 자리에 가만히 있고, 지금 페이지 밑줄(.ng-active)은 새 메뉴 자리로 미끄러져 옮겨 간다 */
+@view-transition{navigation:auto;}
+body > nav{view-transition-name:site-nav;}
+.nav-glide .ng-active{view-transition-name:nav-current;}
+::view-transition-group(nav-current){animation-duration:.5s; animation-timing-function:cubic-bezier(.22,1,.36,1);}
+html::view-transition-old(root){animation:ptx-out-blur .45s cubic-bezier(.45,0,.55,1) both;}
+html::view-transition-new(root){animation:ptx-in-blur .45s cubic-bezier(.45,0,.55,1) both;}
+@keyframes ptx-out-blur{to{opacity:0; filter:blur(4px);}}
+@keyframes ptx-in-blur{from{opacity:0; filter:blur(4px);}}
+@keyframes ptx-out{to{opacity:0;}}
+@keyframes ptx-rise-in{from{opacity:0; transform:translateY(14px);}}
+@keyframes ptx-slide-out-l{to{opacity:0; transform:translateX(-28px); filter:blur(3px);}}
+@keyframes ptx-slide-in-r{from{opacity:0; transform:translateX(28px); filter:blur(3px);}}
+@keyframes ptx-slide-out-r{to{opacity:0; transform:translateX(28px); filter:blur(3px);}}
+@keyframes ptx-slide-in-l{from{opacity:0; transform:translateX(-28px); filter:blur(3px);}}
+@media (prefers-reduced-motion: reduce){ @view-transition{navigation:none;} }
