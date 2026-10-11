@@ -72,6 +72,7 @@
   .pp-optout{display:flex; flex-wrap:wrap; gap:10px 16px; align-items:center; border:1px solid var(--line); border-radius:8px; padding:14px 16px; margin:4px 0 12px;}
   .pp-optstate{font-size:15px; color:var(--pp-text);}
   .pp-optbtn{font:inherit; font-size:15px; padding:8px 14px; border:1px solid var(--ivory-dim); border-radius:6px; background:none; color:var(--ivory); cursor:pointer;}
+  .pp-optbtn{transition:border-color .2s ease;}
   .pp-optbtn:hover{border-color:var(--ivory);}
   .pp-optbtn:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
   /* 지난 개정 이력은 길어서 접어 둔다. 시행일과 변경 고지 규칙은 방침의 효력에 관한 내용이라 접지 않는다.
@@ -82,8 +83,19 @@
     font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px;
     color:var(--ivory-dim); text-decoration:underline; text-underline-offset:5px;}
   .pp-hist summary::-webkit-details-marker{display:none;}
+  /* 펼치기·접기가 0.25초에 걸쳐 부드럽게(2026-10-12, transitions.dev 'accordion' 값). 높이를 부드럽게 바꿀 줄 아는
+     브라우저(크롬·엣지 최신)에서만 켜지고, 나머지는 지금처럼 바로 열리고 닫힌다 */
+  @supports (interpolate-size: allow-keywords) and selector(::details-content){
+    @media (prefers-reduced-motion: no-preference){
+      .pp-hist{interpolate-size:allow-keywords;}
+      .pp-hist::details-content{block-size:0; overflow:clip; opacity:0;
+        transition:block-size .25s cubic-bezier(.22,1,.36,1), opacity .25s cubic-bezier(.22,1,.36,1), content-visibility .25s allow-discrete;}
+      .pp-hist[open]::details-content{block-size:auto; opacity:1;}
+    }
+  }
   .pp-hist summary::before{content:'+ ';}
   .pp-hist[open] summary::before{content:'\2212 ';}
+  .pp-hist summary{transition:color .2s ease;}
   .pp-hist summary:hover, .pp-hist summary:focus-visible{color:var(--ivory);}
   .pp-hist > ul{margin-top:10px;}
   .pp-history{margin-top:40px; padding-top:24px; border-top:1px solid var(--line);}

@@ -153,6 +153,17 @@
   .cf-detail{margin-left:28px;}
   .cf-detail summary{display:inline-block; list-style:none; cursor:pointer; font-size:13px; color:var(--ivory-dim); text-decoration:underline; text-underline-offset:5px; padding:4px 0;}
   .cf-detail summary::-webkit-details-marker{display:none;}
+  /* 펼치기·접기가 0.25초에 걸쳐 부드럽게(2026-10-12, transitions.dev 'accordion' 값). 높이를 부드럽게 바꿀 줄 아는
+     브라우저(크롬·엣지 최신)에서만 켜지고, 나머지는 지금처럼 바로 열리고 닫힌다 */
+  @supports (interpolate-size: allow-keywords) and selector(::details-content){
+    @media (prefers-reduced-motion: no-preference){
+      .cf-detail{interpolate-size:allow-keywords;}
+      .cf-detail::details-content{block-size:0; overflow:clip; opacity:0;
+        transition:block-size .25s cubic-bezier(.22,1,.36,1), opacity .25s cubic-bezier(.22,1,.36,1), content-visibility .25s allow-discrete;}
+      .cf-detail[open]::details-content{block-size:auto; opacity:1;}
+    }
+  }
+  .cf-detail summary{transition:color .2s ease;}
   .cf-detail summary:hover, .cf-detail summary:focus-visible{color:var(--ivory);}
   .cf-detail ul{list-style:none; font-size:13px; line-height:1.6; color:var(--ivory-dim); margin:2px 0 8px; padding:14px 16px; display:grid; gap:6px; background:var(--bg-2); border:1px solid var(--line); border-radius:8px;}
   /* 항목 이름은 한 단계 흐리게, '보관 기간'만 굵고 밝게 — 동의 안내에서 보유 기간은 '중요한 내용'이라
@@ -172,6 +183,13 @@
   .cf-done:focus-visible{outline:2px solid var(--accent); outline-offset:6px; border-radius:4px;}
   .cf-done-title{font-family:'Black Han Sans', sans-serif; font-size:24px; color:var(--ivory); margin:0 0 10px;}
   .cf-done-body{font-size:16px; line-height:1.8; color:var(--ivory-dim); margin:0;}
+  /* 접수 완료 문구가 아래에서 흐릿하게 떠오르며 나타난다 — 제목 먼저, 본문 0.06초 뒤(2026-10-12, transitions.dev 'texts reveal').
+     나중에 얼빵해달 인사 그림이 생기면 같은 박자로 붙인다 */
+  @media (prefers-reduced-motion: no-preference){
+    .cf-done:not([hidden]) .cf-done-title, .cf-done:not([hidden]) .cf-done-body{animation:cfDoneIn .5s cubic-bezier(.22,1,.36,1) both;}
+    .cf-done:not([hidden]) .cf-done-body{animation-delay:.06s;}
+  }
+  @keyframes cfDoneIn{from{opacity:0; transform:translateY(12px); filter:blur(3px);}}
 </style>
 </head>
 <body>
@@ -758,10 +776,26 @@ document.getElementById('contactForm').addEventListener('submit', function(e){
   document.getElementById('cfFallback').hidden = false;
   window.location.href = mailto;
 });
+/* 글자 바꾸기: 옛 글자는 위로 흐려지며 빠지고, 새 글자가 아래에서 또렷해지며 들어온다(각 0.15초 —
+   2026-10-12, transitions.dev 'text states swap'). 움직임 줄이기를 켰거나 브라우저가 못 하면 그냥 바꾼다 */
+function swapLabel(el, text){
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce || !el.animate){ el.textContent = text; return; }
+  if(getComputedStyle(el).display === 'inline') el.style.display = 'inline-block';
+  var ease = 'cubic-bezier(.45,0,.55,1)';
+  var out = el.animate([{opacity:1, transform:'none', filter:'blur(0)'}, {opacity:0, transform:'translateY(-4px)', filter:'blur(2px)'}],
+                       {duration:150, easing:ease, fill:'forwards'});
+  out.onfinish = function(){
+    el.textContent = text;
+    el.animate([{opacity:0, transform:'translateY(4px)', filter:'blur(2px)'}, {opacity:1, transform:'none', filter:'blur(0)'}],
+               {duration:150, easing:ease});
+    out.cancel();
+  };
+}
 function flashCopyFeedback(btn, text){
   var original = btn.dataset.i ? I18N[LANG][btn.dataset.i] : btn.textContent;
-  btn.textContent = text;
-  setTimeout(function(){ btn.textContent = original; }, 2200);
+  swapLabel(btn, text);
+  setTimeout(function(){ swapLabel(btn, original); }, 2200);
 }
 document.getElementById('copyEmailBtn').addEventListener('click', function(){
   var btn = this;

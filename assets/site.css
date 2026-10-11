@@ -115,9 +115,9 @@ nav{
    모바일에서는 더 넓은 비율로 나오되 항상 같은 오른쪽 슬라이드 모션을 쓴다. */
 .nav-backdrop{
   position:fixed; inset:0; z-index:49; background:rgba(5,5,10,.35);
-  opacity:0; pointer-events:none; transition:opacity .3s ease;
+  opacity:0; pointer-events:none; transition:opacity .2s ease;   /* 닫힘 0.2초 */
 }
-.nav-backdrop.open{opacity:1; pointer-events:auto;}
+.nav-backdrop.open{opacity:1; pointer-events:auto; transition:opacity .3s ease;}
 .nav-overlay{
   position:fixed; top:0; right:0; bottom:0; z-index:50;
   width:min(420px, 46vw);
@@ -127,7 +127,8 @@ nav{
   transform:translateX(100%);
   /* 닫힌 패널이 화면 바로 밖에 있어 그림자가 화면 안으로 새므로, 닫히면 숨기고 그림자도 연 뒤에만 */
   visibility:hidden; box-shadow:none;
-  transition:transform .38s cubic-bezier(.32,.72,0,1), box-shadow .38s ease, visibility 0s linear .38s;
+  /* 닫힘은 0.26초 — 열 때(0.38초, 아래 .open)보다 빨리 물러나야 답답하지 않다(2026-10-12, transitions.dev 원칙) */
+  transition:transform .26s cubic-bezier(.32,.72,0,1), box-shadow .26s ease, visibility 0s linear .26s;
 }
 .nav-overlay.open{transform:translateX(0); visibility:visible; box-shadow:-24px 0 60px rgba(0,0,0,.35); transition:transform .38s cubic-bezier(.32,.72,0,1), box-shadow .38s ease, visibility 0s;}
 .overlay-close{position:absolute; top:22px; right:24px; font-size:20px;}
@@ -142,6 +143,9 @@ nav{
 .icon-btn.menu-btn{display:none;}
 @media(max-width:900px){ .nav-menu{display:none;} .icon-btn.menu-btn{display:flex;} .nav-icons{gap:20px;} }
 .icon-btn:hover{opacity:1;}
+/* 올렸을 때 색·밝기가 '딱' 바뀌지 않고 0.2초에 걸쳐 바뀌게 — .link-sub 와 같은 박자(2026-10-12) */
+.icon-btn{transition:opacity .2s ease;}
+.lang button{transition:color .2s ease;}
 
 /* 텍스트 링크는 두 가지뿐.
    ① .link-go  다른 페이지로 이동(→) — 전복 블루, 올리면 밑줄
@@ -191,6 +195,7 @@ footer .ft-privacy:hover{text-decoration:underline; text-underline-offset:4px;}
    늘 먼저다. 그래서 클래스를 새로 붙이는 대신 "앞에 형제가 있는 쪽"으로 고른다 —
    자기 페이지에서 주소가 ./ 로 바뀌어도 순서는 그대로라 안전하다. */
 footer .ft-privacy ~ .ft-privacy{font-weight:400; color:var(--ivory-muted);}
+footer .ft-privacy{transition:color .2s ease;}
 footer .ft-privacy ~ .ft-privacy:hover{color:var(--ivory);}
 html[lang="en"] .ft-ko, html:not([lang="en"]) .ft-en{display:none;}
 /* 본문 건너뛰기 — 평소에는 화면 밖에 있다가 Tab 을 처음 누르면 나타난다.

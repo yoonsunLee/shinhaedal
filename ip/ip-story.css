@@ -77,8 +77,8 @@ nav{display:flex;align-items:flex-start;justify-content:space-between;padding:26
 @media (prefers-reduced-motion: no-preference){
   .nav-glide.ready span{transition:transform .32s cubic-bezier(.3,.7,.2,1), width .32s cubic-bezier(.3,.7,.2,1), height .32s cubic-bezier(.3,.7,.2,1), opacity .2s ease;}
 }
-.nav-backdrop{position:fixed;inset:0;z-index:49;background:rgba(20,20,10,.25);opacity:0;pointer-events:none;transition:opacity .3s ease}
-.nav-backdrop.open{opacity:1;pointer-events:auto}
+.nav-backdrop{position:fixed;inset:0;z-index:49;background:rgba(20,20,10,.25);opacity:0;pointer-events:none;transition:opacity .2s ease}
+.nav-backdrop.open{opacity:1;pointer-events:auto;transition:opacity .3s ease}
 .nav-overlay{
   position:fixed;top:0;right:0;bottom:0;z-index:50;
   width:min(420px,46vw);background:#fffdf7f7;
@@ -87,7 +87,8 @@ nav{display:flex;align-items:flex-start;justify-content:space-between;padding:26
   transform:translateX(100%);
   /* 닫힌 패널 그림자가 밝은 배경에서 오른쪽 회색 띠로 보이던 문제 — 닫히면 숨기고 그림자도 연 뒤에만 */
   visibility:hidden;box-shadow:none;
-  transition:transform .38s cubic-bezier(.32,.72,0,1),box-shadow .38s ease,visibility 0s linear .38s;
+  /* 닫힘 0.26초 — 열 때(0.38초)보다 빨리(2026-10-12) */
+  transition:transform .26s cubic-bezier(.32,.72,0,1),box-shadow .26s ease,visibility 0s linear .26s;
 }
 .nav-overlay.open{transform:translateX(0);visibility:visible;box-shadow:-24px 0 60px rgba(0,0,0,.18);transition:transform .38s cubic-bezier(.32,.72,0,1),box-shadow .38s ease,visibility 0s}
 .overlay-close{position:absolute;top:22px;right:24px;font-size:20px}
@@ -196,8 +197,9 @@ html:not([lang="en"]) .hero h1{word-spacing:-.05em}
 /* 캐릭터 프로필: 화면 가운데에 세로 카드 한 장(PC·폰 같은 구성).
    위는 캐릭터를 좋아하게 만드는 공간(큰 전신·이름·직업·배달하는 것), 아래는 정보를 확인하는 공간(2열).
    얇은 선·배지 같은 장식 없이 따뜻한 아이보리 한 장. 아래 전역 dialog 규칙(사진 크게 보기용)을 이 요소에서만 덮어쓴다 */
-dialog.profile-sheet{position:fixed;inset:0;margin:auto;width:min(380px,calc(100vw - 32px));height:fit-content;max-width:none;max-height:calc(100dvh - 32px);padding:0;border:0;border-radius:14px;background:#fffaf0;color:var(--navy);box-shadow:0 30px 80px rgba(18,35,40,.28);overflow-y:auto;opacity:0;transform:translateY(22px);transition:opacity .3s ease,transform .45s cubic-bezier(.22,1,.36,1)}
-dialog.profile-sheet.is-open{opacity:1;transform:none}
+dialog.profile-sheet{position:fixed;inset:0;margin:auto;width:min(380px,calc(100vw - 32px));height:fit-content;max-width:none;max-height:calc(100dvh - 32px);padding:0;border:0;border-radius:14px;background:#fffaf0;color:var(--navy);box-shadow:0 30px 80px rgba(18,35,40,.28);overflow-y:auto;opacity:0;transform:translateY(22px);transition:opacity .2s ease,transform .3s cubic-bezier(.22,1,.36,1)}
+/* 프로필 카드: 열 때 0.3·0.45초, 닫을 때 0.2·0.3초로 더 빨리(2026-10-12) */
+dialog.profile-sheet.is-open{opacity:1;transform:none;transition:opacity .3s ease,transform .45s cubic-bezier(.22,1,.36,1)}
 dialog.profile-sheet::backdrop{background:rgba(20,30,35,.36)}
 .profile-inner{position:relative;padding:34px 30px 30px}
 .profile-close{position:absolute;top:12px;right:12px;z-index:3;width:44px;height:44px;border:0;background:none;color:var(--navy);font-size:17px;opacity:.7;cursor:pointer} /* 캐릭터 그림(z-index:1)에 덮이지 않게 */
@@ -217,7 +219,7 @@ html[lang="en"] .profile-sheet .profile-name-sub{font:13px/1.5 'Noto Sans KR',sa
 .profile-facts div{min-width:0}
 .profile-facts dt{font:10.5px/1.6 'Space Mono',monospace;letter-spacing:.14em;color:var(--muted)}
 .profile-facts dd{margin:3px 0 0;font-size:15px;font-weight:500}
-@media(prefers-reduced-motion:reduce){dialog.profile-sheet{transition:none;transform:none}}
+@media(prefers-reduced-motion:reduce){dialog.profile-sheet,dialog.profile-sheet.is-open{transition:none;transform:none}}
 .toy{background:#F7F8FA;color:#172D3B;display:grid;grid-template-columns:1fr 1fr;gap:60px 9%;align-items:center}
 .toy-heading h2{margin:30px 0;color:#172D3B}
 .toy-heading p{color:#4D606C}
@@ -318,6 +320,10 @@ footer .ft-privacy:hover{text-decoration:underline;text-underline-offset:4px}
 /* 저작권·이용 안내는 굵게 하지 않는다(site.css와 같은 이유). IP는 이 파일만 쓰므로 여기에도 둔다 */
 footer .ft-privacy ~ .ft-privacy{font-weight:400;color:var(--muted)}
 footer .ft-privacy ~ .ft-privacy:hover{color:var(--navy)}
+/* 올렸을 때 색·밝기가 '딱' 바뀌지 않게 0.2초(2026-10-12) */
+.lang button,.toy-link,footer .ft-privacy{transition:color .2s ease}
+.icon-btn,.profile-close{transition:opacity .2s ease}
+.photo-open>span{transition:background-color .2s ease,color .2s ease}
 html[lang="en"] .ft-ko,html:not([lang="en"]) .ft-en{display:none}
 dialog{border:0;background:#10151bf5;color:white;width:100vw;height:100dvh;max-width:none;max-height:none;margin:0;padding:60px 5vw 25px}
 dialog::backdrop{background:#10151b}

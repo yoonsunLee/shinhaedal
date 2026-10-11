@@ -39,6 +39,7 @@ html:not([lang="en"]) .t-en{display:none !important;}
 .wp-series-item{display:flex; flex-direction:column; gap:8px; text-decoration:none; color:var(--ivory-dim); font-size:13px; line-height:1.45;}
 .wp-series-item img{display:block; width:100%; aspect-ratio:1/1; object-fit:contain; background:#05050a; border-radius:2px;}
 .wp-series-item:hover{color:var(--ivory);}
+.wp-back, .wp-action, .wp-series-item{transition:color .2s ease;}   /* 올렸을 때 색이 '딱' 바뀌지 않게(2026-10-12) */
 
 .wp-pager{margin-top:72px; padding-top:20px; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:24px;}
 .wp-pager a{display:flex; flex-direction:column; gap:6px; max-width:48%; padding:6px 0; text-decoration:none; color:var(--ivory-dim);}

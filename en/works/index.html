@@ -72,6 +72,7 @@
   .ex-info-card .ex-meta{display:block; font-size:13px; color:var(--ivory-dim); line-height:1.7;}
   .ex-info-card .ex-links{display:flex; align-items:center; gap:10px; margin-top:14px; padding-top:14px; border-top:1px solid var(--line);}
   .ex-info-card .ex-links a, .ex-info-card .ex-links button.ex-poster-link{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-dim); text-decoration:underline; text-underline-offset:5px; text-decoration-thickness:1px; border:none; background:none; margin:0; padding:0; cursor:pointer;}
+  .ex-info-card .ex-links a, .ex-info-card .ex-links button.ex-poster-link{transition:color .2s ease;}
   .ex-info-card .ex-links a:hover, .ex-info-card .ex-links button.ex-poster-link:hover{color:var(--ivory);}
   .ex-info-card .ex-links .sep{color:var(--ivory-faint); font-size:11px;}
   @media(max-width:720px){
@@ -107,6 +108,14 @@
     .tile-media img{transition:transform .6s ease;}
     .tile:hover .tile-media img{transform:scale(1.03);}
     .tile:hover .tile-title, .tile:focus-visible .tile-title{color:var(--ivory);}
+    .tile-title{transition:color .2s ease;}   /* 자개빛 스침을 끈 경우(움직임 줄이기)에도 색이 '딱' 바뀌지 않게. 스침이 켜지면 아래 규칙이 덮는다 */
+  }
+  /* 작품 그림이 다 받아지면 0.4초에 걸쳐 흐릿함→또렷함으로 나타난다(2026-10-12, transitions.dev 'skeleton reveal' 값).
+     덜 받아진 그림에만 스크립트가 .is-pending 을 붙인다 — 이미 받아 둔 그림은 기다리지 않고 바로 보인다.
+     올렸을 때 살짝 커지는 transform 도 같은 줄에 있어야 서로 지우지 않는다 */
+  @media (prefers-reduced-motion: no-preference){
+    .tile-media img{transition:transform .6s ease, opacity .4s ease-in-out, filter .4s ease-in-out;}
+    .tile-media img.is-pending{opacity:0; filter:blur(2px);}
   }
   /* 작품 사진 색은 건드리지 않고, 제목에만 메뉴 호버와 같은 자개빛 스침을 준다 */
   @media (hover:hover) and (pointer:fine) and (prefers-reduced-motion: no-preference){
@@ -150,9 +159,9 @@
     background:#05050a;
     display:flex; align-items:center; justify-content:center;
     opacity:0; pointer-events:none;
-    transition:opacity .32s ease;
+    transition:opacity .2s ease;   /* 닫힘 0.2초 — 열 때(0.32초)보다 빨리 물러난다(2026-10-12) */
   }
-  .work-modal-overlay.open{opacity:1; pointer-events:auto;}
+  .work-modal-overlay.open{opacity:1; pointer-events:auto; transition:opacity .32s ease;}
   .work-modal{
     position:relative;
     width:100%; height:100%; max-width:1400px;
@@ -223,7 +232,7 @@
     position:absolute; right:14px; bottom:14px; z-index:2;
     font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px;
     color:var(--ivory-dim); background:rgba(5,5,10,.6); padding:5px 10px; border-radius:20px;
-    text-decoration:none;
+    text-decoration:none; transition:color .2s ease;
   }
   .wm-video-extlink:hover{color:var(--ivory);}
   .wm-media-label{
@@ -321,16 +330,22 @@
     display:flex; align-items:center; justify-content:center;
     padding:24px;
     opacity:0; pointer-events:none;
-    transition:opacity .2s ease;
+    transition:opacity .15s cubic-bezier(.22,1,.36,1);
   }
-  .large-view-overlay.open{opacity:1; pointer-events:auto;}
-  .large-view-overlay img{max-width:100%; max-height:100%; object-fit:contain;}
+  /* 크게 보기: 열 때 그림이 96%에서 제 크기로 커지며 0.25초에 나타나고, 닫을 때는 0.15초로 더 빨리 물러난다
+     (2026-10-12, transitions.dev 'modal' 값). 닫는 동안 그림이 먼저 사라지지 않게 그림 비우기는 닫힘이 끝난 뒤에(hideLargeView) */
+  .large-view-overlay.open{opacity:1; pointer-events:auto; transition:opacity .25s cubic-bezier(.22,1,.36,1);}
+  .large-view-overlay img{max-width:100%; max-height:100%; object-fit:contain;
+    transform:scale(.96); transition:transform .15s cubic-bezier(.22,1,.36,1);}
+  .large-view-overlay.open img{transform:none; transition:transform .25s cubic-bezier(.22,1,.36,1);}
+  @media (prefers-reduced-motion: reduce){ .large-view-overlay img{transform:none; transition:none;} }
   .lv-close{
     position:absolute; top:16px; right:16px; z-index:2;
     background:rgba(255,255,255,.08); border:none; color:var(--ivory);
     width:38px; height:38px; border-radius:50%; font-size:16px;
     cursor:pointer; display:flex; align-items:center; justify-content:center;
   }
+  .lv-close{transition:background-color .2s ease;}
   .lv-close:hover{background:rgba(255,255,255,.18);}
 
   .tile-media img, #wmImg, #lvImg{
@@ -775,6 +790,28 @@ function renderSelected(filterActive){
   document.getElementById('allHead').hidden = !rows.length;
   if(rows.length) document.getElementById('selGrid').innerHTML = cellsHtml(rows, function(r){ return 'data-id="' + esc(r.id) + '"'; });
 }
+/* ---------- 작품 그림이 받아지면 부드럽게 나타나게(위 .tile-media img.is-pending) ----------
+   격자가 새로 그려질 때마다 덜 받아진 그림에만 표시를 붙였다가, 다 받아지면(실패해도) 뗀다 */
+(function(){
+  if(!window.MutationObserver) return;
+  function soften(root){
+    Array.prototype.forEach.call(root.querySelectorAll('.tile-media img'), function(img){
+      // 아직 하나도 못 받은 그림(가로 크기 0)만. 일부라도 받아 그려지기 시작한 그림은 건드리지 않고(깜빡임 방지),
+      // 못 받아서 숨긴 그림(onerror)도 건너뛴다
+      if(img.naturalWidth || img.style.visibility === 'hidden' || img.classList.contains('is-pending')) return;
+      img.classList.add('is-pending');
+      function done(){ img.classList.remove('is-pending'); }
+      img.addEventListener('load', done, {once:true});
+      img.addEventListener('error', done, {once:true});
+    });
+  }
+  ['workGrid', 'selGrid'].forEach(function(id){
+    var g = document.getElementById(id);
+    if(!g) return;
+    soften(g);   // 처음부터 들어 있는 칸(미리 만들어 둔 목록 — 홈은 이걸 그대로 쓴다)
+    new MutationObserver(function(){ soften(g); }).observe(g, {childList:true});
+  });
+})();
 var ALL_WORKS = [];
 var VISIBLE_WORKS = [];
 var EXHIBITIONS = [];
@@ -1424,8 +1461,8 @@ document.getElementById('wmShareCopy').addEventListener('click', function(){
   var label = btn.querySelector('span');
   var original = I18N[LANG].wm_share_copy;
   copyText(url).then(function(){
-    label.textContent = I18N[LANG].wm_share_copied;
-    setTimeout(function(){ label.textContent = original; }, 2200);
+    swapLabel(label, I18N[LANG].wm_share_copied);
+    setTimeout(function(){ swapLabel(label, original); }, 2200);
   }).catch(function(){
     // 복사가 막힌 환경이면 주소를 직접 선택할 수 있게 띄운다
     window.prompt(I18N[LANG].wm_share_failed, url);
@@ -1440,6 +1477,22 @@ function legacyCopy(text){
   try{ ok = document.execCommand('copy'); }catch(e){}
   ta.remove();
   return ok;
+}
+/* 글자 바꾸기: 옛 글자는 위로 흐려지며 빠지고, 새 글자가 아래에서 또렷해지며 들어온다(각 0.15초 —
+   2026-10-12, transitions.dev 'text states swap'). 움직임 줄이기를 켰거나 브라우저가 못 하면 그냥 바꾼다 */
+function swapLabel(el, text){
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce || !el.animate){ el.textContent = text; return; }
+  if(getComputedStyle(el).display === 'inline') el.style.display = 'inline-block';
+  var ease = 'cubic-bezier(.45,0,.55,1)';
+  var out = el.animate([{opacity:1, transform:'none', filter:'blur(0)'}, {opacity:0, transform:'translateY(-4px)', filter:'blur(2px)'}],
+                       {duration:150, easing:ease, fill:'forwards'});
+  out.onfinish = function(){
+    el.textContent = text;
+    el.animate([{opacity:0, transform:'translateY(4px)', filter:'blur(2px)'}, {opacity:1, transform:'none', filter:'blur(0)'}],
+               {duration:150, easing:ease});
+    out.cancel();
+  };
 }
 function copyText(text){
   if(navigator.clipboard && window.isSecureContext){
@@ -1485,10 +1538,12 @@ document.addEventListener('keydown', function(e){
 /* ---------- 크게 보기 (Large View) ---------- */
 var lvOverlay = document.getElementById('largeView');
 var lvImg = document.getElementById('lvImg');
+var lvClearTimer = 0;
 var lvLastFocused = null;
 var lvPushed = false;
 function openLargeView(src, alt){
   lvLastFocused = document.activeElement;
+  clearTimeout(lvClearTimer);
   lvImg.src = src;
   lvImg.alt = alt || '';
   lvOverlay.classList.add('open');
@@ -1500,7 +1555,9 @@ function openLargeView(src, alt){
 function hideLargeView(){
   lvOverlay.classList.remove('open');
   lvOverlay.setAttribute('aria-hidden', 'true'); lvOverlay.inert = true;
-  lvImg.src = '';
+  /* 닫힘(0.15초)이 끝난 뒤에 그림을 비운다 — 바로 비우면 그림이 먼저 툭 사라지고 검은 바탕만 서서히 꺼진다 */
+  clearTimeout(lvClearTimer);
+  lvClearTimer = setTimeout(function(){ if(!lvOverlay.classList.contains('open')) lvImg.src = ''; }, 200);
   if(lvLastFocused){ lvLastFocused.focus(); lvLastFocused = null; }
 }
 function closeLargeView(){

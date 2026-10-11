@@ -135,7 +135,7 @@ document.querySelectorAll('.nav-menu a').forEach(function(a){
     var done = false;
     function finish(){ if(done) return; done = true; sheet.close(); }
     sheet.addEventListener('transitionend', finish, {once:true});
-    setTimeout(finish, 450);
+    setTimeout(finish, 300);   // 닫힘(0.2·0.3초)보다 조금 길게 — transitionend 가 안 오는 경우의 안전장치
   }
   openBtn.addEventListener('click', open);
   closeBtn.addEventListener('click', close);

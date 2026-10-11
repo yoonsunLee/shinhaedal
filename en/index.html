@@ -173,8 +173,9 @@
 
   /* 홈 하단 안내 두 블록(작가 · 캐릭터) — 인덱스 목록(2026-10-11 작가 선택).
      굵은 글자 줄 두 개를 가는 선으로 나눈다. 평소엔 글자만 있고, 줄에 올리면 그림이 나타난다:
-     작가 사진도 얼빵해달도 제목과 버튼 사이(버튼 왼쪽)에 살짝 기울어져 나타난다.
-     작가 사진은 크게 보여 주지 않는다 — 작가 소개 페이지에 크게 있다(작가). 폰은 올릴 수 없으니 두 그림 다 오른쪽 위에 늘 작게 보여 준다.
+     작가 줄은 글자만 둔다(작가 사진은 뺐다 — 작가 2026-10-11, 작가 소개 페이지에 크게 있다).
+     캐릭터 줄은 올리면 얼빵해달이 제목과 버튼 사이(버튼 왼쪽)에 살짝 기울어져 나타나고, 마우스를 따라 살짝 움직인다.
+     폰은 올릴 수 없으니 얼빵해달을 오른쪽 위에 늘 작게 보여 준다.
      예전엔 반투명 남색 상자 + 검은 장면 카드로 두 블록의 상자 색·글 시작줄이 서로 달라 광고 배너 두 장처럼 보였다. */
   .about-teaser-wrap, .ip-teaser-wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
   .ip-teaser-wrap{padding-bottom:104px;}
@@ -186,7 +187,7 @@
   .about-teaser-label, .ip-teaser-label{grid-column:1; grid-row:1 / span 2; align-self:start; margin:0; padding-top:16px;
     font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--ivory-muted);}
   .about-teaser-lede, .ip-teaser-lede{grid-column:2; grid-row:1; margin:0; font-family:'Black Han Sans',sans-serif; font-weight:400; color:var(--ivory);}
-  /* 제목 오른쪽 170px 은 작가 사진이 나타날 자리 — 비워 둬서 글을 가리지 않는다. 두 줄의 박자를 맞추려 캐릭터 줄도 같이 비운다 */
+  /* 제목 오른쪽 170px 은 얼빵해달이 나타날 자리 — 비워 둬서 글을 가리지 않는다. 두 줄의 박자를 맞추려 작가 줄도 같이 비운다 */
   .about-teaser-lede .lede-1, .ip-teaser-lede{display:block; padding-right:170px; font-size:clamp(28px,3.4vw,44px); line-height:1.2; text-wrap:balance;
     transition:transform .45s cubic-bezier(.22,1,.36,1);}
   /* 1인칭 문장은 본문체 — 포스터체로 쓰면 외치는 느낌이 난다 */
@@ -211,24 +212,21 @@
     .about-teaser:hover .cta-arrow, .ip-teaser:hover .cta-arrow{transform:translateX(4px);}
     .about-teaser:hover .lede-1, .ip-teaser:hover .ip-teaser-lede{transform:translateX(10px);}
   }
-  /* 작가 사진 — 제목과 버튼 사이(가운데 칸 오른쪽 끝) */
-  .about-teaser-media{grid-column:2; grid-row:1 / span 2; justify-self:end; align-self:center; width:132px; z-index:3; pointer-events:none;
-    opacity:0; transform:rotate(-4deg) translateY(10px) scale(.92); transition:opacity .3s ease, transform .5s cubic-bezier(.22,1,.36,1);}
-  .about-teaser-media img{display:block; width:100%; height:auto; aspect-ratio:3/4; object-fit:cover; object-position:center 28%;
-    box-shadow:0 18px 50px rgba(0,0,0,.55); -webkit-user-select:none; user-select:none; -webkit-user-drag:none;}
-  /* 얼빵해달 — 작가 사진과 같은 자리(제목과 버튼 사이)에 같은 방식으로. 처음엔 오른쪽 버튼 윗변에 앉혔다가
-     작가가 사진처럼 버튼 왼쪽으로 옮기자고 했다(2026-10-11). 크기는 폭에 맞춰 줄인다(좁은 PC 에서 줄 밖으로 나가지 않게).
+  /* 얼빵해달 — 제목과 버튼 사이(가운데 칸 오른쪽 끝)에 기울어져 나타난다. 처음엔 오른쪽 버튼 윗변에 앉혔다가
+     작가가 버튼 왼쪽으로 옮기자고 했다(2026-10-11). 크기는 폭에 맞춰 줄인다(좁은 PC 에서 줄 밖으로 나가지 않게).
      그림은 버튼 안에 넣지 말 것 — 언어를 바꿀 때 data-i 가 버튼 innerHTML 을 갈아 끼워 지워진다 */
   .ip-teaser-media{grid-column:2; grid-row:1 / span 2; justify-self:end; align-self:center; width:clamp(96px,10.3vw,132px); z-index:3; pointer-events:none;
     opacity:0; transform:rotate(-4deg) translateY(10px) scale(.92); transition:opacity .3s ease, transform .5s cubic-bezier(.22,1,.36,1);}
-  .ip-teaser-character{display:block; width:100%; height:auto; filter:drop-shadow(0 12px 28px rgba(0,0,0,.45));
-    -webkit-user-select:none; user-select:none; -webkit-user-drag:none;}
-  .about-teaser:hover .about-teaser-media, .about-teaser:focus-visible .about-teaser-media,
+  /* 마우스를 따라 살짝 움직인다(작가 2026-10-11) — 아래 스크립트가 줄 안 커서 위치를 --mx·--my(-1~1)로 준다.
+     좌우 최대 10px·위아래 6px·기울기 4°, 0.45초에 걸쳐 따라온다. 움직임 줄이기·폰에서는 스크립트가 돌지 않아 가만히 있다 */
+  .ip-teaser-character{--mx:0; --my:0; display:block; width:100%; height:auto; filter:drop-shadow(0 12px 28px rgba(0,0,0,.45));
+    -webkit-user-select:none; user-select:none; -webkit-user-drag:none;
+    transform:translate(calc(var(--mx) * 10px), calc(var(--my) * 6px)) rotate(calc(var(--mx) * 4deg)); transform-origin:50% 80%;
+    transition:transform .45s cubic-bezier(.22,1,.36,1);}
   .ip-teaser:hover .ip-teaser-media, .ip-teaser:focus-visible .ip-teaser-media{opacity:1; transform:rotate(-4deg) translateY(0) scale(1);}
   @media (prefers-reduced-motion: reduce){
     /* 움직임 없이 나타나기만 */
-    .about-teaser-media, .ip-teaser-media, .about-teaser-lede .lede-1, .ip-teaser-lede{transition:opacity .2s linear;}
-    .about-teaser-media, .about-teaser:hover .about-teaser-media, .about-teaser:focus-visible .about-teaser-media{transform:rotate(-4deg);}
+    .ip-teaser-media, .about-teaser-lede .lede-1, .ip-teaser-lede{transition:opacity .2s linear;}
     .ip-teaser-media, .ip-teaser:hover .ip-teaser-media, .ip-teaser:focus-visible .ip-teaser-media{transform:rotate(-4deg);}
   }
   @media(max-width:820px){
@@ -237,11 +235,10 @@
     .about-teaser-lede, .ip-teaser-lede, .ip-teaser-sub, .about-teaser-cta, .ip-teaser-cta{grid-column:1; grid-row:auto;}
     .ip-teaser-sub{margin-top:10px;}
     .about-teaser-cta, .ip-teaser-cta{margin-top:28px; justify-self:start;}
-    .about-teaser-lede .lede-1, .ip-teaser-lede{padding-right:96px;}   /* 오른쪽 위 작은 그림 자리 */
-    /* 폰: 올릴 수 없으니 그림을 늘 오른쪽 위에 작게 보여 준다(시안 그대로 — 자리를 다르게 하는 건 PC 만, 작가) */
-    .about-teaser-media{position:absolute; grid-column:auto; grid-row:auto; right:0; top:36px; width:78px; opacity:1; transform:none;}
+    .about-teaser-lede .lede-1{padding-right:0;}
+    .ip-teaser-lede{padding-right:96px;}   /* 오른쪽 위 작은 얼빵해달 자리 */
+    /* 폰: 올릴 수 없으니 얼빵해달을 늘 오른쪽 위에 작게 보여 준다 */
     .ip-teaser-media{position:absolute; grid-column:auto; grid-row:auto; right:0; top:30px; width:92px; opacity:1; transform:none;}
-    .about-teaser:hover .about-teaser-media, .about-teaser:focus-visible .about-teaser-media,
     .ip-teaser:hover .ip-teaser-media, .ip-teaser:focus-visible .ip-teaser-media{transform:none;}
   }
 
@@ -268,6 +265,14 @@
     .tile-media img{transition:transform .6s ease;}
     .tile:hover .tile-media img{transform:scale(1.03);}
     .tile:hover .tile-title, .tile:focus-visible .tile-title{color:var(--ivory);}
+    .tile-title{transition:color .2s ease;}   /* 자개빛 스침을 끈 경우(움직임 줄이기)에도 색이 '딱' 바뀌지 않게. 스침이 켜지면 아래 규칙이 덮는다 */
+  }
+  /* 작품 그림이 다 받아지면 0.4초에 걸쳐 흐릿함→또렷함으로 나타난다(2026-10-12, transitions.dev 'skeleton reveal' 값).
+     덜 받아진 그림에만 스크립트가 .is-pending 을 붙인다 — 이미 받아 둔 그림은 기다리지 않고 바로 보인다.
+     올렸을 때 살짝 커지는 transform 도 같은 줄에 있어야 서로 지우지 않는다 */
+  @media (prefers-reduced-motion: no-preference){
+    .tile-media img{transition:transform .6s ease, opacity .4s ease-in-out, filter .4s ease-in-out;}
+    .tile-media img.is-pending{opacity:0; filter:blur(2px);}
   }
   /* 작품 사진 색은 건드리지 않고, 제목에만 메뉴 호버와 같은 자개빛 스침을 준다 */
   @media (hover:hover) and (pointer:fine) and (prefers-reduced-motion: no-preference){
@@ -397,9 +402,9 @@
     background:#05050a;
     display:flex; align-items:center; justify-content:center;
     opacity:0; pointer-events:none;
-    transition:opacity .32s ease;
+    transition:opacity .2s ease;   /* 닫힘 0.2초 — 열 때(0.32초)보다 빨리 물러난다(2026-10-12) */
   }
-  .work-modal-overlay.open{opacity:1; pointer-events:auto;}
+  .work-modal-overlay.open{opacity:1; pointer-events:auto; transition:opacity .32s ease;}
   .work-modal{
     position:relative;
     width:100%; height:100%; max-width:1400px;
@@ -471,7 +476,7 @@
     position:absolute; right:14px; bottom:14px; z-index:2;
     font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px;
     color:var(--ivory-dim); background:rgba(5,5,10,.6); padding:5px 10px; border-radius:20px;
-    text-decoration:none;
+    text-decoration:none; transition:color .2s ease;
   }
   .wm-video-extlink:hover{color:var(--ivory);}
   .wm-media-label{
@@ -573,16 +578,22 @@
     display:flex; align-items:center; justify-content:center;
     padding:24px;
     opacity:0; pointer-events:none;
-    transition:opacity .2s ease;
+    transition:opacity .15s cubic-bezier(.22,1,.36,1);
   }
-  .large-view-overlay.open{opacity:1; pointer-events:auto;}
-  .large-view-overlay img{max-width:100%; max-height:100%; object-fit:contain;}
+  /* 크게 보기: 열 때 그림이 96%에서 제 크기로 커지며 0.25초에 나타나고, 닫을 때는 0.15초로 더 빨리 물러난다
+     (2026-10-12, transitions.dev 'modal' 값). 닫는 동안 그림이 먼저 사라지지 않게 그림 비우기는 닫힘이 끝난 뒤에(hideLargeView) */
+  .large-view-overlay.open{opacity:1; pointer-events:auto; transition:opacity .25s cubic-bezier(.22,1,.36,1);}
+  .large-view-overlay img{max-width:100%; max-height:100%; object-fit:contain;
+    transform:scale(.96); transition:transform .15s cubic-bezier(.22,1,.36,1);}
+  .large-view-overlay.open img{transform:none; transition:transform .25s cubic-bezier(.22,1,.36,1);}
+  @media (prefers-reduced-motion: reduce){ .large-view-overlay img{transform:none; transition:none;} }
   .lv-close{
     position:absolute; top:16px; right:16px; z-index:2;
     background:rgba(255,255,255,.08); border:none; color:var(--ivory);
     width:38px; height:38px; border-radius:50%; font-size:16px;
     cursor:pointer; display:flex; align-items:center; justify-content:center;
   }
+  .lv-close{transition:background-color .2s ease;}
   .lv-close:hover{background:rgba(255,255,255,.18);}
 
   .tile-media img, #wmImg, #lvImg{
@@ -693,9 +704,6 @@
 
 <div class="about-teaser-wrap">
   <a class="about-teaser reveal-text" href="/en/about/" data-reveal>
-    <div class="about-teaser-media">
-      <img src="about/assets/artist-profile-1.webp" alt="The artist Shin Haedal" data-i-alt="alt_artist_1" width="700" height="1050" draggable="false" loading="lazy" decoding="async">
-    </div>
     <div class="about-teaser-body">
       <p class="about-teaser-label">About the artist</p>
       <p class="about-teaser-lede" data-i="about_teaser_lede"><span class="lede-1">To read, interpret, and translate.</span><span class="lede-2">I read the law, seek out its meaning,<br>and translate it into the language of najeonchilgi.</span></p>
@@ -982,6 +990,28 @@ function renderWorkTiles(rows){
       '</a>';
   }).join('');
 }
+/* ---------- 작품 그림이 받아지면 부드럽게 나타나게(위 .tile-media img.is-pending) ----------
+   격자가 새로 그려질 때마다 덜 받아진 그림에만 표시를 붙였다가, 다 받아지면(실패해도) 뗀다 */
+(function(){
+  if(!window.MutationObserver) return;
+  function soften(root){
+    Array.prototype.forEach.call(root.querySelectorAll('.tile-media img'), function(img){
+      // 아직 하나도 못 받은 그림(가로 크기 0)만. 일부라도 받아 그려지기 시작한 그림은 건드리지 않고(깜빡임 방지),
+      // 못 받아서 숨긴 그림(onerror)도 건너뛴다
+      if(img.naturalWidth || img.style.visibility === 'hidden' || img.classList.contains('is-pending')) return;
+      img.classList.add('is-pending');
+      function done(){ img.classList.remove('is-pending'); }
+      img.addEventListener('load', done, {once:true});
+      img.addEventListener('error', done, {once:true});
+    });
+  }
+  ['workGrid', 'selGrid'].forEach(function(id){
+    var g = document.getElementById(id);
+    if(!g) return;
+    soften(g);   // 처음부터 들어 있는 칸(미리 만들어 둔 목록 — 홈은 이걸 그대로 쓴다)
+    new MutationObserver(function(){ soften(g); }).observe(g, {childList:true});
+  });
+})();
 var ALL_WORKS = [];
 var HOME_LIST = [];
 var DETAIL_CACHE = {};
@@ -1636,8 +1666,8 @@ document.getElementById('wmShareCopy').addEventListener('click', function(){
   var label = btn.querySelector('span');
   var original = I18N[LANG].wm_share_copy;
   copyText(url).then(function(){
-    label.textContent = I18N[LANG].wm_share_copied;
-    setTimeout(function(){ label.textContent = original; }, 2200);
+    swapLabel(label, I18N[LANG].wm_share_copied);
+    setTimeout(function(){ swapLabel(label, original); }, 2200);
   }).catch(function(){
     // 복사가 막힌 환경이면 주소를 직접 선택할 수 있게 띄운다
     window.prompt(I18N[LANG].wm_share_failed, url);
@@ -1652,6 +1682,22 @@ function legacyCopy(text){
   try{ ok = document.execCommand('copy'); }catch(e){}
   ta.remove();
   return ok;
+}
+/* 글자 바꾸기: 옛 글자는 위로 흐려지며 빠지고, 새 글자가 아래에서 또렷해지며 들어온다(각 0.15초 —
+   2026-10-12, transitions.dev 'text states swap'). 움직임 줄이기를 켰거나 브라우저가 못 하면 그냥 바꾼다 */
+function swapLabel(el, text){
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce || !el.animate){ el.textContent = text; return; }
+  if(getComputedStyle(el).display === 'inline') el.style.display = 'inline-block';
+  var ease = 'cubic-bezier(.45,0,.55,1)';
+  var out = el.animate([{opacity:1, transform:'none', filter:'blur(0)'}, {opacity:0, transform:'translateY(-4px)', filter:'blur(2px)'}],
+                       {duration:150, easing:ease, fill:'forwards'});
+  out.onfinish = function(){
+    el.textContent = text;
+    el.animate([{opacity:0, transform:'translateY(4px)', filter:'blur(2px)'}, {opacity:1, transform:'none', filter:'blur(0)'}],
+               {duration:150, easing:ease});
+    out.cancel();
+  };
 }
 function copyText(text){
   if(navigator.clipboard && window.isSecureContext){
@@ -1702,10 +1748,12 @@ document.addEventListener('keydown', function(e){
 /* ---------- 크게 보기 (Large View) ---------- */
 var lvOverlay = document.getElementById('largeView');
 var lvImg = document.getElementById('lvImg');
+var lvClearTimer = 0;
 var lvLastFocused = null;
 var lvPushed = false;
 function openLargeView(src, alt){
   lvLastFocused = document.activeElement;
+  clearTimeout(lvClearTimer);
   lvImg.src = src;
   lvImg.alt = alt || '';
   lvOverlay.classList.add('open');
@@ -1716,7 +1764,9 @@ function openLargeView(src, alt){
 function hideLargeView(){
   lvOverlay.classList.remove('open');
   lvOverlay.setAttribute('aria-hidden', 'true'); lvOverlay.inert = true;
-  lvImg.src = '';
+  /* 닫힘(0.15초)이 끝난 뒤에 그림을 비운다 — 바로 비우면 그림이 먼저 툭 사라지고 검은 바탕만 서서히 꺼진다 */
+  clearTimeout(lvClearTimer);
+  lvClearTimer = setTimeout(function(){ if(!lvOverlay.classList.contains('open')) lvImg.src = ''; }, 200);
   if(lvLastFocused){ lvLastFocused.focus(); lvLastFocused = null; }
 }
 function closeLargeView(){
@@ -1749,6 +1799,22 @@ document.addEventListener('contextmenu', function(e){
     });
   }, {threshold:0.15});
   targets.forEach(function(el){ io.observe(el); });
+})();
+/* ---------- 홈 하단 캐릭터 줄: 올리면 나타나는 얼빵해달이 마우스를 따라 살짝 움직인다(작가 2026-10-11) ----------
+   줄 안 커서 위치를 -1~1 로 바꿔 --mx·--my 로 준다(움직임 크기는 CSS .ip-teaser-character). 마우스가 없거나 움직임 줄이기면 안 돈다 */
+(function(){
+  var row = document.querySelector('.ip-teaser'), img = row && row.querySelector('.ip-teaser-character');
+  if(!row || !img || !window.matchMedia) return;
+  if(!matchMedia('(hover:hover) and (pointer:fine)').matches || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var raf = 0, mx = 0, my = 0;
+  function paint(){ raf = 0; img.style.setProperty('--mx', mx.toFixed(3)); img.style.setProperty('--my', my.toFixed(3)); }
+  row.addEventListener('pointermove', function(e){
+    var r = row.getBoundingClientRect();
+    mx = Math.max(-1, Math.min(1, (e.clientX - r.left) / r.width * 2 - 1));
+    my = Math.max(-1, Math.min(1, (e.clientY - r.top) / r.height * 2 - 1));
+    if(!raf) raf = requestAnimationFrame(paint);
+  });
+  row.addEventListener('pointerleave', function(){ mx = 0; my = 0; if(!raf) raf = requestAnimationFrame(paint); });
 })();
 </script>
 
