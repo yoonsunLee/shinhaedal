@@ -341,6 +341,31 @@
     transform:scale(.96); transition:transform .15s cubic-bezier(.22,1,.36,1);}
   .large-view-overlay.open img{transform:none; transition:transform .25s cubic-bezier(.22,1,.36,1);}
   @media (prefers-reduced-motion: reduce){ .large-view-overlay img{transform:none; transition:none;} }
+  /* 크게 보기 확대·이동(작가 2026-10-12). PC: 휠로 커서 쪽 확대, 그림을 누르면 원본 크기↔맞춤, 확대한 채 끌어서 이동.
+     폰: 두 손가락으로 벌려 확대, 두 번 눌러 원본 크기↔맞춤, 한 손가락으로 이동. 아래 [− 100% +] 와 키보드 + − 0 ← → ↑ ↓.
+     확대는 개별 속성 scale·translate 로 준다 — 열고 닫을 때의 transform(96%→100%)과 서로 덮어쓰지 않는다 */
+  /* 맞춤(100%) 상태에서 그림이 아래 [− 100% +] 와 겹치지 않게 아래를 비운다. 확대하면 그림이 화면 전체를 쓴다 */
+  .large-view-overlay{overflow:hidden; touch-action:none; padding-bottom:calc(max(18px, env(safe-area-inset-bottom)) + 52px);}
+  .large-view-overlay img{cursor:zoom-in; -webkit-user-select:none; user-select:none;}
+  .large-view-overlay.is-zoomed img{cursor:grab;}
+  .large-view-overlay.is-dragging img{cursor:grabbing;}
+  .large-view-overlay.is-zoom-anim img{transition:transform .25s cubic-bezier(.22,1,.36,1), scale .34s cubic-bezier(.22,1,.36,1), translate .34s cubic-bezier(.22,1,.36,1);}
+  .lv-zoom{position:absolute; left:50%; bottom:max(18px, env(safe-area-inset-bottom)); transform:translateX(-50%); z-index:2;
+    display:flex; align-items:center; gap:2px; padding:4px; border-radius:999px;
+    background:rgba(20,20,26,.72); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);}
+  .lv-zoom[hidden]{display:none;}
+  .lv-zbtn, .lv-zlevel{border:0; background:none; color:var(--ivory); cursor:pointer; height:34px; border-radius:999px;
+    font-family:'Space Mono','Noto Sans KR',monospace; transition:background-color .2s ease, color .2s ease, opacity .2s ease;}
+  .lv-zbtn{width:34px; font-size:17px; line-height:1;}
+  .lv-zlevel{min-width:60px; padding:0 8px; font-size:12px; letter-spacing:.5px; color:var(--ivory-dim); font-variant-numeric:tabular-nums;}
+  .lv-zbtn:hover, .lv-zlevel:hover{background:rgba(255,255,255,.1); color:var(--ivory);}
+  .lv-zbtn:disabled{opacity:.3; cursor:default; background:none;}
+  .lv-zbtn:focus-visible, .lv-zlevel:focus-visible{outline:2px solid var(--accent); outline-offset:1px;}
+  .lv-hint{position:absolute; left:50%; bottom:calc(max(18px, env(safe-area-inset-bottom)) + 50px); transform:translateX(-50%); z-index:2;
+    margin:0; max-width:calc(100vw - 32px); pointer-events:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    font-family:'Noto Sans KR',sans-serif; font-size:12.5px; color:var(--ivory); background:rgba(20,20,26,.72);
+    padding:7px 14px; border-radius:999px; opacity:0; transition:opacity .4s ease;}
+  .lv-hint.is-on{opacity:1;}
   .lv-close{
     position:absolute; top:16px; right:16px; z-index:2;
     background:rgba(255,255,255,.08); border:none; color:var(--ivory);
@@ -512,6 +537,12 @@
 <div class="large-view-overlay" id="largeView" role="dialog" aria-modal="true" aria-hidden="true" inert>
   <button class="lv-close" id="lvClose" aria-label="Close photo" data-i-aria="aria_photo_close">✕</button>
   <img id="lvImg" alt="" draggable="false">
+  <div class="lv-zoom" id="lvZoom" hidden>
+    <button type="button" class="lv-zbtn" id="lvZoomOut" aria-label="Zoom out" data-i-aria="aria_zoom_out">&minus;</button>
+    <button type="button" class="lv-zlevel" id="lvZoomLevel" aria-label="Fit to screen" data-i-aria="aria_zoom_reset">100%</button>
+    <button type="button" class="lv-zbtn" id="lvZoomIn" aria-label="Zoom in" data-i-aria="aria_zoom_in">+</button>
+  </div>
+  <p class="lv-hint" id="lvHint" aria-hidden="true"></p>
 </div>
 </main>
 
@@ -533,6 +564,11 @@ var I18N = {
     aria_work_prev:'이전 작품',
     aria_work_next:'다음 작품',
     aria_photo_close:'사진 닫기',
+    aria_zoom_in:'확대',
+    aria_zoom_out:'축소',
+    aria_zoom_reset:'화면에 맞추기',
+    lv_hint_mouse:'스크롤하거나 눌러서 확대 · 끌어서 이동',
+    lv_hint_touch:'두 손가락으로 벌리거나 두 번 눌러 확대',
     logo_tag:'나전칠기 아티스트',
     page_h:'Works',
     page_sub:'같은 규칙 안에서 서로 다른 빛으로 살아가는 개인에 관한 작업입니다.',
@@ -568,6 +604,11 @@ var I18N = {
     aria_work_prev:'Previous artwork',
     aria_work_next:'Next artwork',
     aria_photo_close:'Close photo',
+    aria_zoom_in:'Zoom in',
+    aria_zoom_out:'Zoom out',
+    aria_zoom_reset:'Fit to screen',
+    lv_hint_mouse:'Scroll or click to zoom · drag to move',
+    lv_hint_touch:'Pinch or double-tap to zoom',
     logo_tag:'Najeonchilgi Artist',
     page_h:'Works',
     page_sub:'Work about individuals who live differently — each with their own light — within the same rules.',
@@ -1650,6 +1691,7 @@ document.addEventListener('keydown', function(e){
   if(lvOverlay.classList.contains('open')){
     if(e.key === 'Escape') closeLargeView();
     else if(e.key === 'Tab') trapFocus(e, lvOverlay);
+    else lvZoomKey(e);   // + − 0, 확대했을 때 화살표로 이동
     return;
   }
   if(!wmModal.classList.contains('open')) return;
@@ -1670,6 +1712,7 @@ function openLargeView(src, alt){
   clearTimeout(lvClearTimer);
   lvImg.src = src;
   lvImg.alt = alt || '';
+  lvZoomReset(); lvShowHint();   // 새로 열 때마다 화면 맞춤에서 시작
   lvOverlay.classList.add('open');
   lvOverlay.setAttribute('aria-hidden', 'false'); lvOverlay.inert = false;
   document.getElementById('lvClose').focus();
@@ -1690,6 +1733,154 @@ function closeLargeView(){
 }
 document.getElementById('lvClose').onclick = closeLargeView;
 lvOverlay.addEventListener('click', function(e){ if(e.target === lvOverlay) closeLargeView(); });
+/* ---------- 크게 보기 확대·이동(작가 2026-10-12) ----------
+   배율 lvZ.s 와 이동 lvZ.x·y 를 그림의 scale·translate 에 준다. 그림이 화면보다 크면 가장자리가 화면 안으로 들어오지 않게,
+   작으면 가운데에 둔다. 최대 배율은 원본 화소의 1.5배(2~4배 사이) — 그 이상은 흐려지기만 한다.
+   누르면 '원본 크기'(화면 1px = 그림 1px, 2~3배 사이)로 간다. 끌거나 두 손가락으로 움직인 뒤에는 크게 보기가 닫히지 않게 막는다 */
+var lvZ = {s:1, x:0, y:0}, lvPtrs = {}, lvGest = null, lvMoved = false, lvDownOnImg = false, lvTapAt = 0, lvToggledAt = 0,
+    lvSuppressClick = false, lvAnimTimer = 0;
+function lvReduce(){ return !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches); }
+function lvBase(){ return {cx:lvImg.offsetLeft + lvImg.offsetWidth / 2, cy:lvImg.offsetTop + lvImg.offsetHeight / 2, w:lvImg.offsetWidth, h:lvImg.offsetHeight}; }
+function lvRatio(){ var w = lvImg.offsetWidth; return (w && lvImg.naturalWidth) ? lvImg.naturalWidth / w : 1; }
+function lvMax(){ return Math.max(2, Math.min(4, lvRatio() * 1.5)); }
+function lvClamp(z){
+  var b = lvBase(), VW = lvOverlay.clientWidth, VH = lvOverlay.clientHeight;
+  z.s = Math.max(1, Math.min(lvMax(), z.s));
+  if(z.s <= 1.001){ z.s = 1; z.x = 0; z.y = 0; return z; }
+  var w = b.w * z.s, h = b.h * z.s;
+  z.x = w <= VW ? VW / 2 - b.cx : Math.min(w / 2 - b.cx, Math.max(VW - b.cx - w / 2, z.x));
+  z.y = h <= VH ? VH / 2 - b.cy : Math.min(h / 2 - b.cy, Math.max(VH - b.cy - h / 2, z.y));
+  return z;
+}
+function lvApply(anim){
+  clearTimeout(lvAnimTimer);
+  var on = !!anim && !lvReduce();
+  lvOverlay.classList.toggle('is-zoom-anim', on);
+  if(on) lvAnimTimer = setTimeout(function(){ lvOverlay.classList.remove('is-zoom-anim'); }, 380);
+  lvImg.style.scale = lvZ.s === 1 ? '' : String(lvZ.s);
+  lvImg.style.translate = lvZ.s === 1 ? '' : lvZ.x.toFixed(1) + 'px ' + lvZ.y.toFixed(1) + 'px';
+  lvOverlay.classList.toggle('is-zoomed', lvZ.s > 1);
+  lvZoomUI();
+}
+// 화면의 점 (qx,qy) 아래에 있는 그림 자리를 그대로 둔 채 배율을 s 로
+function lvZoomAt(s, qx, qy, anim){
+  var b = lvBase(), s0 = lvZ.s, ns = Math.max(1, Math.min(lvMax(), s));
+  lvZ.x = qx - b.cx - ns * (qx - b.cx - lvZ.x) / s0;
+  lvZ.y = qy - b.cy - ns * (qy - b.cy - lvZ.y) / s0;
+  lvZ.s = ns; lvClamp(lvZ); lvApply(anim);
+}
+function lvFit(anim){ lvZ = {s:1, x:0, y:0}; lvApply(anim); }
+function lvToggle(qx, qy){
+  lvToggledAt = Date.now();
+  if(lvZ.s > 1.001){ lvFit(true); return; }
+  lvZoomAt(Math.min(lvMax(), Math.max(2, Math.min(3, lvRatio()))), qx, qy, true);
+}
+function lvZoomUI(){
+  document.getElementById('lvZoom').hidden = !lvImg.naturalWidth;
+  document.getElementById('lvZoomLevel').textContent = Math.round(lvZ.s * 100) + '%';
+  document.getElementById('lvZoomOut').disabled = lvZ.s <= 1.001;
+  document.getElementById('lvZoomIn').disabled = lvZ.s >= lvMax() - 0.001;
+}
+function lvZoomReset(){ lvPtrs = {}; lvGest = null; lvOverlay.classList.remove('is-dragging'); lvFit(false); }
+function lvShowHint(){
+  var seen = false;
+  try{ seen = sessionStorage.getItem('lv_hint') === '1'; sessionStorage.setItem('lv_hint', '1'); }catch(e){}
+  if(seen) return;
+  var h = document.getElementById('lvHint');
+  var touch = !!(window.matchMedia && matchMedia('(hover: none)').matches);
+  h.textContent = I18N[LANG][touch ? 'lv_hint_touch' : 'lv_hint_mouse'];
+  clearTimeout(h._t); h.classList.add('is-on');
+  h._t = setTimeout(function(){ h.classList.remove('is-on'); }, 2800);
+}
+lvImg.addEventListener('load', function(){ lvZoomUI(); });
+function lvGestStart(){
+  var ids = Object.keys(lvPtrs);
+  if(ids.length >= 2){
+    var a = lvPtrs[ids[0]], c = lvPtrs[ids[1]];
+    lvGest = {pinch:true, d0:Math.hypot(c.x - a.x, c.y - a.y) || 1, mx:(a.x + c.x) / 2, my:(a.y + c.y) / 2, s0:lvZ.s, x0:lvZ.x, y0:lvZ.y};
+  }else if(ids.length === 1){
+    var p = lvPtrs[ids[0]];
+    lvGest = {pinch:false, px:p.x, py:p.y, x0:lvZ.x, y0:lvZ.y};
+  }else lvGest = null;
+}
+lvOverlay.addEventListener('pointerdown', function(e){
+  if(e.target.closest('button') || (e.pointerType === 'mouse' && e.button !== 0) || !lvImg.naturalWidth) return;
+  if(!Object.keys(lvPtrs).length){ lvMoved = false; lvDownOnImg = e.target === lvImg; }
+  try{ lvOverlay.setPointerCapture(e.pointerId); }catch(err){}
+  lvPtrs[e.pointerId] = {x:e.clientX, y:e.clientY};
+  lvGestStart();
+});
+lvOverlay.addEventListener('pointermove', function(e){
+  if(!lvPtrs[e.pointerId] || !lvGest) return;
+  lvPtrs[e.pointerId] = {x:e.clientX, y:e.clientY};
+  var ids = Object.keys(lvPtrs);
+  if(lvGest.pinch && ids.length >= 2){
+    var a = lvPtrs[ids[0]], c = lvPtrs[ids[1]], b = lvBase();
+    var mx = (a.x + c.x) / 2, my = (a.y + c.y) / 2;
+    var ns = Math.max(1, Math.min(lvMax(), lvGest.s0 * Math.hypot(c.x - a.x, c.y - a.y) / lvGest.d0));
+    lvZ.x = mx - b.cx - ns * (lvGest.mx - b.cx - lvGest.x0) / lvGest.s0;
+    lvZ.y = my - b.cy - ns * (lvGest.my - b.cy - lvGest.y0) / lvGest.s0;
+    lvZ.s = ns; lvMoved = true; lvClamp(lvZ); lvApply(false);
+  }else if(!lvGest.pinch){
+    var dx = e.clientX - lvGest.px, dy = e.clientY - lvGest.py;
+    if(!lvMoved && Math.hypot(dx, dy) < 5) return;
+    lvMoved = true;
+    if(lvZ.s > 1){
+      lvOverlay.classList.add('is-dragging');
+      lvZ.x = lvGest.x0 + dx; lvZ.y = lvGest.y0 + dy; lvClamp(lvZ); lvApply(false);
+    }
+  }
+});
+function lvPtrEnd(e){
+  if(!lvPtrs[e.pointerId]) return;
+  delete lvPtrs[e.pointerId];
+  if(Object.keys(lvPtrs).length){ lvGestStart(); return; }   // 두 손가락 중 하나만 떼면 남은 손가락으로 이어서 이동
+  lvGest = null;
+  lvOverlay.classList.remove('is-dragging');
+  if(e.type === 'pointercancel') return;
+  if(lvMoved || lvDownOnImg){
+    lvSuppressClick = true;
+    setTimeout(function(){ lvSuppressClick = false; }, 60);
+  }
+  if(lvMoved || !lvDownOnImg) return;   // 끌었거나 그림 밖을 누름(그림 밖은 아래 click 이 닫는다)
+  if(e.pointerType === 'mouse'){
+    if(Date.now() - lvToggledAt > 300) lvToggle(e.clientX, e.clientY);   // 두 번 누르기가 확대→되돌림으로 상쇄되지 않게
+  }else{
+    var now = Date.now();
+    if(now - lvTapAt < 320){ lvTapAt = 0; lvToggle(e.clientX, e.clientY); } else lvTapAt = now;
+  }
+}
+lvOverlay.addEventListener('pointerup', lvPtrEnd);
+lvOverlay.addEventListener('pointercancel', lvPtrEnd);
+lvOverlay.addEventListener('click', function(e){
+  if(lvSuppressClick){ lvSuppressClick = false; e.stopPropagation(); e.preventDefault(); }
+}, true);
+lvOverlay.addEventListener('wheel', function(e){
+  if(!lvOverlay.classList.contains('open') || !lvImg.naturalWidth) return;
+  e.preventDefault();
+  var dy = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY;
+  lvZoomAt(lvZ.s * Math.exp(-dy * (e.ctrlKey ? 0.01 : 0.0022)), e.clientX, e.clientY, false);   // ctrlKey = 트랙패드 두 손가락 벌리기
+}, {passive:false});
+document.getElementById('lvZoomIn').onclick = function(){ lvZoomAt(lvZ.s * 1.5, lvOverlay.clientWidth / 2, lvOverlay.clientHeight / 2, true); };
+document.getElementById('lvZoomOut').onclick = function(){ lvZoomAt(lvZ.s / 1.5, lvOverlay.clientWidth / 2, lvOverlay.clientHeight / 2, true); };
+document.getElementById('lvZoomLevel').onclick = function(){ lvFit(true); };
+function lvZoomKey(e){
+  var W = lvOverlay.clientWidth / 2, H = lvOverlay.clientHeight / 2;
+  if(e.key === '+' || e.key === '=') lvZoomAt(lvZ.s * 1.5, W, H, true);
+  else if(e.key === '-' || e.key === '_') lvZoomAt(lvZ.s / 1.5, W, H, true);
+  else if(e.key === '0') lvFit(true);
+  else if(lvZ.s > 1 && /^Arrow/.test(e.key)){
+    var step = 90;
+    if(e.key === 'ArrowLeft') lvZ.x += step;
+    if(e.key === 'ArrowRight') lvZ.x -= step;
+    if(e.key === 'ArrowUp') lvZ.y += step;
+    if(e.key === 'ArrowDown') lvZ.y -= step;
+    lvClamp(lvZ); lvApply(true);
+  }else return false;
+  e.preventDefault();
+  return true;
+}
+window.addEventListener('resize', function(){ if(lvOverlay.classList.contains('open') && lvZ.s > 1){ lvClamp(lvZ); lvApply(false); } });
 
 /* ---------- 작품 이미지 저장/드래그 캐주얼 방지 ---------- */
 document.addEventListener('contextmenu', function(e){
