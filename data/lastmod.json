@@ -1,15 +1,15 @@
 {
  "": {
-  "date": "2026-10-11",
-  "hash": "791b47c4579c336c"
+  "date": "2026-10-12",
+  "hash": "e1b028ce9343bdda"
  },
  "about/": {
   "date": "2026-10-10",
   "hash": "c370d6f35d5ec9a2"
  },
  "contact/": {
-  "date": "2026-10-10",
-  "hash": "d4e9b93b9ab1d1a0"
+  "date": "2026-10-12",
+  "hash": "427b122e5b52906d"
  },
  "copyright/": {
   "date": "2026-10-10",
@@ -20,16 +20,16 @@
   "hash": "423ba5bb3c04fd15"
  },
  "en/": {
-  "date": "2026-10-11",
-  "hash": "4c9f0d1f7f041e20"
+  "date": "2026-10-12",
+  "hash": "870fb4e1287906d4"
  },
  "en/about/": {
   "date": "2026-10-10",
   "hash": "c01b3144fd1faceb"
  },
  "en/contact/": {
-  "date": "2026-10-10",
-  "hash": "635480f7cc6e8318"
+  "date": "2026-10-12",
+  "hash": "c4b437df31315d2c"
  },
  "en/copyright/": {
   "date": "2026-10-10",
@@ -40,36 +40,36 @@
   "hash": "1e80090f95baf149"
  },
  "en/ip/": {
-  "date": "2026-10-11",
-  "hash": "73ce56a3cf65d8c8"
+  "date": "2026-10-12",
+  "hash": "098ef8b945c2d02d"
  },
  "en/press/": {
   "date": "2026-10-10",
   "hash": "e2f3ca90e3f4a5d1"
  },
  "en/privacy/": {
-  "date": "2026-10-10",
-  "hash": "d34707b1740faedd"
+  "date": "2026-10-12",
+  "hash": "de1a1bcef6722cb7"
  },
  "en/works/": {
-  "date": "2026-10-10",
-  "hash": "4404062240348754"
+  "date": "2026-10-12",
+  "hash": "91bc38a34571864a"
  },
  "ip/": {
-  "date": "2026-10-11",
-  "hash": "19f95903adaf33ef"
+  "date": "2026-10-12",
+  "hash": "f584797f478abc57"
  },
  "press/": {
   "date": "2026-10-10",
   "hash": "c0f2e8b377ec7e14"
  },
  "privacy/": {
-  "date": "2026-10-10",
-  "hash": "ad854997df471ab3"
+  "date": "2026-10-12",
+  "hash": "0163cd9ccb164f8e"
  },
  "works/": {
-  "date": "2026-10-10",
-  "hash": "11ce8afcf7d2f047"
+  "date": "2026-10-12",
+  "hash": "4e5a70ee2abe9b5c"
  },
  "works/w/HD-2025-001/": {
   "date": "2026-10-10",
