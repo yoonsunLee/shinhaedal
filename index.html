@@ -289,7 +289,7 @@
        휴대폰에서 전시명 윗줄이 잘리던 원인이다(2026-09-25). */
     min-height:210px;
     border-radius:2px; border:1px solid rgba(134,182,232,.18); background:var(--bg-2);
-    padding:20px 18px; display:flex; flex-direction:column; justify-content:center; gap:6px;
+    padding:20px 18px; display:flex; flex-direction:column; justify-content:flex-start; gap:6px;
     position:relative; overflow:hidden;
     transition:border-color .18s ease, background .18s ease;
   }
@@ -305,17 +305,23 @@
   }
   .tile-ex .ex-badge.on{ color:var(--accent); border-color:var(--accent-dim); }
   /* 제목을 감싼 링크가 카드 전체를 덮는다. 안쪽 링크는 그 위에 얹혀 따로 눌린다. */
-  .tile-ex .ex-go{ text-decoration:none; color:inherit; }
-  .tile-ex .ex-go::after{ content:''; position:absolute; inset:0; z-index:1; }
+  /* 링크 자신은 position 을 갖지 않아야 ::after 가 카드(position:relative)를 기준으로 카드 전체를 덮는다.
+     예전엔 아래 '.tile-ex > *{position:relative}' 가 링크에도 걸려 ::after 가 제목 글자만 덮었다 — 장소 줄·빈 곳을 눌러도
+     아무 일이 없었다(2026-10-11 정정). 덮개(2)는 장소·포스터(1) 위, 바닥 링크(3) 아래 */
+  .tile-ex .ex-go{ position:static; text-decoration:none; color:inherit; }
+  .tile-ex .ex-go::after{ content:''; position:absolute; inset:0; z-index:2; }
   .tile-ex .ex-go:focus-visible{ outline:none; }
   .tile-ex:has(.ex-go:focus-visible){ outline:2px solid var(--accent); outline-offset:3px; }
-  .tile-ex .ex-links{ z-index:2; }
+  .tile-ex .ex-links{ z-index:3; }
   .tile-ex .ex-bg{
     position:absolute; inset:-10px; background-size:cover; background-position:center;
     filter:blur(7px); z-index:0;
   }
   .tile-ex .ex-bg::after{ content:''; position:absolute; inset:0; background:rgba(11,11,15,.7); }
-  .tile-ex > *{ position:relative; z-index:1; }
+  /* 카드 안 글자는 층 높이 없이(z-index:auto) 흐린 배경(.ex-bg, z0) 뒤 순서로만 그 위에 온다. 층 높이 1을 주면 카드를 덮는
+     링크 덮개(z2)보다 위로 잡혀 장소 줄을 눌러도 반응이 없었다(2026-10-11). 쌓임: 배경 → 글자 → 덮개 → 배지·바닥 링크 */
+  .tile-ex > *{ position:relative; }
+  .tile-ex .ex-title{ position:relative; }   /* 링크(.ex-go)는 기준에서 빠졌으니 제목 글자를 따로 배경 위로 */
   .tile-ex .ex-title{
     display:block;
     font-family:'Black Han Sans',sans-serif; font-weight:400; font-size:21px; color:var(--ivory); line-height:1.35;
@@ -323,7 +329,15 @@
     padding-right:62px;   /* 오른쪽 위 배지와 겹치지 않게 자리를 비워 둔다 */
   }
   .tile-ex .ex-meta{font-size:13px; color:var(--ivory-dim); line-height:1.6;}
-  .tile-ex .ex-links{display:flex; align-items:center; gap:10px; margin-top:12px; padding-top:12px; border-top:1px solid var(--line);}
+  /* 링크(출품작 보기·찾아오는 길)는 카드 바닥에 붙인다(작가 2026-10-11) — 제목·정보는 위, 링크는 아래 */
+  .tile-ex .ex-links{display:flex; align-items:center; gap:10px; margin-top:auto; padding-top:12px; border-top:1px solid var(--line);}
+  /* 카드는 옆 작품 그림 칸과 같은 정사각형(작가 2026-10-11). 예전엔 격자 줄 높이(그림+제목 줄)만큼 늘어나
+     카드 아래 끝이 작품 그림보다 24px 내려왔다. 높이를 1:1 로 못 박으면(aspect-ratio + overflow:hidden) 글이 길 때
+     잘리므로(2026-09-25), 최소 높이만 칸 폭과 같게 두고 글이 넘치면 늘어나게 한다. 칸 폭 = 격자 폭(100cqi)에서
+     칸 사이(40px×2, 900px 이하 28px)를 뺀 몫. 컨테이너 단위를 모르는 브라우저는 위 min-height:210px 그대로 */
+  #workGrid{container-type:inline-size;}
+  #workGrid > .tile-ex{align-self:start; min-height:calc((100cqi - 80px) / 3);}
+  @media(max-width:900px){ #workGrid > .tile-ex{min-height:calc((100cqi - 28px) / 2);} }
   /* 링크 ② 보조 링크와 같은 모양 */
   .tile-ex .ex-links a{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-dim); text-decoration:underline; text-underline-offset:5px; text-decoration-thickness:1px;}
   .tile-ex .ex-links a:hover{color:var(--ivory);}
@@ -334,7 +348,7 @@
   .tile-ex .ex-poster, .tile-ex .ex-works-link{display:none;}
   .tile-ex .ex-slot{display:contents;}  /* 기기별 링크 두 개를 담는 껍데기 — 배치에는 끼지 않는다(끼면 링크 글자가 그 안에서 줄바꿈됐다) */
   @media (hover:hover) and (pointer:fine){
-    .tile-ex .ex-poster{display:block; position:absolute; inset:0; width:100%; height:100%; padding:14px; object-fit:contain;
+    .tile-ex .ex-poster{display:block; position:absolute; inset:0; width:100%; height:100%; padding:14px 14px 58px; object-fit:contain;   /* 아래 58px 은 바닥의 링크 줄 자리 */
       z-index:1; opacity:0; pointer-events:none; transition:opacity .35s ease;}
     .tile-ex .ex-title, .tile-ex .ex-meta{transition:opacity .25s ease;}
     .tile-ex .ex-bg::after{transition:background-color .35s ease;}
@@ -358,7 +372,7 @@
        낱말 중간에서 끊겼다(2026-10-11). 그래서 폰에서는 전시 카드만 두 칸을 다 쓰고 표시는 제목 윗줄에 둔다.
        카드가 하나·셋이면 아래 작품이 홀수로 남아 마지막 한 점이 한 줄에 혼자 서므로, 그 한 점은 폰에서만
        숨긴다('모든 작품 보기'에는 다 있다). 전시가 없을 때(최근 작품만)는 건드리지 않는다. */
-    #workGrid > .tile-ex{grid-column:1 / -1;}
+    #workGrid > .tile-ex{grid-column:1 / -1; min-height:0;}
     #workGrid:has(> .tile-ex) > .tile:last-child:nth-child(odd of .tile){display:none;}
     .tile-ex .ex-badge{position:relative; top:auto; right:auto; align-self:flex-start; margin-bottom:4px;}
     .tile-ex .ex-title{padding-right:0; overflow-wrap:anywhere;}   /* 아주 긴 낱말이 와도 카드 밖으로 안 나가게 */
