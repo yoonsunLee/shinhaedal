@@ -1,9 +1,9 @@
 {
  "slides": [
   {
-   "id": "439cb3cc-56dd-4334-9627-4721c8ed7988",
+   "id": "default",
    "kind": "image",
-   "image": "assets/home-hero/439cb3cc-56dd-4334-9627-4721c8ed7988/image.webp",
+   "image": "assets/landing/hero-bg.webp",
    "w": 1448,
    "h": 1086,
    "work": null
