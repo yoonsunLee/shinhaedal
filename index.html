@@ -120,7 +120,9 @@
     -webkit-box-decoration-break:clone; box-decoration-break:clone;
   }
   @media (prefers-reduced-motion: no-preference){
-    .statement .accent{animation:pearlSweep 1.8s cubic-bezier(.45,.05,.25,1) .6s both;}
+    /* 2.1초 뒤에 스친다 — 첫 화면 검은 막이 걷히는 0.6~1.8초 동안 첫 줄이 먼저 떠오르고, 그다음 이 줄이 반짝이게.
+       예전 0.6초는 막이 걷히는 중에 시작해 스침 앞부분이 어둠에 묻혔다(작가 요청: 1.5초 늦게, 2026-10-11) */
+    .statement .accent{animation:pearlSweep 1.8s cubic-bezier(.45,.05,.25,1) 2.1s both;}
   }
   @keyframes pearlSweep{ from{ background-position:100% 0; } to{ background-position:0% 0; } }
   /* 크레딧이 없는 장(기본 이미지 등)에도 자리는 남겨 문구가 흔들리지 않게 */
