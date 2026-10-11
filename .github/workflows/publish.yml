@@ -3,6 +3,11 @@ name: Publish archive data
 on:
   repository_dispatch:
     types: [archive-publish]
+  # 이 파일을 고쳐 올리면 그 자리에서 한 번 돌아 바뀐 설정을 확인한다(서버·부품 버전을 바꿀 때).
+  # 발행은 내용이 같으면 아무것도 바꾸지 않으므로 한 번 더 돌아도 안전하다.
+  push:
+    branches: [main]
+    paths: ['.github/workflows/publish.yml']
   workflow_dispatch:      # Actions 탭에서 수동 실행
     inputs:
       allow_shrink:
@@ -25,14 +30,15 @@ concurrency:
 
 jobs:
   publish:
-    # ubuntu-latest 는 2026-10-19 부터 Ubuntu 26 으로 바뀐다(GitHub 공지). 개인전(11/23) 앞에서 발행 환경이
-    # 저절로 바뀌지 않게 지금 버전에 묶어 둔다. 24.04 는 2029년까지 지원된다 — 전시가 끝난 뒤 올릴 것.
-    runs-on: ubuntu-24.04
+    # ubuntu-latest 는 2026-10-19 부터 몇 주에 걸쳐 섞여 가며 Ubuntu 26.04 로 바뀐다(GitHub 공지) — 그동안은 날마다
+    # 24·26 중 어디서 돌지 모른다. 그래서 26.04 를 직접 적어 두고, 옮긴 날 바로 한 번 돌려 확인했다(2026-10-11).
+    # 문제가 생기면 ubuntu-24.04 로 되돌리면 된다(2029년까지 지원).
+    runs-on: ubuntu-26.04
     timeout-minutes: 20  # 기본값(360분)까지 매달려 있지 않도록 — 평소엔 몇 분이면 끝남
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7       # Node 24 (v4 는 지원 끝난 Node 20)
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7   # Node 24
         with:
           python-version: '3.12'
 

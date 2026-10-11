@@ -6,7 +6,7 @@ name: Notify search engines
 on:
   push:
     branches: [main]
-    paths: ['**/index.html', 'index.html']
+    paths: ['**/index.html', 'index.html', '.github/workflows/indexnow.yml']   # 이 파일을 고쳐도 한 번 돈다(바뀐 페이지가 없으면 알리지 않음)
   workflow_dispatch:      # Actions 탭에서 수동 실행 = 사이트맵의 주소 전부를 한 번 알림(처음 등록할 때)
 
 permissions:
@@ -14,13 +14,13 @@ permissions:
 
 jobs:
   notify:
-    runs-on: ubuntu-24.04   # publish.yml 과 같은 이유로 고정(10/19 Ubuntu 26 전환)
+    runs-on: ubuntu-26.04   # publish.yml 과 같게
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7       # Node 24 (v4 는 지원 끝난 Node 20)
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7   # Node 24
         with:
           python-version: '3.12'
       # GitHub Pages 배포가 끝난 뒤에 알려야 새 내용을 가져간다
