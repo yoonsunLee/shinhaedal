@@ -205,6 +205,8 @@
     padding:40px;
   }
   .wm-stage img{max-width:100%; max-height:100%; width:100%; height:100%; object-fit:contain;}
+  /* 다른 작품·사진으로 바뀌는 동안 잠깐 겹쳐 두는 지금 그림의 사본(아래 wmSwapWork·wmSwapPhoto) */
+  .wm-stage .wm-ghost{position:absolute; z-index:1; margin:0; max-width:none; max-height:none; object-fit:contain; pointer-events:none;}
 
   .wm-counter{
     position:absolute; top:24px; left:32px; z-index:2;
@@ -1109,6 +1111,122 @@ function buildRailItems(w, fallbackAlt){
   });
   return items;
 }
+/* ---------- 작품 창 안에서 바뀔 때의 전환(작가 2026-10-12: "휙휙 바뀌지 않고") ----------
+   다른 작품·상세 사진·시리즈 작품으로 넘어갈 때, 지금 그림의 사본(.wm-ghost)을 위에 남겨 두고 새 그림이 다 받아지면
+   둘을 겹쳐 바꾼다(빈 화면·반쯤 받은 그림이 보이지 않게). 작품이 바뀌면 글·번호·사진 줄은 0.14초에 빠졌다가
+   새 작품 내용이 다 채워지면(또는 0.6초가 지나면) 떠오른다 — '불러오는 중…'이 비치지 않는다.
+   움직임 줄이기를 켰으면 지금처럼 바로 바뀐다 */
+var WM_FX = { // 디졸브: 제자리에서 흐릿하게 겹쳐 바뀐다
+    work:  {out:function(d){ return [{opacity:1, filter:'blur(0px)'}, {opacity:0, filter:'blur(4px)'}]; }, outDur:520, outEase:'cubic-bezier(.45,0,.55,1)',
+            in:function(d){ return [{opacity:0, filter:'blur(4px)'}, {opacity:1, filter:'blur(0px)'}]; }, inDur:520, inDelay:0, inEase:'cubic-bezier(.45,0,.55,1)',
+            textRise:10, textDur:420, textDelay:120},
+    photo: {out:function(d){ return [{opacity:1, filter:'blur(0px)'}, {opacity:0, filter:'blur(3px)'}]; }, outDur:420, outEase:'cubic-bezier(.45,0,.55,1)',
+            in:function(d){ return [{opacity:0, filter:'blur(3px)'}, {opacity:1, filter:'blur(0px)'}]; }, inDur:420, inDelay:0, inEase:'cubic-bezier(.45,0,.55,1)'}
+  };
+function wmFx(){ return WM_FX; }
+var wmFxSeq = 0, wmFxGhost = null, wmFxAnims = [], wmFxDetailWait = null;
+function wmFxOn(){
+  return !!document.body.animate && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+}
+function wmFxClear(){
+  wmFxAnims.forEach(function(a){ try{ a.cancel(); }catch(e){} });
+  wmFxAnims = [];
+  if(wmFxGhost){ wmFxGhost.remove(); wmFxGhost = null; }
+}
+function wmFxPlay(el, frames, opt){
+  var a = el.animate(frames, opt); wmFxAnims.push(a); return a;
+}
+function wmFxGhostOf(img){
+  if(img.hidden || !img.naturalWidth || img.style.visibility === 'hidden' || !img.offsetWidth) return null;
+  var g = img.cloneNode(false);
+  ['id', 'onload', 'onerror'].forEach(function(k){ g.removeAttribute(k); });
+  g.className = 'wm-ghost'; g.alt = ''; g.setAttribute('aria-hidden', 'true');
+  g.style.left = img.offsetLeft + 'px'; g.style.top = img.offsetTop + 'px';
+  g.style.width = img.offsetWidth + 'px'; g.style.height = img.offsetHeight + 'px';
+  img.parentNode.insertBefore(g, img.nextSibling);
+  return g;
+}
+// 새 그림이 다 받아져 그릴 준비가 될 때까지(최대 cap) 기다린다
+function wmFxReady(img, cap){
+  return new Promise(function(res){
+    var done = false, t = setTimeout(fin, cap);
+    function fin(){ if(done) return; done = true; clearTimeout(t); res(); }
+    function decoded(){ (img.decode ? img.decode() : Promise.resolve()).then(fin, fin); }
+    if(img.hidden) return fin();
+    if(img.complete && img.naturalWidth) return decoded();
+    img.addEventListener('load', decoded, {once:true});
+    img.addEventListener('error', fin, {once:true});
+  });
+}
+// 그림 바꾸기 준비: 새 그림은 숨겨 두고, 준비되면 reveal() 로 사본과 겹쳐 바꾼다
+function wmFxImage(fx, dir, ghost){
+  var img = document.getElementById('wmImg');
+  var hold = wmFxPlay(img, [{opacity:0}], {duration:1, fill:'forwards'});
+  var d = dir < 0 ? -1 : 1;
+  return function reveal(){
+    if(ghost){
+      var go = wmFxPlay(ghost, fx.out(d), {duration:fx.outDur, easing:fx.outEase, fill:'forwards'});
+      go.onfinish = function(){ if(wmFxGhost === ghost){ ghost.remove(); wmFxGhost = null; } };
+    }
+    var embed = document.getElementById('wmVideoEmbed');
+    if(img.hidden && !embed.hidden){   // 영상으로 바뀌었다
+      wmFxPlay(embed, [{opacity:0}, {opacity:1}], {duration:320, easing:'ease-out'});
+    }else{
+      var ia = wmFxPlay(img, fx.in(d), {duration:fx.inDur, delay:fx.inDelay, easing:fx.inEase, fill:'both'});
+      ia.onfinish = function(){ ia.cancel(); };
+    }
+    hold.cancel();
+  };
+}
+function wmSwapWork(dir, apply){
+  var modal = document.getElementById('workModal');
+  if(!wmFxOn() || !modal.classList.contains('open')){ apply(); return; }
+  var seq = ++wmFxSeq;
+  wmFxClear();
+  var fx = wmFx().work, img = document.getElementById('wmImg');
+  var ghost = wmFxGhost = wmFxGhostOf(img);
+  var reveal = wmFxImage(fx, dir, ghost);
+  var texts = [document.getElementById('wmInfo'), document.getElementById('wmCounter'), document.getElementById('wmRail')];
+  var outs = texts.map(function(el){
+    return wmFxPlay(el, [{opacity:1, transform:'none'}, {opacity:0, transform:'translateY(-4px)'}], {duration:140, easing:'ease-in', fill:'forwards'});
+  });
+  setTimeout(function(){
+    if(seq !== wmFxSeq || !modal.classList.contains('open')) return;
+    var detail = new Promise(function(res){ wmFxDetailWait = res; setTimeout(res, 600); });
+    apply();
+    wmFxReady(img, 900).then(function(){
+      if(seq !== wmFxSeq) return;
+      reveal();
+      return detail;
+    }).then(function(){
+      if(seq !== wmFxSeq) return;
+      texts.forEach(function(el, i){
+        var a = wmFxPlay(el, [{opacity:0, transform:'translateY(' + fx.textRise + 'px)'}, {opacity:1, transform:'none'}],
+                         {duration:fx.textDur, delay:fx.textDelay + i * 40, easing:'cubic-bezier(.22,1,.36,1)', fill:'both'});
+        outs[i].cancel();
+        a.onfinish = function(){ a.cancel(); };
+      });
+    });
+  }, 140);
+}
+function wmSwapPhoto(dir, apply){
+  if(!wmFxOn()){ apply(); return; }
+  var seq = ++wmFxSeq;
+  wmFxClear();
+  var img = document.getElementById('wmImg');
+  var ghost = wmFxGhost = wmFxGhostOf(img);
+  var reveal = wmFxImage(wmFx().photo, dir, ghost);
+  apply();
+  wmFxReady(img, 900).then(function(){ if(seq === wmFxSeq) reveal(); });
+}
+// 사진 줄은 다시 그리지 않고 선택 표시만 옮긴다 — 테두리가 0.15초에 옮겨 간다
+function wmRailMark(){
+  var items = document.querySelectorAll('#wmRail .wm-rail-item');
+  if(items.length !== RAIL_ITEMS.length){ renderRail(); return; }
+  Array.prototype.forEach.call(items, function(b, k){ b.classList.toggle('is-active', k === railActiveIndex); });
+}
+// 다른 페이지로 넘어가며 걷어 낸 화면이 '뒤로'로 돌아왔을 때 그대로 남지 않게
+window.addEventListener('pageshow', function(e){ if(e.persisted){ wmFxSeq++; wmFxClear(); } });
 function renderRail(){
   var rail = document.getElementById('wmRail');
   if(RAIL_ITEMS.length <= 1){ rail.hidden = true; rail.innerHTML = ''; return; }
@@ -1174,10 +1292,14 @@ function selectRailItem(i){
     window.open(item.url, '_blank', 'noopener'); // 인스타그램: 새 탭으로만 이동, 현재 뷰어는 그대로 둔다
     return;
   }
-  stopVideo();
-  railActiveIndex = i;
-  renderRail();
-  if(item.type === 'photo') showPhoto(item); else showVideo(item);
+  if(i === railActiveIndex && item.type === 'photo') return;   // 이미 보고 있는 사진
+  var dir = i - railActiveIndex;
+  wmSwapPhoto(dir, function(){
+    stopVideo();
+    railActiveIndex = i;
+    wmRailMark();
+    if(item.type === 'photo') showPhoto(item); else showVideo(item);
+  });
 }
 function stopVideo(){
   var embed = document.getElementById('wmVideoEmbed');
@@ -1291,13 +1413,14 @@ function renderWorkModal(){
 
     renderDocent(w);
     setupMedia(w, primary);
+    if(wmFxDetailWait){ var ready = wmFxDetailWait; wmFxDetailWait = null; ready(); }   // 바뀌는 중이면 글을 띄워도 된다
   }).catch(function(e){
     console.error('작품 상세를 불러오지 못했습니다:', e);
   });
 }
-function setWorkIndex(idx, historyMode){
+function setWorkIndex(idx, historyMode, dir){
   wmIndex = idx;
-  renderWorkModal();
+  wmSwapWork(dir || 1, renderWorkModal);   // 창이 열려 있을 때만 전환, 처음 열 때는 바로 그린다
   var id = VISIBLE_WORKS[idx] && VISIBLE_WORKS[idx].id;
   if(id && historyMode){
     try{
@@ -1365,6 +1488,7 @@ document.getElementById('wmSeriesList').addEventListener('click', function(e){
   openWorkById(btn.dataset.workId);
 });
 function hideWorkModal(){
+  wmFxSeq++; wmFxClear(); wmFxDetailWait = null;   // 바뀌던 중에 닫으면 거기서 멈춘다
   if(window.shStatWork) shStatWork(null);
   stopDocent();
   stopVideo();
@@ -1391,7 +1515,7 @@ function closeWorkModal(){
 }
 function stepWorkModal(delta){
   if(!VISIBLE_WORKS.length) return;
-  setWorkIndex((wmIndex + delta + VISIBLE_WORKS.length) % VISIBLE_WORKS.length, 'replace');
+  setWorkIndex((wmIndex + delta + VISIBLE_WORKS.length) % VISIBLE_WORKS.length, 'replace', delta);
 }
 function openFromUrlIfPresent(){
   var params = new URLSearchParams(location.search);
