@@ -329,6 +329,11 @@
     padding-right:62px;   /* 오른쪽 위 배지와 겹치지 않게 자리를 비워 둔다 */
   }
   .tile-ex .ex-meta{font-size:13px; color:var(--ivory-dim); line-height:1.6;}
+  /* 글자를 키운다(작가 2026-10-11). 카드 폭에 비례하게(컨테이너 단위 cqi) — PC 345px 카드에서 제목 26px·정보 15px(cqi 는 안쪽 여백을 뺀 폭 기준),
+     폰 한 줄 카드 ≈ 25px·14px. 컨테이너 단위를 모르는 브라우저는 위 21px·13px 그대로 */
+  .tile-ex{container-type:inline-size;}
+  .tile-ex .ex-title{font-size:clamp(20px, 8.5cqi, 28px); text-wrap:balance;}
+  .tile-ex .ex-meta{font-size:clamp(13px, 4.9cqi, 15px);}
   /* 전시 칸 = 카드 + 그 아래 링크 줄 — 옆 작품 칸(그림 + 제목 줄)과 같은 짜임(작가 2026-10-11).
      카드는 옆 작품 그림과 같은 정사각형. 높이를 1:1 로 못 박으면(aspect-ratio + overflow:hidden) 글이 길 때
      잘리므로(2026-09-25), 최소 높이만 칸 폭과 같게 두고 글이 넘치면 늘어나게 한다. 칸 폭 = 격자 폭(100cqi)에서
@@ -348,18 +353,25 @@
   .tile-ex .ex-poster, .ex-cell .ex-works-link{display:none;}
   .ex-cell .ex-slot{display:contents;}  /* 기기별 링크 두 개를 담는 껍데기 — 배치에는 끼지 않는다(끼면 링크 글자가 그 안에서 줄바꿈됐다) */
   @media (hover:hover) and (pointer:fine){
-    .tile-ex .ex-poster{display:block; position:absolute; inset:0; width:100%; height:100%; padding:14px; object-fit:contain;
-      z-index:1; opacity:0; pointer-events:none; transition:opacity .35s ease;}
+    /* 올리면 포스터가 꽉 찬 상태(--pv-scale 배, 위 기준)로 나타나 부드럽게 줄어들며 전체가 드러난다(작가 2026-10-11 ③).
+       포스터는 세로로 길고 카드는 정사각형이라 전체를 넣으면 양옆이 비는데, 그 자리는 흐린 포스터(.ex-bg)가 채운다.
+       배율은 포스터 비율과 카드 비율로 스크립트가 정한다(4:5 포스터 = 1.25) */
+    .tile-ex .ex-poster{display:block; position:absolute; inset:0; width:100%; height:100%; padding:0; object-fit:contain;
+      z-index:1; opacity:0; pointer-events:none; transform:scale(var(--pv-scale, 1)); transform-origin:50% 0;
+      transition:opacity .35s ease, transform .65s cubic-bezier(.22,1,.36,1);}
     .tile-ex .ex-title, .tile-ex .ex-meta{transition:opacity .25s ease;}
     .tile-ex .ex-bg::after{transition:background-color .35s ease;}
-    .tile-ex:hover .ex-poster, .tile-ex:has(.ex-go:focus-visible) .ex-poster{opacity:1;}
+    .tile-ex:hover .ex-poster, .tile-ex:has(.ex-go:focus-visible) .ex-poster{opacity:1; transform:scale(1);}
     .tile-ex:has(.ex-poster):hover .ex-title, .tile-ex:has(.ex-poster):hover .ex-meta,
     .tile-ex:has(.ex-poster):has(.ex-go:focus-visible) .ex-title, .tile-ex:has(.ex-poster):has(.ex-go:focus-visible) .ex-meta{opacity:0;}
-    .tile-ex:has(.ex-poster):hover .ex-bg::after{background-color:rgba(11,11,15,.88);}
+    .tile-ex:has(.ex-poster):hover .ex-bg::after{background-color:rgba(11,11,15,.38);}
     /* PC: '포스터 보기' 대신 '출품작 보기'(카드를 누르면 포스터를 크게 본다) */
     .ex-cell .ex-poster-link{display:none;}
     .ex-cell .ex-works-link{display:inline;}
     .tile-ex:has(.ex-poster) .ex-go::after{cursor:zoom-in;}
+  }
+  @media (hover:hover) and (pointer:fine) and (prefers-reduced-motion: reduce){
+    .tile-ex .ex-poster, .tile-ex:hover .ex-poster{transform:none; transition:opacity .2s linear;}
   }
   @media (max-width:560px){
     /* 폰에서는 격자가 두 칸이라 카드 폭이 130~170px 뿐이었다. 그 폭에서는 오른쪽 위 D-day 표시가 전시명을
@@ -1082,6 +1094,18 @@ function renderHomeGrid(){
         e.preventDefault(); e.stopPropagation();
         openLargeView(ex.poster_url, LANG === 'en' ? (ex.title_en || ex.title) : ex.title);
       };
+      // 올리면 포스터가 '꽉 찬 상태 → 전체'로 줄어든다. 꽉 찬 배율 = 포스터 비율과 카드 비율의 비(4:5 포스터·정사각 카드 = 1.25)
+      var tile = card.querySelector('.tile-ex'), pimg = card.querySelector('.ex-poster');
+      if(tile && pimg){
+        var fitPoster = function(){
+          var r = tile.getBoundingClientRect(), a = pimg.naturalWidth / pimg.naturalHeight;
+          if(!a || !r.width || !r.height) return;
+          var ca = r.width / r.height;
+          tile.style.setProperty('--pv-scale', (a < ca ? ca / a : a / ca).toFixed(4));
+        };
+        if(pimg.complete) fitPoster(); else pimg.addEventListener('load', fitPoster);
+        if(window.ResizeObserver) new ResizeObserver(fitPoster).observe(tile);
+      }
       var pl = card.querySelector('.ex-poster-link');
       if(pl) pl.onclick = big;
       card.querySelector('.ex-go').addEventListener('click', function(e){
