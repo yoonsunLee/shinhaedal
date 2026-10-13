@@ -5,6 +5,29 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; font-src 'self'; connect-src 'self' https://shinhaedalapi.mycafe24.com; frame-src https://www.youtube-nocookie.com; object-src 'none'; base-uri 'self'; upgrade-insecure-requests">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>/*lang-route*/(function(){var s=location.search,m=/[?&]lang=(en|ko)(?=&|$)/.exec(s),l=m&&m[1];try{if(l==='ko')localStorage.setItem('site_lang','ko');else if(!l)l=localStorage.getItem('site_lang')}catch(e){}if(!l){try{var b=/bot|crawl|spider|slurp|yeti|facebookexternalhit|kakaotalk|embedly|preview|lighthouse|headless/i.test(navigator.userAgent||'');var g=(navigator.languages&&navigator.languages.length)?navigator.languages:[navigator.language||''];var k=false,i;for(i=0;i<g.length;i++){if(/^ko/i.test(g[i]||''))k=true}if(!b&&!k&&g[0])l='en'}catch(e){}}if(l!=='en')return;window.__SH_LANG_REDIRECT=1;document.documentElement.style.visibility='hidden';location.replace('/en'+location.pathname+s.replace(/([?&])lang=en(&|$)/,function(a,p,e){return e?p:''})+location.hash)})()</script>
+<script>/* 들어올 때 올라오기 — 디졸브(페이지 사이 전환)가 끝나면 시작한다(2026-10-14, CV·Works 와 같은 엔진 — 차례 계산은 site.js).
+   움직임 줄이기를 켰거나 브라우저가 못 하면 아무것도 숨기지 않는다. 무슨 일이 있어도 2.5초 뒤에는 시작한다 */
+(function(){
+  var d = document.documentElement;
+  if(!window.matchMedia || matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  var T = {k1:[40, 700, {}]}, fx = 'k1';
+  var R = {"order": "reading", "cap": 700, "sel": ".contact-hero h1, .contact-hero > p, .direct-inline, .contact-work-preview, .contact-form > .cf-row, .contact-form > .work-inquiry-card, .contact-form .cf-consents, .contact-form .cf-actions"};
+  R.step = T[fx][0]; R.dur = T[fx][1];
+  for(var k in T[fx][2]) R[k] = T[fx][2][k];
+  window.__RISE = R;
+  d.setAttribute('data-ctfx', fx);
+  d.classList.add('rise-wait');
+  var go; window.__riseGo = new Promise(function(r){ go = r; });
+  setTimeout(go, 2500);
+  if('onpagereveal' in window){
+    addEventListener('pagereveal', function(e){
+      var v = e.viewTransition;
+      // 브라우저가 디졸브를 건너뛰면(아주 느린 이동 등) 약속들이 '취소됨'으로 끝난다 — 받아 두고 바로 시작한다
+      if(v){ v.ready.catch(function(){}); v.finished.then(go, go); } else requestAnimationFrame(function(){ requestAnimationFrame(go); });
+    }, {once:true});
+  }else addEventListener('DOMContentLoaded', function(){ requestAnimationFrame(go); });
+})();
+</script>
 <title>연락하기 — 신해달 나전칠기 아티스트</title>
 <meta name="description" content="신해달의 작품, 전시, 협업, 라이선싱 문의.">
 <meta property="og:type" content="website">
@@ -190,6 +213,11 @@
     .cf-done:not([hidden]) .cf-done-body{animation-delay:.06s;}
   }
   @keyframes cfDoneIn{from{opacity:0; transform:translateY(12px); filter:blur(3px);}}
+  /* 들어올 때 올라오기(작가 2026-10-14, CV·Works 와 같은 엔진 — 차례 계산은 site.js). 올라오기 전에는 숨겨 둔다 */
+  html.rise-wait :is(.contact-hero h1, .contact-hero > p, .direct-inline, .contact-work-preview, .contact-form > .cf-row, .contact-form > .work-inquiry-card, .contact-form .cf-consents, .contact-form .cf-actions):not(.is-risen){opacity:0;}
+  /* K1 같은 말투, 빠르게: 줄마다 흐림 없이 옆에서, 0.7초 안에(입력 칸은 바로 쓸 수 있어야 한다) */
+  html[data-ctfx="k1"] :is(.contact-hero h1, .contact-hero > p, .direct-inline, .contact-work-preview, .contact-form > .cf-row, .contact-form > .work-inquiry-card, .contact-form .cf-consents, .contact-form .cf-actions).is-risen:not(.rise-done){animation:rx-slide .55s cubic-bezier(.22,1,.36,1) var(--rise-delay, 0ms) both;}
+  @keyframes rx-slide{from{opacity:0; transform:translateX(-10px);}}
 </style>
 </head>
 <body>

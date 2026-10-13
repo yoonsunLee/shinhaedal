@@ -7,6 +7,29 @@
 <script>/*lang-route*/(function(){var s=location.search,m=/[?&]lang=(en|ko)(?=&|$)/.exec(s),l=m&&m[1];try{if(l==='ko')localStorage.setItem('site_lang','ko');else if(!l)l=localStorage.getItem('site_lang')}catch(e){}if(!l){try{var b=/bot|crawl|spider|slurp|yeti|facebookexternalhit|kakaotalk|embedly|preview|lighthouse|headless/i.test(navigator.userAgent||'');var g=(navigator.languages&&navigator.languages.length)?navigator.languages:[navigator.language||''];var k=false,i;for(i=0;i<g.length;i++){if(/^ko/i.test(g[i]||''))k=true}if(!b&&!k&&g[0])l='en'}catch(e){}}if(l!=='en')return;window.__SH_LANG_REDIRECT=1;document.documentElement.style.visibility='hidden';location.replace('/en'+location.pathname+s.replace(/([?&])lang=en(&|$)/,function(a,p,e){return e?p:''})+location.hash)})()</script>
 <!-- 아카이브 미리보기(iframe·?pv=1)일 때만 데이터 바꿔 끼우기 스크립트를 먼저 불러온다. 평소 방문에는 아무것도 안 함 -->
 <script>try{if(window.top!==window&&(/[?&]pv=1(&|$)/.test(location.search)||sessionStorage.getItem('sh_pv')==='1'))document.write('<script src="/assets/preview.js"><\/script>')}catch(e){}</script>
+<script>/* 들어올 때 올라오기 — About 디졸브(페이지 사이 전환)가 끝나면 시작한다(2026-10-14, CV·Works 와 같은 엔진 — 차례 계산은 site.js).
+   움직임 줄이기를 켰거나 브라우저가 못 하면 아무것도 숨기지 않는다. 무슨 일이 있어도 2.5초 뒤에는 시작한다 */
+(function(){
+  var d = document.documentElement;
+  if(!window.matchMedia || matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  var T = {a1:[60, 1000, {}]}, fx = 'a1';
+  var R = {"order": "reading", "cap": 1100, "waitImg": "img", "watch": [".ab-body"], "sel": ".ab-portrait, .ab-hero-text h1, .ab-role, .ab-eng-name, .ab-lede, .ab-hero-text .ab-body > p, .ab-section-title, .ab-note-hook, .ab-note-text .ab-body > p, .ab-photo-inner, .ab-links > a"};
+  R.step = T[fx][0]; R.dur = T[fx][1];
+  for(var k in T[fx][2]) R[k] = T[fx][2][k];
+  window.__RISE = R;
+  d.setAttribute('data-abfx', fx);
+  d.classList.add('rise-wait');
+  var go; window.__riseGo = new Promise(function(r){ go = r; });
+  setTimeout(go, 2500);
+  if('onpagereveal' in window){
+    addEventListener('pagereveal', function(e){
+      var v = e.viewTransition;
+      // 브라우저가 디졸브를 건너뛰면(아주 느린 이동 등) 약속들이 '취소됨'으로 끝난다 — 받아 두고 바로 시작한다
+      if(v){ v.ready.catch(function(){}); v.finished.then(go, go); } else requestAnimationFrame(function(){ requestAnimationFrame(go); });
+    }, {once:true});
+  }else addEventListener('DOMContentLoaded', function(){ requestAnimationFrame(go); });
+})();
+</script>
 <title>작가 소개 — 신해달 나전칠기 아티스트</title>
 <meta name="description" content="법과 사회의 규범, 그리고 그 안을 살아가는 개인의 이야기를 나전칠기로 표현하는 작가, 신해달 소개.">
 <meta property="og:type" content="website">
@@ -107,6 +130,13 @@
   .ab-anim-title.js-anim.in{opacity:1;}
   .ab-anim-block.js-anim{opacity:0; transition:opacity .55s cubic-bezier(.22,1,.36,1);}
   .ab-anim-block.js-anim.in{opacity:1;}
+  /* 들어올 때 올라오기(작가 2026-10-14, CV·Works 와 같은 엔진 — 차례 계산은 site.js). 올라오기 전에는 숨겨 둔다 */
+  html.rise-wait :is(.ab-portrait, .ab-hero-text h1, .ab-role, .ab-eng-name, .ab-lede, .ab-hero-text .ab-body > p, .ab-section-title, .ab-note-hook, .ab-note-text .ab-body > p, .ab-photo-inner, .ab-links > a):not(.is-risen){opacity:0;}
+  /* A1 같은 말투: 사진은 자개빛이 스치며(Works W2+), 글은 한 문단씩 흐림 없이 옆에서(CV C3+) */
+  html[data-abfx="a1"] :is(.ab-portrait, .ab-photo-inner).is-risen:not(.rise-done){animation:rx-glint .9s cubic-bezier(.22,1,.36,1) var(--rise-delay, 0ms) both;}
+  html[data-abfx="a1"] :is(.ab-hero-text h1, .ab-role, .ab-eng-name, .ab-lede, .ab-hero-text .ab-body > p, .ab-section-title, .ab-note-hook, .ab-note-text .ab-body > p, .ab-links > a).is-risen:not(.rise-done){animation:rx-slide .6s cubic-bezier(.22,1,.36,1) var(--rise-delay, 0ms) both;}
+  @keyframes rx-glint{0%{opacity:0; transform:scale(.975); filter:blur(5px) brightness(1.35);} 60%{opacity:1; filter:blur(0) brightness(1.08);} 100%{opacity:1; transform:none; filter:none;}}
+  @keyframes rx-slide{from{opacity:0; transform:translateX(-10px);}}
 </style>
 </head>
 <body>
@@ -339,6 +369,7 @@ if(LANG!=='ko') applyLang(LANG, {skipUrl:true});
 /* ---------- 절제된 일회성 등장 모션. reduced-motion이면 아무것도 건드리지 않고 기본 CSS(항상 표시)를 그대로 둔다 ---------- */
 (function(){
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if(window.__RISE) return;   // 들어올 때 올라오기(site.js)가 맡는다 — 옛 등장 효과는 쉰다(2026-10-14)
   if(!('IntersectionObserver' in window)) return;
   var targets = Array.prototype.slice.call(document.querySelectorAll('[data-reveal]'));
   targets.forEach(function(el){ el.classList.add('js-anim'); });

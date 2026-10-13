@@ -177,7 +177,10 @@ window.addEventListener('pageswap', function(e){
     schedule();
   }
   collect();
-  (R.watch || []).forEach(function(id){ var g = document.getElementById(id); if(g) new MutationObserver(collect).observe(g, {childList:true}); });
+  // R.watch: id 또는 선택자. 그 안이 새로 그려지면(목록 다시 그리기·언어 바꾸기) 새 항목도 같은 방식으로 올린다
+  (R.watch || []).forEach(function(w){
+    Array.prototype.forEach.call(document.querySelectorAll(/^[#.\[]/.test(w) ? w : '#' + w), function(g){ new MutationObserver(collect).observe(g, {childList:true}); });
+  });
   var ready = Promise.resolve();
   if(R.ready){
     var g = document.getElementById(R.ready);

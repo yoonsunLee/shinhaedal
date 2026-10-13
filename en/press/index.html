@@ -8,6 +8,29 @@
 <script>/*lang-route*/(function(){var s=location.search;if(!/[?&]lang=ko(&|$)/.test(s))return;window.__SH_LANG_REDIRECT=1;document.documentElement.style.visibility='hidden';location.replace(location.pathname.replace(/^\/en(?=\/)/,'')+s+location.hash)})()</script>
 <!-- 아카이브 미리보기(iframe·?pv=1)일 때만 데이터 바꿔 끼우기 스크립트를 먼저 불러온다. 평소 방문에는 아무것도 안 함 -->
 <script>try{if(window.top!==window&&(/[?&]pv=1(&|$)/.test(location.search)||sessionStorage.getItem('sh_pv')==='1'))document.write('<script src="/assets/preview.js"><\/script>')}catch(e){}</script>
+<script>/* 들어올 때 올라오기 — 디졸브(페이지 사이 전환)가 끝나면 시작한다(2026-10-14, CV·Works 와 같은 엔진 — 차례 계산은 site.js).
+   움직임 줄이기를 켰거나 브라우저가 못 하면 아무것도 숨기지 않는다. 무슨 일이 있어도 2.5초 뒤에는 시작한다 */
+(function(){
+  var d = document.documentElement;
+  if(!window.matchMedia || matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  var T = {p1:[90, 1000, {}]}, fx = 'p1';
+  var R = {"order": "reading", "cap": 900, "waitImg": "img", "ready": "pressList", "watch": ["pressFeature", "pressList"], "sel": ".press-intro h1, .press-intro > p, .press-feature-grid, .press-row"};
+  R.step = T[fx][0]; R.dur = T[fx][1];
+  for(var k in T[fx][2]) R[k] = T[fx][2][k];
+  window.__RISE = R;
+  d.setAttribute('data-prfx', fx);
+  d.classList.add('rise-wait');
+  var go; window.__riseGo = new Promise(function(r){ go = r; });
+  setTimeout(go, 2500);
+  if('onpagereveal' in window){
+    addEventListener('pagereveal', function(e){
+      var v = e.viewTransition;
+      // 브라우저가 디졸브를 건너뛰면(아주 느린 이동 등) 약속들이 '취소됨'으로 끝난다 — 받아 두고 바로 시작한다
+      if(v){ v.ready.catch(function(){}); v.finished.then(go, go); } else requestAnimationFrame(function(){ requestAnimationFrame(go); });
+    }, {once:true});
+  }else addEventListener('DOMContentLoaded', function(){ requestAnimationFrame(go); });
+})();
+</script>
 <title>Press — Shin Haedal, Najeonchilgi Artist</title>
 <meta name="description" content="Press coverage of my work and artistic practice.">
 <meta property="og:type" content="website">
@@ -85,6 +108,17 @@
     .press-row-media{width:96px; height:96px;}
     .press-row-links{flex-direction:row; align-items:center; gap:16px; white-space:normal;}
   }
+  /* 들어올 때 올라오기(작가 2026-10-14, CV·Works 와 같은 엔진 — 차례 계산은 site.js). 올라오기 전에는 숨겨 둔다 */
+  html.rise-wait :is(.press-intro h1, .press-intro > p, .press-feature-grid, .press-row):not(.is-risen){opacity:0;}
+  /* P1 같은 말투: 기사마다 사진이 자개빛으로(W2+) → 출처·날짜가 먼저 → 제목·요약·링크가 옆에서 뒤따른다(C3+) */
+  html[data-prfx="p1"] :is(.press-feature-grid, .press-row).is-risen:not(.rise-done){animation:none;}
+  html[data-prfx="p1"] :is(.press-feature-grid, .press-row).is-risen:not(.rise-done) :is(.press-feature-media, .press-row-media){animation:rx-glint .9s cubic-bezier(.22,1,.36,1) var(--rise-delay, 0ms) both;}
+  html[data-prfx="p1"] :is(.press-feature-grid, .press-row).is-risen:not(.rise-done) :is(.press-feature-meta, .press-row-meta){animation:rx-fade .45s ease-out calc(var(--rise-delay, 0ms) + 60ms) both;}
+  html[data-prfx="p1"] :is(.press-feature-grid, .press-row).is-risen:not(.rise-done) :is(.press-feature-title, .press-feature-dek, .press-feature-links, .press-row-title, .press-row-dek, .press-row-links){animation:rx-slide .6s cubic-bezier(.22,1,.36,1) calc(var(--rise-delay, 0ms) + 150ms) both;}
+  html[data-prfx="p1"] :is(.press-intro h1, .press-intro > p).is-risen:not(.rise-done){animation:rx-slide .6s cubic-bezier(.22,1,.36,1) var(--rise-delay, 0ms) both;}
+  @keyframes rx-fade{from{opacity:0;}}
+  @keyframes rx-glint{0%{opacity:0; transform:scale(.975); filter:blur(5px) brightness(1.35);} 60%{opacity:1; filter:blur(0) brightness(1.08);} 100%{opacity:1; transform:none; filter:none;}}
+  @keyframes rx-slide{from{opacity:0; transform:translateX(-10px);}}
 </style>
 </head>
 <body>
@@ -345,7 +379,7 @@ function applyLang(l, opts){
 }
 document.getElementById('langKo').onclick = function(){ applyLang('ko'); };
 document.getElementById('langEn').onclick = function(){ applyLang('en'); };
-if(!matchMedia('(prefers-reduced-motion: reduce)').matches) document.body.classList.add('motion-ready');
+if(!window.__RISE && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.body.classList.add('motion-ready');   // 새 올라오기가 켜지면 옛 효과는 쉰다(2026-10-14)
 loadPress();
 if(LANG!=='ko') applyLang(LANG, {skipUrl:true});
 </script>
