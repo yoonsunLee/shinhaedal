@@ -93,3 +93,105 @@ window.addEventListener('pageswap', function(e){
   if(!v || !to) return;
   try{ if(/^\/(en\/)?ip\//.test(new URL(to).pathname)){ v.ready.catch(function(){}); v.finished.catch(function(){}); v.skipTransition(); } }catch(err){}
 });
+/* ---------- 들어올 때 올라오기(2026-10-13) ----------
+   페이지가 <head> 에서 정한 항목(window.__RISE)을, 디졸브가 끝나면(window.__riseGo) 화면에 보이는 것부터 올린다.
+   차례(R.order): reading 읽는 순서 · interleave 단(R.cols)끼리 좌·우·좌·우 엇갈림 · diagonal 첫 칸에서의 격자 거리(물결) ·
+   random 무작위. 화면 밖 항목은 스크롤해 조금이라도 보이면 같은 방식으로, 목록이 새로 그려지면(전시 고르기) 새 칸도.
+   R.ready 가 있으면 그 칸이 처음 다시 그려질 때까지(최대 1.2초) 기다린다 — 두 번 오르지 않게.
+   R.waitImg 가 있으면 칸마다 그 그림이 다 받아진 뒤에 올린다(최대 1.5초) — 빈 액자가 보이지 않게 */
+(function(){
+  var R = window.__RISE, d = document.documentElement;
+  if(!R || !window.__riseGo || !d.classList.contains('rise-wait')) return;
+  var pending = [], queued = [], started = false, raf = 0;
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(en){ if(en.isIntersecting){ io.unobserve(en.target); queued.push(en.target); } });
+    schedule();
+  }, {threshold:0.01});
+  function collect(){
+    Array.prototype.forEach.call(document.querySelectorAll(R.sel), function(el){
+      if(el.classList.contains('is-risen') || pending.indexOf(el) >= 0) return;
+      pending.push(el); io.observe(el);
+    });
+  }
+  function schedule(){ if(started && !raf) raf = requestAnimationFrame(flush); }
+  function uniq(v, tol){ var s = v.slice().sort(function(a, b){ return a - b; }), u = []; s.forEach(function(x){ if(!u.length || x - u[u.length - 1] > tol) u.push(x); }); return u; }
+  function near(u, x, tol){ for(var i = 0; i < u.length; i++) if(Math.abs(u[i] - x) <= tol) return i; return 0; }
+  function reading(a){ return a.slice().sort(function(x, y){ return (Math.round(x.top / 12) - Math.round(y.top / 12)) || (x.left - y.left); }); }
+  // 한 묶음 안에서 항목마다 지연(ms)을 정한다
+  function plan(list){
+    var pos = list.map(function(el){ var r = el.getBoundingClientRect(); return {el:el, top:r.top, left:r.left}; });
+    var step = R.step, out = [];
+    if(R.order === 'interleave'){
+      var head = [], cols = [], key = new Map();
+      reading(pos).forEach(function(p){
+        var c = R.cols && p.el.closest(R.cols);
+        if(!c){ head.push(p); return; }
+        if(!key.has(c)){ key.set(c, cols.length); cols.push([]); }
+        cols[key.get(c)].push(p);
+      });
+      cols.sort(function(a, b){ return a[0].left - b[0].left; });   // 왼쪽 단부터
+      var seq = head.slice();
+      for(var i = 0; cols.some(function(c){ return i < c.length; }); i++) cols.forEach(function(c){ if(i < c.length) seq.push(c[i]); });
+      seq.forEach(function(p, k){ out.push([p.el, k * step]); });
+    }else if(R.order === 'diagonal'){
+      var xs = uniq(pos.map(function(p){ return p.left; }), 8), ys = uniq(pos.map(function(p){ return p.top; }), 12);
+      pos.forEach(function(p){ var c = near(xs, p.left, 8), r = near(ys, p.top, 12); out.push([p.el, Math.sqrt(r * r + c * c) * step]); });
+    }else if(R.order === 'random'){
+      var sh = pos.slice();
+      for(var j = sh.length - 1; j > 0; j--){ var k = Math.floor(Math.random() * (j + 1)), t = sh[j]; sh[j] = sh[k]; sh[k] = t; }
+      sh.forEach(function(p, n){ out.push([p.el, n * step + Math.random() * step * 0.6]); });
+    }else reading(pos).forEach(function(p, n){ out.push([p.el, n * step]); });
+    var max = out.reduce(function(m, o){ return Math.max(m, o[1]); }, 0), cap = R.cap || 1100;
+    if(max > cap) out.forEach(function(o){ o[1] *= cap / max; });   // 한꺼번에 많으면 전체 길이에 맞춰 좁힌다
+    return out;
+  }
+  function rise(el, delay){
+    el.style.setProperty('--rise-delay', delay + 'ms');
+    el.classList.add('is-risen');
+    // 움직임이 끝나면 떼어 낸다 — 붙어 있으면 올렸을 때(hover) 효과를 막는다
+    setTimeout(function(){ el.classList.add('rise-done'); }, delay + (R.dur || 900) + 120);
+  }
+  function flush(){
+    raf = 0;
+    var list = queued.splice(0).filter(function(el){ return el.isConnected && !el.classList.contains('is-risen'); });
+    plan(list).forEach(function(o){
+      var el = o[0], delay = Math.round(o[1]), k = pending.indexOf(el);
+      if(k >= 0) pending.splice(k, 1);
+      var img = R.waitImg && el.querySelector(R.waitImg);
+      if(!img || (img.complete && img.naturalWidth) || img.style.visibility === 'hidden'){ rise(el, delay); return; }
+      // 그림이 아직이면 다 받아질 때까지(최대 1.5초) 기다렸다가, 원래 차례에서 이미 지난 만큼 빼고 올린다 — 빈 액자가 보이지 않게
+      var t0 = performance.now(), done = false;
+      function go(){ if(done) return; done = true; rise(el, Math.max(0, Math.round(delay - (performance.now() - t0)))); }
+      img.addEventListener('load', go, {once:true});
+      img.addEventListener('error', go, {once:true});
+      if(img.loading === 'lazy') img.loading = 'eager';   // 화면에 들어온 칸은 바로 받기 시작하게
+      setTimeout(go, 1500);
+    });
+  }
+  // 화면에 조금이라도 보이는데 아직 안 오른 항목을 한 묶음으로(아래 끝에 걸친 줄까지)
+  function sweep(){
+    pending.slice().forEach(function(el){
+      var r = el.getBoundingClientRect();
+      if(r.top < innerHeight && r.bottom > 0 && queued.indexOf(el) < 0){ io.unobserve(el); queued.push(el); }
+    });
+    schedule();
+  }
+  collect();
+  (R.watch || []).forEach(function(id){ var g = document.getElementById(id); if(g) new MutationObserver(collect).observe(g, {childList:true}); });
+  var ready = Promise.resolve();
+  if(R.ready){
+    var g = document.getElementById(R.ready);
+    if(g) ready = new Promise(function(res){
+      var mo = new MutationObserver(function(){ mo.disconnect(); res(); });
+      mo.observe(g, {childList:true});
+      setTimeout(function(){ mo.disconnect(); res(); }, 1200);
+    });
+  }
+  function start(){
+    if(started) return;
+    started = true; collect(); sweep();
+    if(document.fonts && document.fonts.ready) document.fonts.ready.then(sweep);   // 글꼴이 늦게 들어와 줄이 움직였으면 한 번 더
+  }
+  window.__riseGo.then(function(){ return ready; }).then(start);
+  setTimeout(start, 4000);   // 무슨 일이 있어도 4초 뒤에는 다 보이게
+})();

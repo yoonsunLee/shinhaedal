@@ -8,6 +8,29 @@
 <script>/*lang-route*/(function(){var s=location.search;if(!/[?&]lang=ko(&|$)/.test(s))return;window.__SH_LANG_REDIRECT=1;document.documentElement.style.visibility='hidden';location.replace(location.pathname.replace(/^\/en(?=\/)/,'')+s+location.hash)})()</script>
 <!-- 아카이브 미리보기(iframe·?pv=1)일 때만 데이터 바꿔 끼우기 스크립트를 먼저 불러온다. 평소 방문에는 아무것도 안 함 -->
 <script>try{if(window.top!==window&&(/[?&]pv=1(&|$)/.test(location.search)||sessionStorage.getItem('sh_pv')==='1'))document.write('<script src="/assets/preview.js"><\/script>')}catch(e){}</script>
+<script>/* 들어올 때 올라오기 — 디졸브(페이지 사이 전환)가 끝나면 시작한다(2026-10-13, 차례 계산은 site.js).
+   움직임 줄이기를 켰거나 브라우저가 못 하면 아무것도 숨기지 않는다. 무슨 일이 있어도 2.5초 뒤에는 시작한다 */
+(function(){
+  var d = document.documentElement;
+  if(!window.matchMedia || matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  var T = {w5:['random', 70, 1200, {"cap": 900, "waitImg": ".tile-media img"}]}, fx = 'w5';
+  var R = {sel:'#selGrid > .tile, #workGrid > .tile', cap:1000, ready:'workGrid', watch:['workGrid', 'selGrid']};
+  R.order = T[fx][0]; R.step = T[fx][1]; R.dur = T[fx][2];
+  for(var k in T[fx][3]) R[k] = T[fx][3][k];
+  window.__RISE = R;
+  d.setAttribute('data-wkfx', fx);
+  d.classList.add('rise-wait');
+  var go; window.__riseGo = new Promise(function(r){ go = r; });
+  setTimeout(go, 2500);
+  if('onpagereveal' in window){
+    addEventListener('pagereveal', function(e){
+      var v = e.viewTransition;
+      // 브라우저가 디졸브를 건너뛰면(아주 느린 이동 등) 약속들이 '취소됨'으로 끝난다 — 받아 두고 바로 시작한다
+      if(v){ v.ready.catch(function(){}); v.finished.then(go, go); } else requestAnimationFrame(function(){ requestAnimationFrame(go); });
+    }, {once:true});
+  }else addEventListener('DOMContentLoaded', function(){ requestAnimationFrame(go); });
+})();
+</script>
 <title>Works — Shin Haedal, Najeonchilgi Artist</title>
 <meta name="description" content="Work about individuals who live differently — each with their own light — within the same rules. Law, society and the individual, translated into najeonchilgi.">
 <meta property="og:type" content="website">
@@ -397,6 +420,15 @@
     .wm-rail{padding:0 16px 14px; gap:6px;}
     .wm-rail-item{width:46px; height:46px;}
   }
+  /* 들어올 때 올라오기(작가 2026-10-13, 차례 계산은 site.js). 전시를 골라 목록이 바뀔 때도 */
+  html.rise-wait :is(#selGrid, #workGrid) > .tile:not(.is-risen){opacity:0;}
+  #selGrid > .tile, #workGrid > .tile{--rise-dist:22px; --rise-dur:.7s; --rise-blur:3px;}
+  @keyframes wk-cap{from{opacity:0; transform:translateY(8px);}}
+  /* W2 다듬음: 무작위 차례로, 그림에만 은은하게 자개빛이 스치며 나타나고 제목은 뒤따라 조용히. 그림이 다 받아진 뒤(waitImg) */
+  @keyframes wk-twinkle2{0%{opacity:0; transform:scale(.975); filter:blur(5px) brightness(1.35);} 60%{opacity:1; filter:blur(0) brightness(1.08);} 100%{opacity:1; transform:none; filter:none;}}
+  html[data-wkfx="w5"] :is(#selGrid, #workGrid) > .tile.is-risen:not(.rise-done){animation:none;}
+  html[data-wkfx="w5"] :is(#selGrid, #workGrid) > .tile.is-risen:not(.rise-done) .tile-media{animation:wk-twinkle2 .9s cubic-bezier(.22,1,.36,1) var(--rise-delay, 0ms) both;}
+  html[data-wkfx="w5"] :is(#selGrid, #workGrid) > .tile.is-risen:not(.rise-done) .tile-cap{animation:wk-cap .6s cubic-bezier(.22,1,.36,1) calc(var(--rise-delay, 0ms) + 260ms) both;}
 </style>
 </head>
 <body>

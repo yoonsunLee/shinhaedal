@@ -231,3 +231,8 @@ html::view-transition-new(root){animation:ptx-in-blur .45s cubic-bezier(.45,0,.5
 @keyframes ptx-slide-out-r{to{opacity:0; transform:translateX(28px); filter:blur(3px);}}
 @keyframes ptx-slide-in-l{from{opacity:0; transform:translateX(-28px); filter:blur(3px);}}
 @media (prefers-reduced-motion: reduce){ @view-transition{navigation:none;} }
+/* ---------- 들어올 때 올라오기(2026-10-13) ----------
+   기본 모습: 밑에서 살짝 흐릿하게 → 제자리 또렷하게. 페이지마다 다른 모습은 각 페이지 <style> 이 덮는다.
+   무엇을·어떤 차례로는 각 페이지가 정하고(window.__RISE), 차례 계산은 site.js. 다 끝나면 rise-done 으로 떼어 낸다 */
+@keyframes rise-in{from{opacity:0; transform:translateY(var(--rise-dist, 14px)); filter:blur(var(--rise-blur, 2px));}}
+.is-risen:not(.rise-done){animation:rise-in var(--rise-dur, .6s) cubic-bezier(.22,1,.36,1) var(--rise-delay, 0ms) both;}

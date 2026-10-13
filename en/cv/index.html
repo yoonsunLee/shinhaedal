@@ -8,6 +8,29 @@
 <script>/*lang-route*/(function(){var s=location.search;if(!/[?&]lang=ko(&|$)/.test(s))return;window.__SH_LANG_REDIRECT=1;document.documentElement.style.visibility='hidden';location.replace(location.pathname.replace(/^\/en(?=\/)/,'')+s+location.hash)})()</script>
 <!-- 아카이브 미리보기(iframe·?pv=1)일 때만 데이터 바꿔 끼우기 스크립트를 먼저 불러온다. 평소 방문에는 아무것도 안 함 -->
 <script>try{if(window.top!==window&&(/[?&]pv=1(&|$)/.test(location.search)||sessionStorage.getItem('sh_pv')==='1'))document.write('<script src="/assets/preview.js"><\/script>')}catch(e){}</script>
+<script>/* 들어올 때 올라오기 — 디졸브(페이지 사이 전환)가 끝나면 시작한다(2026-10-13, 차례 계산은 site.js).
+   움직임 줄이기를 켰거나 브라우저가 못 하면 아무것도 숨기지 않는다. 무슨 일이 있어도 2.5초 뒤에는 시작한다 */
+(function(){
+  var d = document.documentElement;
+  if(!window.matchMedia || matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  var T = {c4:['interleave', 38, 780, {"cap": 1000}]}, fx = 'c4';
+  var R = {sel:'.page-head h1, .page-head p, .cv-h, .cv-h3, .cv-list > li', cols:'.cv-col', cap:1300};
+  R.order = T[fx][0]; R.step = T[fx][1]; R.dur = T[fx][2];
+  for(var k in T[fx][3]) R[k] = T[fx][3][k];
+  window.__RISE = R;
+  d.setAttribute('data-cvfx', fx);
+  d.classList.add('rise-wait');
+  var go; window.__riseGo = new Promise(function(r){ go = r; });
+  setTimeout(go, 2500);
+  if('onpagereveal' in window){
+    addEventListener('pagereveal', function(e){
+      var v = e.viewTransition;
+      // 브라우저가 디졸브를 건너뛰면(아주 느린 이동 등) 약속들이 '취소됨'으로 끝난다 — 받아 두고 바로 시작한다
+      if(v){ v.ready.catch(function(){}); v.finished.then(go, go); } else requestAnimationFrame(function(){ requestAnimationFrame(go); });
+    }, {once:true});
+  }else addEventListener('DOMContentLoaded', function(){ requestAnimationFrame(go); });
+})();
+</script>
 <title>CV — Shin Haedal, Najeonchilgi Artist</title>
 <meta name="description" content="CV of Shin Haedal, najeonchilgi artist: education, certifications, brand activities and exhibitions (solo exhibitions, group exhibitions and art fairs).">
 <meta property="og:type" content="website">
@@ -70,6 +93,16 @@
     .cv{grid-template-columns:1fr 1.35fr; column-gap:40px; padding-top:16px;}
     .cv-list li{break-inside:avoid;}
   }
+  /* 들어올 때 올라오기(작가 2026-10-13, 차례 계산은 site.js). 올라오기 전에는 숨겨 둔다 */
+  html.rise-wait :is(.page-head h1, .page-head p, .cv-h, .cv-h3, .cv-list > li):not(.is-risen){opacity:0;}
+  .page-head h1, .page-head p, .cv-h, .cv-h3, .cv-list > li{--rise-dist:12px; --rise-dur:.55s;}
+  /* C3 다듬음: 날짜 먼저, 내용은 흐림 없이 또렷하게 옆에서. 맨 위·구역 제목도 흐림 없이 */
+  @keyframes cv-text2{from{opacity:0; transform:translateX(-10px);}}
+  html[data-cvfx="c4"] :is(.page-head h1, .page-head p, .cv-h, .cv-h3){--rise-blur:0px; --rise-dist:10px;}
+  html[data-cvfx="c4"] .cv-list > li.is-risen:not(.rise-done){animation:none;}
+  html[data-cvfx="c4"] .cv-list > li.is-risen:not(.rise-done) > .cv-d{animation:cv-date .45s ease-out var(--rise-delay, 0ms) both;}
+  html[data-cvfx="c4"] .cv-list > li.is-risen:not(.rise-done) > .cv-t{animation:cv-text2 .6s cubic-bezier(.22,1,.36,1) calc(var(--rise-delay, 0ms) + 90ms) both;}
+  @keyframes cv-date{from{opacity:0;}}
 </style>
 </head>
 <body>
