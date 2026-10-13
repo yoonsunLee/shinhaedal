@@ -98,7 +98,7 @@ window.addEventListener('pageswap', function(e){
    차례(R.order): reading 읽는 순서 · interleave 단(R.cols)끼리 좌·우·좌·우 엇갈림 · diagonal 첫 칸에서의 격자 거리(물결) ·
    random 무작위. 화면 밖 항목은 스크롤해 조금이라도 보이면 같은 방식으로, 목록이 새로 그려지면(전시 고르기) 새 칸도.
    R.ready 가 있으면 그 칸이 처음 다시 그려질 때까지(최대 1.2초) 기다린다 — 두 번 오르지 않게.
-   R.waitImg 가 있으면 칸마다 그 그림이 다 받아진 뒤에 올린다(최대 1.5초) — 빈 액자가 보이지 않게 */
+   R.waitImg 가 있으면 칸마다 그 그림이 다 받아진 뒤에 올린다(최대 2.5초) — 빈 칸이 보이지 않게 */
 (function(){
   var R = window.__RISE, d = document.documentElement;
   if(!R || !window.__riseGo || !d.classList.contains('rise-wait')) return;
@@ -159,13 +159,13 @@ window.addEventListener('pageswap', function(e){
       if(k >= 0) pending.splice(k, 1);
       var img = R.waitImg && el.querySelector(R.waitImg);
       if(!img || (img.complete && img.naturalWidth) || img.style.visibility === 'hidden'){ rise(el, delay); return; }
-      // 그림이 아직이면 다 받아질 때까지(최대 1.5초) 기다렸다가, 원래 차례에서 이미 지난 만큼 빼고 올린다 — 빈 액자가 보이지 않게
+      // 그림이 아직이면 다 받아질 때까지(최대 2.5초, R.waitMax) 기다렸다가, 원래 차례에서 이미 지난 만큼 빼고 올린다 — 빈 칸이 보이지 않게
       var t0 = performance.now(), done = false;
       function go(){ if(done) return; done = true; rise(el, Math.max(0, Math.round(delay - (performance.now() - t0)))); }
       img.addEventListener('load', go, {once:true});
       img.addEventListener('error', go, {once:true});
       if(img.loading === 'lazy') img.loading = 'eager';   // 화면에 들어온 칸은 바로 받기 시작하게
-      setTimeout(go, 1500);
+      setTimeout(go, R.waitMax || 2500);   // 아주 느린 인터넷에서도 너무 오래 비워 두지는 않게
     });
   }
   // 화면에 조금이라도 보이는데 아직 안 오른 항목을 한 묶음으로(아래 끝에 걸친 줄까지)
