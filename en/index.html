@@ -1060,6 +1060,7 @@ var HOME_LIST = [];
 var DETAIL_CACHE = {};
 var HOME_STATE = { exhibitions:[], works:[] };
 var HOME_RECENT_COUNT = 6; // 작가가 홈 운영에서 2~6점 사이로 정한다(data/site-settings.json). 못 받아오면 6.
+var HOME_RECENT_PICK = [];  // 작가가 홈 운영에서 고른 Recent works 작품번호 차례(site-settings.json homeRecent). 비어 있으면 최신순 HOME_RECENT_COUNT 점
 
 function formatDateRange(start, end){
   function fmt(d){ return String(d||'').replace(/-/g,'.'); }
@@ -1189,11 +1190,13 @@ function renderHomeGrid(){
     moreBtn.hidden = true;
   }else{
     titleEl.textContent = 'Recent works';
-    HOME_LIST = ALL_WORKS.slice(0, HOME_RECENT_COUNT);
+    // 고른 차례가 있으면 그것(공개 작품만, 최대 6점 — 2026-10-14), 없으면 목록 앞에서 HOME_RECENT_COUNT 점
+    var pick = HOME_RECENT_PICK.map(function(id){ return ALL_WORKS.filter(function(w){ return w.id === id; })[0]; }).filter(Boolean).slice(0, 6);
+    HOME_LIST = pick.length ? pick : ALL_WORKS.slice(0, HOME_RECENT_COUNT);
     renderWorkTiles(HOME_LIST);
     moreBtn.href = 'works/';
     moreBtn.textContent = I18N[LANG].browse_all;
-    moreBtn.hidden = ALL_WORKS.length <= HOME_RECENT_COUNT;
+    moreBtn.hidden = ALL_WORKS.length <= HOME_LIST.length;
   }
 }
 function loadExhibitionAndRender(){
@@ -1241,6 +1244,7 @@ function loadRecentWorks(){
       ALL_WORKS = results[0] || [];
       var n = parseInt(results[1] && results[1].homeRecentCount, 10);
       if(n >= 2 && n <= 6) HOME_RECENT_COUNT = n;
+      if(results[1] && Array.isArray(results[1].homeRecent)) HOME_RECENT_PICK = results[1].homeRecent.map(String);
       return loadExhibitionAndRender();
     })
     .then(function(){ openFromUrlIfPresent(); })

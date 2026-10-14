@@ -353,10 +353,12 @@ def blocks(lang="ko", press_labels=PRESS_LABELS):
     # 작가가 홈 운영 화면에서 2~6점 사이로 정한 값(publish_sb.py가 같은 열쇠로 쓴다). 없으면 기본 HOME_RECENT.
     home_recent_n = max(2, min(6, int(site_settings.get("homeRecentCount") or HOME_RECENT)))
 
-    out = {"index.html": {"home-recent": work_tiles(index[:home_recent_n], "works/", "", lang),
+    by_id = {w["id"]: w for w in index}
+    # 홈 운영에서 고른 Recent works 가 있으면 그 차례(최대 6점), 없으면 목록 앞에서 점수만큼 — index.html renderHomeGrid 와 같다
+    home_pick = [by_id[i] for i in (site_settings.get("homeRecent") or []) if i in by_id][:6]
+    out = {"index.html": {"home-recent": work_tiles(home_pick or index[:home_recent_n], "works/", "", lang),
                           "home-ld": ld_home(lang)},
            "about/index.html": {"about-ld": ld_about(lang, exhibitions)}}
-    by_id = {w["id"]: w for w in index}
     sel, added = [], set()
     for wid in page.get("selected") or []:
         w = by_id.get(wid)

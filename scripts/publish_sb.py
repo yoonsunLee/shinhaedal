@@ -656,7 +656,18 @@ def main():
     except (TypeError, ValueError):
         home_recent_count = 6
     home_recent_count = max(2, min(6, home_recent_count))
-    write_json(os.path.join(data_dir, "site-settings.json"), {"homeRecentCount": home_recent_count})
+    # 홈 운영에서 고른 Recent works(site_settings 'home_recent_works' = 작품 id 차례, 2026-10-14). 공개 작품의 작품번호만, 최대 6점.
+    # 있으면 index.html·prerender_lists.py 가 점수 대신 이 차례를 쓴다. 이름은 Recent works 그대로(작가 결정)
+    pub_nos = {e["id"] for e in index_entries}
+    home_recent = []
+    for i in (settings.get("home_recent_works") or []):
+        n = no_by_uuid.get(i)
+        if n and n in pub_nos and n not in home_recent:
+            home_recent.append(n)
+    site_settings_out = {"homeRecentCount": home_recent_count}
+    if home_recent:
+        site_settings_out["homeRecent"] = home_recent[:6]
+    write_json(os.path.join(data_dir, "site-settings.json"), site_settings_out)
     print("works-page.json: Selected %d점" % len(selected))
 
     # 전시: 홈페이지는 여전히 work_nos 문자열을 읽으므로 관계에서 되만들어 준다.
