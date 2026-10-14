@@ -142,6 +142,8 @@ nav{
 .icon-btn{background:none; border:none; color:var(--ivory); cursor:pointer; display:flex; align-items:center; justify-content:center; width:44px; height:44px; margin:-12px; opacity:0.85;}
 .icon-btn.menu-btn{display:none;}
 @media(max-width:900px){ .nav-menu{display:none;} .icon-btn.menu-btn{display:flex;} .nav-icons{gap:20px;} }
+/* 아주 작은 폰(320px, 아이폰 SE 1세대급)에서 오른쪽 묶음이 4px 넘쳐 화면이 옆으로 밀리던 것 — 340px 이하만 간격을 줄인다(로고·메뉴 모양은 그대로, 2026-10-14) */
+@media(max-width:340px){ .nav-icons{gap:14px;} }
 .icon-btn:hover{opacity:1;}
 /* 올렸을 때 색·밝기가 '딱' 바뀌지 않고 0.2초에 걸쳐 바뀌게 — .link-sub 와 같은 박자(2026-10-12) */
 .icon-btn{transition:opacity .2s ease;}
