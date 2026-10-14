@@ -1184,10 +1184,8 @@ function renderHomeGrid(){
         if(pcHover && pcHover.matches){ big(e); if(window.shStat) window.shStat('ex_poster', ''); }
       });
     });
-    // 카드가 저마다 제 전시로 가므로 한 곳만 가리키던 단추는 쓰지 않는다
-    moreBtn.href = 'works/';
-    moreBtn.textContent = I18N[LANG].browse_all;
-    moreBtn.hidden = false;
+    // Upcoming·Now on view 에서는 '모든 작품 보기'를 두지 않는다 — 카드가 저마다 제 출품작으로 간다(작가 2026-10-14)
+    moreBtn.hidden = true;
   }else{
     titleEl.textContent = 'Recent works';
     HOME_LIST = ALL_WORKS.slice(0, HOME_RECENT_COUNT);
