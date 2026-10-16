@@ -33,8 +33,10 @@ window.shStat = window.shStat || function(){}; window.shStatWork = window.shStat
 
   var nav = window.navigator || {};
   // __SH_LANG_REDIRECT: 영문 주소로 옮겨 가는 중인 국문 페이지(옮겨 간 페이지에서 센다)
+  // 내 컴퓨터에서 연 사본(localhost)은 실제 방문이 아니다 — 점검하다 통계에 섞인 적이 있다(2026-10-14·16)
   var skip = !ENDPOINT || window.__SH_PREVIEW || window.__SH_LANG_REDIRECT || nav.webdriver || nav.globalPrivacyControl === true ||
     nav.doNotTrack === '1' || window.doNotTrack === '1' || nav.msDoNotTrack === '1' || get(OFF_KEY) === '1' ||
+    /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) ||
     /bot|crawl|spider|slurp|headless|lighthouse|preview/i.test(nav.userAgent || '');
   if(skip) return;
 
