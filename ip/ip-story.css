@@ -477,3 +477,14 @@ main:focus{outline:none}
   footer .ft-social{order:6;margin:9px auto -5px -5px}
   footer .ft-top{order:7}
 }
+/* 영문 페이지 글자 크기 맞춤(작가 2026-10-18) — assets/site.css 끝의 설명과 같은 방식·비율. IP 는 site.css 를 읽지 않아 여기 따로 둔다.
+   큰 제목 ×0.88 · 소제목 ×0.92 · 소개 문장 ×0.93 · 본문 ×0.95(Noto Sans KR 영문 x높이 0.543 기준). 첫 화면 SPACED-OUT SEA OTTER 는 국·영 같아서 그대로 */
+html[lang="en"]{--en-head:.478;--en-sub:.50;--en-lede:.505;--en-body:.516}
+html[lang="en"] :is(.section-top h2,.pool-quote h2,.pool-copy h2,#licensing h2,.identity-head h2,.toy-heading h2,.friends-top h2,.delivery-meaning p){font-size-adjust:var(--en-head)}
+html[lang="en"] :is(.story-piece .caption h3,#members .member h3){font-size-adjust:var(--en-sub)}
+html[lang="en"] :is(.friends-lead,.hero-note p){font-size-adjust:var(--en-lede)}
+html[lang="en"] :is(.story-piece .caption p,.pool-copy p,.identity-subtitle,.toy-heading p,.friends-top p:not(.friends-lead),#licensing>p,.toy-spec p,#members .member p,.contact-link>span,.scroll-link>span,.profile-open>span){font-size-adjust:var(--en-body)}
+/* 자간(em)은 원래 크기 기준이라 글자가 작아진 만큼 빽빽해 보인다 — 같은 비율로 풀어 준다(×0.88) */
+html[lang="en"] h2{letter-spacing:-.048em}
+html[lang="en"] .pool-quote h2{letter-spacing:-.057em}
+html[lang="en"] .delivery-meaning p{letter-spacing:-.035em}

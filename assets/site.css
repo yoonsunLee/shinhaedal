@@ -238,3 +238,20 @@ html::view-transition-new(root){animation:ptx-in-blur .45s cubic-bezier(.45,0,.5
    무엇을·어떤 차례로는 각 페이지가 정하고(window.__RISE), 차례 계산은 site.js. 다 끝나면 rise-done 으로 떼어 낸다 */
 @keyframes rise-in{from{opacity:0; transform:translateY(var(--rise-dist, 14px)); filter:blur(var(--rise-blur, 2px));}}
 .is-risen:not(.rise-done){animation:rise-in var(--rise-dur, .6s) cubic-bezier(.22,1,.36,1) var(--rise-delay, 0ms) both;}
+/* ---------- 영문 페이지 글자 크기 맞춤(작가 2026-10-18 "영문 사이트 글자 크기를 한글 사이트 기준으로") ----------
+   같은 px 여도 라틴 글자가 한글보다 크게 보인다 — 글꼴의 영문 x높이가 Noto Sans KR 0.543, Black Han Sans 0.600 이라서.
+   국·영 문구가 다른 자리만 글자 자체를 비율로 줄인다: font-size-adjust = 줄이는 비율 × 그 글꼴의 x높이.
+   크기 규칙(px·clamp·화면 폭별)은 그대로 두므로 모든 화면 폭에 같은 비율로 걸린다(지원 안 하는 옛 브라우저는 지금 그대로).
+   비율: 큰 제목(Black Han Sans) ×0.86 · 대문자 이름 ×0.84 · 소제목 ×0.92 · 소개 문장 ×0.93 · 본문 ×0.95.
+   고정폭(Space Mono) 링크·라벨·날짜는 영문이 오히려 작아 보여서, 로고·메뉴·푸터는 국·영이 같아서 그대로 둔다. */
+html[lang="en"]{--en-dsp:.516; --en-dsp-caps:.504; --en-sub:.50; --en-lede:.505; --en-body:.516;}
+html[lang="en"] :is(.statement .lead1, .statement .accent, .about-teaser-lede .lede-1, .ex-title){font-size-adjust:var(--en-dsp);}
+html[lang="en"] .ab-hero-text h1{font-size-adjust:var(--en-dsp-caps);}
+html[lang="en"] :is(.press-feature-title, #wmTitlePrimary){font-size-adjust:var(--en-sub);}
+html[lang="en"] :is(.ab-lede, .ab-note-hook){font-size-adjust:var(--en-lede);}
+html[lang="en"] :is(.ab-body p, .ab-role, .about-teaser-lede .lede-2, .ip-teaser-sub, .about-teaser-cta, .ip-teaser-cta, .ex-meta, .tile-title,
+  .page-head > p, .cv-t, .cv-h3, .press-intro > p:not(.press-en-note), .press-row-title, .press-row-dek, .press-feature-dek,
+  .contact-hero > p, .type-hint, #cfHint, .cf-consent, .cf-detail, #cfSubmit, #wmCaption, .wm-ex-list li){font-size-adjust:var(--en-body);}
+html[lang="en"] .press-lang-flag{font-size-adjust:none;}   /* 제목 안의 'KO' 표시(고정폭)는 그대로 */
+/* 글자만 작아지고 줄 간격은 원래 크기 기준이라 벌어 보인다 — 홈 큰 문장은 같은 박자로(1.16 × 0.86) */
+html[lang="en"] .statement{line-height:1;}
