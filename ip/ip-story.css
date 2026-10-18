@@ -175,8 +175,10 @@ html:not([lang="en"]) .hero h1{word-spacing:-.05em}
 /* 타일 배경 위에서 '물 위에 띄운 그림'으로 읽히게 그림자를 두 겹(넓게 퍼지는 것 + 가까운 것)으로 */
 .swim-image{width:100%;box-shadow:0 34px 80px rgba(3,28,90,.5),0 10px 24px rgba(3,28,90,.28)}
 .membership{position:absolute;width:46%;right:-5%;bottom:-8px;transform:rotate(9deg);filter:drop-shadow(0 18px 22px #042f7a45)}
-.pool-quote{text-align:center;margin-top:100px;padding-top:65px;border-top:1px solid #ffffff40}
-.pool-quote h2{font-size:clamp(40px,7vw,100px);line-height:1.2;letter-spacing:-.065em;color:#eff7ff}
+.pool-quote{text-align:left;margin-top:100px;padding-top:65px;border-top:1px solid #ffffff40}   /* 왼쪽 정렬: 위 '02 / MORNING SWIMMING' 글과 같은 줄(작가 10/18 Q1) */
+.pool-quote h2{margin-bottom:28px}   /* 크기·자간·색은 장 제목 h2 그대로(작가 10/18: '더 빨리 조개를…'과 같게) */
+.pool-quote p{color:#d6e4ff;max-width:34em;text-wrap:pretty}   /* 설명 = '작가님께…' 본문과 같은 크기·색 */
+.pool-quote .qb{display:none}
 .slogan-break{display:none}
 .identity{background:#f7f9fa}
 .identity-head .eyebrow{margin-bottom:22px}
@@ -383,7 +385,7 @@ body>nav{animation:nav-arrive .55s .04s both cubic-bezier(.22,1,.36,1)}
   .story-piece.second{margin-top:80px}
   .story-piece.third{margin-top:-80px}
   .pool-layout{gap:6%}
-  .pool-copy p{font-size:16px}
+  .pool-copy p,.pool-quote p{font-size:16px}
   .toy{gap:40px}
   .toy-thumbs img{height:130px}
 }
@@ -421,7 +423,9 @@ body>nav{animation:nav-arrive .55s .04s both cubic-bezier(.22,1,.36,1)}
   .pool-art{width:85%;margin:0 auto}
   .membership{width:52%;right:-7%}
   .pool-quote{margin-top:50px;padding-top:40px}
-  .pool-quote h2{font-size:42px}
+  .pool-quote h2{font-size:34px}
+  .pool-quote .qb{display:block}   /* 긴 두 문장을 쉼표·'너그럽게' 뒤에서 나눈다 */
+  html[lang="en"] .pool-quote p br{display:none}   /* 영문은 이어 쓴다(세 문장이 각각 꺾여 들쭉날쭉해지는 것보다 낫다) */
   .slogan-break{display:block}
   .identity-subtitle{font-size:16px}
   /* 폰: 두 영역을 세로로 쌓고, 각 영역 안에서 이름과 그림을 한 줄에 나란히 둔 뒤 설명은 아래로 */
@@ -482,10 +486,9 @@ html[lang="en"]{--en-head:.478;--en-sub:.50;--en-lede:.505;--en-body:.516}
 html[lang="en"] :is(.section-top h2,.pool-quote h2,.pool-copy h2,#licensing h2,.identity-head h2,.toy-heading h2,.friends-top h2,.delivery-meaning p){font-size-adjust:var(--en-head)}
 html[lang="en"] :is(.story-piece .caption h3,#members .member h3){font-size-adjust:var(--en-sub)}
 html[lang="en"] :is(.friends-lead,.hero-note p){font-size-adjust:var(--en-lede)}
-html[lang="en"] :is(.story-piece .caption p,.pool-copy p,.identity-subtitle,.toy-heading p,.friends-top p:not(.friends-lead),#licensing>p,.toy-spec p,#members .member p,.contact-link>span,.scroll-link>span,.profile-open>span){font-size-adjust:var(--en-body)}
+html[lang="en"] :is(.story-piece .caption p,.pool-copy p,.pool-quote p,.identity-subtitle,.toy-heading p,.friends-top p:not(.friends-lead),#licensing>p,.toy-spec p,#members .member p,.contact-link>span,.scroll-link>span,.profile-open>span){font-size-adjust:var(--en-body)}
 /* 자간(em)은 원래 크기 기준이라 글자가 작아진 만큼 빽빽해 보인다 — 같은 비율로 풀어 준다(×0.88) */
 html[lang="en"] h2{letter-spacing:-.048em}
-html[lang="en"] .pool-quote h2{letter-spacing:-.057em}
 html[lang="en"] .delivery-meaning p{letter-spacing:-.035em}
 /* ---------- 숲길(작가 2026-10-18) — Story 와 02 MORNING SWIMMING 사이. 수영을 못 배워 약속 장소까지 걸어가는 장면 ----------
    동화책 그림 그대로(그림 속 글씨·FAIRYTALE 만 같은 배경색으로 덮어 HTML 로 뺐다). 글씨는 위 '조개와 함께…'와 같은 글꼴·굵기.
