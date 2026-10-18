@@ -497,7 +497,6 @@ html[lang="en"] .delivery-meaning p{letter-spacing:-.035em}
 .forest-copy{position:relative;z-index:1;max-width:min(880px,70%)}   /* 영문 둘째 줄까지 한 줄에(그림 위쪽은 빈 초록이라 넓혀도 길·얼빵해달과 안 겹친다) */
 .forest-copy p{font-size:clamp(23px,2.7vw,38px);line-height:1.6;font-weight:600;letter-spacing:-.04em;text-wrap:pretty}
 .forest-art{position:absolute;right:0;bottom:0;height:100%;width:auto;max-width:none}
-.motion-ready .forest-art.reveal{transition-delay:.18s}   /* 글 다음에 숲길·얼빵해달이 살짝 떠오른다(그림의 초록은 띠와 같아 길과 얼빵해달만 움직여 보인다) */
 @media(max-width:850px){
   .forest{min-height:0}
   .forest-copy{max-width:none}
@@ -506,3 +505,15 @@ html[lang="en"] .delivery-meaning p{letter-spacing:-.035em}
 }
 html[lang="en"] .forest-copy p{font-size-adjust:var(--en-head);letter-spacing:-.035em}
 @media(max-width:600px){html[lang="en"] .forest-copy br{display:none}}   /* 좁은 폰에서는 영문 세 줄이 각각 두 줄로 갈라져 여섯 줄이 된다 — 이어 써서 네 줄로 */
+/* 걷는 얼빵해달(작가 2026-10-18): 그림 한 장을 층 넷으로 — 얼빵해달이 빠진 숲길 · 얼빵해달 · '뽀송뽀송' · '꼬질꼬질'.
+   자리는 1440 그림 기준(멈춘 자리 = 원래 그림). 발끝(50% 98%)을 축으로 기우뚱. 글씨 둘은 멈춘 뒤 톡(움직임 줄이기면 처음부터 보임) */
+.forest-art{aspect-ratio:1/1}
+.forest-art img{position:absolute;display:block;max-width:none;height:auto}
+.forest-art .fa-path{left:0;top:0;width:100%;height:100%}
+.fa-otter{left:42.778%;top:46.111%;width:27.153%;transform-origin:50% 98%;will-change:transform}
+.fa-fluffy{left:42.222%;top:66.597%;width:5.764%}
+.fa-grubby{left:65.000%;top:84.583%;width:6.319%}
+.fa-tag{transition:opacity .32s cubic-bezier(.22,1,.36,1),transform .32s cubic-bezier(.22,1,.36,1)}
+.walk-ready .fa-tag{opacity:0;transform:scale(.6)}
+.walk-ready .fa-tag.on{opacity:1;transform:none}
+@media(max-width:850px){.forest-art{margin-top:-16vw}}   /* 폰: 걷기 시작 자리(길 위쪽)가 글 끝줄과 닿지 않게 그림을 덜 당긴다(가만히 있는 그림은 -24vw) */

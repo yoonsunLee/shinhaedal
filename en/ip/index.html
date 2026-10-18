@@ -23,7 +23,7 @@
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <link rel="preload" href="../assets/fonts.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="../assets/fonts.css"></noscript>
-<link rel="stylesheet" href="ip-story.css?v=20261018b">
+<link rel="stylesheet" href="ip-story.css?v=20261018c">
 <script src="/assets/ip-otter-wall.js"></script>
 </head>
 <body>
@@ -150,7 +150,12 @@
   <div class="forest-copy reveal">
     <p data-i="forest_p">While the other sea otters were learning to swim, <br>Spaced-out Sea Otter zoned out and never learned how. <br>Now it’s walking all the way to the meeting place.</p>
   </div>
-  <img class="forest-art reveal" src="assets/forest-walk-1440.webp" srcset="assets/forest-walk-960.webp 960w, assets/forest-walk-1440.webp 1440w" sizes="(max-width:850px) 100vw, min(60vw, 880px)" width="1440" height="1440" alt="Spaced-out Sea Otter, a little grubby, walking along a forest path" data-i-alt="alt_forest" loading="lazy" decoding="async">
+  <div class="forest-art" role="img" aria-label="Spaced-out Sea Otter, a little grubby, walking along a forest path" data-i-aria="alt_forest">
+    <img class="fa-path" src="assets/forest-path-1440.webp" srcset="assets/forest-path-960.webp 960w, assets/forest-path-1440.webp 1440w" sizes="(max-width:850px) 100vw, min(60vw, 880px)" width="1440" height="1440" alt="" loading="lazy" decoding="async">
+    <img class="fa-otter" src="assets/forest-otter.webp" width="391" height="563" alt="" loading="lazy" decoding="async">
+    <img class="fa-tag fa-fluffy" src="assets/forest-tag-fluffy.webp" width="83" height="55" alt="" loading="lazy" decoding="async">
+    <img class="fa-tag fa-grubby" src="assets/forest-tag-grubby.webp" width="91" height="51" alt="" loading="lazy" decoding="async">
+  </div>
 </section>
 
 <section class="pool section" id="pool">
@@ -502,6 +507,7 @@ document.getElementById('langEn').onclick=()=>applyLang('en');
 })();
 </script>
 <script src="ip-story.js?v=20261012"></script>
+<script src="forest-walk.js?v=20261018"></script>
 <script src="../assets/nav-glide.js"></script>
 <script src="../assets/stats.js"></script>
 <script src="../assets/lang.js"></script>
