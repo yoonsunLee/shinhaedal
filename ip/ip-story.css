@@ -488,3 +488,21 @@ html[lang="en"] :is(.story-piece .caption p,.pool-copy p,.identity-subtitle,.toy
 html[lang="en"] h2{letter-spacing:-.048em}
 html[lang="en"] .pool-quote h2{letter-spacing:-.057em}
 html[lang="en"] .delivery-meaning p{letter-spacing:-.035em}
+/* ---------- 숲길(작가 2026-10-18) — Story 와 02 MORNING SWIMMING 사이. 수영을 못 배워 약속 장소까지 걸어가는 장면 ----------
+   동화책 그림 그대로(그림 속 글씨·FAIRYTALE 만 같은 배경색으로 덮어 HTML 로 뺐다). 글씨는 위 '조개와 함께…'와 같은 글꼴·굵기.
+   초록은 그림의 배경과 같은 값(WebP 로 읽힌 85,169,31)이라 그림 경계가 보이지 않는다 */
+/* A 숲길 띠: 그림을 오른쪽 아래에 붙인다 — 숲길이 그림의 오른쪽·아래 끝에서 끝나므로, 화면 끝에 맞춰야 길이 끊겨 보이지 않는다.
+   그림 위쪽 1/3 은 빈 초록이라 글씨가 그 자리에 앉는다(슬라이드와 같은 배치). 폰에서는 글씨 아래로 그림을 화면 끝까지 */
+.forest{position:relative;overflow:hidden;background:#55a91f;color:#fff;min-height:clamp(560px,60vw,880px);padding-bottom:0}
+.forest-copy{position:relative;z-index:1;max-width:min(880px,70%)}   /* 영문 둘째 줄까지 한 줄에(그림 위쪽은 빈 초록이라 넓혀도 길·얼빵해달과 안 겹친다) */
+.forest-copy p{font-size:clamp(23px,2.7vw,38px);line-height:1.6;font-weight:600;letter-spacing:-.04em;text-wrap:pretty}
+.forest-art{position:absolute;right:0;bottom:0;height:100%;width:auto;max-width:none}
+.motion-ready .forest-art.reveal{transition-delay:.18s}   /* 글 다음에 숲길·얼빵해달이 살짝 떠오른다(그림의 초록은 띠와 같아 길과 얼빵해달만 움직여 보인다) */
+@media(max-width:850px){
+  .forest{min-height:0}
+  .forest-copy{max-width:none}
+  .forest-copy p{font-size:clamp(17px,4.7vw,23px)}   /* 슬라이드의 세 줄을 그대로 — 390px 폰에서 셋째 줄이 한 줄에 들어가는 크기 */
+  .forest-art{position:relative;display:block;height:auto;width:100vw;margin:-24vw 0 0 calc(50% - 50vw)}   /* 그림 위 1/4 은 빈 초록 — 글씨 밑으로 당겨 붙인다 */
+}
+html[lang="en"] .forest-copy p{font-size-adjust:var(--en-head);letter-spacing:-.035em}
+@media(max-width:600px){html[lang="en"] .forest-copy br{display:none}}   /* 좁은 폰에서는 영문 세 줄이 각각 두 줄로 갈라져 여섯 줄이 된다 — 이어 써서 네 줄로 */
