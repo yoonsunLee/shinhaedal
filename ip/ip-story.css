@@ -177,7 +177,6 @@ html:not([lang="en"]) .hero h1{word-spacing:-.05em}
 .membership{position:absolute;width:46%;right:-5%;bottom:-8px;transform:rotate(9deg);filter:drop-shadow(0 18px 22px #042f7a45)}
 .pool-quote{text-align:center;margin-top:100px;padding-top:65px;border-top:1px solid #ffffff40}
 .pool-quote h2{font-size:clamp(40px,7vw,100px);line-height:1.2;letter-spacing:-.065em;color:#eff7ff}
-.pool-quote span{font:12px 'Space Mono',monospace;letter-spacing:.18em;display:block;margin-top:28px}
 .slogan-break{display:none}
 .identity{background:#f7f9fa}
 .identity-head .eyebrow{margin-bottom:22px}
