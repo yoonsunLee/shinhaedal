@@ -517,3 +517,12 @@ html[lang="en"] .forest-copy p{font-size-adjust:var(--en-head);letter-spacing:-.
 .walk-ready .fa-tag{opacity:0;transform:scale(.6)}
 .walk-ready .fa-tag.on{opacity:1;transform:none}
 @media(max-width:850px){.forest-art{margin-top:-16vw}}   /* 폰: 걷기 시작 자리(길 위쪽)가 글 끝줄과 닿지 않게 그림을 덜 당긴다(가만히 있는 그림은 -24vw) */
+/* 헤엄쳐 올라오는 얼빵해달(작가 2026-10-18): 수영장 그림은 원래 파일 그대로, 헤엄치는 동안만 원래 얼빵해달 자리를 파란 조각(sw-cover)으로 덮고
+   떼어 낸 얼빵해달(sw-otter, 둘레 물결 포함)을 옮긴다. 멈추면 둘 다 치워 원래 그림 그대로(.swim-live 가 없을 때).
+   칸 밖으로 나가지 않게 overflow:hidden(그림자는 칸 자신의 것이라 잘리지 않는다). 몸통(50% 45%)을 축으로 기우뚱 */
+.swim-image{position:relative;overflow:hidden}
+.swim-image .sw-pool{display:block;width:100%;height:auto}
+.swim-image .sw-cover,.swim-image .sw-otter{position:absolute;display:none;max-width:none;height:auto}
+.swim-image.swim-live .sw-cover,.swim-image.swim-live .sw-otter{display:block}
+.swim-image .sw-cover{left:31.021%;top:28.230%;width:38.038%}
+.swim-image .sw-otter{left:31.340%;top:28.549%;width:37.400%;transform-origin:50% 45%;will-change:transform}
