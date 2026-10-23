@@ -1,11 +1,11 @@
 /* 스크롤 연출 b(시안, 작가 2026-10-23): 문장이 스크롤 따라 한 단어씩 밝아진다(애플 제품 페이지처럼).
-   페이지 중간의 짧은 문장에만 — About '쉽게 들어와서 오래 머무는 작업…', IP '처음부터 능숙한 존재는 없습니다…'.
+   페이지 중간의 짧은 문장에만 — About '쉽게 들어와서 오래 머무는 작업…', IP '처음부터 능숙한 존재는 없습니다…'·'조개와 함께, 사랑·응원·위로를 배달해요.'
    문단 윗변이 화면 맨 아래(95%)에 들어오면 시작해, 문단 아랫변이 화면 아래쪽 80%에 오면 다 밝아진다
    (10/23 작가 '문제 있다' — 가운데까지 내려야 밝아져 폰에서 다 보이는데도 흐린 글로 남았다). 멈추면 그 자리에 선다. 페이지 끝이면 다 밝힌다.
    언어를 바꿔 글이 새로 들어오면 다시 나눈다. 움직임 줄이기면 하지 않는다. */
 (function(){
   if(!window.matchMedia || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var SEL = '.ab-note-hook, .pool-quote p';
+  var SEL = '.ab-note-hook, .pool-quote p, .delivery-meaning p';   // IP '조개와 함께…' 도(10/23 IP 움직임 맞추기 — 두 마무리 문장을 같게)
   var on = function(){ var d = document.documentElement.dataset.sfx; return d === undefined || /\bb\b/.test(d); };
   var els = [].slice.call(document.querySelectorAll(SEL)), raf = 0;
   if(!els.length) return;

@@ -41,8 +41,10 @@
       };
       requestAnimationFrame(frame);
     };
+    // 숲길 그림이 다 나타난 뒤(ip-motion.js 올라오기, 2026-10-23) 걷기 시작 — 수영장과 같은 순서. 최대 1.6초
+    var whenShown = function(cb){ var t0 = performance.now(); (function chk(){ if(parseFloat(getComputedStyle(art).opacity) > 0.98 || performance.now() - t0 > 1600) cb(); else requestAnimationFrame(chk); })(); };
     var io = new IntersectionObserver(function(es){
-      es.forEach(function(e){ if(e.isIntersecting){ io.disconnect(); run(); } });
+      es.forEach(function(e){ if(e.isIntersecting){ io.disconnect(); whenShown(run); } });
     }, {threshold: 0.6});
     io.observe(otter);
     window.__forestWalkReplay = function(){ if(running) return; hideTags(); pose(0); setTimeout(run, 450); };

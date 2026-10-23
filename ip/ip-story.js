@@ -2,8 +2,7 @@
 const body=document.body;
 if(!matchMedia('(prefers-reduced-motion: reduce)').matches) body.classList.add('motion-ready');
 
-const observer=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('seen');observer.unobserve(e.target)}}),{threshold:.08});
-document.querySelectorAll('.reveal').forEach(e=>observer.observe(e));
+// 들어올 때 올라오기는 ip-motion.js(2026-10-23 — 예전 .reveal 덩어리째 .seen 은 뺐다)
 
 let queued=false;
 function update(){queued=false;let y=Math.min(scrollY,900);body.style.setProperty('--shore-y',y*.025+'px');body.style.setProperty('--char-y',y*.035+'px')}

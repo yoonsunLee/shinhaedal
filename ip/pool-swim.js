@@ -51,7 +51,7 @@
   var whenShown = function(cb){
     var t0 = performance.now();
     (function chk(){
-      var shown = !art || (art.classList.contains('seen') && parseFloat(getComputedStyle(art).opacity) > 0.98);
+      var shown = parseFloat(getComputedStyle(box).opacity) > 0.98 && (!art || parseFloat(getComputedStyle(art).opacity) > 0.98);   // 올라오기는 그림 칸마다(ip-motion.js)
       if(shown || performance.now() - t0 > 1600) cb(); else requestAnimationFrame(chk);
     })();
   };

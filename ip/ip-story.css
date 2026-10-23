@@ -361,8 +361,29 @@ html:has(#viewer[open]){overscroll-behavior-x:none}
   #viewer #viewer-image{height:calc(100% - 45px - 56px)}
 }
 .reveal{opacity:1;transform:none}
-.motion-ready .reveal:not(.seen){opacity:0;transform:translateY(28px)}
-.motion-ready .reveal{transition:opacity .8s var(--e-io),transform .8s var(--e-out)}
+/* 들어올 때 올라오기(2026-10-23 IP 움직임 맞추기, ip-motion.js) — 사이트 다른 페이지처럼 항목마다 0.6초·16px·살짝 흐림, 같이 들어온 것끼리 70ms 씩.
+   글은 화면 안쪽에서 24px·0.8초(사이트 공통 박자로는 화면 끝에서 끝나 움직임이 안 보였다). 움직임은 translate 로 — 회원증 기울기(transform)와 겹치지 않게.
+   예전: 덩어리(.reveal)째 0.8초·28px — 덩어리 아래쪽 글은 화면에 들어오기 전에 이미 다 나타났다 */
+.ipu-ready :is(.reveal, .toy-bottom) > :not(.ipu-in), .ipu-ready .member:not(.ipu-in), .ipu-ready .forest-art:not(.ipu-in){opacity:0}
+.ipu-ready :is(.reveal, .toy-bottom) > .ipu-in, .ipu-ready .member.ipu-in, .ipu-ready .forest-art.ipu-in{animation:ipu-rise .6s var(--e-out) var(--ipu-d, 0ms) both}
+.ipu-ready .ipu-txt.ipu-in{animation-name:ipu-rise-txt;animation-duration:.8s}
+.ipu-ready .reveal > .membership.ipu-in{animation-name:ipu-rise-nb}   /* 자기 그림자(filter)가 있어 흐림은 빼고 */
+@keyframes ipu-rise{from{opacity:0;translate:0 16px;filter:blur(2px)}}
+@keyframes ipu-rise-txt{from{opacity:0;translate:0 24px;filter:blur(2px)}}
+@keyframes ipu-rise-nb{from{opacity:0;translate:0 16px}}
+/* 아트토이 사진 창(ip-motion.js): 바탕은 옅게 깔리고 사진은 누른 칸에서 날아오며, 단추·줄은 살짝 늦게. 닫을 때는 거꾸로 */
+#viewer.ipu-open{animation:ipu-bg .32s var(--e-io) both}
+#viewer.ipu-open::backdrop{animation:ipu-fade .32s var(--e-io) both}
+#viewer.ipu-open > :not(#viewer-image):not(.ipu-fly){animation:ipu-fade .3s .12s var(--e-io) both}
+#viewer.ipu-closing{animation:ipu-bg-out .3s var(--e-in) both}
+#viewer.ipu-closing::backdrop{animation:ipu-fade-out .3s var(--e-in) both}
+#viewer.ipu-closing > :not(.ipu-fly){animation:ipu-fade-out .16s var(--e-in) both}
+@keyframes ipu-fade{from{opacity:0}}
+@keyframes ipu-fade-out{to{opacity:0}}
+@keyframes ipu-bg{from{background-color:transparent}}
+@keyframes ipu-bg-out{to{background-color:transparent}}
+#viewer .ipu-fly{position:fixed;margin:0;padding:0;max-width:none;pointer-events:none;transform-origin:0 0;will-change:transform;object-fit:fill}
+#viewer .ipu-ghost{position:absolute;margin:0;max-width:none;pointer-events:none;object-fit:contain}
 @keyframes arrive{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
 /* 상단 메뉴도 함께 들어온다. 이 페이지의 메뉴는 다른 페이지와 글자색이 아예 달라서(아이보리 → 진한 청록)
    막으로 덮을 수밖에 없는데, 덮고 난 뒤 혼자만 완성된 채로 나타나 튀어 보였다(작가 지적).
@@ -467,7 +488,6 @@ body>nav{animation:nav-arrive .55s .04s both cubic-bezier(.22,1,.36,1)}
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation:none!important;transition:none!important}
-  .motion-ready .reveal:not(.seen){opacity:1;transform:none}
   .beach,.hero-character{transform:none!important}
 }
 /* 본문 건너뛰기 — IP 페이지는 site.css 를 쓰지 않아 여기에도 둔다 */
