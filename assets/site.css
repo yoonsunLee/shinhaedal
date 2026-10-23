@@ -281,4 +281,4 @@ html[lang="en"] .statement{line-height:1;}
 }}
 @keyframes sfx-recede{to{transform:scale(.94); opacity:.45;}}
 @keyframes sfx-lift{to{transform:translateY(-36px); opacity:0;}}
-@keyframes sfx-depth{from{transform:translateY(32px);} to{transform:translateY(-32px);}}
+@keyframes sfx-depth{from{translate:0 32px;} to{translate:0 -32px;}}   /* transform 대신 translate — 떠오르기(reveal·올라오기)의 transform 과 겹쳐도 서로 덮지 않는다(10/23) */
