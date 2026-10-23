@@ -1,0 +1,13 @@
+/* Artist-approved speech bubble. Its anchor stays still while the otter tilts. */
+.hero-character-trigger{display:block;position:relative;width:100%;padding:0;border:0;border-radius:45%;background:transparent;line-height:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.hero-character-trigger:focus-visible{outline:2px solid #476fd0;outline-offset:8px}
+.hero-speech-position{position:absolute;z-index:3;width:210px;height:112px;right:calc(100% - 19px);top:20px;transform:rotate(-5deg);pointer-events:none}
+.hero-speech-position[hidden]{display:none}
+.hero-speech{position:relative;width:100%;height:100%;transform-origin:96% 77%;filter:drop-shadow(0 5px 5px #58452d12)}
+.hero-speech svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.hero-speech-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:0 25px 5px 10px;font-size:18px;font-weight:500;letter-spacing:-.7px;line-height:1.5;text-align:center;color:#284c60;white-space:nowrap}
+html[lang="en"] .hero-speech-text{font-size:17px;letter-spacing:0}
+@media(min-width:1250px){.hero-speech-position{top:12%}}
+@media(max-width:850px){.hero-speech-position{width:190px;height:102px;right:calc(100% - 10px);top:5px}.hero-speech-text{font-size:17px}}
+@media(min-width:461px) and (max-width:580px){.hero-speech-position{width:182px;height:97px;right:calc(100% - 16px);top:26%}}
+@media(max-width:460px){.hero-speech-position{width:182px;height:97px;right:20%;top:-87px;transform:rotate(-6deg)}}

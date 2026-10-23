@@ -24,6 +24,7 @@
 <link rel="preload" href="../assets/fonts.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="../assets/fonts.css"></noscript>
 <link rel="stylesheet" href="ip-story.css?v=20261023d">
+<link rel="stylesheet" href="hero-bubble.css?v=20261023">
 <script src="/assets/ip-otter-wall.js"></script>
 </head>
 <body>
@@ -84,8 +85,16 @@
     <h1>SPACED-OUT<br>SEA OTTER</h1>
     <p class="hero-name" data-i="hero_name">Eolbbang Haedal (얼빵해달)</p>
     <div class="hero-character">
-      <img src="assets/hero_face.webp" alt="Spaced-out Sea Otter holding a shell" data-i-alt="alt_hero" fetchpriority="high">
-      <span class="character-shadow"></span>
+      <button type="button" class="hero-character-trigger" aria-label="Talk to Spaced-out Sea Otter" data-i-aria="hero_bubble_label" aria-expanded="false" aria-controls="heroSpeech" aria-describedby="heroSpeech">
+        <img src="assets/hero_face.webp" alt="Spaced-out Sea Otter holding a shell" data-i-alt="alt_hero" fetchpriority="high">
+      </button>
+      <span class="character-shadow" aria-hidden="true"></span>
+      <div class="hero-speech-position" id="heroSpeech" role="tooltip" hidden>
+        <div class="hero-speech">
+          <svg viewBox="0 0 210 112" aria-hidden="true"><path d="M19 18C37 7 91 4 134 11C166 16 181 30 179 52C178 61 177 67 174 72Q184 83 203 86Q181 92 165 84C148 99 110 101 70 96C29 92 9 80 8 56C7 38 10 25 19 18Z" fill="#fffdf6" stroke="#687d842e" stroke-width="1.1"/></svg>
+          <span class="hero-speech-text"><span data-i="hero_bubble">Did you<br>call me?</span></span>
+        </div>
+      </div>
     </div>
     <div class="hero-note"><p data-i="hero_note"><span style="white-space:nowrap">Spaced-out</span> <span style="white-space:nowrap">Sea Otter</span> works as a Shell Delivery Worker in modern society.<br>But there’s one problem: even though it’s a sea otter, it can’t swim.</p></div>
     <div class="hero-actions">
@@ -303,6 +312,8 @@
 const I18N = {
   ko: {
     hero_name:'얼빵해달',
+    hero_bubble:'저를<br>부르셨나요?',
+    hero_bubble_label:'얼빵해달에게 말 걸기',
     hero_note:'얼빵해달은 현대사회에 <span style="white-space:nowrap">살고 있는 조개배달부다.</span><br>그런데 해달이면서 수영을 못 한다.',
     hero_scroll:'얼빵해달의 이야기',
     s1_h2:'조개를 줍고,<br>작가님에게 건네요.',
@@ -362,6 +373,8 @@ const I18N = {
   },
   en: {
     hero_name:'Eolbbang Haedal (얼빵해달)',
+    hero_bubble:'Did you<br>call me?',
+    hero_bubble_label:'Talk to Spaced-out Sea Otter',
     hero_note:'<span style="white-space:nowrap">Spaced-out</span> <span style="white-space:nowrap">Sea Otter</span> works as a Shell Delivery Worker in modern society.<br>But there’s one problem: even though it’s a sea otter, it can’t swim.',
     hero_scroll:'THE STORY',
     s1_h2:'A shell from the shore.<br>A delivery to the artist.',
@@ -509,6 +522,7 @@ document.getElementById('langEn').onclick=()=>applyLang('en');
 })();
 </script>
 <script src="ip-story.js?v=20261023b"></script>
+<script src="hero-bubble.js?v=20261023"></script>
 <script src="ip-motion.js?v=20261023"></script>
 <script src="forest-walk.js?v=20261023"></script>
 <script src="pool-swim.js?v=20261023"></script>
