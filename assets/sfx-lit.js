@@ -1,6 +1,7 @@
 /* 스크롤 연출 b(시안, 작가 2026-10-23): 문장이 스크롤 따라 한 단어씩 밝아진다(애플 제품 페이지처럼).
    페이지 중간의 짧은 문장에만 — About '쉽게 들어와서 오래 머무는 작업…', IP '처음부터 능숙한 존재는 없습니다…'.
-   문단 윗변이 화면 아래쪽(85%)에 오면 시작해 문단이 화면 가운데를 지나면 다 밝아진다. 멈추면 그 자리에 선다. 페이지 끝이면 다 밝힌다.
+   문단 윗변이 화면 맨 아래(95%)에 들어오면 시작해, 문단 아랫변이 화면 아래쪽 80%에 오면 다 밝아진다
+   (10/23 작가 '문제 있다' — 가운데까지 내려야 밝아져 폰에서 다 보이는데도 흐린 글로 남았다). 멈추면 그 자리에 선다. 페이지 끝이면 다 밝힌다.
    언어를 바꿔 글이 새로 들어오면 다시 나눈다. 움직임 줄이기면 하지 않는다. */
 (function(){
   if(!window.matchMedia || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -33,11 +34,11 @@
       if(!on()){ clear(el); return; }
       var r = el.getBoundingClientRect();
       if(r.bottom < -80 || r.top > vh + 80) return;
-      var p = end ? 1 : Math.max(0, Math.min(1, (vh * 0.85 - r.top) / (vh * 0.4 + r.height)));
+      var p = end ? 1 : Math.max(0, Math.min(1, (vh * 0.95 - r.top) / (vh * 0.15 + r.height)));
       if(Math.abs(p - el.__last) < 0.002) return;
       el.__last = p;
       var N = el.__w.length;
-      el.__w.forEach(function(s, i){ var k = Math.max(0, Math.min(1, p * (N + 2) - i)); s.style.opacity = (0.2 + 0.8 * k).toFixed(3); });
+      el.__w.forEach(function(s, i){ var k = Math.max(0, Math.min(1, p * (N + 2) - i)); s.style.opacity = (0.35 + 0.65 * k).toFixed(3); });
     });
   }
   els.forEach(function(el){
