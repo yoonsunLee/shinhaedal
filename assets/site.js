@@ -49,6 +49,75 @@
       e.preventDefault(); first.focus();
     }
   });
+  /* 폰: 패널을 오른쪽으로 밀어 닫기(작가 2026-10-23, 아이폰처럼). 손을 따라오다가 폭의 30% 넘게 밀었거나 빠르게 던지면 닫히고,
+     아니면 스프링으로 제자리. 위아래로 끌면 원래대로 패널 안 스크롤 */
+  var drag = null;
+  ov.addEventListener('touchstart', function(e){
+    if(!ov.classList.contains('open') || e.touches.length !== 1) return;
+    if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var t = e.touches[0];
+    drag = {x0: t.clientX, y0: t.clientY, dx: 0, mode: null, pts: [[t.clientX, performance.now()]]};
+  }, {passive: true});
+  ov.addEventListener('touchmove', function(e){
+    if(!drag) return;
+    var t = e.touches[0], dx = t.clientX - drag.x0, dy = t.clientY - drag.y0;
+    if(!drag.mode){
+      if(Math.hypot(dx, dy) < 8) return;
+      if(dx > 0 && Math.abs(dx) > Math.abs(dy) * 1.2){ drag.mode = 'h'; ov.style.transition = 'none'; }
+      else { drag = null; return; }
+    }
+    e.preventDefault();
+    drag.dx = Math.max(0, dx);
+    drag.pts.push([t.clientX, performance.now()]); if(drag.pts.length > 6) drag.pts.shift();
+    ov.style.transform = 'translateX(' + drag.dx + 'px)';
+    if(backdrop) backdrop.style.opacity = String(Math.max(0, 1 - drag.dx / ov.offsetWidth));
+  }, {passive: false});
+  function endDrag(){
+    if(!drag) return;
+    var d = drag; drag = null;
+    if(!d.mode) return;
+    var a = d.pts[0], b = d.pts[d.pts.length - 1], v = (b[0] - a[0]) / Math.max(1, b[1] - a[1]);
+    ov.style.transition = ''; ov.style.transform = '';
+    if(backdrop) backdrop.style.opacity = '';
+    if(d.dx > ov.offsetWidth * 0.3 || v > 0.4) closeMenu();          // 지금 자리에서 닫힘 곡선으로 이어서 물러난다
+    else ov.animate([{transform: 'translateX(' + d.dx + 'px)'}, {transform: 'translateX(0)'}], {duration: 380, easing: 'cubic-bezier(.32,.72,0,1)'});
+  }
+  ov.addEventListener('touchend', endDrag);
+  ov.addEventListener('touchcancel', endDrag);
+})();
+
+/* 누를 때 반응(작가 2026-10-23, 아이폰처럼): 손가락으로 누르는 순간 모양 있는 단추·작품 칸은 97%로 살짝 눌리고,
+   글자 링크는 옅어진다. 떼면 스프링으로 돌아온다. 누른 채 스크롤하면(10px 넘게 움직이면) 바로 풀린다.
+   transform 대신 scale 속성을 써서 단추가 원래 가진 위치 옮김(translate)과 겹치지 않는다. 마우스·움직임 줄이기에서는 하지 않는다 */
+(function(){
+  if(!document.body || !document.body.animate) return;
+  var SHAPED = '.tile, .wm-action-btn, .wm-nav, .wm-close, .wm-rail-item, .wm-series-item, .wm-ex-toggle, .lv-zbtn, .icon-btn, .cf-submit, .press-row, .ex-poster-link, .ex-go, .ex-works-link, .ip-teaser';
+  var TEXT = '.link-go, .link-sub, .nav-menu a, .overlay-links a, footer a, .lang button, .press-link, .copy-btn, .wm-video-extlink';
+  var SPRING = 'cubic-bezier(.32,.72,0,1)';
+  try{ if(CSS.supports('animation-timing-function', 'linear(0, 1)')) SPRING = 'linear(0, 0.18, 0.5, 0.76, 0.92, 1.01, 1.03, 1.02, 1.005, 1)'; }catch(e){}
+  var held = null;
+  function release(){
+    if(!held) return;
+    var h = held; held = null;
+    h.a.pause();
+    var cur = getComputedStyle(h.el)[h.prop];
+    h.a.cancel();
+    h.el.animate([{[h.prop]: cur}, {[h.prop]: '1'}], {duration: h.prop === 'scale' ? 460 : 260, easing: h.prop === 'scale' ? SPRING : 'cubic-bezier(.22,1,.36,1)'});
+  }
+  document.addEventListener('touchstart', function(e){
+    if(e.touches.length !== 1 || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
+    var el = e.target.closest && e.target.closest(SHAPED + ',' + TEXT);
+    if(!el || el.disabled) return;
+    release();
+    var shaped = el.matches(SHAPED), prop = shaped ? 'scale' : 'opacity';
+    var a = el.animate([{[prop]: '1'}, {[prop]: shaped ? '0.97' : '0.5'}], {duration: shaped ? 110 : 90, easing: 'cubic-bezier(.3,.6,.4,1)', fill: 'forwards'});
+    held = {el: el, a: a, prop: prop, x: e.touches[0].clientX, y: e.touches[0].clientY};
+  }, {passive: true});
+  document.addEventListener('touchmove', function(e){
+    if(held && Math.hypot(e.touches[0].clientX - held.x, e.touches[0].clientY - held.y) > 10) release();
+  }, {passive: true});
+  document.addEventListener('touchend', release, {passive: true});
+  document.addEventListener('touchcancel', release, {passive: true});
 })();
 
 /* 작품 이미지 외 일반 이미지(작가 사진 등)의 우클릭 저장 방지. 드래그 저장은 site.css의

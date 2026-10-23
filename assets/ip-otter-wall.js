@@ -144,7 +144,7 @@
       var bg = beachCanvas(W, H, a[2]);
       bg.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:0';
       w.root.insertBefore(bg, w.root.firstChild);
-      bg.animate([{opacity: 0}, {opacity: 1}], {duration: q ? 350 : 650, delay: q ? 40 : v === 'C' ? 60 : 120, easing: 'ease-out', fill: 'forwards'});
+      bg.animate([{opacity: 0}, {opacity: 1}], {duration: q ? 350 : 650, delay: q ? 40 : v === 'C' ? 60 : 120, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'forwards'});
       var dur = q ? 240 : v === 'B' ? 340 : 400, end = 0;
       w.imgs.forEach(function(im, i){
         var o = list[i]; end = Math.max(end, o.d + dur);

@@ -1,3 +1,10 @@
+/* 움직임 박자(작가 2026-10-23, '애플처럼 어디를 눌러도 같은 느낌'): 움직임·나타남 / 색·투명도 / 물러남. 바꾸는 도구 _점검도구/motion/apple/unify_easing.py */
+:root{--e-out:cubic-bezier(.22,1,.36,1); --e-io:cubic-bezier(.45,0,.55,1); --e-in:cubic-bezier(.4,0,1,1);}
+/* 본문 글꼴이 오기 전 잠깐 쓰는 대기 글꼴(작가 2026-10-23 — 글꼴이 바뀌며 줄 수가 달라져 화면이 밀리지 않게).
+   본문 글꼴(Noto Sans KR)은 한글 폭이 0.92em, 시스템 한글 글꼴(애플 산돌고딕·맑은 고딕·안드로이드 Noto CJK)은 1em 이라 92%로 맞춘다.
+   위아래 여백도 본문 글꼴(1.16/0.288em)에 맞춘다(÷0.92 — 메뉴처럼 줄 높이가 글꼴 따라 정해지는 곳이 1~4px 출렁이지 않게) */
+@font-face{font-family:'Noto Sans KR Fallback'; font-weight:400; src:local('Apple SD Gothic Neo'),local('AppleSDGothicNeo-Regular'),local('Malgun Gothic'),local('Noto Sans CJK KR'),local('NotoSansCJKkr-Regular'); size-adjust:92%; ascent-override:126%; descent-override:31.3%; line-gap-override:0%;}
+@font-face{font-family:'Noto Sans KR Fallback'; font-weight:700; src:local('Apple SD Gothic Neo Bold'),local('AppleSDGothicNeo-Bold'),local('Malgun Gothic Bold'),local('MalgunGothicBold'),local('Noto Sans CJK KR Bold'),local('NotoSansCJKkr-Bold'); size-adjust:92%; ascent-override:126%; descent-override:31.3%; line-gap-override:0%;}
 /* 공통 색상 변수 / 기본 리셋 / 접근성 / 상단 네비게이션
    index, works, about, press, contact 5개 페이지에서 공유합니다.
    Haedal 페이지는 구조가 달라 별도 인라인 스타일을 유지합니다. */
@@ -32,7 +39,7 @@ body{
   margin:0;
   background:var(--bg);
   color:var(--ivory);
-  font-family:'Noto Sans KR', sans-serif;
+  font-family:'Noto Sans KR','Noto Sans KR Fallback', sans-serif;
   -webkit-font-smoothing:antialiased;
   word-break:keep-all;
   -webkit-user-select:none; -moz-user-select:none; user-select:none;
@@ -51,18 +58,21 @@ nav{
 .logo-block{display:grid; grid-template-columns:auto 1fr; row-gap:1px;}
 .logo{display:contents; text-decoration:none;}
 .logo-c, .logo-name{font-family:'Black Han Sans', sans-serif; font-size:20px; letter-spacing:1px; color:var(--ivory); line-height:1; align-self:center;}
-.logo-name{grid-column:2;}
-.logo-tag{grid-column:2; justify-self:center; text-align:center; font-family:'Space Mono','Noto Sans KR',monospace; font-size:11px; letter-spacing:.5px; color:var(--ivory-muted); text-transform:uppercase;}
+.logo-name{grid-column:2; white-space:nowrap;}
+/* 좁은 폰(405px 이하)에서는 원래 SHIN / HAEDAL 두 줄이 된다 — 글꼴이 늦게 바뀌는 동안 한 줄↔두 줄을 오가며 화면 전체가 출렁여서(10/23 측정 CLS 0.177),
+   줄바꿈을 글꼴과 상관없이 정해 둔다(모양은 지금과 같다) */
+@media(max-width:405px){ .logo-name{white-space:normal; width:min-content;} }
+.logo-tag{grid-column:2; justify-self:center; text-align:center; font-family:'Space Mono','Noto Sans KR','Noto Sans KR Fallback',monospace; font-size:11px; letter-spacing:.5px; color:var(--ivory-muted); text-transform:uppercase;}
 .nav-icons{display:flex; align-items:center; gap:16px; padding-top:2px;}
 .lang{display:flex; align-items:center; gap:5px;}
-.lang button{border:none; background:none; padding:11px 4px; margin:-11px -4px; cursor:pointer; color:var(--ivory-dim); font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; font-weight:700; letter-spacing:.5px;}
+.lang button{border:none; background:none; padding:11px 4px; margin:-11px -4px; cursor:pointer; color:var(--ivory-dim); font-family:'Space Mono','Noto Sans KR','Noto Sans KR Fallback',monospace; font-size:12px; font-weight:700; letter-spacing:.5px;}
 .lang button:hover{color:var(--ivory);}
 .lang button.on{color:var(--ivory);}
-.lang .lang-sep{color:var(--ivory-faint); font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px;}
-.nav-menu{display:flex; gap:24px; list-style:none; margin:0 8px 0 0; padding:0; align-items:center; font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px;}
-.nav-menu a{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-dim); text-decoration:none; transition:color .5s ease;}
+.lang .lang-sep{color:var(--ivory-faint); font-family:'Space Mono','Noto Sans KR','Noto Sans KR Fallback',monospace; font-size:12px;}
+.nav-menu{display:flex; gap:24px; list-style:none; margin:0 8px 0 0; padding:0; align-items:center; font-family:'Space Mono','Noto Sans KR','Noto Sans KR Fallback',monospace; font-size:12px;}
+.nav-menu a{font-family:'Space Mono','Noto Sans KR','Noto Sans KR Fallback',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-dim); text-decoration:none; transition:color .5s var(--e-io);}
 .nav-menu a:hover, .nav-menu a.on{color:var(--ivory);}
-.nav-menu .soon{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-faint); cursor:default;}
+.nav-menu .soon{font-family:'Space Mono','Noto Sans KR','Noto Sans KR Fallback',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-faint); cursor:default;}
 /* 메뉴 글자에 자개빛이 한 번 스치는 호버 효과. 포인터가 있는 PC 환경 +
    모션을 줄이지 않은 경우에만 적용 — 터치·모션감소에서는 기존의 단순한
    color 전환(위 :hover 규칙)만 그대로 동작한다.
@@ -109,15 +119,15 @@ nav{
 .nav-glide .ng-pill{z-index:-1; border-radius:6px; background:rgba(245,240,230,.1);}
 .nav-glide .ng-line{height:2px; background:var(--ivory);}
 @media (prefers-reduced-motion: no-preference){
-  .nav-glide.ready span{transition:transform .32s cubic-bezier(.3,.7,.2,1), width .32s cubic-bezier(.3,.7,.2,1), height .32s cubic-bezier(.3,.7,.2,1), opacity .2s ease;}
+  .nav-glide.ready span{transition:transform .32s cubic-bezier(.3,.7,.2,1), width .32s cubic-bezier(.3,.7,.2,1), height .32s cubic-bezier(.3,.7,.2,1), opacity .2s var(--e-io);}
 }
 /* 오른쪽에서 슬라이드로 나오는 메뉴 패널. 태블릿에서는 화면 오른쪽에 붙은 폭 좁은 패널로,
    모바일에서는 더 넓은 비율로 나오되 항상 같은 오른쪽 슬라이드 모션을 쓴다. */
 .nav-backdrop{
   position:fixed; inset:0; z-index:49; background:rgba(5,5,10,.35);
-  opacity:0; pointer-events:none; transition:opacity .2s ease;   /* 닫힘 0.2초 */
+  opacity:0; pointer-events:none; transition:opacity .2s var(--e-io);   /* 닫힘 0.2초 */
 }
-.nav-backdrop.open{opacity:1; pointer-events:auto; transition:opacity .3s ease;}
+.nav-backdrop.open{opacity:1; pointer-events:auto; transition:opacity .3s var(--e-io);}
 .nav-overlay{
   position:fixed; top:0; right:0; bottom:0; z-index:50;
   width:min(420px, 46vw);
@@ -128,9 +138,9 @@ nav{
   /* 닫힌 패널이 화면 바로 밖에 있어 그림자가 화면 안으로 새므로, 닫히면 숨기고 그림자도 연 뒤에만 */
   visibility:hidden; box-shadow:none;
   /* 닫힘은 0.26초 — 열 때(0.38초, 아래 .open)보다 빨리 물러나야 답답하지 않다(2026-10-12, transitions.dev 원칙) */
-  transition:transform .26s cubic-bezier(.32,.72,0,1), box-shadow .26s ease, visibility 0s linear .26s;
+  transition:transform .26s cubic-bezier(.32,.72,0,1), box-shadow .26s var(--e-io), visibility 0s linear .26s;
 }
-.nav-overlay.open{transform:translateX(0); visibility:visible; box-shadow:-24px 0 60px rgba(0,0,0,.35); transition:transform .38s cubic-bezier(.32,.72,0,1), box-shadow .38s ease, visibility 0s;}
+.nav-overlay.open{transform:translateX(0); visibility:visible; box-shadow:-24px 0 60px rgba(0,0,0,.35); transition:transform .38s cubic-bezier(.32,.72,0,1), box-shadow .38s var(--e-io), visibility 0s;}
 .overlay-close{position:absolute; top:22px; right:24px; font-size:20px;}
 .overlay-links{display:flex; flex-direction:column; gap:26px; text-align:left;}
 @media(max-width:560px){
@@ -138,7 +148,7 @@ nav{
 }
 .overlay-links a, .overlay-links .soon{font-family:'Black Han Sans',sans-serif; font-size:26px; color:var(--ivory); text-decoration:none; padding:6px 0;}
 .overlay-links .soon{color:var(--ivory-faint);}
-.overlay-links .overlay-ig{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-dim); margin-top:10px;}
+.overlay-links .overlay-ig{font-family:'Space Mono','Noto Sans KR','Noto Sans KR Fallback',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-dim); margin-top:10px;}
 .icon-btn{background:none; border:none; color:var(--ivory); cursor:pointer; display:flex; align-items:center; justify-content:center; width:44px; height:44px; margin:-12px; opacity:0.85;}
 .icon-btn.menu-btn{display:none;}
 @media(max-width:900px){ .nav-menu{display:none;} .icon-btn.menu-btn{display:flex;} .nav-icons{gap:20px;} }
@@ -146,17 +156,17 @@ nav{
 @media(max-width:340px){ .nav-icons{gap:14px;} }
 .icon-btn:hover{opacity:1;}
 /* 올렸을 때 색·밝기가 '딱' 바뀌지 않고 0.2초에 걸쳐 바뀌게 — .link-sub 와 같은 박자(2026-10-12) */
-.icon-btn{transition:opacity .2s ease;}
-.lang button{transition:color .2s ease;}
+.icon-btn{transition:opacity .2s var(--e-io);}
+.lang button{transition:color .2s var(--e-io);}
 
 /* 텍스트 링크는 두 가지뿐.
    ① .link-go  다른 페이지로 이동(→) — 전복 블루, 올리면 밑줄
    ② .link-sub 밖으로 나가거나(↗) 복사처럼 보조 동작 — 아이보리 62%, 늘 밑줄 */
-.link-go, .link-sub{font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; text-underline-offset:5px; text-decoration-thickness:1px;}
+.link-go, .link-sub{font-family:'Space Mono','Noto Sans KR','Noto Sans KR Fallback',monospace; font-size:12px; letter-spacing:.5px; text-underline-offset:5px; text-decoration-thickness:1px;}
 .link-go{color:var(--accent); text-decoration:none;}
 .link-go:focus-visible{text-decoration:underline;}
 @media (hover:hover){ .link-go:hover{text-decoration:underline;} }
-.link-sub{color:var(--ivory-dim); text-decoration:underline; transition:color .2s ease;}
+.link-sub{color:var(--ivory-dim); text-decoration:underline; transition:color .2s var(--e-io);}
 .link-sub:hover, .link-sub:focus-visible{color:var(--ivory);}
 button.link-go, button.link-sub{background:none; border:none; padding:0; margin:0; cursor:pointer;}
 
@@ -166,7 +176,7 @@ button.link-go, button.link-sub{background:none; border:none; padding:0; margin:
    폰에서도 그대로 두고, 저작권과 아이콘이 부딪히는 아주 좁은 화면에서만 세 줄로 접는다. */
 footer{border-top:1px solid var(--line); padding:30px max(32px, calc((100% - 1180px) / 2 + 32px)) 44px; /* 선은 화면 끝까지, 글자는 로고와 같은 선에서 시작 */
   display:flex; flex-wrap:wrap; align-items:baseline; column-gap:16px;
-  font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-muted);}
+  font-family:'Space Mono','Noto Sans KR','Noto Sans KR Fallback',monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-muted);}
 footer::after{content:''; order:3; flex-basis:100%; height:0;}
 footer .ft-copy{order:1;}
 footer .ft-social{order:2; margin:-6px -6px -6px auto; align-self:center; display:flex; gap:6px;}
@@ -197,7 +207,7 @@ footer .ft-privacy:hover{text-decoration:underline; text-underline-offset:4px;}
    늘 먼저다. 그래서 클래스를 새로 붙이는 대신 "앞에 형제가 있는 쪽"으로 고른다 —
    자기 페이지에서 주소가 ./ 로 바뀌어도 순서는 그대로라 안전하다. */
 footer .ft-privacy ~ .ft-privacy{font-weight:400; color:var(--ivory-muted);}
-footer .ft-privacy{transition:color .2s ease;}
+footer .ft-privacy{transition:color .2s var(--e-io);}
 footer .ft-privacy ~ .ft-privacy:hover{color:var(--ivory);}
 html[lang="en"] .ft-ko, html:not([lang="en"]) .ft-en{display:none;}
 /* 본문 건너뛰기 — 평소에는 화면 밖에 있다가 Tab 을 처음 누르면 나타난다.
@@ -210,8 +220,8 @@ main:focus{outline:none;}
 .skip-link{position:absolute; left:16px; top:-64px; z-index:200;
   padding:10px 16px; border-radius:4px;
   background:var(--accent); color:#06070c;
-  font-family:'Space Mono','Noto Sans KR',monospace; font-size:13px; font-weight:700;
-  text-decoration:none; transition:top .18s ease;}
+  font-family:'Space Mono','Noto Sans KR','Noto Sans KR Fallback',monospace; font-size:13px; font-weight:700;
+  text-decoration:none; transition:top .18s var(--e-out);}
 .skip-link:focus{top:12px;}
 /* ---------- 페이지 사이 전환(작가 2026-10-12) — View Transitions ----------
    같은 사이트 안에서 페이지를 옮길 때 브라우저가 지금 화면과 새 화면을 이어 준다(크롬·엣지·웨일·삼성 인터넷, 사파리 18.2+).
@@ -255,3 +265,11 @@ html[lang="en"] :is(.ab-body p, .ab-role, .about-teaser-lede .lede-2, .ip-teaser
 html[lang="en"] .press-lang-flag{font-size-adjust:none;}   /* 제목 안의 'KO' 표시(고정폭)는 그대로 */
 /* 글자만 작아지고 줄 간격은 원래 크기 기준이라 벌어 보인다 — 홈 큰 문장은 같은 박자로(1.16 × 0.86) */
 html[lang="en"] .statement{line-height:1;}
+/* 작품 창을 사진 앱처럼(작가 2026-10-23, assets/wm-motion.js): 누른 칸 ↔ 창 그림 사이를 오가는 사본.
+   옮기는 동안 진짜 그림은 숨기고, 다 오면 같은 자리에서 바꾼다 */
+.wm-fly{position:fixed; z-index:90; margin:0; max-width:none; pointer-events:none; transform-origin:0 0; will-change:transform;}
+.work-modal-overlay.wm-fly-on #wmImg{opacity:0 !important; transition:none !important;}
+.work-modal-overlay.wm-fly-land #wmImg{opacity:1 !important; transform:none !important; transition:none !important;}
+/* 누를 때 반응(작가 2026-10-23, site.js): 반응을 그리는 곳은 iOS 기본 회색 상자를 끈다 */
+:is(.tile, .wm-action-btn, .wm-nav, .wm-close, .wm-rail-item, .wm-series-item, .wm-ex-toggle, .lv-zbtn, .icon-btn, .cf-submit, .press-row, .ex-poster-link, .ex-go, .ex-works-link, .ip-teaser,
+    .link-go, .link-sub, .nav-menu a, .overlay-links a, footer a, .lang button, .press-link, .copy-btn, .wm-video-extlink){-webkit-tap-highlight-color:transparent;}

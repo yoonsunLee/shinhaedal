@@ -151,3 +151,22 @@ document.querySelectorAll('.nav-menu a').forEach(function(a){
     openBtn.focus();
   });
 })();
+/* 누를 때 반응(작가 2026-10-23, 사이트 공통 site.js 와 같은 방식 — IP 는 site.js 를 안 읽는다) */
+(()=>{
+  if(!document.body.animate) return;
+  const SHAPED='.photo-open,.profile-open,.contact-link,.scroll-link,.viewer-nav,.viewer-rail button,.icon-btn';
+  const TEXT='nav a,footer a,#langKo,#langEn,.lang button';
+  let ease='cubic-bezier(.32,.72,0,1)';
+  try{ if(CSS.supports('animation-timing-function','linear(0, 1)')) ease='linear(0, 0.18, 0.5, 0.76, 0.92, 1.01, 1.03, 1.02, 1.005, 1)'; }catch(e){}
+  let held=null;
+  const release=()=>{ if(!held) return; const h=held; held=null; h.a.pause(); const cur=getComputedStyle(h.el)[h.prop]; h.a.cancel();
+    h.el.animate([{[h.prop]:cur},{[h.prop]:'1'}],{duration:h.prop==='scale'?460:260,easing:h.prop==='scale'?ease:'cubic-bezier(.22,1,.36,1)'}); };
+  document.addEventListener('touchstart',e=>{
+    if(e.touches.length!==1||matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const el=e.target.closest&&e.target.closest(SHAPED+','+TEXT); if(!el) return;
+    release(); const shaped=el.matches(SHAPED), prop=shaped?'scale':'opacity';
+    held={el,prop,x:e.touches[0].clientX,y:e.touches[0].clientY,a:el.animate([{[prop]:'1'},{[prop]:shaped?'0.97':'0.5'}],{duration:shaped?110:90,easing:'cubic-bezier(.3,.6,.4,1)',fill:'forwards'})};
+  },{passive:true});
+  document.addEventListener('touchmove',e=>{ if(held&&Math.hypot(e.touches[0].clientX-held.x,e.touches[0].clientY-held.y)>10) release(); },{passive:true});
+  document.addEventListener('touchend',release,{passive:true}); document.addEventListener('touchcancel',release,{passive:true});
+})();

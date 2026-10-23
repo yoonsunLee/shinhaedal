@@ -58,15 +58,15 @@
   .nf-sub{font-size:14px; line-height:1.7; color:var(--ivory-muted); margin:0 0 30px;}
   .nf-links{display:flex; align-items:center; gap:26px; flex-wrap:wrap; justify-content:center;}
   .nf-link-primary{
-    font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px;
+    font-family:'Space Mono','Noto Sans KR','Noto Sans KR Fallback',monospace; font-size:12px; letter-spacing:.5px;
     color:var(--accent); text-decoration:none; border-bottom:1px solid transparent; padding-bottom:3px;
-    transition:color .2s ease, border-color .2s ease;
+    transition:color .2s var(--e-io), border-color .2s var(--e-io);
   }
   .nf-link-primary:hover, .nf-link-primary:focus-visible{border-color:var(--accent);}
   .nf-link-secondary{
-    font-family:'Space Mono','Noto Sans KR',monospace; font-size:12px; letter-spacing:.5px;
+    font-family:'Space Mono','Noto Sans KR','Noto Sans KR Fallback',monospace; font-size:12px; letter-spacing:.5px;
     color:var(--ivory-dim); text-decoration:none; border-bottom:1px solid transparent; padding-bottom:2px;
-    transition:color .2s ease, border-color .2s ease;
+    transition:color .2s var(--e-io), border-color .2s var(--e-io);
   }
   .nf-link-secondary:hover, .nf-link-secondary:focus-visible{color:var(--ivory); border-color:var(--ivory-faint);}
   .nf-link-primary:focus-visible, .nf-link-secondary:focus-visible{outline:2px solid var(--accent); outline-offset:4px;}

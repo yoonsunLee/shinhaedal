@@ -84,18 +84,18 @@
     display:flex; gap:14px; align-items:center;
     background:var(--bg-2); border:1px solid rgba(245,240,230,.14); border-radius:8px;
     padding:14px;
-    opacity:0; transform:translateY(8px); transition:opacity .3s ease, transform .3s ease;
+    opacity:0; transform:translateY(8px); transition:opacity .3s var(--e-io), transform .3s var(--e-out);
   }
   .work-inquiry-card[hidden]{display:none;}
   .work-inquiry-card.cwp-show{opacity:1; transform:translateY(0);}
   /* 떠오르는 것은 칸이 아니라 그 안의 작품과 제목이다. 갈아끼울 때는 .cwp-replay 를 한 프레임만 붙여
      안쪽만 처음 자리로 돌려놓고 떼어 다시 떠오르게 한다 — 바깥 칸(구분선)은 건드리지 않는다. */
-  .contact-work-preview > *, .work-inquiry-card > *{transition:opacity .38s ease, transform .38s ease;}
+  .contact-work-preview > *, .work-inquiry-card > *{transition:opacity .38s var(--e-io), transform .38s var(--e-out);}
   .contact-work-preview.cwp-replay > *, .work-inquiry-card.cwp-replay > *{
     opacity:0; transform:translateY(12px); transition:none;
   }
   .work-inquiry-card img{width:56px; height:56px; object-fit:cover; border-radius:4px; flex-shrink:0; -webkit-user-select:none; user-select:none;}
-  .wic-label, .cwp-label{font-family:'Space Mono','Noto Sans KR', monospace; font-size:11px; letter-spacing:1px; color:var(--accent); text-transform:uppercase; margin-bottom:4px;}
+  .wic-label, .cwp-label{font-family:'Space Mono','Noto Sans KR','Noto Sans KR Fallback', monospace; font-size:11px; letter-spacing:1px; color:var(--accent); text-transform:uppercase; margin-bottom:4px;}
   .wic-title, .cwp-title{font-size:14px; color:var(--ivory); line-height:1.4;}
 
   /* 작품 선택 시 큰 미리보기 — 1024px 이상에서만, 왼쪽 소개글 아래(스크롤을 따라오는 sticky 영역).
@@ -109,7 +109,7 @@
       text-align:center;   /* 문구를 뺀 자리에 작품과 제목만 남으므로 둘을 같이 가운데로 (작가 요청) */
       /* 구분선이 이 칸에 붙어 있으므로 여기에는 transform 을 주지 않는다 — 주면 선까지 같이 떠오른다(작가 지적).
          떠오르는 것은 안쪽의 작품과 제목뿐이고, 이 칸은 나타나고 사라질 때 옅어지기만 한다. */
-      opacity:0; transition:opacity .38s ease;
+      opacity:0; transition:opacity .38s var(--e-io);
     }
     .contact-work-preview.cwp-show{opacity:1;}
   }
@@ -120,14 +120,14 @@
 
   .contact-form{display:flex; flex-direction:column; gap:18px;}
   .contact-form[hidden]{display:none;}
-  .cf-row label{display:block; font-family:'Space Mono','Noto Sans KR', monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-dim); text-transform:uppercase; margin-bottom:8px;}
+  .cf-row label{display:block; font-family:'Space Mono','Noto Sans KR','Noto Sans KR Fallback', monospace; font-size:12px; letter-spacing:.5px; color:var(--ivory-dim); text-transform:uppercase; margin-bottom:8px;}
   .cf-row label .req-mark{color:var(--accent); margin-left:2px;}
   /* 입력칸(2026-09-23): 테두리 대비를 약 3:1로(전에는 1.7:1이라 칸이 흐릿하게 떠 보였다), 포커스는 2px,
      칸 안 안내 글씨는 보조색(5.5:1), 모서리 2px로 통일. 선택칸은 기본 select 그대로(키보드·폰 선택 휠 유지)에 모양만 */
   .contact-form{--field-line:rgba(245,240,230,.38); color-scheme:dark;}
   .cf-row input, .cf-row select, .cf-row textarea{
     width:100%; background:var(--bg-2); border:1px solid var(--field-line); border-radius:2px;
-    color:var(--ivory); font-family:'Noto Sans KR',sans-serif; font-size:16px; padding:13px 16px;
+    color:var(--ivory); font-family:'Noto Sans KR','Noto Sans KR Fallback',sans-serif; font-size:16px; padding:13px 16px;
   }
   .cf-row input::placeholder, .cf-row textarea::placeholder{color:var(--ivory-muted); opacity:1;}
   .cf-row input:focus, .cf-row select:focus, .cf-row textarea:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 1px var(--accent);}
@@ -147,11 +147,11 @@
   .cf-submit{
     align-self:flex-start; margin-top:6px; display:inline-flex; align-items:center; gap:10px;
     padding:13px 26px; border:1px solid rgba(245,240,230,.72); border-radius:12px;
-    font-family:'Noto Sans KR',sans-serif; font-size:15px; font-weight:600; letter-spacing:.2px; line-height:1.2;
+    font-family:'Noto Sans KR','Noto Sans KR Fallback',sans-serif; font-size:15px; font-weight:600; letter-spacing:.2px; line-height:1.2;
     color:var(--ivory); background:transparent; cursor:pointer;
-    transition:background-color .28s ease, color .28s ease, border-color .28s ease;
+    transition:background-color .28s var(--e-io), color .28s var(--e-io), border-color .28s var(--e-io);
   }
-  .cf-submit::after{content:'\2192'; display:inline-block; transition:transform .28s ease;}
+  .cf-submit::after{content:'\2192'; display:inline-block; transition:transform .28s var(--e-out);}
   .cf-submit:disabled::after{display:none;}
   .cf-submit:focus-visible, .cf-submit:active:not(:disabled){background:var(--ivory); border-color:var(--ivory); color:var(--bg);}
   @media (hover:hover){ .cf-submit:hover:not(:disabled){background:var(--ivory); border-color:var(--ivory); color:var(--bg);} }
@@ -182,11 +182,11 @@
     @media (prefers-reduced-motion: no-preference){
       .cf-detail{interpolate-size:allow-keywords;}
       .cf-detail::details-content{block-size:0; overflow:clip; opacity:0;
-        transition:block-size .25s cubic-bezier(.22,1,.36,1), opacity .25s cubic-bezier(.22,1,.36,1), content-visibility .25s allow-discrete;}
+        transition:block-size .25s cubic-bezier(.22,1,.36,1), opacity .25s cubic-bezier(.22,1,.36,1), content-visibility .25s var(--e-io) allow-discrete;}
       .cf-detail[open]::details-content{block-size:auto; opacity:1;}
     }
   }
-  .cf-detail summary{transition:color .2s ease;}
+  .cf-detail summary{transition:color .2s var(--e-io);}
   .cf-detail summary:hover, .cf-detail summary:focus-visible{color:var(--ivory);}
   .cf-detail ul{list-style:none; font-size:13px; line-height:1.6; color:var(--ivory-dim); margin:2px 0 8px; padding:14px 16px; display:grid; gap:6px; background:var(--bg-2); border:1px solid var(--line); border-radius:8px;}
   /* 항목 이름은 한 단계 흐리게, '보관 기간'만 굵고 밝게 — 동의 안내에서 보유 기간은 '중요한 내용'이라
