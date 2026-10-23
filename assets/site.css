@@ -273,3 +273,12 @@ html[lang="en"] .statement{line-height:1;}
 /* 누를 때 반응(작가 2026-10-23, site.js): 반응을 그리는 곳은 iOS 기본 회색 상자를 끈다 */
 :is(.tile, .wm-action-btn, .wm-nav, .wm-close, .wm-rail-item, .wm-series-item, .wm-ex-toggle, .lv-zbtn, .icon-btn, .cf-submit, .press-row, .ex-poster-link, .ex-go, .ex-works-link, .ip-teaser,
     .link-go, .link-sub, .nav-menu a, .overlay-links a, footer a, .lang button, .press-link, .copy-btn, .wm-video-extlink){-webkit-tap-highlight-color:transparent;}
+/* 스크롤 연출(작가 2026-10-23, _점검도구/motion/apple/scroll_patch.py a,b,c) — 스크롤을 가로채지 않고 위치에 맞춰서만. 지원 안 하는 브라우저·움직임 줄이기면 없음 */
+@media (prefers-reduced-motion: no-preference){ @supports (animation-timeline: view()){
+  header.hero .hh-media{transform-origin:50% 0; animation:sfx-recede linear both; animation-timeline:scroll(root); animation-range:0 90vh;}
+  header.hero .hero-inner{animation:sfx-lift linear both; animation-timeline:scroll(root); animation-range:0 55vh;}
+  .press-feature-media{animation:sfx-depth linear both; animation-timeline:view(); animation-range:cover 0% cover 100%;}
+}}
+@keyframes sfx-recede{to{transform:scale(.94); opacity:.45;}}
+@keyframes sfx-lift{to{transform:translateY(-36px); opacity:0;}}
+@keyframes sfx-depth{from{transform:translateY(32px);} to{transform:translateY(-32px);}}

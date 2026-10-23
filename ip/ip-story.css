@@ -536,3 +536,10 @@ html[lang="en"] .forest-copy p{font-size-adjust:var(--en-head);letter-spacing:-.
 .swim-image .sw-cover{left:31.021%;top:28.230%;width:38.038%}
 .swim-image .sw-otter{left:31.340%;top:28.549%;width:37.400%;transform-origin:50% 45%;will-change:transform}
 :is(.photo-open,.profile-open,.contact-link,.scroll-link,.viewer-nav,.viewer-rail button,.icon-btn,nav a,footer a,#langKo,#langEn){-webkit-tap-highlight-color:transparent}   /* 누를 때 반응(10/23, ip-story.js) */
+/* 스크롤 연출(작가 2026-10-23, _점검도구/motion/apple/scroll_patch.py a,b,c) — 스크롤을 가로채지 않고 위치에 맞춰서만. 지원 안 하는 브라우저·움직임 줄이기면 없음 */
+@media (prefers-reduced-motion: no-preference){ @supports (animation-timeline: view()){
+  .pool-art{animation:sfx-depth linear both; animation-timeline:view(); animation-range:cover 0% cover 100%;}
+}}
+@keyframes sfx-recede{to{transform:scale(.94); opacity:.45;}}
+@keyframes sfx-lift{to{transform:translateY(-36px); opacity:0;}}
+@keyframes sfx-depth{from{transform:translateY(32px);} to{transform:translateY(-32px);}}
