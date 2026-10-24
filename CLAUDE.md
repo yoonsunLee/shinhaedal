@@ -36,12 +36,15 @@
 - 메뉴: About | CV | Works | IP | Press | Contact | KO/EN | 인스타 | 샵(상점 아이콘, 물결 차양).
 - 푸터: 1줄 `© SHIN HAEDAL All rights reserved. | 인스타·샵 아이콘`, 2줄 `처리방침·이용안내 | BACK TO TOP ↑`. 아주 좁은 폰에서만 3줄.
 - 움직임은 작가가 고른 시안대로 맞춰져 있다(페이지 디졸브, 들어올 때 올라오기, 작품 창 사진 앱식, IP 벽·숲길·수영·문장 밝아지기 등). 새 움직임도 시안 먼저.
-- 영문 표기: 얼빵해달은 **it**, 직업은 **Shell Delivery Worker**. 학두루미 = Sky Guard, 솔직사슴 = 나무꾼/Woodcutter.
+- 영문 표기: 현대사회스포츠센터 = **Hyundae Social Sports Center**(회원카드 그림 속 HYUNDAI 는 그대로 둔다). 얼빵해달은 **it**, 직업은 **Shell Delivery Worker**. 학두루미 = Sky Guard, 솔직사슴 = 나무꾼/Woodcutter.
 
 ## 통계(방문 수집)
 - `assets/stats.js` — `RULES`(클릭 이름), `ZONES`(페이지별 구역). 새 구역·버튼을 만들면 여기에 더하고,
   어드민 `admin.html` 의 `ST_BTN`/`ST_ZONE` 라벨과 (새 페이지면) 카페24 `hosting/stats/collect.php` 의 페이지 목록도 함께 고친다.
 - 방문은 "실제로 본 사람"만 센다(스크롤·머묾 등 참여 조건). 자동화 브라우저(`navigator.webdriver`)는 세지 않으니 테스트할 땐 그 값을 가린다.
+- 시험할 때 수집이 안 되는 이유는 보통 셋: localhost 주소, user agent 의 `Headless`, `navigator.webdriver`.
+  → 보통 Chrome user agent·`locale:'ko-KR'` 로 열고, `webdriver` 를 가리고, `/assets/stats.js` 를 localhost 검사만 뺀 사본으로 route 해서 보낸 내용을 가로채 본다(`window.__SH_STATS_ENDPOINT` 로 받을 주소 바꿈).
+- 구역 이름·클릭 이름은 collect.php 가 형식만 검사한다 — 새 구역을 더해도 카페24 파일은 다시 올릴 필요 없다(새 '페이지'일 때만 필요).
 - 같은 사이트 안 링크는 바깥 링크(`out`)로 세지 않는다(`outKind`).
 
 ## 확인하는 법
@@ -53,7 +56,4 @@
 - 커밋 전: `node --check` 로 바꾼 JS 확인, build_en.py 결과를 함께 커밋.
 
 ## 진행 중·보류
-- IP 'FROM 얼빵해달 TO ARTWORKS' 작품 섹션: 제안만 함(이름 섹션과 아트토이 사이, 큰 1·작은 4·세로 1 배치, 작품 페이지로 링크).
-  작품 구성(포트폴리오 6점 / POV 유급휴일·〈저작인접권자〉 더해 8점)과 시안 확인을 기다리는 중.
-- IP 숲길 장면(`#forest`)이 stats.js ZONES 에 아직 없다(머문 시간 따로 안 잡힘) — 사용자에게 알렸고 답 기다림.
-- 영문 스포츠센터 표기 Hyundae(본문) vs HYUNDAI(회원카드 그림) — 작가 확인 전.
+- (없음)
