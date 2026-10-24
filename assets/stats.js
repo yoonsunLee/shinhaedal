@@ -176,7 +176,7 @@ window.shStat = window.shStat || function(){}; window.shStatWork = window.shStat
   var ZONES = {
     '/': [['recent', '#works'], ['about', '.about-teaser-wrap'], ['ip', '.ip-teaser-wrap']],
     '/about/': [['note', '.ab-note']],   // 학력·전시 구역은 CV(/cv/)로 옮겼다(2026-10-07)
-    '/ip/': [['intro', '#intro'], ['story', '#story'], ['pool', '#pool'], ['identity', '#identity'], ['toy', '#toy'], ['friends', '#friends'], ['licensing', '#licensing']]
+    '/ip/': [['intro', '#intro'], ['story', '#story'], ['forest', '#forest'], ['pool', '#pool'], ['identity', '#identity'], ['toy', '#toy'], ['friends', '#friends'], ['licensing', '#licensing']]
   }[PAGE] || [];
   var zoneOn = {}, zoneMs = {}, zoneFrom = {};
   if(ZONES.length && 'IntersectionObserver' in window){
