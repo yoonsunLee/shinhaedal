@@ -5,7 +5,7 @@
  },
  "about/": {
   "date": "2026-10-25",
-  "hash": "85fbfc0eefe6c149"
+  "hash": "d5be70a44bc780e1"
  },
  "contact/": {
   "date": "2026-10-24",
@@ -25,7 +25,7 @@
  },
  "en/about/": {
   "date": "2026-10-25",
-  "hash": "1b2dd6ff0d99752d"
+  "hash": "0c09e9ab81a27099"
  },
  "en/contact/": {
   "date": "2026-10-24",
@@ -129,6 +129,6 @@
  },
  "works/w/HD-2026-012/": {
   "date": "2026-10-25",
-  "hash": "31112b8ea059f4ac"
+  "hash": "df4859d6fbfeedaa"
  }
 }
