@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""작품 목록·홈 Recent works·Press 목록을 HTML에 미리 써 넣는다.
+"""작품 목록·홈 Recent works·Press 목록·CV 전시 이력을 HTML에 미리 써 넣는다.
 
 지금까지 이 목록들은 브라우저가 JSON을 받아 JS로 그렸다. 그래서 원본 HTML에는
 "불러오는 중…"만 있었고, 검색 로봇(특히 JS 실행이 약한 네이버)은 작품 링크도,
@@ -317,6 +317,48 @@ def ld_about(lang, exhibitions):
     return ld_script({"@context": "https://schema.org", "@graph": out})
 
 
+# ── CV 전시 이력: 어드민 전시 데이터로 채운다(2026-10-25 — 그전엔 CV 에 손으로 써 두어 새 전시가 안 들어갔다) ──
+# 어드민 전시 유형을 CV 의 세 묶음으로. 목록에 없는 유형은 단체전으로 둔다.
+CV_GROUPS = [
+    ("개인전", ("Solo Exhibition", "Solo Exhibitions"), ("개인전",)),
+    ("단체전", ("Group Exhibition", "Group Exhibitions"), ("단체전", "기획전", "특별전")),
+    ("페어", ("Art Fair", "Art Fairs"), ("아트페어", "팝업")),
+]
+
+
+def cv_dates(s, t):
+    """2026.11.23–11.29 / 해를 넘기면 2025.12.24–2026.01.02 / 하루짜리는 시작일만."""
+    a = str(s or "").replace("-", ".")
+    if not t or t == s:
+        return e(a)
+    b = str(t)
+    b = (b[5:] if b[:4] == str(s)[:4] else b).replace("-", ".")
+    return '%s<span class="cv-dash">–</span>%s' % (e(a), e(b))
+
+
+def cv_exhibitions(exhibitions, lang="ko"):
+    en = lang == "en"
+    rows = [x for x in exhibitions if x.get("start_date")]
+    known = {t for _, _, types in CV_GROUPS for t in types}
+    out = []
+    for ko_name, en_names, types in CV_GROUPS:
+        group = [x for x in rows if (x.get("type") in types) or (ko_name == "단체전" and x.get("type") not in known)]
+        if not group:
+            continue
+        group.sort(key=lambda x: str(x.get("start_date")), reverse=True)
+        head = (en_names[0] if len(group) == 1 else en_names[1]) if en else ko_name
+        out.append('\n      <h3 class="cv-h3">%s</h3>\n      <ol class="cv-list cv-ex">' % e(head))
+        for x in group:
+            title = primary_title(x, lang)
+            venue = str((x.get("venue_en") or x.get("venue")) if en else (x.get("venue") or x.get("venue_en")) or "").strip()
+            text = title + (", " + venue if venue else "")
+            out.append('\n      <li data-start="%s"><span class="cv-d">%s</span><span class="cv-t"><span>%s</span>'
+                       '<span class="cv-up" data-i="cv_upcoming" hidden>(예정)</span></span></li>'
+                       % (e(x.get("start_date")), cv_dates(x.get("start_date"), x.get("end_date")), e(text)))
+        out.append('\n      </ol>')
+    return "".join(out) + "\n      "
+
+
 def fill_block(text, name, inner, where):
     """text 안의 GEN 표시 사이를 inner로 바꾼 새 text."""
     start, end = "<!-- GEN:%s -->" % name, "<!-- /GEN:%s -->" % name
@@ -358,7 +400,8 @@ def blocks(lang="ko", press_labels=PRESS_LABELS):
     home_pick = [by_id[i] for i in (site_settings.get("homeRecent") or []) if i in by_id][:6]
     out = {"index.html": {"home-recent": work_tiles(home_pick or index[:home_recent_n], "works/", "", lang),
                           "home-ld": ld_home(lang)},
-           "about/index.html": {"about-ld": ld_about(lang, exhibitions)}}
+           "about/index.html": {"about-ld": ld_about(lang, exhibitions)},
+           "cv/index.html": {"cv-exhibitions": cv_exhibitions(exhibitions, lang)}}
     sel, added = [], set()
     for wid in page.get("selected") or []:
         w = by_id.get(wid)

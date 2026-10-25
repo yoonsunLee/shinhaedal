@@ -37,6 +37,10 @@ jobs:
     timeout-minutes: 20  # 기본값(360분)까지 매달려 있지 않도록 — 평소엔 몇 분이면 끝남
     steps:
       - uses: actions/checkout@v7       # Node 24 (v4 는 지원 끝난 Node 20)
+        with:
+          # 버튼을 누른 순간이 아니라 '차례가 와서 시작한 순간'의 main 에서 만든다. 반영을 연달아 누르면 뒤 발행이
+          # 앞 발행이 올린 결과보다 옛 상태에서 만들어 커밋할 때 충돌로 실패했다(2026-10-25 #163)
+          ref: main
 
       - uses: actions/setup-python@v7   # Node 24
         with:
@@ -123,7 +127,7 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           mkdir -p assets/exhibitions assets/home-video assets/home-hero
           git add data/ assets/works/ assets/exhibitions/ assets/home-video/ assets/home-hero/ works/w/ sitemap.xml en/ \
-                  index.html works/index.html press/index.html about/index.html contact/index.html privacy/index.html ip/index.html
+                  index.html works/index.html press/index.html about/index.html cv/index.html contact/index.html privacy/index.html ip/index.html
           if git diff --cached --quiet; then
             echo "No changes."
           else
