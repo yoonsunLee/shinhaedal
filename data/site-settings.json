@@ -1,3 +1,15 @@
 {
- "homeRecentCount": 4
+ "homeRecentCount": 4,
+ "cvCompetitions": [
+  {
+   "date": "2026",
+   "ko": "LART 재료의 언어전 공모전 선정",
+   "en": ""
+  },
+  {
+   "date": "2025",
+   "ko": "세종시문화관광재단 한글콘텐츠 공모전 선정",
+   "en": ""
+  }
+ ]
 }
