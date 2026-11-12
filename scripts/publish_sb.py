@@ -667,6 +667,17 @@ def main():
     site_settings_out = {"homeRecentCount": home_recent_count}
     if home_recent:
         site_settings_out["homeRecent"] = home_recent[:6]
+    # CV '공모전 선정'(site_settings 'cv_competitions' = [{date, ko, en}], 어드민 전시 관리에서 입력, 2026-11-12).
+    # 글자만 받아 둔다(HTML 은 prerender_lists.py 가 이스케이프해 쓴다). 순서는 어드민에서 정한 그대로.
+    comps = []
+    for c in (settings.get("cv_competitions") or []):
+        if not isinstance(c, dict):
+            continue
+        ko, en, date = s(c.get("ko")).strip(), s(c.get("en")).strip(), s(c.get("date")).strip()
+        if ko or en:
+            comps.append({"date": date[:20], "ko": ko[:200], "en": en[:200]})
+    if comps:
+        site_settings_out["cvCompetitions"] = comps[:30]
     write_json(os.path.join(data_dir, "site-settings.json"), site_settings_out)
     print("works-page.json: Selected %d점" % len(selected))
 
