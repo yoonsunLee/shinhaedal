@@ -26,7 +26,7 @@
 - `<!-- GEN:... -->` 블록은 `scripts/prerender_lists.py` 가 채운다.
 - CV 전시 이력(`cv/index.html` 의 GEN:cv-exhibitions)은 어드민 전시 데이터(`data/exhibitions.json`)로 발행 때마다 다시 쓴다.
   유형 묶음: 개인전 ← 개인전 / 단체전 ← 단체전·기획전·특별전(모르는 유형도 여기) / 페어 ← 아트페어·팝업. 표기를 고치려면 어드민 전시 데이터를 고친다.
-  전시명은 자동으로 국문 《전시명》, 영문 기울임으로 싣는다(어드민엔 괄호 없이). 국내 전시는 장소 끝 ', 대한민국'(영문 ', Korea')을 뺀다.
+  전시명은 자동으로 국문 《전시명》, 영문 기울임으로 싣는다(어드민엔 괄호 없이). 어드민 전시명에 《》를 직접 넣었으면 그대로 둔다(영문은 《…》 부분만 기울임). 국내 전시는 장소 끝 ', 대한민국'(영문 ', Korea')을 뺀다.
   COMPETITIONS(GEN:cv-competitions)는 어드민 전시 관리 아래 'CV · 공모전 선정' → site_settings 'cv_competitions' → site-settings.json cvCompetitions. 비면 구역째 숨는다.
   학력·자격·브랜드 활동은 어드민에 없어서 CV 페이지에 직접 쓴다. 발행 커밋이 담는 파일 목록(publish.yml 'Commit if changed')에 새로 생성되는 페이지를 꼭 넣는다.
 - 같은 머리·메뉴·푸터가 국문 페이지 9개 + 작품 페이지 틀(gen_work_share.py) + 404 에 복사돼 있다. 공통 마크업을 바꾸면 전부(스크립트로 일괄) 바꾸고 빠진 곳이 없는지 grep 으로 확인한다.

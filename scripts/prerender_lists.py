@@ -336,6 +336,17 @@ def cv_dates(s, t):
     return '%s<span class="cv-dash">–</span>%s' % (e(a), e(b))
 
 
+def cv_title(title, en=False):
+    """CV 전시명. 국문은 《전시명》, 영문은 기울임(영문 이력서의 관례) — 어드민에는 괄호 없이 적는다(작가 2026-11-12).
+    어드민 전시명에 《 》를 직접 넣었으면 그대로 둔다 — 예: 《URBAN BREAK & TOYCON SEOUL》 단독 부스(작가 2026-11-12).
+    영문에서는 그 《…》 부분만 기울임으로 바꾼다."""
+    if "《" in title:
+        if not en:
+            return e(title)
+        return re.sub(r"《(.*?)》", lambda m: "<i>%s</i>" % m.group(1), e(title))
+    return ("<i>%s</i>" % e(title)) if en else ("《%s》" % e(title))
+
+
 def cv_venue(venue, en=False):
     """CV 에서는 국내 전시의 나라 이름을 뺀다(작가 2026-11-12). 해외(파리, 프랑스 등)는 그대로."""
     tail = ", Korea" if en else ", 대한민국"
@@ -373,8 +384,7 @@ def cv_exhibitions(exhibitions, lang="ko"):
             title = primary_title(x, lang)
             venue = str((x.get("venue_en") or x.get("venue")) if en else (x.get("venue") or x.get("venue_en")) or "").strip()
             venue = cv_venue(venue, en)
-            # 전시명은 국문 《》, 영문 기울임(영문 이력서의 관례) — 어드민에는 괄호 없이 적는다(작가 2026-11-12)
-            name = ("<i>%s</i>" % e(title)) if en else ("《%s》" % e(title))
+            name = cv_title(title, en)
             out.append('\n      <li data-start="%s"><span class="cv-d">%s</span><span class="cv-t"><span>%s</span>'
                        '<span class="cv-up" data-i="cv_upcoming" hidden>(예정)</span></span></li>'
                        % (e(x.get("start_date")), cv_dates(x.get("start_date"), x.get("end_date")),
