@@ -336,6 +336,27 @@ def cv_dates(s, t):
     return '%s<span class="cv-dash">–</span>%s' % (e(a), e(b))
 
 
+def cv_venue(venue, en=False):
+    """CV 에서는 국내 전시의 나라 이름을 뺀다(작가 2026-11-12). 해외(파리, 프랑스 등)는 그대로."""
+    tail = ", Korea" if en else ", 대한민국"
+    for t in (tail, ", 대한민국", ", Korea", ", South Korea", ", Republic of Korea"):
+        if venue.endswith(t):
+            return venue[: -len(t)].rstrip()
+    return venue
+
+
+def cv_competitions(items, lang="ko"):
+    """CV '공모전 선정' — 어드민 전시 관리에서 넣은 목록(site-settings.json cvCompetitions). 없으면 구역째 숨긴다."""
+    en = lang == "en"
+    rows = [c for c in (items or []) if isinstance(c, dict) and (c.get("ko") or c.get("en"))]
+    if not rows:
+        return ""
+    lis = "".join('\n      <li><span class="cv-d">%s</span><span class="cv-t">%s</span></li>'
+                  % (e(c.get("date")), e((c.get("en") or c.get("ko")) if en else (c.get("ko") or c.get("en")))) for c in rows)
+    return ('\n    <section class="cv-sec">\n      <h2 class="cv-h">COMPETITIONS</h2>\n      <ol class="cv-list">%s\n      </ol>\n    </section>\n    '
+            % lis)
+
+
 def cv_exhibitions(exhibitions, lang="ko"):
     en = lang == "en"
     rows = [x for x in exhibitions if x.get("start_date")]
@@ -351,10 +372,13 @@ def cv_exhibitions(exhibitions, lang="ko"):
         for x in group:
             title = primary_title(x, lang)
             venue = str((x.get("venue_en") or x.get("venue")) if en else (x.get("venue") or x.get("venue_en")) or "").strip()
-            text = title + (", " + venue if venue else "")
+            venue = cv_venue(venue, en)
+            # 전시명은 국문 《》, 영문 기울임(영문 이력서의 관례) — 어드민에는 괄호 없이 적는다(작가 2026-11-12)
+            name = ("<i>%s</i>" % e(title)) if en else ("《%s》" % e(title))
             out.append('\n      <li data-start="%s"><span class="cv-d">%s</span><span class="cv-t"><span>%s</span>'
                        '<span class="cv-up" data-i="cv_upcoming" hidden>(예정)</span></span></li>'
-                       % (e(x.get("start_date")), cv_dates(x.get("start_date"), x.get("end_date")), e(text)))
+                       % (e(x.get("start_date")), cv_dates(x.get("start_date"), x.get("end_date")),
+                          name + (", " + e(venue) if venue else "")))
         out.append('\n      </ol>')
     return "".join(out) + "\n      "
 
@@ -401,7 +425,8 @@ def blocks(lang="ko", press_labels=PRESS_LABELS):
     out = {"index.html": {"home-recent": work_tiles(home_pick or index[:home_recent_n], "works/", "", lang),
                           "home-ld": ld_home(lang)},
            "about/index.html": {"about-ld": ld_about(lang, exhibitions)},
-           "cv/index.html": {"cv-exhibitions": cv_exhibitions(exhibitions, lang)}}
+           "cv/index.html": {"cv-exhibitions": cv_exhibitions(exhibitions, lang),
+                             "cv-competitions": cv_competitions(site_settings.get("cvCompetitions"), lang)}}
     sel, added = [], set()
     for wid in page.get("selected") or []:
         w = by_id.get(wid)
