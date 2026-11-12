@@ -57,6 +57,25 @@
   "home_lead_days": null
  },
  {
+  "id": "EX-2025-03",
+  "title": "문화체육관광부 주관 '한글문화산업전'",
+  "venue": "광화문광장, 서울",
+  "start_date": "2025-10-11",
+  "end_date": "2025-10-14",
+  "work_nos": "",
+  "type": "아트페어",
+  "type_en": "Art Fair",
+  "note_public": "",
+  "title_en": "",
+  "venue_en": "",
+  "poster_url": "",
+  "map_url": "",
+  "featured_work_nos": "",
+  "about_selected": false,
+  "home_mode": "auto",
+  "home_lead_days": null
+ },
+ {
   "id": "EX-2026-01",
   "title": "나전칠기로 ART하는 法",
   "venue": "갤러리비브, 서울, 대한민국",
