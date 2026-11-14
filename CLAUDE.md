@@ -60,5 +60,14 @@
 - 작업 환경에서 shinhaedal.com 에 직접 접속이 막혀 있을 수 있다 → 배포 여부는 GitHub Actions(pages 배포) 기록으로 확인한다.
 - 커밋 전: `node --check` 로 바꾼 JS 확인, build_en.py 결과를 함께 커밋.
 
+## 갤러리(`gallery/`, 준비 중 — 작가 승인 전에는 main에 합치지 않는다)
+- `gallery/` 는 작가 PC의 갤러리 작업(아카이브 저장소 `gallery-launch-qa` 가지의 `gallery-plan/work/release/gallery/`)에서 만든 출시본을 그대로 옮긴 것.
+  여기서 고친 것(진입 주소·three.js 사본·설명 문구)은 작가 PC 원본(`gallery/src`·`make_site.py`)에도 같이 넣어야 다음 출시본에서 사라지지 않는다.
+- 공개 진입 주소: 로비 `/gallery/`, 작품관 `/gallery/#works`(첫 작품 HD-2026-001 앞), IP관 입구 `/gallery/#ip`(물빛 통로, 해변 쪽).
+  `?at=` `?beach=` 같은 점검 주소는 출시본에서 꺼져 있다 — 홈페이지 링크에 쓰지 않는다. 공개 문구에 '가상갤러리'를 쓰지 않는다.
+- 입장 링크 네 곳: 홈 맨 아래 갤러리 줄(.gal-teaser) · Works 필터 줄 오른쪽 · IP 배달 이야기 끝(숲길 앞) · About 아래 링크 줄. 상단 메뉴에는 넣지 않는다.
+- 통계: 클릭 `gallery_enter`(lobby·works·ip), 홈 구역 `gallery`, 페이지 `/gallery/`(카페24 collect.php 목록에 있어야 따로 셈).
+- three.js 는 CDN 대신 `gallery/vendor/three-0.169.0/` 사본을 읽는다.
+
 ## 진행 중·보류
-- (없음)
+- 갤러리 공개: 작가 승인 대기(위 '갤러리' 참고).
