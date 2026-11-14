@@ -11,6 +11,18 @@
   var koPath = path.replace(/^\/en(?=\/)/, '');
   if(PAGES.indexOf(koPath) < 0) return;
 
+  // 갤러리 링크(2026-11 작가 결정): PC(마우스)에서는 새 창, 폰·태블릿은 같은 창(인스타 앱 안 브라우저 등에서 새 창이 길을 잃게 해서).
+  // 화살표(→ / ↗)는 같은 조건으로 CSS(.arr-same/.arr-new)가 바꾼다
+  var pcMq = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)');
+  function galTarget(){
+    var pc = !!(pcMq && pcMq.matches), links = document.querySelectorAll('a[href*="gallery/"]');
+    for(var i = 0; i < links.length; i++){
+      if(pc){ links[i].target = '_blank'; links[i].rel = 'noopener'; } else { links[i].removeAttribute('target'); links[i].removeAttribute('rel'); }
+    }
+  }
+  galTarget();
+  if(pcMq){ if(pcMq.addEventListener) pcMq.addEventListener('change', galTarget); else if(pcMq.addListener) pcMq.addListener(galTarget); }
+
   function dropLang(s){ return s.replace(/([?&])lang=(?:en|ko)(&|$)/, function(a, p, e){ return e ? p : ''; }); }
   function go(l){
     try{ localStorage.setItem('site_lang', l); }catch(e){}

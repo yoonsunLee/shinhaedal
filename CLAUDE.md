@@ -66,6 +66,7 @@
 - 공개 진입 주소: 로비 `/gallery/`, 작품관 `/gallery/#works`(첫 작품 HD-2026-001 앞), IP관 입구 `/gallery/#ip`(물빛 통로, 해변 쪽).
   `?at=` `?beach=` 같은 점검 주소는 출시본에서 꺼져 있다 — 홈페이지 링크에 쓰지 않는다. 공개 문구에 '가상갤러리'를 쓰지 않는다.
 - 입장 링크 네 곳: 홈 맨 아래 갤러리 줄(.gal-teaser) · Works 필터 줄 오른쪽 · IP 배달 이야기 끝(숲길 앞) · About 아래 링크 줄. 상단 메뉴에는 넣지 않는다.
+- 입장 링크는 PC(마우스)에서 새 창 + 화살표 ↗, 폰·태블릿은 같은 창 + → (작가 결정 2026-11-14; 인스타 앱 안 브라우저에서 새 창이 길을 잃음). 새 창은 `assets/lang.js`, 화살표는 `.arr-same/.arr-new`(site.css·ip-story.css).
 - 통계: 클릭 `gallery_enter`(lobby·works·ip), 홈 구역 `gallery`, 페이지 `/gallery/`(카페24 collect.php 목록에 있어야 따로 셈).
 - three.js 는 CDN 대신 `gallery/vendor/three-0.169.0/` 사본을 읽는다.
 
