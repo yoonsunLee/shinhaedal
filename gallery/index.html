@@ -949,6 +949,9 @@ const COURT_ROOF = [];
   const P = geo.attributes.position; for (let t = 0; t < P.count; t += 3) { const ax = P.getX(t), az = P.getZ(t), bx = P.getX(t + 1), bz = P.getZ(t + 1), cx = P.getX(t + 2), cz = P.getZ(t + 2); if ((bx - ax) * (cz - az) - (bz - az) * (cx - ax) > 0) { for (const k of [0, 1, 2]) { const tmp = [P.getX(t + 1), P.getY(t + 1), P.getZ(t + 1)]; P.setXYZ(t + 1, P.getX(t + 2), P.getY(t + 2), P.getZ(t + 2)); P.setXYZ(t + 2, ...tmp); const u = geo.attributes.uv; const tu = [u.getX(t + 1), u.getY(t + 1)]; u.setXY(t + 1, u.getX(t + 2), u.getY(t + 2)); u.setXY(t + 2, ...tu); break; } } }
   geo.computeVertexNormals();
   const roofM = new THREE.Mesh(geo, M.giwa); scene.add(roofM); COURT_ROOF.push(roofM);
+  // 지붕 밑면(작가님 2026-11-14: 가까이서 올려다보면 기와 그림이 보였다): 같은 모양을 6 cm 아래에 짙은 나무(평고대와 같은 색)로 한 겹 더.
+  //   아래에서 올려다보면 이 면이, 멀리서 경사 윗면을 내려다보는 각도에서는 위의 기와가 보인다
+  { const ug = geo.clone(); ug.translate(0, -.06, 0); const under = new THREE.Mesh(ug, M.soffit); scene.add(under); COURT_ROOF.push(under); }
   for (const [x, z, L, ang] of fas) { const b = new THREE.Mesh(new THREE.BoxGeometry(L + .02, .16, .07), M.soffit); b.position.set(x, Y0 - .05, z); b.rotation.y = -ang; scene.add(b); COURT_ROOF.push(b);
     const lip = new THREE.Mesh(new THREE.BoxGeometry(L + .02, .025, .075), M.brass); lip.position.set(x, Y0 - .135, z); lip.rotation.y = -ang; scene.add(lip); }
 }
@@ -3776,13 +3779,13 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
         const eaveBulb = new THREE.Mesh(new THREE.SphereGeometry(.085, 16, 10), new THREE.MeshBasicMaterial({ color: 0xffe6bc, toneMapped: false })); eaveBulb.position.set(SFX - .36, LY - .08, LZ); scene.add(eaveBulb);
         const plateLamp = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowT, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false, opacity: .3, color: 0xffe0b0 })); plateLamp.scale.setScalar(.7); plateLamp.position.copy(eaveBulb.position); scene.add(plateLamp);
         // 명판 「신해달 작가 작업실」(작가님 2026-11-14): 가운데(상자) 칸 벽, '조개 놓는 곳' 위. 짙은 나무 가로 판에 크림 글자, 나무 테
-        { const PW = 1.0, PHh = .24, PY = 1.78, t = canvasTex(1000, 240, () => {});
+        { const PW = 1.0, PHh = .24, PY = 2.45, t = canvasTex(1000, 240, () => {});
           const draw = () => { const g = t.image.getContext('2d'), W = t.image.width, H = t.image.height; g.fillStyle = '#2a211c'; g.fillRect(0, 0, W, H);
             g.strokeStyle = 'rgba(239,226,200,.35)'; g.lineWidth = 4; g.strokeRect(14, 14, W - 28, H - 28);
             g.fillStyle = '#efe2c8'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.font = `700 ${H * .42}px ${FONT_B}`; g.letterSpacing = `${H * .06}px`;
             g.fillText('신해달 작가 작업실', W / 2, H * .53); t.needsUpdate = true; };
           draw(); document.fonts && document.fonts.ready.then(draw);
-          const nm = new THREE.Mesh(new THREE.PlaneGeometry(PW, PHh), new THREE.MeshBasicMaterial({ map: t, toneMapped: false, color: new THREE.Color(...nl(SFX - .5, PY, CZc, [-1, 0, 0])).multiplyScalar(1.15) }));
+          const nm = new THREE.Mesh(new THREE.PlaneGeometry(PW, PHh), new THREE.MeshBasicMaterial({ map: t, toneMapped: false, color: new THREE.Color(...nl(SFX - .5, 1.78, CZc, [-1, 0, 0])).multiplyScalar(1.15) }));   // 밝기는 예전 자리(1.78 m) 그대로 — 처마 그늘이지만 바로 옆 외등이 비춘다
           nm.position.set(SFX - .045, PY, CZc); nm.rotation.y = -Math.PI / 2; scene.add(nm);
           boxMM(SFX - .04, SFX, PY - PHh / 2 - .03, PY + PHh / 2 + .03, CZc - PW / 2 - .03, CZc + PW / 2 + .03, colAt(SFX - .2, PY, CZc)); }
         // 문 안내문(작가님 2026-11-14, 작가님이 준 글): 다른 문짝에 흰 종이를 테이프로. 「외부인 출입금지」 「개인 작가 작업실입니다.」
