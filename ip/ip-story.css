@@ -567,3 +567,7 @@ html[lang="en"] .forest-copy p{font-size-adjust:var(--en-head);letter-spacing:-.
 @keyframes sfx-recede{to{transform:scale(.94); opacity:.45;}}
 @keyframes sfx-lift{to{transform:translateY(-36px); opacity:0;}}
 @keyframes sfx-depth{from{translate:0 32px;} to{translate:0 -32px;}}   /* transform 대신 translate — 떠오르기(reveal·올라오기)의 transform 과 겹쳐도 서로 덮지 않는다(10/23) */
+
+/* 갤러리 링크(2026-11 작가 결정): PC(마우스)는 새 창 → 화살표 ↗, 폰·태블릿은 같은 창 → 화살표 →. 새 창 열기는 assets/lang.js */
+.arr-new{display:none}
+@media (hover:hover) and (pointer:fine){.arr-same{display:none}.arr-new{display:inline}}
