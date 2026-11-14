@@ -61,9 +61,11 @@
 - 커밋 전: `node --check` 로 바꾼 JS 확인, build_en.py 결과를 함께 커밋.
 
 ## 갤러리(`gallery/`, 2026-11-14 공개)
-- `gallery/` 는 작가 PC의 갤러리 작업(아카이브 저장소 `gallery-launch-qa` 가지의 `gallery-plan/work/release/gallery/`)에서 만든 출시본을 그대로 옮긴 것.
-  여기서 고친 것은 작가 PC 원본(`gallery/src`·`make_site.py`)에도 같이 넣어야 다음 출시본에서 사라지지 않는다(진입 주소·three.js 사본·설명 문구는 원본에 반영됨).
-  갤러리 작가소개 CV에는 홈페이지 CV의 공모전(COMPETITIONS)을 넣지 않는다(작가 결정).
+- **`gallery/index.html` 이 갤러리의 원본이자 최신본이다(작가 결정 2026-11-14).** 갤러리 수정은 여기서 이 파일을 직접 고친다.
+  처음엔 작가 PC의 조각 원본(`gallery/src` + `make_site.py`)으로 만든 출시본이었지만, 이제 PC 쪽은 예전 판이다 —
+  PC에서 만든 출시본으로 이 파일을 덮어쓰지 않는다(덮어쓰면 이후 수정이 사라진다). PC에서 다시 작업하려면 이 파일을 내려받아 시작한다.
+- 확인: 화면은 헤드리스로 1~2분/장 걸린다(그래픽카드 없음). 점검용 `?at=x,z,방향` 은 출시본에서 꺼져 있으니 시험 때만 route 로 바꿔 끼워 쓴다
+  (`URLSearchParams('').get('at')` → `location.search`, `''.includes("dbg=1")` → `true` 면 `window.__dbg.view.pitch` 로 위아래 시점).
 - 공개 진입 주소: 로비 `/gallery/`, 작품관 `/gallery/#works`(첫 작품 HD-2026-001 앞), IP관 입구 `/gallery/#ip`(물빛 통로, 해변 쪽).
   `?at=` `?beach=` 같은 점검 주소는 출시본에서 꺼져 있다 — 홈페이지 링크에 쓰지 않는다. 공개 문구에 '가상갤러리'를 쓰지 않는다.
 - 입장 링크 네 곳: 홈 맨 아래 갤러리 줄(.gal-teaser) · Works 필터 줄 오른쪽 · IP 배달 이야기 끝(숲길 앞) · About 아래 링크 줄. 상단 메뉴에는 넣지 않는다.
