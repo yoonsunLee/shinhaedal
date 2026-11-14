@@ -170,6 +170,10 @@ html:not([lang="en"]) .hero h1{word-spacing:-.05em}
 .delivery-meaning{margin:65px auto 0;text-align:center;max-width:850px;padding:40px 0 0;border-top:1px solid var(--line)}
 .delivery-meaning .eyebrow{font-size:13px;letter-spacing:.07em;color:#8f4761}
 .delivery-meaning p{font-size:clamp(23px,3vw,38px);line-height:1.6;font-weight:600;letter-spacing:-.04em;margin-top:18px}
+/* 갤러리 IP관으로(2026-11): 배달 이야기 끝, 숲길 앞. 홈페이지 .link-go 와 같은 글자(사이트 안 이동 →), 색은 IP 파랑 */
+.delivery-meaning .gal-go{display:inline-block;margin-top:26px;padding:6px 0;font-family:'Space Mono','Noto Sans KR','Noto Sans KR Fallback',monospace;font-size:13px;letter-spacing:.5px;color:var(--blue);text-decoration:none;text-underline-offset:5px;text-decoration-thickness:1px;-webkit-tap-highlight-color:transparent}
+.delivery-meaning .gal-go:focus-visible{text-decoration:underline}
+@media (hover:hover){.delivery-meaning .gal-go:hover{text-decoration:underline}}
 /* 수영장 타일 그림을 깔되, 글자가 있는 쪽은 진한 파랑으로 덮어 흰 글자 대비(약 7:1)를 지킨다.
    PC는 글자가 왼쪽이라 오른쪽으로 갈수록, 폰은 글자가 위라 아래로 갈수록 타일이 드러난다 */
 .pool{background:linear-gradient(90deg,#0847c2 0%,rgba(8,71,194,.9) 34%,rgba(8,71,194,.42) 62%,rgba(8,71,194,.28) 100%),url('assets/pool-tile-bg.webp') center/cover no-repeat,#0847c2;color:#fff;position:relative;overflow:hidden;padding-bottom:85px}

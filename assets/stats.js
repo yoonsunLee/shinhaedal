@@ -174,7 +174,7 @@ window.shStat = window.shStat || function(){}; window.shStatWork = window.shStat
 
   /* ---------- 구역 도달·구역별 머문 시간 ---------- */
   var ZONES = {
-    '/': [['recent', '#works'], ['about', '.about-teaser-wrap'], ['ip', '.ip-teaser-wrap']],
+    '/': [['recent', '#works'], ['about', '.about-teaser-wrap'], ['ip', '.ip-teaser-wrap'], ['gallery', '.gal-teaser-wrap']],
     '/about/': [['note', '.ab-note']],   // 학력·전시 구역은 CV(/cv/)로 옮겼다(2026-10-07)
     '/ip/': [['intro', '#intro'], ['story', '#story'], ['forest', '#forest'], ['pool', '#pool'], ['identity', '#identity'], ['toy', '#toy'], ['friends', '#friends'], ['licensing', '#licensing']]
   }[PAGE] || [];
@@ -262,6 +262,8 @@ window.shStat = window.shStat || function(){}; window.shStatWork = window.shStat
     ['.hh-credit', function(el){ return ['hero_work', workNoFromHref(el)]; }],
     ['#hhPP', function(){ return ['hero_pause', '']; }],
     ['#btnMoreWorks', function(){ return ['all_works', '']; }],
+    // 갤러리로 들어가는 링크(홈 갤러리 줄 · Works · IP · About) — 어디로 들어가는지(lobby·works·ip)를 함께
+    ['a[href*="gallery/"]', function(el){ var m = (el.getAttribute('href') || '').match(/#(works|ip)$/); return ['gallery_enter', m ? m[1] : 'lobby']; }],
     ['.about-teaser', function(){ return ['about_teaser', '']; }],
     ['.ip-teaser', function(){ return ['ip_teaser', '']; }],
     ['.ex-poster-link', function(){ return ['ex_poster', '']; }],

@@ -54,6 +54,7 @@
   .page-head h1{font-family:'Black Han Sans', sans-serif; font-weight:400; font-size:clamp(34px,4.4vw,48px); line-height:1.2; margin:0;}
   .page-head p{font-family:'Noto Sans KR','Noto Sans KR Fallback',sans-serif; font-weight:400; font-size:14px; color:var(--ivory-dim); line-height:1.6; margin:10px 0 0;}
   .ex-filter-row{display:flex; align-items:center; gap:10px; margin-top:22px; flex-wrap:wrap;}
+  .ex-filter-row .gal-go{margin-left:auto;}   /* 갤러리 작품관으로(2026-11) — 필터 줄 오른쪽 끝, 좁으면 다음 줄 오른쪽 */
   .ex-filter-row label{font-family:'Space Mono','Noto Sans KR','Noto Sans KR Fallback', monospace; font-size:11px; letter-spacing:1px; color:var(--ivory-dim); text-transform:uppercase;}
   .ex-filter-row select{
     background:var(--bg-2); border:1px solid var(--field-line); border-radius:6px;
@@ -492,6 +493,7 @@
       <option value="" data-i="filter_all">전체 작품</option>
     </select>
     <span class="ex-filter-notice" id="exFilterNotice" data-i="filter_cleared_notice" hidden>다른 전시의 작품이라 필터가 해제됐어요</span>
+    <a class="link-go gal-go" href="../gallery/#works" data-i="gal_link">전시실 둘러보기 →</a>
   </div>
 </div>
 
@@ -607,6 +609,7 @@ var I18N = {
     empty:'등록된 작품이 아직 없어요',
     error:'작품을 불러오지 못했어요',
     filter_label:'전시별로 보기',
+    gal_link:'전시실 둘러보기 →',
     sel_h:'Selected works',
     all_h:'All works',
     filter_all:'전체 작품',
@@ -647,6 +650,7 @@ var I18N = {
     empty:'No works registered yet',
     error:'Could not load works',
     filter_label:'Browse by exhibition',
+    gal_link:'Walk through the gallery rooms →',
     sel_h:'Selected works',
     all_h:'All works',
     filter_all:'All works',

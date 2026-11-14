@@ -178,10 +178,10 @@
      폰은 올릴 수 없으니 얼빵해달을 오른쪽 위에 늘 작게 보여 준다.
      예전엔 반투명 남색 상자 + 검은 장면 카드로 두 블록의 상자 색·글 시작줄이 서로 달라 광고 배너 두 장처럼 보였다. */
   .about-teaser-wrap, .ip-teaser-wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
-  .ip-teaser-wrap{padding-bottom:104px;}
+  .gal-teaser-wrap{padding-bottom:104px;}   /* 갤러리 줄(2026-11): 작가 소개 줄과 같은 모양으로 맨 아래에 한 줄 더 — 아래 여백과 밑줄은 이 줄로 옮겼다 */
   .about-teaser, .ip-teaser{position:relative; display:grid; grid-template-columns:190px minmax(0,1fr) auto; column-gap:40px; row-gap:10px; align-items:center;
     padding:52px 0; border-top:1px solid var(--line); text-decoration:none; color:inherit;}
-  .ip-teaser{border-bottom:1px solid var(--line);}
+  .gal-teaser{border-bottom:1px solid var(--line);}
   .about-teaser:focus-visible, .ip-teaser:focus-visible{outline:2px solid var(--accent); outline-offset:8px;}
   .about-teaser-body, .ip-teaser-body{display:contents;}  /* 라벨·제목·버튼을 줄의 칸에 바로 놓는다 */
   .about-teaser-label, .ip-teaser-label{grid-column:1; grid-row:1 / span 2; align-self:start; margin:0; padding-top:16px;
@@ -753,6 +753,16 @@
   </a>
 </div>
 
+<div class="about-teaser-wrap gal-teaser-wrap">
+  <a class="about-teaser gal-teaser reveal-text" href="gallery/" data-reveal>
+    <div class="about-teaser-body">
+      <p class="about-teaser-label">Gallery</p>
+      <p class="about-teaser-lede" data-i="gal_teaser_lede"><span class="lede-1">Shin Haedal Gallery</span><span class="lede-2">Explore the najeonchilgi works and walk through the world of Spaced-out Sea Otter.</span></p>
+      <span class="about-teaser-cta" data-i="gal_teaser_cta">Enter the gallery <span class="cta-arrow">→</span></span>
+    </div>
+  </a>
+</div>
+
 <div class="work-modal-overlay" id="workModal" role="dialog" aria-modal="true" aria-hidden="true" inert>
   <div class="work-modal">
     <div class="wm-media" id="wmMedia">
@@ -870,6 +880,8 @@ var I18N = {
     hv_play:'재생', hv_pause:'일시정지',
     about_teaser_lede:'<span class="lede-1">독해하고, 해석하고, 번역하는 것.</span><span class="lede-2">저는 법을 읽고 의미를 찾아,<br>그것을 나전칠기의 언어로 옮깁니다.</span>',
     about_teaser_cta:'작가 소개 보기 <span class="cta-arrow">→</span>',
+    gal_teaser_lede:'<span class="lede-1">신해달 갤러리</span><span class="lede-2">나전칠기 작품을 둘러보고, 얼빵해달의 세계를 걸어보세요.</span>',
+    gal_teaser_cta:'갤러리 입장 <span class="cta-arrow">→</span>',
   },
   en: {
     aria_work_close:'Close artwork',
@@ -911,7 +923,9 @@ var I18N = {
     hv_view_work:'View work →',
     hv_play:'Play', hv_pause:'Pause',
     about_teaser_lede:'<span class="lede-1">To read, interpret, and translate.</span><span class="lede-2">I read the law, seek out its meaning,<br>and translate it into the language of najeonchilgi.</span>',
-    about_teaser_cta:'Meet the artist <span class="cta-arrow">→</span>'
+    about_teaser_cta:'Meet the artist <span class="cta-arrow">→</span>',
+    gal_teaser_lede:'<span class="lede-1">Shin Haedal Gallery</span><span class="lede-2">Explore the najeonchilgi works and walk through the world of Spaced-out Sea Otter.</span>',
+    gal_teaser_cta:'Enter the gallery <span class="cta-arrow">→</span>'
   }
 };
 var LANG = 'en';
