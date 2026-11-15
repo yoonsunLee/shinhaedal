@@ -4869,6 +4869,9 @@ function redrawPanel(m) { const r = REDRAW.find(o => o.t === m.material.map); if
   { const s = panel(.8, .35, (g, W, H) => { g.fillStyle = LB; g.fillRect(0, 0, W, H); g.strokeStyle = 'rgba(255,255,255,.85)'; g.lineWidth = H * .04; g.strokeRect(H * .08, H * .08, W - H * .16, H - H * .16);
       g.fillStyle = '#ffffff'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.font = `700 ${H * .5}px ${FONT_B}`; g.fillText('로비', W / 2, H * .54); }, { ppm: 600 });
     place(s, LG.x0 + WF + .012, 3.32, 11.4, 1, 0); }
+  // 같은 문 윗면(작가님 2026-11-15): 갤러리 벽 문 윗면과 라운지 모델 문 윗면이 거의 같은 높이에 겹쳐 갈색 줄이 지글거렸다 →
+  //   벽 두께 전체(로비 쪽 벽면 ~ 라운지 안쪽 면)를 덮는 한 장으로 덮는다. 색은 문 옆면과 같은 밝은 회백
+  boxMM(6 - WT / 2 - .01, LG.x0 + WF + .02, 2.975, 3.0, 10.2, 12.6, M.plaster);
 
   // 멤버십 안내지(작가님 2026-11-12): 데스크 위에 세운 작은 안내지. 눌러야만 발급 창이 뜬다
   { const leaflet = panel(.26, .36, (g, W, H) => {
