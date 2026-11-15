@@ -1104,7 +1104,7 @@ function homeLead(ex){
   return (n === null || n === undefined || n === '') ? HOME_UPCOMING_DAYS : Number(n);
 }
 /* 오늘 홈에 나갈 수 있는 전시를 앞선 차례대로.
-   이 규칙은 아카이브 admin.html 의 hvCandidates 와 글자 그대로 같아야 한다 —
+   이 규칙은 아카이브 admin.html 의 hvCandidates, 갤러리 gallery/index.html 의 PROMOS 와 같아야 한다 —
    다르면 관리 화면 미리보기와 실제 홈페이지가 서로 다른 전시를 가리킨다. */
 function homeCandidates(list, today){
   return list.filter(function(ex){

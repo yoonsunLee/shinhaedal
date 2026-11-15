@@ -73,6 +73,7 @@
 - 통계: 클릭 `gallery_enter`(lobby·works·ip), 홈 구역 `gallery`, 페이지 `/gallery/`(카페24 collect.php 목록에 있어야 따로 셈).
 - 작품 캡션은 작품 오른쪽, 아랫줄을 작품 아랫면에 맞춘다(작가 2026-11-15; 룸4 벽감만 벽감 아래 오른쪽 맞춤). 판매완료 작품은 오른쪽 아래 모서리 밑에 빨간 동그라미.
   판매 여부는 발행 때 DB 뷰 works_status(effective_status='sold')로 works-index.json 에 `sold: true` 만 싣는다. 가격·NFS·판매가능 등은 갤러리 어디에도 싣지 않는다.
+- 홍보 포스터·바깥 현수막·로비 개인전 벽 = 지금 홈 첫 화면(Upcoming · Now on view)에 나오는 전시(작가 2026-11-15). 갤러리 `PROMOS` 는 홈 `index.html` 의 homeCandidates(예고 기간·hide·차례·3개)와 같아야 한다 — 한쪽을 고치면 다른 쪽도. 포스터 없는 전시는 갤러리에 안 걸리고 대표작·갤러리 이름으로 대신한다.
 - three.js 는 CDN 대신 `gallery/vendor/three-0.169.0/` 사본을 읽는다.
 
 ## 진행 중·보류
