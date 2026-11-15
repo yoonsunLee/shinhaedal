@@ -273,7 +273,6 @@ body:has(.welcome:not(.gone)) .hint, body:has(.welcome:not(.gone)) .loading { op
       <span class="door" aria-hidden="true">입구</span>
     </div>
     <div class="secs" id="secs"></div>
-    <div class="mapFoot"><button id="openList">작품 목록</button></div>
   </div>
 </section>
 
@@ -5633,7 +5632,7 @@ for (const { w, info } of workPlaced) {
 }
 function openList() { closeMap(); list.hidden = false; $('listClose').focus(); }
 function closeList() { list.hidden = true; }
-$('openList').addEventListener('click', openList); $('listClose').addEventListener('click', closeList);
+/* 안내도 '작품 목록' 단추는 뺐다(작가님 2026-11-15) */ $('listClose').addEventListener('click', closeList);
 list.addEventListener('click', e => { if (e.target === list) closeList(); });
 
 // 전시 안내도(작가님 결정 2026-11-13, 전문가 자문 '가'안): 위 메뉴 줄을 접고, 안내도 단추를 누르면 평면 안내도가 열린다.
@@ -5658,11 +5657,13 @@ function secOf(zone) {
   list.forEach(([, pos], i) => { if (SEC_IN[zone][i] !== name) return; const d = Math.hypot(me.x - pos[0], me.z - pos[1]); if (d < bd) { bd = d; best = i; } });
   return best;
 }
+// 안내도 IP관 단추는 넷만(작가님 2026-11-15): 해변 · 숲길 · 작업실 · 수영장. 나머지 섹션은 '지금 위치' 이름과 #ip 입장 자리에만 쓴다
+const IP_BTN = { '해변': '해변', '숲길': '숲길', '작업실 문 앞': '작업실', '수영장': '수영장' };
 const secsEl = $('secs');
 for (const [k, list] of Object.entries(SUBNAV)) {
   const box = document.createElement('section'), h = document.createElement('h3'), row = document.createElement('div');
   h.textContent = k === 'works' ? '작품관' : 'IP관'; box.append(h, row); box.dataset.zone = k;
-  list.forEach(([label, pos, yaw]) => { const b = document.createElement('button'); b.textContent = label; b.addEventListener('click', () => { closeMap(); closeCard(); jump(pos, yaw); }); row.appendChild(b); });
+  list.forEach(([label, pos, yaw]) => { if (k === 'ip' && !(label in IP_BTN)) return; const b = document.createElement('button'); b.textContent = k === 'ip' ? IP_BTN[label] : label; b.addEventListener('click', () => { closeMap(); closeCard(); jump(pos, yaw); }); row.appendChild(b); });
   secsEl.appendChild(box);
 }
 let whereKey = '';
