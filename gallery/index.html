@@ -412,11 +412,18 @@ const SITE = 'https://shinhaedal.com';
 const SHOP_URL = 'https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product';
 // 한국 날짜. 주소 끝에 ?today=2026-11-25 처럼 붙이면 그날로 보고 현수막·로비 안내를 미리 확인할 수 있다
 const TODAY = (new URLSearchParams('').get('today') || '').match(/^\d{4}-\d{2}-\d{2}$/)?.[0] || new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
-// 갤러리 곳곳의 홍보 포스터(작가님 2026-11-13 운영방식 A). 어드민 전시 칸 '갤러리 홍보'(gallery_promo)와 '홍보 순서'(gallery_rank)로 고른다.
-//   auto: 개인전이면 끝나기 전까지 자동으로 건다 / pin: 단체전·아트페어도 건다 / hide: 걸지 않는다. 포스터 그림이 있는 전시만.
-//   차례: pin → 홍보 순서(작을수록 앞) → 개인전 → 개막이 이른 것. 큰 자리는 1순위, 작은 자리는 자리 번호로 1~3순위를 나눠 건다
-const PROMOS = EXHIBITIONS.filter(e => e.end_date >= TODAY && e.poster_url && (e.gallery_promo === 'pin' || ((e.gallery_promo || 'auto') === 'auto' && e.type === '개인전')))
-  .sort((a, b) => (b.gallery_promo === 'pin') - (a.gallery_promo === 'pin') || (a.gallery_rank ?? 99) - (b.gallery_rank ?? 99) || (b.type === '개인전') - (a.type === '개인전') || a.start_date.localeCompare(b.start_date));
+// 갤러리 곳곳의 홍보 포스터(작가님 2026-11-15): 지금 홈페이지 첫 화면(Upcoming · Now on view)에 나오는 전시를 그대로 건다.
+//   판정은 홈페이지 index.html 의 homeCandidates 와 같다 — 전시별 예고 기간(home_lead_days, 없으면 30일), 홈 노출 '숨김'(hide)은 빼고,
+//   차례는 고정(pin) → 개인전 → 단체전류 → 아트페어류 → 진행 중 먼저 → 개막이 이른 것. 홈처럼 앞의 3개까지. 갤러리에 걸 그림이 필요해 포스터가 있는 전시만.
+//   큰 자리는 1순위, 작은 자리는 자리 번호로 1~3순위를 나눠 건다. 홈 규칙을 바꾸면 여기도 같이 바꾼다
+const HOME_UPCOMING_DAYS = 30, HOME_CARDS_MAX = 3;
+const homeTypeRank = t => t === '개인전' ? 0 : ['단체전', '기획전', '특별전'].includes(t) ? 1 : ['아트페어', '팝업'].includes(t) ? 2 : 3;
+const homeLead = e => (e.home_lead_days === null || e.home_lead_days === undefined || e.home_lead_days === '') ? HOME_UPCOMING_DAYS : Number(e.home_lead_days);
+const addDays = (d, n) => { const x = new Date(d + 'T00:00:00Z'); x.setUTCDate(x.getUTCDate() + n); return x.toISOString().slice(0, 10); };
+const PROMOS = EXHIBITIONS.filter(e => e.start_date && e.end_date && e.home_mode !== 'hide' && TODAY <= e.end_date && TODAY >= addDays(e.start_date, -homeLead(e)))
+  .sort((a, b) => (a.home_mode === 'pin' ? 0 : 1) - (b.home_mode === 'pin' ? 0 : 1) || homeTypeRank(a.type) - homeTypeRank(b.type)
+    || (TODAY >= a.start_date ? 0 : 1) - (TODAY >= b.start_date ? 0 : 1) || String(a.start_date).localeCompare(String(b.start_date)) || String(a.id).localeCompare(String(b.id)))
+  .slice(0, HOME_CARDS_MAX).filter(e => e.poster_url);
 const promoFor = (slot = 0) => PROMOS.length ? PROMOS[slot % Math.min(3, PROMOS.length)] : null;
 const LOCAL_POSTERS = new Set(['EX-2026-01']);   // 갤러리 폴더(posters/)에 옮겨 둔 포스터. 없는 것은 홈페이지 주소로 불러온다(아티팩트에서는 안 보임 → 새 전시를 걸면 여기 복사해 넣는다)
 const posterSrc = e => LOCAL_POSTERS.has(e.id) ? `posters/${e.id}.webp` : `${SITE}/${e.poster_url}`;
@@ -1081,7 +1088,7 @@ animators.push((t, dt) => { heroT += dt; if ((heroT * 30 | 0) !== ((heroT - dt) 
 
 /* ───────── 전시 안내(로비 · 작가소개 함께 씀) ───────── */
 // 개인전(홍보 1순위) 머리글 + 포스터 + 설명. wx·nx: 벽 자리와 바라보는 쪽, zl: 보는 사람 기준 왼쪽 끝 z, s: 크기 배율, by: 포스터 밑 높이
-const SOLO = promoFor(0);   // 홍보 1순위(개인전이 기본, 어드민 '갤러리 홍보'로 바꾼다)
+const SOLO = promoFor(0);   // 홍보 1순위(홈 첫 화면에 나오는 전시의 1순위)
 const exDates = (e) => `${e.start_date.replace(/-/g, '.')} – ${e.end_date.slice(5).replace('-', '.')}`;
 const exVenue = e => e.venue.split(',').slice(0, 2).join(',');
 function exhibitSolo(wx, nx, zl, s = 1, by = .95) {
@@ -4984,7 +4991,7 @@ function redrawPanel(m) { const r = REDRAW.find(o => o.t === m.material.map); if
 // 걸 개인전이 없으면 갤러리 이름을 세로로. 양옆 채의 지붕 밑으로 내려 걸어 처마에 닿지 않게 한다
 const banners = [];
 {
-  const solo = promoFor(0);   // 홍보 1순위(g2 promoFor: 개인전이 기본, 어드민 '갤러리 홍보'로 바꾼다)
+  const solo = promoFor(0);   // 홍보 1순위(g2 promoFor: 홈 첫 화면 전시의 1순위)
   const dfmt = e => `${e.start_date.replace(/-/g, '.')} – ${e.end_date.slice(5).replace('-', '.')}`;
   const dday = e => Math.round((Date.parse(e.start_date) - Date.parse(TODAY)) / 864e5);
   const W_ = 2.0, H_ = 4.9, TOP = 5.9, PPM = 240;
