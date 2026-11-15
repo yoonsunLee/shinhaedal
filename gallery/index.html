@@ -414,19 +414,37 @@ const SHOP_URL = 'https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dba
 const TODAY = (new URLSearchParams('').get('today') || '').match(/^\d{4}-\d{2}-\d{2}$/)?.[0] || new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
 // 갤러리 곳곳의 홍보 포스터(작가님 2026-11-15): 지금 홈페이지 첫 화면(Upcoming · Now on view)에 나오는 전시를 그대로 건다.
 //   판정은 홈페이지 index.html 의 homeCandidates 와 같다 — 전시별 예고 기간(home_lead_days, 없으면 30일), 홈 노출 '숨김'(hide)은 빼고,
-//   차례는 고정(pin) → 개인전 → 단체전류 → 아트페어류 → 진행 중 먼저 → 개막이 이른 것. 홈처럼 앞의 3개까지. 갤러리에 걸 그림이 필요해 포스터가 있는 전시만.
+//   차례는 고정(pin) → 개인전 → 단체전류 → 아트페어류 → 진행 중 먼저 → 개막이 이른 것. 홈처럼 앞의 3개까지.
 //   큰 자리는 1순위, 작은 자리는 자리 번호로 1~3순위를 나눠 건다. 홈 규칙을 바꾸면 여기도 같이 바꾼다
 const HOME_UPCOMING_DAYS = 30, HOME_CARDS_MAX = 3;
+try { await Promise.race([Promise.all(['700 104px "Noto Sans KR"', '400 44px "Noto Sans KR"', '700 34px "Space Mono"'].map(f => document.fonts.load(f))), new Promise(r => setTimeout(r, 2500))]); } catch (e) {}   // 글씨 카드용 글꼴(늦으면 기다리지 않는다)
 const homeTypeRank = t => t === '개인전' ? 0 : ['단체전', '기획전', '특별전'].includes(t) ? 1 : ['아트페어', '팝업'].includes(t) ? 2 : 3;
 const homeLead = e => (e.home_lead_days === null || e.home_lead_days === undefined || e.home_lead_days === '') ? HOME_UPCOMING_DAYS : Number(e.home_lead_days);
 const addDays = (d, n) => { const x = new Date(d + 'T00:00:00Z'); x.setUTCDate(x.getUTCDate() + n); return x.toISOString().slice(0, 10); };
 const PROMOS = EXHIBITIONS.filter(e => e.start_date && e.end_date && e.home_mode !== 'hide' && TODAY <= e.end_date && TODAY >= addDays(e.start_date, -homeLead(e)))
   .sort((a, b) => (a.home_mode === 'pin' ? 0 : 1) - (b.home_mode === 'pin' ? 0 : 1) || homeTypeRank(a.type) - homeTypeRank(b.type)
     || (TODAY >= a.start_date ? 0 : 1) - (TODAY >= b.start_date ? 0 : 1) || String(a.start_date).localeCompare(String(b.start_date)) || String(a.id).localeCompare(String(b.id)))
-  .slice(0, HOME_CARDS_MAX).filter(e => e.poster_url);
+  .slice(0, HOME_CARDS_MAX);   // 포스터가 없는 전시는 아래 exCard 글씨 카드를 포스터 대신 건다(작가님 2026-11-15)
 const promoFor = (slot = 0) => PROMOS.length ? PROMOS[slot % Math.min(3, PROMOS.length)] : null;
 const LOCAL_POSTERS = new Set(['EX-2026-01']);   // 갤러리 폴더(posters/)에 옮겨 둔 포스터. 없는 것은 홈페이지 주소로 불러온다(아티팩트에서는 안 보임 → 새 전시를 걸면 여기 복사해 넣는다)
-const posterSrc = e => LOCAL_POSTERS.has(e.id) ? `posters/${e.id}.webp` : `${SITE}/${e.poster_url}`;
+// 포스터가 없는 전시는 홈페이지 전시 카드처럼 글씨로 만든 세로 카드(5:7)를 포스터 자리에 건다(작가님 2026-11-15). 그림 주소(data:)로 돌려주어 포스터를 쓰는 곳 어디서나 그대로 쓴다
+const EX_CARD = new Map();
+function exCard(e) {
+  if (EX_CARD.has(e.id)) return EX_CARD.get(e.id);
+  const W = 1000, H = 1400, c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d');
+  g.fillStyle = '#1f2638'; g.fillRect(0, 0, W, H);
+  g.strokeStyle = 'rgba(239,233,223,.22)'; g.lineWidth = 3; g.strokeRect(46, 46, W - 92, H - 92);
+  const P = 110, wrap = (text, size, weight, fam, max) => { g.font = `${weight} ${size}px ${fam}`; const out = []; let line = '';
+    for (const ch of [...String(text || '')]) { if (g.measureText(line + ch).width > W - P * 2 && line) { out.push(line); line = ''; } line += ch; } if (line) out.push(line); return out.slice(0, max); };
+  g.textBaseline = 'alphabetic'; g.fillStyle = '#c9a86a'; g.font = `700 34px ${FONT_M}`; g.fillText(String(e.type_en || e.type || 'EXHIBITION').toUpperCase(), P, 230);
+  g.fillStyle = '#efe9df'; const T = wrap(e.title, 104, 700, FONT_B, 4); T.forEach((l, i) => { g.font = `700 104px ${FONT_B}`; g.fillText(l, P, 420 + i * 134); });
+  let y = 420 + (T.length - 1) * 134 + 150; g.fillStyle = 'rgba(239,233,223,.82)';
+  if (e.start_date && e.end_date) { g.font = `500 52px ${FONT_B}`; g.fillText(`${e.start_date.replace(/-/g, '.')} – ${e.end_date.slice(5).replace('-', '.')}`, P, y); y += 84; }
+  for (const l of wrap(String(e.venue || '').replace(/, (대한민국|Korea|South Korea)$/, ''), 44, 400, FONT_B, 2)) { g.font = `400 44px ${FONT_B}`; g.fillText(l, P, y); y += 64; }
+  g.fillStyle = 'rgba(239,233,223,.5)'; g.font = `700 30px ${FONT_M}`; g.fillText('SHIN HAEDAL', P, H - 120);
+  const url = c.toDataURL('image/png'); EX_CARD.set(e.id, url); return url;
+}
+const posterSrc = e => !e.poster_url ? exCard(e) : LOCAL_POSTERS.has(e.id) ? `posters/${e.id}.webp` : `${SITE}/${e.poster_url}`;
 const SCALE = 2.5;            // 작품을 화면에서 보기 좋게 실제 크기의 2.5배로 건다
 const LOCAL_IMG = new Set(['HD-2025-001', 'HD-2025-002', 'HD-2025-004', 'HD-2026-001', 'HD-2026-002', 'HD-2026-003', 'HD-2026-004', 'HD-2026-005', 'HD-2026-006', 'HD-2026-007', 'HD-2026-008', 'HD-2026-009', 'HD-2026-010', 'HD-2026-011', 'HD-2026-012']);
 const workImg = w => LOCAL_IMG.has(w.id) ? `img/${w.id}.webp` : `${SITE}/${w.thumb}`;
@@ -2269,6 +2287,8 @@ SOUND.extra.push((ctx) => {
 // 바닥 글 '영해/공해'는 지웠다(작가님 2026-11-13)
 
 /* ───────── 중정: 얼빵해달 등신대, 이정표, 현판 ───────── */
+// 홍보 포스터(작가님 2026-11-15): 중정 남쪽 벽, 로비로 가는 문 양옆 창호 벽에 한 장씩(중정을 바라본다). 왼쪽 = 홍보 1순위(없으면 대표작), 오른쪽 = 2순위(1개뿐이면 같은 전시)
+for (const [x, slot] of [[-7.2, 0], [7.2, 1]]) { const p = promoPoster(slot, 1.1, { big: slot === 0 }); if (p) place(p, x, 1.75, 9.4 - WT / 2 - .015, 0, -1); }
 // 등신대 자리(중정 자문 2026-11-12, 작가님 A): 마당 한가운데 시야를 가리지 않게 IP관 문 북쪽 옆 툇마루로. 마당 가운데를 바라본다
 const standeeSpot = { x: 8.9, z: -7.4 }, STANDEE_DIR = [-.72, .69];
 const HYEON = [], SEATS = [], VISITED = new Set();   // 현판 빛, 앉는 자리, 다녀간 곳(다음 문 현판을 고른다)
@@ -5045,7 +5065,7 @@ const banners = [];
     for (const sx of [-1, 1]) boxMM(x + sx * (W_ / 2 - .1) - .02, x + sx * (W_ / 2 - .1) + .02, TOP + .01, TOP + .05, 19.55, 19.9, M.steel);
     banners.push({ mesh, base: geo.attributes.position.array.slice(), h: H_, phase: x });
     if (ex) pickable(mesh, { kind: (upcoming ? `UPCOMING · D-${dday(ex)}` : 'NOW ON VIEW') + ' · ' + ex.type, title: ex.title, meta: `${dfmt(ex)} · ${ex.venue}`,
-      img: ex.poster_url ? posterSrc(ex) : undefined,
+      img: posterSrc(ex),
       exTitle: ex.work_nos ? '출품작' : undefined, ex: ex.work_nos ? ex.work_nos.split(',').map(id => (WORKS_INDEX.find(w => w.id === id.trim()) || {}).title || id) : undefined,
       links: [[SITE + '/', '홈페이지에서 보기']], focus: { pos: [x, 27.5], look: [x, 5.0, 19.9] } });
   }
