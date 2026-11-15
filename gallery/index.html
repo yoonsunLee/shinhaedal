@@ -1313,7 +1313,7 @@ for (const s of SERIES) if (s.name) SERIES_NAME[s.key] = s.name;
 // 윗면 맞춤: 모든 작품의 윗면을 POV : 업무 중(53 cm)의 윗면 높이에 건다. 그 작품의 가운데가 눈높이 1.65 m
 const TOP = 1.65 + .53 * SCALE / 2;   // (예전 규칙: 윗면 한 줄. 지금은 쓰지 않음)
 const HANG_CY = 1.5;   // 작품 가운데 높이(작가님 결정: 키 165 cm 관람객 눈높이에 맞춰 가운데 1.5 m 한 줄, 미술관 표준)
-const GAP_IN = 1.45, GAP_UNIT = 2.6, CAP_W = 1.0, CAP_SPACE = 0;   // 캡션은 작품 아래로 옮겨서(작가님) 작품 옆에 자리를 두지 않는다. 작품이 자리 한가운데에 온다
+const GAP_IN = 1.45, GAP_UNIT = 2.6, CAP_W = 1.0, CAP_SPACE = 0;   // 캡션은 작품 오른쪽 아래(2026-11-15). 작품 사이가 넓어(1.45 m 이상) 따로 자리를 두지 않는다. 작품이 자리 한가운데에 온다
 for (const u of units) {
   u.sizes = u.works.map(w => parseSize(w.size).map(v => v / 100 * (SCALE1 && w.id === FIRST_WORK ? 1 : SCALE)));   // ?scale1=1 시안: 첫 작품만 실제 크기(1:1)
   u.width = u.sizes.reduce((s, [w]) => s + w, 0) + (u.works.length - 1) * GAP_IN + CAP_SPACE;
@@ -1388,8 +1388,12 @@ function putWork(w, ww, hh, x, cy, z, [nx, nz], [dx, dz], light, where, capAt) {
   const t = tex(workImg(w)); const face = new THREE.Mesh(new THREE.PlaneGeometry(ww, hh), new THREE.MeshBasicMaterial({ map: t, color: 0xeeeeee, toneMapped: false })); face.position.z = .046; g.add(face);
   place(g, x, cy, z, nx, nz);
   const CS = .72;   // 캡션 크기(작가님: 글씨를 더 작게, 작품 오른쪽 아래)
-  const cw = (CAP_W - .08) * CS, lb = caption(w, light, !!(capAt && capAt[3])), cc = ww / 2 - cw * .45 + cw / 2, [lx, lz] = capAt || [x + dx * cc + nx * .01, z + dz * cc + nz * .01];   // 캡션: 작품 바로 아래, 오른쪽으로 치우쳐(작가님 예시)
-  lb.scale.setScalar(CS); place(lb, lx, capAt && capAt[2] != null ? capAt[2] : cy - hh / 2 + .04 - CAP_H * CS / 2, lz, nx, nz);   // capAt[2]: 캡션 아랫줄 높이를 따로 줄 때
+  // 캡션: 작품 오른쪽, 아랫줄이 작품 아랫면에 맞게(작가님 2026-11-15: 작품 우측 하단). 글은 캔버스 아래에서부터 쌓이므로 캔버스 아랫면 = 작품 아랫면
+  const CAP_GAP = .06, cw = (CAP_W - .08) * CS, lb = caption(w, light, !!(capAt && capAt[3])), cc = ww / 2 + CAP_GAP + cw / 2, [lx, lz] = capAt || [x + dx * cc + nx * .01, z + dz * cc + nz * .01];
+  lb.scale.setScalar(CS); place(lb, lx, capAt && capAt[2] != null ? capAt[2] : cy - hh / 2 + CAP_H * CS / 2, lz, nx, nz);   // capAt[2]: 캡션 아랫줄 높이를 따로 줄 때(벽감)
+  // 판매완료 작품: 오른쪽 아래 모서리 바로 밑에 빨간 동그라미 스티커(작가님 2026-11-15). 판매 여부는 발행 자료 works-index.json 의 sold(판매완료만 true)
+  if (w.sold) { const dot = new THREE.Mesh(new THREE.CircleGeometry(.022, 28), new THREE.MeshBasicMaterial({ color: 0xc8231c, toneMapped: false }));
+    dot.position.set(ww / 2 - .028, -hh / 2 - .036, .004); g.add(dot); }
   const D = DETAIL[w.id] || {};
   const info = { kind: D.en || w.title_en || w.id, title: w.title, meta: D.medium || `${w.year} · ${w.size} cm`, body: (D.body || []).join('\n\n'), ex: D.ex, img: workImg(w), id: w.id,
     links: [[`${SITE}/works/w/${w.id}/`, '작품 페이지'], [`${SITE}/contact/`, '작품 문의', true]], where, focus: focusFrom(x, cy, z, nx, nz, Math.max(2.4, hh * 1.6)) };

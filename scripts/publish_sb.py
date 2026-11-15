@@ -475,6 +475,9 @@ def main():
     all_media = sb("work_media_links?select=*&is_public=eq.true&order=sort_order")
     series_rows = sb_optional("series?select=*", "series")
     settings_rows = sb_optional("site_settings?select=key,value", "site_settings")
+    # 판매완료 여부(갤러리 빨간 스티커용) — DB 뷰 works_status 의 판정만 쓴다. 가격·다른 상태는 내보내지 않는다
+    sold_ids = {r.get("id") for r in sb_optional("works_status?select=id,effective_status", "works_status")
+                if r.get("effective_status") == "sold"}
 
     if not works:
         sys.exit("공개 작품이 0건 — 반영 중단")
@@ -499,6 +502,7 @@ def main():
     index_entries = []
     asset_sources = {"works": {}, "posters": {}, "home_videos": {}, "hero_images": {}}  # 미리보기용 원본 지문
     for w in works:
+        work_id = w.get("id")   # 아래 사진 너비 계산에서 w 를 다시 쓰므로 미리 잡아 둔다
         no = s(w["work_no"])
         mine = [e for e in ex_of_work.get(w["id"], []) if e]
         mine.sort(key=lambda e: s(e.get("start_date")), reverse=True)
@@ -630,6 +634,8 @@ def main():
             tset.append([rel, w])
         if len(tset) > 1:
             entry["thumb_set"] = tset
+        if work_id in sold_ids:
+            entry["sold"] = True   # 판매완료만 표시(그 밖엔 키 자체가 없다)
         index_entries.append(entry)
 
     write_json(os.path.join(data_dir, "works-index.json"), index_entries)

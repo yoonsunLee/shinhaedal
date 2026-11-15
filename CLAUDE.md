@@ -71,6 +71,8 @@
 - 입장 링크 네 곳: 홈 맨 아래 갤러리 줄(.gal-teaser) · Works 필터 줄 오른쪽 · IP 배달 이야기 끝(숲길 앞) · About 아래 링크 줄. 상단 메뉴에는 넣지 않는다.
 - 입장 링크는 PC(마우스)에서 새 창 + 화살표 ↗, 폰·태블릿은 같은 창 + → (작가 결정 2026-11-14; 인스타 앱 안 브라우저에서 새 창이 길을 잃음). 새 창은 `assets/lang.js`, 화살표는 `.arr-same/.arr-new`(site.css·ip-story.css).
 - 통계: 클릭 `gallery_enter`(lobby·works·ip), 홈 구역 `gallery`, 페이지 `/gallery/`(카페24 collect.php 목록에 있어야 따로 셈).
+- 작품 캡션은 작품 오른쪽, 아랫줄을 작품 아랫면에 맞춘다(작가 2026-11-15; 룸4 벽감만 벽감 아래 오른쪽 맞춤). 판매완료 작품은 오른쪽 아래 모서리 밑에 빨간 동그라미.
+  판매 여부는 발행 때 DB 뷰 works_status(effective_status='sold')로 works-index.json 에 `sold: true` 만 싣는다. 가격·NFS·판매가능 등은 갤러리 어디에도 싣지 않는다.
 - three.js 는 CDN 대신 `gallery/vendor/three-0.169.0/` 사본을 읽는다.
 
 ## 진행 중·보류
