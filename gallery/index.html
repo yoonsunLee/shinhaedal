@@ -2855,8 +2855,8 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
     { file: 'sign-4-sportscenter', R: [.07, .09, .93, .66], ink: '#24364a', sub: '#5b7088', dot: '#4aa8d8', title: '현대사회 스포츠센터', body: '수영을 못 하는 얼빵해달이 수영을 배우는 곳이에요.' },
   ];
   const ipSign = (n, x, z, ry, W = 1.35) => {
-    const S = IP_SIGNS[n - 1], c = document.createElement('canvas'), t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = maxAniso;
-    const mat = new THREE.MeshBasicMaterial({ map: t, transparent: true, alphaTest: .35, toneMapped: false, visible: false });
+    const S = IP_SIGNS[n - 1];
+    const mat = new THREE.MeshBasicMaterial({ transparent: true, alphaTest: .35, side: THREE.DoubleSide, toneMapped: false, visible: false });
     const m = new THREE.Mesh(new THREE.PlaneGeometry(W, W * .64), mat); m.rotation.y = ry; m.position.set(x, W * .32, z); scene.add(m);
     // 보는 사람 쪽으로 돌아선다(작가님 2026-11-20: 어디서 봐도 글이 보이게). 바닥 높이는 그 자리 바닥에 맞춘다(모래 언덕에 묻히지 않게)
     let base = null, hh = W * .64; const rc = new THREE.Raycaster();
@@ -2864,15 +2864,17 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
       if (base === null) { rc.set(new THREE.Vector3(x, 6, z), new THREE.Vector3(0, -1, 0)); const f = rc.intersectObjects(floors, false).find(f => f.object.visible); if (f) base = f.point.y; }
       m.position.y = (base ?? 0) + hh / 2; });
     new THREE.ImageLoader().load(`ip/new/signs/${S.file}.webp`, (im) => {
-      const w = im.naturalWidth, h = im.naturalHeight; c.width = w; c.height = h; m.geometry.dispose(); hh = W * h / w; m.geometry = new THREE.PlaneGeometry(W, hh);
-      const draw = () => { const g = c.getContext('2d'); g.clearRect(0, 0, w, h); g.drawImage(im, 0, 0);
+      const w = im.naturalWidth || im.width, h = im.naturalHeight || im.height; m.geometry.dispose(); hh = W * h / w; m.geometry = new THREE.PlaneGeometry(W, hh);
+      const draw = () => { const c = document.createElement('canvas'); c.width = w; c.height = h;   // 그릴 때마다 새 캔버스·새 텍스처(크기가 바뀐 캔버스를 다시 올리지 않게)
+        try { const g = c.getContext('2d'); g.drawImage(im, 0, 0);
         const [a, b, cc, d] = S.R, X0 = a * w, Y0 = b * h, BW = (cc - a) * w, BH = (d - b) * h, cx = X0 + BW / 2; g.textAlign = 'center'; g.textBaseline = 'alphabetic';
         const u = BH / 10;   // 글 크기 단위
         g.fillStyle = S.sub; g.font = `500 ${u * 1.0}px ${FONT_B}`; g.fillText(`얼빵해달의 하루 · ${n} / 4`, cx, Y0 + u * 1.3);
         for (let k = 0; k < 4; k++) { g.beginPath(); g.arc(cx + (k - 1.5) * u * .9, Y0 + u * 2.15, u * .17, 0, Math.PI * 2); if (k === n - 1) { g.fillStyle = S.dot; g.fill(); } else { g.strokeStyle = S.sub; g.lineWidth = u * .07; g.stroke(); } }
         g.fillStyle = S.ink; g.font = `700 ${u * 2.3}px ${FONT_B}`; g.fillText(S.title, cx, Y0 + u * 4.95);
         g.font = `500 ${u * 1.4}px ${FONT_B}`; const L = wrapText(g, S.body, BW * .94); L.forEach((l, i) => g.fillText(l, cx, Y0 + u * (7.0 + i * 1.85)));
-        t.needsUpdate = true; mat.visible = true; };
+        } catch (e) { console.warn('sign', e); }
+        const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = maxAniso; if (mat.map) mat.map.dispose(); mat.map = t; mat.needsUpdate = true; mat.visible = true; };
       draw(); document.fonts && document.fonts.ready.then(draw); });
     solid(x - .09, x + .09, z - .09, z + .09);   // 기둥
     return m; };
@@ -3315,9 +3317,9 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
     // 조개: 줍지 않고 구경만. 가까이 가면 얼빵해달이 그 조개를 줍는 듯한 혼잣말이 한 번 뜬다(작가님 2026-11-20)
     shellSay.wait -= dt;
     for (const s of BEACH.shells || []) {
-      s.sp.material.opacity = reduceMotion ? .55 : (.15 + .5 * Math.max(0, Math.sin(t * 2.3 + s.x * 1.7 + s.z)));
+      s.sp.visible = false;   // 반짝임은 줍기 놀이 표시라 뺐다(2026-11-20)
       if (here && !s.said && shellSay.wait <= 0 && Math.hypot(me.x - s.x, me.z - s.z) < 1.1) {
-        s.said = true; shellSay.wait = 4.5; sfx('pick');
+        s.said = true; shellSay.wait = 4.5;   // 줍는 소리는 뺐다(놀이가 아니므로)
         const line = shellSay.n === 0 ? SHELL_LINES[0] : SHELL_LINES[1 + (shellSay.n - 1) % (SHELL_LINES.length - 1)]; shellSay.n++;
         showToast(line, '', 3000);
       }
@@ -3335,9 +3337,9 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
       if (typeof dropPaw === 'function' && Math.floor(pushT * 6) !== Math.floor((pushT - dt / .9) * 6)) { const f = me.face; me.face = f + (Math.random() - .5) * 3; dropPaw(); me.face = f; }
       if (pushT >= 1) pushT = -1;
     }
-    // 다 주웠을 때: 숲길 틈으로 해 질 녘 빛이 든다(돌아보기는 없앰, turnT는 -2로 바로)
+    // (놀이를 빼며 '다 주웠을 때 숲길 틈 빛'도 껐다, 2026-11-20)
     if (turnT >= 0) { turnT = Math.min(1, turnT + dt / (reduceMotion ? .01 : 1)); const e = turnT * turnT * (3 - 2 * turnT), want = -Math.PI / 2, dy = wrapA(want - turnFrom); view.yaw = turnFrom + dy * e; if (turnT >= 1) turnT = -2; }
-    if (BEACH.done && BEACH.gapFx) { BEACH.gapK = Math.min(1, (BEACH.gapK || 0) + dt * (turnT === -2 ? .6 : 0)); BEACH.gapFx[0].material.opacity = (1 - (BEACH.gateK || 0)) * BEACH.gapK * (.9 + (reduceMotion ? 0 : .1 * Math.sin(t * .8))); BEACH.gapFx[1].material.opacity = BEACH.gapK * .8; }
+    if (false && BEACH.done && BEACH.gapFx) { BEACH.gapK = Math.min(1, (BEACH.gapK || 0) + dt * (turnT === -2 ? .6 : 0)); BEACH.gapFx[0].material.opacity = (1 - (BEACH.gateK || 0)) * BEACH.gapK * (.9 + (reduceMotion ? 0 : .1 * Math.sin(t * .8))); BEACH.gapFx[1].material.opacity = BEACH.gapK * .8; }
   });
   // ── 「그림자 줄」 길: 해변 → 숲길 ──
   // 작가님 결정(통로마다 감각 하나): 낮게 기운 해가 만드는 그림자 줄. 전문가 셋 자문 뒤(하얀 실내 상자가 바깥 → 바깥 사이에 끼어 뜬금없음) 지붕이 트인 바깥 길로.
@@ -3946,7 +3948,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
             g.gain.setValueAtTime(.0001, t0 + at); g.gain.linearRampToValueAtTime(.055, t0 + at + .008); g.gain.setValueAtTime(.05, t0 + at + Math.min(.1, len * .5)); g.gain.exponentialRampToValueAtTime(.0001, t0 + at + len);
             o.connect(g).connect(lp); o.start(t0 + at); o.stop(t0 + at + len + .05); }); };
         let phase = 'wait', T = 0, doneT = -1;
-        { phase = 'done'; doneT = 6; T = 9; }   // 조개 넣기 놀이는 뺐다(작가님 2026-11-20): 늘 자개 셋이 붙은 모습, 「출구」 문은 다가가면 열린다
+        { phase = 'done'; doneT = 60; T = 9; }   // 조개 넣기 놀이는 뺐다(작가님 2026-11-20): 늘 자개 셋이 붙은 모습, 「출구」 문은 다가가면 열린다
         const sheen = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowT, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false, opacity: 0, color: 0xffe6a8 })); sheen.scale.setScalar(2.2); scene.add(sheen);   // 햇살 한 줄기
         // 달(낮이라 숨김. 작가님 2026-11-12)
         const moonT = canvasTex(128, 128, (g, W, H) => { const gr = g.createRadialGradient(W / 2, H / 2, W * .3, W / 2, H / 2, W * .36); gr.addColorStop(0, '#f6f1e0'); gr.addColorStop(1, 'rgba(246,241,224,0)'); g.fillStyle = gr; g.fillRect(0, 0, W, H); });
@@ -3963,13 +3965,12 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
           }
           if (phase === 'done') {   // 외등이 한 번 반짝여 답함 → 햇살 한 줄기가 지붕에서 상자로, 디딤돌을 하나씩 따라 문까지 → 나가는 문 간유리가 환해진다(작가님 3A, 낮)
             doneT += dt;
-            const bl = Math.max(0, Math.sin(Math.PI * Math.min(1, Math.max(0, (doneT - .3) / 1.0)))); plateLamp.material.opacity = .3 + .9 * bl; plateLamp.scale.setScalar(.7 + .5 * bl);
+            plateLamp.material.opacity = .3; plateLamp.scale.setScalar(.7);   // 놀이를 빼며 '다 넣었을 때' 반짝임·햇살 줄기·디딤돌 불·출구 등은 껐다(2026-11-20). 문 열림(exitOn)만 남긴다
             const SP = [[RX, RY + .2, CZc], [CX - .3, CT + .4, CZc], ...LIT.map(([x, z]) => [x, .25, z]), [EX, 1.4, EZ - .3]], st = (doneT - 1.1) / .45;
             if (st > 0 && st < SP.length - 1) { const i = Math.floor(st), f = st - i, A = SP[i], B = SP[i + 1]; sheen.position.set(A[0] + (B[0] - A[0]) * f, A[1] + (B[1] - A[1]) * f, A[2] + (B[2] - A[2]) * f); sheen.material.opacity = .55 * Math.min(1, st * 2, (SP.length - 1 - st) * 2); } else sheen.material.opacity = 0;
-            dots.forEach((d, k) => { d.material.opacity = .55 * smooth(1.1 + (k + 2) * .45, 1.1 + (k + 2) * .45 + .3, doneT); });
+            dots.forEach((d) => { d.material.opacity = 0; });
             exitOn = smooth(1.1 + (SP.length - 2) * .45, 1.1 + (SP.length - 1) * .45 + .3, doneT);
-            exitBulb.material.color.setRGB(.33 + .67 * exitOn, .32 + .6 * exitOn, .35 + .4 * exitOn); exitHalo.material.opacity = .45 * exitOn;
-            exitGlass.color.copy(NAVY).lerp(DAWN, exitOn); exitGlow.material.opacity = .3 * exitOn;
+            exitHalo.material.opacity = 0; exitGlow.material.opacity = 0; exitGlass.color.copy(DAWN);
           }
         });
         // 담 뒤 밤 대나무 숲(미로 노을빛과 먼 구름을 가린다)과 남동쪽 소나무 한 그루(작가님 결정), 그 너머 먼 숲 띠
