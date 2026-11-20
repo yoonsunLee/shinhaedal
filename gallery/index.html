@@ -4300,7 +4300,9 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
         { const t = pw('window-morning.webp'); t.wrapS = THREE.MirroredRepeatWrapping; t.wrapT = THREE.ClampToEdgeWrapping;
           const g = new THREE.PlaneGeometry(468, 246, 1, 1), P = g.attributes.position, uv = g.attributes.uv;
           for (let i = 0; i < P.count; i++) uv.setXY(i, (26 + P.getX(i)) / 52, (83 + P.getY(i)) / 26);
-          const m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ map: t, toneMapped: false })); m.position.set(21, 77, 66); m.rotation.y = Math.PI; scene.add(m); }
+          const m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ map: t, toneMapped: false })); m.position.set(21, 77, 66); m.rotation.y = Math.PI; scene.add(m);
+          // 창 아래로 내려다보면 그림 밑이 세로로 늘어나 보였다(작가님 2026-11-20): 창과 그림 사이에 낮은 풀밭(복도 창과 같은 방법)
+          const gr = new THREE.Mesh(new THREE.PlaneGeometry(140, 6.7), new THREE.MeshBasicMaterial({ color: 0x9fbd86, toneMapped: false })); gr.rotation.x = -Math.PI / 2; gr.position.set(21, .2, 62.6); scene.add(gr); }
         // 물: 물결 그림이 흐르는 반투명 물낯 + 수조 바닥에 물결 빛
         const U = { time: { value: 0 }, map: { value: rp(pw('tile-water.webp'), 1) } };
         const VS = 'varying vec3 vWP; void main(){ vec4 w = modelMatrix * vec4(position,1.0); vWP = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }';
@@ -4509,11 +4511,12 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
         // 스포츠센터 안내판처럼 파란 바탕에 흰 글자. 고급반은 북쪽 세 레인 가운데(z 45.5), 초급반은 남쪽 끝 레인(z 53.0) 위. 들어오는 칸(천장 3.6 m)에서 가리지 않는 높이
         // 레인 표지(작가님 2026-11-13, 수영장 전문가 A안): 천장에 매단 판 대신 실제 수영장처럼 강습 쪽 끝 벽(동쪽, x 35.5)에 레인마다 번호와 반 이름.
         //   들어오는 칸(천장 3.6 m) 위 벽에 한 줄로. 반대쪽(서쪽) 끝에는 출발대 다섯, 남쪽 데크 가운데에 안전요원 높은 의자
-        { const laneSign = (no, label, z) => { const draw = (g, W, H) => { g.fillStyle = '#2b4ec9'; g.fillRect(0, 0, W, H); g.strokeStyle = '#eaf1ff'; g.lineWidth = H * .045; g.strokeRect(H * .07, H * .07, W - H * .14, H - H * .14);
-              g.fillStyle = '#ffffff'; g.beginPath(); g.arc(H * .55, H / 2, H * .3, 0, 7); g.fill(); g.fillStyle = '#2b4ec9'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.font = `800 ${H * .42}px ${FONT_B}`; g.fillText(String(no), H * .55, H * .53);
+        { const laneSign = (no, label, z) => { const BG = label === '초급반' ? '#f08a24' : '#2b4ec9';   // 초급반만 다른 색(작가님 2026-11-20)
+            const draw = (g, W, H) => { g.fillStyle = BG; g.fillRect(0, 0, W, H); g.strokeStyle = '#eaf1ff'; g.lineWidth = H * .045; g.strokeRect(H * .07, H * .07, W - H * .14, H - H * .14);
+              g.fillStyle = '#ffffff'; g.beginPath(); g.arc(H * .55, H / 2, H * .3, 0, 7); g.fill(); g.fillStyle = BG; g.textAlign = 'center'; g.textBaseline = 'middle'; g.font = `800 ${H * .42}px ${FONT_B}`; g.fillText(String(no), H * .55, H * .53);
               g.fillStyle = '#ffffff'; g.font = `700 ${H * .44}px ${FONT_B}`; g.fillText(label, (W + H * .9) / 2, H * .54); };
             const t = canvasTex(768, 256, draw); t.wrapS = t.wrapT = THREE.ClampToEdgeWrapping; REDRAW.push({ t, W: 768, H: 256, draw });
-            const m = new THREE.Mesh(new THREE.PlaneGeometry(1.5, .5), new THREE.MeshBasicMaterial({ map: t, toneMapped: false })); m.rotation.y = -Math.PI / 2; m.position.set(35.48, 4.15, z); scene.add(m); };
+            const m = new THREE.Mesh(new THREE.PlaneGeometry(2.2, .73), new THREE.MeshBasicMaterial({ map: t, toneMapped: false })); m.rotation.y = Math.PI / 2; m.position.set(6.06, 3.7, z); scene.add(m); };   // 들어오는 문(동쪽)에서 정면으로 보이게 맞은편(서쪽) 끝 벽으로 옮겼다(작가님 2026-11-20)
           // 레인 배치 A안(2026-11-12): 자유수영 ②고급반 ④ 중급 ⑤ 초급반
           [[1, '자유수영', 43.0], [2, '고급반', 45.5], [3, '고급반', 48.0], [4, '중급', 50.5], [5, '초급반', 53.0]].forEach(([n, l, z]) => laneSign(n, l, z));
           // 출발대는 뺐다(작가님 2026-11-13: 올라서면 그 자리에 갇혀 못 움직임)
@@ -4545,9 +4548,9 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
             const t = canvasTex(512, 224, draw); t.wrapS = t.wrapT = THREE.ClampToEdgeWrapping; REDRAW.push({ t, W: 512, H: 224, draw });
             const m = new THREE.Mesh(new THREE.PlaneGeometry(.8, .35), new THREE.MeshBasicMaterial({ map: t, toneMapped: false })); m.rotation.y = Math.PI / 2; m.position.set(6.02, 3.2, 56.4); scene.add(m); } }
         // 발자국: 들어오는 문에서 빈자리 앞까지(관람객과 같은 발자국, 물기처럼 옅게)
-        const guide = []; { const P = [[41.6, 48.0], [38.0, 48.6], [35.6, 51.0], SPOT]; let side = 1;
-          for (let k = 0; k < P.length - 1; k++) { const [ax, az] = P[k], [bx, bz] = P[k + 1], L = Math.hypot(bx - ax, bz - az), n = Math.floor(L / .5), face = Math.atan2(-(bx - ax), -(bz - az));
-            for (let i = 0; i < n; i++) { const t = i / n, x = ax + (bx - ax) * t + Math.cos(face) * .1 * side, z = az + (bz - az) * t - Math.sin(face) * .1 * side; side = -side; guide.push([x, z, face]); } } }
+        const guide = []; { const P = [[40.6, 48.0], [38.0, 48.6], [35.6, 51.0], SPOT];   // 발자국 대신 화살표(작가님 2026-11-20): 들어오는 문에서 초급반 빈자리까지 1.3 m마다
+          for (let k = 0; k < P.length - 1; k++) { const [ax, az] = P[k], [bx, bz] = P[k + 1], L = Math.hypot(bx - ax, bz - az), n = Math.max(1, Math.round(L / 1.3)), face = Math.atan2(-(bx - ax), -(bz - az));
+            for (let i = 0; i < n; i++) { const t = i / n; guide.push([ax + (bx - ax) * t, az + (bz - az) * t, face]); } } }
         let guideMade = false; const guideMs = [];
         // 킥판(화면 아래, 카메라에 붙는다)과 물보라
         const board = new THREE.Mesh(new THREE.PlaneGeometry(.54, .36), new THREE.MeshBasicMaterial({ map: pw('kickboard.webp'), alphaTest: .4, transparent: true, toneMapped: false, depthTest: false }));
@@ -4584,7 +4587,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
             s.g.position.set(s.x, WATER + .015 + Math.sin(t * 2.4 + s.ph) * .006, s.z + Math.sin(t * 1.2 + s.ph) * .05); s.g.rotation.y = s.d > 0 ? Math.PI / 2 : -Math.PI / 2;
             const k = .9 + .1 * Math.sin(t * 2.4 + s.ph); s.g.scale.set(k, 1, 1); }
           for (const o of otters) o.tick(t, dt);
-          if (!guideMade && typeof pawTex !== 'undefined') { guideMade = true; for (const [x, z, f] of guide) { const m = new THREE.Mesh(new THREE.PlaneGeometry(.34, .34), new THREE.MeshBasicMaterial({ map: pawTex, transparent: true, opacity: .32, depthWrite: false, toneMapped: false, color: 0x6b7f8c })); m.rotation.x = -Math.PI / 2; m.rotation.z = f; m.position.set(x, DECK + .006, z); m.renderOrder = 3; scene.add(m); guideMs.push(m); } }
+          if (!guideMade) { guideMade = true; for (const [x, z, f] of guide) { const m = new THREE.Mesh(new THREE.PlaneGeometry(.5, .5), new THREE.MeshBasicMaterial({ map: arrowT, transparent: true, opacity: .62, depthWrite: false, toneMapped: false, color: 0xf08a24 })); m.rotation.order = 'YXZ'; m.rotation.set(-Math.PI / 2, f, 0); m.position.set(x, DECK + .006, z); m.renderOrder = 3; scene.add(m); guideMs.push(m); } }
           for (const d of drops) { if (d.life <= 0) { d.s.material.opacity = 0; continue; } d.life -= dt; d.v.y -= 6 * dt; d.s.position.addScaledVector(d.v, dt); if (d.s.position.y < WATER) d.life = 0; d.s.material.opacity = Math.min(1, d.life * 2) * .9; }
           // 눈높이: 계단 위 문턱·데크 0.45 m, 물속은 물낯 위 0.22 m
           const inside = inPool(me.x, me.z) || SW.state === 'water' || SW.state === 'done' || SW.state === 'free';
