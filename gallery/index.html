@@ -2700,6 +2700,8 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
   // 유일한 글(IP 페이지 첫 문장)은 남색 색연필 손글씨로 작게(작가님 결정).
   const CH = { x0: IPR.x0 + .2, x1: IPR.x0 + 4.7, z0: -6.1, z1: -2.9, h: 3.2 };
   const IP_FIRST = ['얼빵해달은 현대사회에 살고 있는 조개배달부다.', '그런데 해달이면서 수영을 못 한다.'];
+  // 물빛 통로 왼쪽(북) 벽: IP관이 무엇을 하는 곳인지(작가님 2026-11-20). 첫 문장은 오른쪽(남) 벽으로 옮겼다. [글, 크기 배율]
+  const IP_INTRO = [['얼빵해달의 하루 속으로', 1], ['조개를 줍고, 배달하고, 수영을 배우는 하루.', .62], ['얼빵해달이 되어 직접 걸어 보세요.', .62], ['해변 · 숲길 · 작업실 · 스포츠센터', .48]];
   // 「물빛」 통로 첫 문장 글꼴: 홈페이지 본문 글꼴 노토 산스 가늘게(작가님 결정)
   const WALL_FONT = '"Noto Sans KR"', WALL_W = 300;
   const NAVY_PEN = '#2d4b8e', INK_C = 'rgba(58,44,34,.92)';
@@ -2777,16 +2779,19 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
       };
       return m;
     };
-    // 옆벽(북): 첫 문장을 남색 손글씨로(작가님 결정). 바탕은 하얀 벽
-    const textT = canvasTex(Math.round(L * PPM), Math.round(Hh * PPM), (g, W, H) => { g.fillStyle = '#f6f4ee'; g.fillRect(0, 0, W, H); });
-    const drawText = () => { const g = textT.image.getContext('2d'), W = textT.image.width, H = textT.image.height; g.fillStyle = '#f6f4ee'; g.fillRect(0, 0, W, H);
-      // 문장마다 한 줄에 들어오게: 긴 문장이 벽 폭(양옆 0.5 m 남김)에 맞는 크기로
-      g.font = `${WALL_W} 100px ${WALL_FONT}, sans-serif`; const maxW = W - 1.0 * PPM, longest = Math.max(...IP_FIRST.map(t => g.measureText(t).width));
-      const fs = Math.min(.2 * PPM, 100 * maxW / longest); g.font = `${WALL_W} ${fs}px ${WALL_FONT}, sans-serif`; g.fillStyle = NAVY_PEN; g.textBaseline = 'alphabetic';
-      IP_FIRST.forEach((t, i) => g.fillText(t, .5 * PPM, H - 1.6 * PPM + i * fs * 1.6)); textT.needsUpdate = true; };   // 첫 줄 높이 1.6 m(작가님: 살짝 낮게, 2026-11-12)
-    drawText(); document.fonts && document.fonts.load(`${WALL_W} 40px ${WALL_FONT}`, IP_FIRST.join('')).then(drawText).catch(() => {});
-    const mN = new THREE.Mesh(new THREE.PlaneGeometry(L, Hh), waterLight({ map: textT, color: 0xffffff, ink: true })); place(mN, CH.x0 + L / 2, Hh / 2, CH.z0, 0, 1); blockers.push(mN);
-    const mS = new THREE.Mesh(new THREE.PlaneGeometry(L, Hh), waterLight()); place(mS, CH.x0 + L / 2, Hh / 2, CH.z1, 0, -1); blockers.push(mS);
+    // 옆벽 글(남색 손글씨, 작가님 결정. 바탕은 하얀 벽): 왼쪽(북) = IP관 소개, 오른쪽(남) = 첫 문장(작가님 2026-11-20 자리 바꿈)
+    //   rows: [글, 크기 배율]. right: 글 덩어리를 캔버스 오른쪽 끝에 붙일 때(두 벽 모두 캔버스 왼쪽이 입구 쪽이라 지금은 안 쓴다)
+    const wallText = (rows, right) => { const T = canvasTex(Math.round(L * PPM), Math.round(Hh * PPM), (g, W, H) => { g.fillStyle = '#f6f4ee'; g.fillRect(0, 0, W, H); });
+      const draw = () => { const g = T.image.getContext('2d'), W = T.image.width, H = T.image.height; g.fillStyle = '#f6f4ee'; g.fillRect(0, 0, W, H);
+        g.font = `${WALL_W} 100px ${WALL_FONT}, sans-serif`; const maxW = W - 1.0 * PPM, longest = Math.max(...rows.map(([t, k]) => g.measureText(t).width * k));
+        const fs = Math.min(.2 * PPM, 100 * maxW / longest); let y = H - 1.6 * PPM, bw = 0;
+        for (const [t, k] of rows) { g.font = `${WALL_W} ${fs * k}px ${WALL_FONT}, sans-serif`; bw = Math.max(bw, g.measureText(t).width); }
+        const x0 = right ? W - .5 * PPM - bw : .5 * PPM; g.fillStyle = NAVY_PEN; g.textBaseline = 'alphabetic';
+        rows.forEach(([t, k], i) => { g.font = `${WALL_W} ${fs * k}px ${WALL_FONT}, sans-serif`; if (i) y += fs * (k * 1.25 + (i === 1 ? .55 : .2)); g.fillText(t, x0, y); });
+        T.needsUpdate = true; };
+      draw(); document.fonts && document.fonts.load(`${WALL_W} 40px ${WALL_FONT}`, rows.map(r => r[0]).join('')).then(draw).catch(() => {}); return T; };
+    const mN = new THREE.Mesh(new THREE.PlaneGeometry(L, Hh), waterLight({ map: wallText(IP_INTRO, false), color: 0xffffff, ink: true })); place(mN, CH.x0 + L / 2, Hh / 2, CH.z0, 0, 1); blockers.push(mN);
+    const mS = new THREE.Mesh(new THREE.PlaneGeometry(L, Hh), waterLight({ map: wallText(IP_FIRST.map(t => [t, 1]), false), color: 0xffffff, ink: true })); place(mS, CH.x0 + L / 2, Hh / 2, CH.z1, 0, -1); blockers.push(mS);
     solid(CH.x0, CH.x1, CH.z0 - .2, CH.z0); solid(CH.x0, CH.x1, CH.z1, CH.z1 + .2);
     // 중정 벽 두께와 통로 사이 틈 메우기: 옆벽·천장을 중정 벽 안쪽까지 끌어와 틈으로 예전 IP관 건물 안이 비치지 않게(작가님 지적)
     { const x0 = IPR.x0 - WT / 2 + .006, w = CH.x0 - x0 + .02, fm = waterLight();   // 중정 쪽 벽면보다 튀어나오지 않게(작가님: 문 밖에 덧댄 것이 튀어나옴)
@@ -2850,7 +2855,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
   //   n: 순서(얼빵해달의 하루 n/4), R: 판에서 글을 쓸 칸 [x0, y0, x1, y1](그림 비율), ink/sub/dot: 글 색
   const IP_SIGNS = [
     { file: 'sign-1-beach', R: [.09, .1, .91, .58], ink: '#4a3524', sub: '#8a6a48', dot: '#c9a46a', title: '조개 줍는 해변', body: '얼빵해달이 작가님께 배달할 조개를 줍는 해변이에요.' },
-    { file: 'sign-2-forest', R: [.15, .16, .92, .66], ink: '#f6e6c8', sub: '#d9bf95', dot: '#f0c27a', title: '작가님께 가는 숲길', body: '얼빵해달이 조개를 들고 작가님을 찾아가는 길이에요.' },
+    { file: 'sign-2-forest', R: [.15, .16, .92, .66], ink: '#f6e6c8', sub: '#d9bf95', dot: '#f0c27a', title: '작가님께 가는 숲길', body: '얼빵해달이 조개를 들고 작가님을 찾아가는 길이에요. 갈림길이 많은 미로라 조금 헤매도 괜찮아요.' },
     { file: 'sign-3-studio', R: [.08, .1, .92, .7], ink: '#efe2c8', sub: '#b9a98c', dot: '#d8cbe8', title: '작가님의 작업실', body: '얼빵해달은 이곳에 조개를 놓고 가요.' },
     { file: 'sign-4-sportscenter', R: [.07, .09, .93, .66], ink: '#24364a', sub: '#5b7088', dot: '#4aa8d8', title: '현대사회 스포츠센터', body: '수영을 못 하는 얼빵해달이 수영을 배우는 곳이에요.' },
   ];
@@ -2939,6 +2944,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
     const src = ctx.createBufferSource(); src.buffer = buf; const bp = ctx.createBiquadFilter(); bp.type = 'lowpass'; bp.frequency.value = kind === 'big' ? 900 : 1300; bp.Q.value = .5;
     const pk = kind === 'big' ? .45 : .22; g.gain.setValueAtTime(.0001, t0); g.gain.linearRampToValueAtTime(pk, t0 + .08); src.connect(bp).connect(g); src.start(t0);
   };
+  globalThis.SHELL_PICK = () => sfx('pick');   // 해변 조개 줍던 '띠링'은 관마다 조개 도장을 얻을 때 쓴다(작가님 2026-11-20)
   interior('ipBeach', [[CH.x1 - .3, BE.x1, BE.z0, BE.z1]], [SB.x0, SB.x1, SB.z0, SB.z1, SB.h], () => {
     ipSign(1, CH.x1 + 3.4, PGz - 1.2, 0, 1.6);   // 안내 팻말 1: 물빛 통로에서 해변으로 나서면 바로 앞(조금 왼쪽)
     floorArrow(GAP.x - .3, -.6, Math.PI, null, 0x8a6236, .5);   // 화살표: 해변 한가운데서 남쪽 덩굴 터널 문 쪽
@@ -3601,7 +3607,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
     };
     interior('ipForest', [[FX0 - .1, 60, FZ0, FZ1], [49.5, 60, FZ1 - .1, 33]], [FX0 - .3, 64.5, FZ0 - .1, 38.5, 16], () => {
       ipSign(2, P2.x1 + .45, P2.z1 + 2.7, 0, 1.2);   // 안내 팻말 2: 덩굴 터널을 나와 미로 첫 길 오른쪽 덤불 앞
-      ipSign(3, 52.6, 27.6, 0, 1.4);   // 안내 팻말 3: 「신해달 작가 작업실」 몸채 앞마당(정면 x 54.5) 남쪽 귀퉁이
+      ipSign(3, 55.1, 27.55, 0, 1.3);   // 안내 팻말 3: 「신해달 작가 작업실」 몸채 남쪽 벽 옆(정면보다 안쪽, 마당 길·출구 문 길을 막지 않게, 작가님 2026-11-20)
       { const [ax, az] = cell(4, 3); floorArrow(ax, az, -Math.PI / 2, .036); }
       tapPad(FX1 + .1, 60, FZ0, 13.7, .03);   // 미로를 나온 오솔길 북쪽 띠(마사토 바닥이 z 13.6부터라 눌러도 안 잡혔다)   // 화살표: 미로 출구 바로 앞 모퉁이에서만 등불 문(동쪽) 쪽. 안쪽 길은 풀어 주지 않는다
       // 바닥: 흙길 결 위에 덤불 그림자(해가 서쪽에 낮게 있어 그림자가 동쪽으로 길게 눕는다)
@@ -3844,6 +3850,13 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
         { const cm = tinted(crateT, CX, .6, CZc, 1.0, {}), ci = tinted(null, CX, .6, CZc, .8, { color: 0x6a4e34 });
           boxMM(CX - .25, CX + .25, CB, CB + .03, CZc - .38, CZc + .38, ci);   // 바닥
           for (const s of [-1, 1]) { boxMM(CX + s * .25 - .015, CX + s * .25 + .015, CB, CT, CZc - .38, CZc + .38, cm); boxMM(CX - .25, CX + .25, CB, CT, CZc + s * .38 - .015, CZc + s * .38 + .015, cm); } }
+        // 상자를 누르면: 얼빵해달이 벌써 다녀갔다는 혼잣말이 하나씩(작가님 2026-11-20). 누를 때마다 다음 문장
+        { const BOX_LINES = ['조개 세 개가 놓여 있어요. 얼빵해달이 벌써 다녀갔나 봐요.', '조개에 아직 모래가 묻어 있어요. 방금 두고 갔나 봐요.', '상자 앞에서 작은 발자국이 멈췄다 돌아갔어요.',
+            '오늘 배달 완료! 얼빵해달이 조용히 다녀갔어요.', "조개 밑에 쪽지가 있어요. '작가님, 오늘 것도 반짝여요.'", '분홍 조개는 얼빵해달이 제일 아끼던 거래요.',
+            '상자 안에서 바다 냄새가 나요.', '이 조개들은 곧 반짝이는 자개가 될 거예요.', '배달은 느려도, 빠짐없이.', '얼빵해달은 벌써 다음 조개를 주우러 갔어요.'];
+          let k = 0; const hit = new THREE.Mesh(new THREE.BoxGeometry(.56, .46, .82), new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false, colorWrite: false }));
+          hit.position.set(CX, CB + .23, CZc); scene.add(hit); pickables.push(hit);
+          hit.userData.info = { title: '조개 상자', act: () => { showToast(BOX_LINES[k % BOX_LINES.length], '', 3200); k++; } }; }
         // 상자 위 작은 판: '조개 놓는 곳'(작가님 2026-11-11: 조개 표시 대신 글로. 옻칠 명판·자개 선반은 뺐다)
         const PYc = 1.3;
         const pg = new THREE.Group(); pg.position.set(SFX - .035, PYc, CZc); pg.rotation.y = -Math.PI / 2; scene.add(pg);
@@ -4100,7 +4113,8 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
             vec3 seaFar(float L){ return mix(vec3(.365, .70, .855), vec3(.44, .72, .87), smoothstep(15.0, 160.0, L)); }
             float h(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
             void main(){ float x = vWP.x, z = vWP.z, d0 = ddAt(vWP.xz), dd = max(d0, -.2);   // 모래 밑은 모래가 가린다(지우면 모래가 없는 자리에 구멍이 났다)
-              if (d0 < -.6) { gl_FragColor = vec4(.30, .31, .33, 1.0); return; }   // 길·방파제 밑(방파제 윗선 틈으로 옥빛이 새지 않게 그늘색)   // 길·방파제 밑(틈으로 옥빛이 새지 않게 그늘색)
+              if (x < 52.6) { gl_FragColor = vec4(.80, .83, .70, 1.0); return; }   // 산책로·스포츠센터 쪽(서쪽)은 땅: 바다가 건물 밑·뒤로 비치지 않게(작가님 2026-11-20)
+              if (d0 < -.6) { gl_FragColor = vec4(.80, .76, .62, 1.0); return; }   // 길·방파제 밑 틈: 모래빛(검은 틈으로 보였다)   // 길·방파제 밑(방파제 윗선 틈으로 옥빛이 새지 않게 그늘색)   // 길·방파제 밑(틈으로 옥빛이 새지 않게 그늘색)
               vec3 tile = texture2D(seaT, vec2(z / 6.0 + time * .004, x / 6.0 - time * .008)).rgb;
               vec3 tint = mix(vec3(1.10, 1.06, 1.0), vec3(1.0), smoothstep(.0, 2.4, dd));      // 얕은 물은 밝게
               tint = mix(tint, vec3(.80, .87, .96), smoothstep(2.4, 7.0, dd));                  // 깊을수록 짙은 하늘색
@@ -4137,7 +4151,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
         const seaT = (n, m) => { const t = tex(`ip/new/sea/web/${n}.webp`); return rp(t, 1 / m); };   // 결 그림: GPT가 작가님 그림체로 그린 것(gpt-prompt-ip-7.md)
         const MAT = {
           cream: { c: 0xf2efe8, t: seaT('wall-cream', 2) }, creamDark: { c: 0xd8cdb8, t: seaT('wall-cream', 2) }, glass: { c: 0xffffff, t: seaT('glass-band', 2) }, blue: { c: 0x2a5cc4 }, steel: { c: 0xc9cdd1 }, sign: { c: 0x2b4ec9 },
-          lobby: { c: 0xdfe8ea }, step: { c: 0xd6d2ca }, terrazzo: { c: 0xe9e6e0, t: seaT('terrazzo', 1.6) }, curb: { c: 0xb4b2ae, t: rp(noiseT('#b4b2ae', ['#9a9893', '#cfccc6'], 900, 2), 1) },
+          lobby: { c: 0xdfe8ea }, step: { c: 0xd6d2ca }, terrazzo: { c: 0xe9e6e0, t: seaT('terrazzo', 1.6), noLm: true },   // 뺀 가로등·벤치의 구운 그림자가 길에 남았다 → 길은 구운 빛 없이 curb: { c: 0xd9d6cf, noLm: true, t: rp(noiseT('#d9d6cf', ['#c9c6bf', '#e6e3dc'], 900, 2), 1) },   // 짙은 회색 턱이 덧댄 판처럼 보였다(작가님 2026-11-20): 방파제 윗돌과 같은 밝은 돌색
           // 산책로 잔디·덤불·해송(작가님 2026-11-12 18번 1안, GPT 16차 gpt-prompt-ip-16.md): 3D는 그대로, 결 그림만 새로
           stone: { c: 0xffffff, t: seaT('stone-wall', 2) }, coping: { c: 0xd2cdc4 }, grass: { c: 0xe3e6d6, t: seaT('walk-lawn', 2) },
           ground: { c: 0xe3e6d6, t: seaT('walk-lawn', 2) }, seawall: { c: 0xffffff, t: seaT('stone-wall', 2) }, sand: { c: 0xdcdbd6, t: rp(tex('ip/new/beach/web/sand.webp'), 1 / 3) },
@@ -4147,9 +4161,13 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
         const seaG = new THREE.Group(); scene.add(seaG); const pineLeafMs = [], pineBarkMs = []; const treeB = { value: Array.from({ length: 8 }, () => new THREE.Vector2(1e4, 1e4)) };
         fetch('ip/new/sea/lightmaps.json').then(r => r.json()).then(({ scale }) => loadGLTF('ip/new/sea/sea.json', (gl) => {
           const lmT = {};
+          gl.scene.updateMatrixWorld(true);
           gl.scene.traverse(o => { if (!o.isMesh) return;
             let n = o; while (n && !['Building', 'Wall', 'Floor', 'Ground', 'Props', 'Trees'].includes(n.name)) n = n.parent; const key = n ? n.name : 'Props';
             if (!lmT[key]) { const t = tex(`ip/new/sea/lm-${key}.webp`); t.flipY = false; t.channel = 1; lmT[key] = t; }
+            if (o.material.name === 'lampHead' || o.material.name === 'pole' || o.material.name === 'wood') { o.visible = false; return; }   // 가로등·벤치는 뺐다(작가님 2026-11-20)
+            if (key === 'Wall' && o.material.name === 'grass') { const P = o.geometry.attributes.position, v = new THREE.Vector3(); for (let i = 0; i < P.count; i++) { v.fromBufferAttribute(P, i).applyMatrix4(o.matrixWorld); if (v.x < 44.2) { const k = Math.max(0, Math.min(1, (v.x - 42.4) / 1.8)); P.setY(i, Math.min(P.getY(i), .4 + (P.getY(i) - .4) * k)); } } P.needsUpdate = true; o.geometry.computeBoundingSphere(); }   // 스포츠센터 벽 앞 잔디 언덕이 창을 가렸다: 벽 쪽 1.8 m는 낮춘다(작가님 2026-11-20)
+            if (key === 'Wall' && (o.material.name === 'stone' || o.material.name === 'coping')) o.userData.clipX = 59.0;   // 마당 남쪽 돌담이 바다 위로 길게 나갔다: 모래 끝(x 59)에서 자른다
             const spec = MAT[o.material.name] || { c: 0xffffff }; if (o.material.name === 'pineLeaf') pineLeafMs.push(o); if (o.material.name === 'pineBark') pineBarkMs.push(o);
             o.material = new THREE.MeshBasicMaterial({ color: spec.c, map: spec.t || null, lightMap: spec.noLm ? null : lmT[key], lightMapIntensity: scale * Math.PI * .95, toneMapped: false });
             if (spec === MAT.grass || spec === MAT.ground) o.material.onBeforeCompile = sh => {   // 옛 해송 줄기 밑 구운 그림자(검은 구멍처럼 보임)만 밝힌다(작가님 2026-11-14, 해변 나무로 바꾼 뒤)
@@ -4159,6 +4177,9 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
                 .replace('lightMapTexel.rgb * lightMapIntensity', 'max(lightMapTexel.rgb, vec3(.55 * treeLift(vTW.xz, treeB))) * lightMapIntensity')
                 .replace('void main() {', 'float treeLift(vec2 p, vec2 b[8]) { float d = 99.; for (int i = 0; i < 8; i++) d = min(d, distance(p, b[i])); return 1. - smoothstep(.7, 1.5, d); }\nvoid main() {'); };
             if (spec.lmFloor) o.material.onBeforeCompile = sh => { sh.fragmentShader = sh.fragmentShader.replace('lightMapTexel.rgb * lightMapIntensity', `max(lightMapTexel.rgb * lightMapIntensity, vec3(${(spec.lmFloor * Math.PI).toFixed(3)}))`); };   // 숨긴 해송 덩어리가 구워 둔 까만 그림자를 덜어 냄
+            if (o.userData.clipX) { const cx = o.userData.clipX.toFixed(2); o.material.onBeforeCompile = sh => {
+              sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying float vWX;').replace('#include <project_vertex>', '#include <project_vertex>\nvWX = (modelMatrix * vec4(transformed, 1.0)).x;');
+              sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying float vWX;').replace('void main() {', 'void main() {\n  if (vWX > ' + cx + ') discard;'); }; }
             if (key === 'Floor' || key === 'Ground') floors.push(o); if (key === 'Building' || key === 'Wall') blockers.push(o); });
           seaG.add(gl.scene); interiorKey = '';
           // 해송 → 해변 나무 그림(작가님 2026-11-14 1안: 솔잎 다발도 징그럽다). 해송 줄기·잎 덩어리는 숨기고, 줄기 밑동 자리에
@@ -4188,8 +4209,6 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
         lineSolid(SEA.land.slice(0, SEA.land.length - 2));
         lineSolid(CO.slice(0, 7));
         solid(40.9, GX - GH - .02, GZ + .1, GZ + .5); solid(GX + GH + .02, 70, GZ + .1, GZ + .5);
-        for (const L of SEA.lamps) solid(L.base[0] - .08, L.base[0] + .08, L.base[1] - .08, L.base[1] + .08);
-        { const [bx, bz] = SEA.bench.c; solid(bx - .55, bx + .55, bz - .55, bz + .55); }
         let doorK = 0;
         animators.push((t, dt, me) => {
           U.time.value = t; U.cam.value.copy(camera.position);
@@ -4706,6 +4725,11 @@ function redrawPanel(m) { const r = REDRAW.find(o => o.t === m.material.map); if
     const lmT = {};
     gl.scene.traverse(o => { if (!o.isMesh) return;
       let n = o; while (n && !['Shell', 'Furniture'].includes(n.name)) n = n.parent; const key = n ? n.name : 'Furniture';
+      if (key === 'Furniture') {   // 멤버십 키오스크(데스크 북쪽 끝 x > 18.2, z < 11.92)는 뺐다(작가님 2026-11-20): 그 자리 삼각형만 지운다
+        const g0 = o.geometry, idx = g0.index, P = g0.attributes.position, keep = [], cnt = idx ? idx.count : P.count;
+        for (let i = 0; i < cnt; i += 3) { const a = idx ? idx.getX(i) : i, b = idx ? idx.getX(i + 1) : i + 1, c = idx ? idx.getX(i + 2) : i + 2;
+          const cx = (P.getX(a) + P.getX(b) + P.getX(c)) / 3, cz = (P.getZ(a) + P.getZ(b) + P.getZ(c)) / 3; if (!(cx > 18.2 && cz < 11.92)) keep.push(a, b, c); }
+        if (keep.length < cnt) { g0.setIndex(keep); g0.computeBoundingSphere(); } }
       if (!lmT[key]) { const t = tex(`lounge/lm-${key}.webp`); t.flipY = false; t.channel = 1; lmT[key] = t; }
       const spec = LGM[o.material.name] || { c: 0xffffff };
       o.material = spec.glow ? new THREE.MeshBasicMaterial({ color: spec.c, toneMapped: false })
@@ -4912,8 +4936,8 @@ function redrawPanel(m) { const r = REDRAW.find(o => o.t === m.material.map); if
     g.fillStyle = '#ffffff'; g.font = `700 ${H * .04}px ${FONT_B}`; g.fillText('시작하기', W / 2, H * .925);
   }, { ppm: 900 });
   cardImg.onload = () => redrawPanel(screen);
-  place(screen, kx - .006, 1.12, kz, -1, 0);
-  pickable(screen, { kind: 'MEMBERSHIP', title: '멤버십 카드 발급', act: () => openMember(false) });
+  void screen; void kx; void kz;   // 키오스크 화면은 뺐다(작가님 2026-11-20). 발급은 데스크 위 안내지로
+  { const fm = new THREE.MeshBasicMaterial({ color: 0xb3aea7, toneMapped: false }), f = new THREE.Mesh(new THREE.PlaneGeometry(1.12, .9), fm); f.rotation.x = -Math.PI / 2; f.position.set(18.76, .032, 11.5); scene.add(f); }   // 키오스크 자리 바닥(모델 바닥이 그 밑에 없어 검게 뚫려 보였다)
 
   // 서쪽 로비 문(z 10.2~12.6, 높이 3.0) 위 안내판(작가님 2026-11-12): 수영장 「출구」판과 같은 파란 판에 흰 글자
   { const s = panel(.8, .35, (g, W, H) => { g.fillStyle = LB; g.fillRect(0, 0, W, H); g.strokeStyle = 'rgba(255,255,255,.85)'; g.lineWidth = H * .04; g.strokeRect(H * .08, H * .08, W - H * .16, H - H * .16);
@@ -5899,6 +5923,7 @@ function award(k) {
   if (stamps.has(k)) return;
   stamps.add(k); store.set('stamps', [...stamps]);
   if (stampMarks[k]) stampMarks[k].fly = 0;   // 조개 코인이 솟아 사라지는 연출
+  if (globalThis.SHELL_PICK) SHELL_PICK();
   const i = STAMPS.findIndex(s => s[0] === k), im = shellImgs[i];
   im.classList.add('got', 'pop'); setTimeout(() => im.classList.remove('pop'), 600);
   const VISIT = ['artist', 'works', 'court', 'obong', 'ip'];   // 알림의 '남은 곳'은 관람 순서로(작가님 2026-11-13). 위 조개 칸 차례는 STAMPS 그대로
@@ -5979,8 +6004,8 @@ function checkStamps() {
   if (atDesk && !deskShown) {
     deskShown = true;
     // 다가가기만 해서는 창을 열지 않는다(작가님 2026-11-12). 데스크 위 안내지나 키오스크 화면을 눌러야 발급
-    if (!member) showToast('멤버십 카드 발급', '데스크 위 안내지를 누르면 카드를 발급해요.');
-    else showToast('반가워요, ' + member.name, '위쪽 「내 카드」에서 멤버십 카드를 다시 볼 수 있어요.');
+    // 라운지에 들어오자마자 발급을 권하던 알림은 뺐다(작가님 2026-11-20)
+    if (member) showToast('반가워요, ' + member.name, '위쪽 「내 카드」에서 멤버십 카드를 다시 볼 수 있어요.');
   }
   if (!atDesk) deskShown = false;
 }
@@ -6293,6 +6318,8 @@ me.face = view.yaw = 0; if (''.includes("dbg=1")) { window.__dbg = { openCard, p
   const enter = () => { if (!welcomeOpen) return; welcomeOpen = false; W.classList.add('gone'); setTimeout(() => { W.hidden = true; }, 500);
     if (ENTRY) { const [, pos, yaw] = SUBNAV[ENTRY][0]; jump(pos, yaw); } else walkTo = startWalk; };   // 안내도 섹션 첫 단추(법과 권리 / 물빛 통로)와 같은 자리·방향
   go.addEventListener('click', () => { if (ready) enter(); });
+  // 작가님 2026-11-20: 다 받으면 입장 버튼을 누르지 않아도 카드가 사라지고 들어간다(막대가 다 찬 걸 잠깐 보여 준 뒤). 소리는 화면을 처음 누를 때 켜진다
+  { let t = 0; const auto = () => { if (ready && welcomeOpen && !t) t = setTimeout(enter, 900); }; const iv = setInterval(() => { auto(); if (!welcomeOpen) clearInterval(iv); }, 200); }
   setTimeout(() => { if (welcomeOpen) open(); }, 12000);
   if (/[?&]at=/.test('')) enter();   // 점검용 바로 가기(?at=)는 카드 없이
   else setTimeout(() => { try { go.focus({ preventScroll: true }); } catch (e) {} }, 50);
