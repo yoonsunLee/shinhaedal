@@ -2701,7 +2701,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
   const CH = { x0: IPR.x0 + .2, x1: IPR.x0 + 4.7, z0: -6.1, z1: -2.9, h: 3.2 };
   const IP_FIRST = ['얼빵해달은 현대사회에 살고 있는 조개배달부다.', '그런데 해달이면서 수영을 못 한다.'];
   // 물빛 통로 왼쪽(북) 벽: IP관이 무엇을 하는 곳인지(작가님 2026-11-20). 첫 문장은 오른쪽(남) 벽으로 옮겼다. [글, 크기 배율]
-  const IP_INTRO = [['얼빵해달의 하루 속으로', 1], ['조개를 줍고, 배달하고, 수영을 배우는 하루.', .62], ['얼빵해달이 되어 직접 걸어 보세요.', .62], ['해변 · 숲길 · 작업실 · 스포츠센터', .48]];
+  const IP_INTRO = [['얼빵해달의 하루 속으로', 1], ['조개를 줍고, 배달하고, 수영을 배우는 하루.', .62], ['얼빵해달이 되어 직접 걸어 보세요.', .62]];
   // 「물빛」 통로 첫 문장 글꼴: 홈페이지 본문 글꼴 노토 산스 가늘게(작가님 결정)
   const WALL_FONT = '"Noto Sans KR"', WALL_W = 300;
   const NAVY_PEN = '#2d4b8e', INK_C = 'rgba(58,44,34,.92)';
@@ -3856,7 +3856,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
             '상자 안에서 바다 냄새가 나요.', '이 조개들은 곧 반짝이는 자개가 될 거예요.', '배달은 느려도, 빠짐없이.', '얼빵해달은 벌써 다음 조개를 주우러 갔어요.'];
           let k = 0; const hit = new THREE.Mesh(new THREE.BoxGeometry(.56, .46, .82), new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false, colorWrite: false }));
           hit.position.set(CX, CB + .23, CZc); scene.add(hit); pickables.push(hit);
-          hit.userData.info = { title: '조개 상자', act: () => { showToast(BOX_LINES[k % BOX_LINES.length], '', 3200); k++; } }; }
+          hit.userData.info = { title: '', act: () => { showToast(BOX_LINES[k % BOX_LINES.length], '', 3200); k++; } }; }
         // 상자 위 작은 판: '조개 놓는 곳'(작가님 2026-11-11: 조개 표시 대신 글로. 옻칠 명판·자개 선반은 뺐다)
         const PYc = 1.3;
         const pg = new THREE.Group(); pg.position.set(SFX - .035, PYc, CZc); pg.rotation.y = -Math.PI / 2; scene.add(pg);
