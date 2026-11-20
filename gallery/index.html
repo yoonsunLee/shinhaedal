@@ -4085,7 +4085,18 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
       const DOOR_NEAR = (x, z) => x > 40.4 && x < 45.6 && Math.abs(z - DZ) < 1.9;
       interior('ipSea', rects, [30, 66, 33.0, 63, 12], () => {
         ipSign(4, SEA.SP[0][0] - .55, SEA.SP[0][1] + 2.4, 0, 1.4);
-        boxMM(57.45, 57.6, -1.6, 2.3, 32.6, 33.0, new THREE.MeshBasicMaterial({ color: 0xcfd2d6, toneMapped: false }));   // 잘라 낸 돌담 끝 마구리(속이 비어 보이지 않게)
+        // 작가님 2026-11-20 결정(다 a)
+        // 1a: 잘라 낸 돌담 끝을 돌기둥으로 마감(같은 돌 결 + 윗돌)
+        { const st = tex('ip/new/sea/web/stone-wall.webp'); st.wrapS = st.wrapT = THREE.RepeatWrapping; st.repeat.set(.3, 1.4);
+          boxMM(57.3, 57.9, -1.6, 1.15, 32.45, 33.15, new THREE.MeshBasicMaterial({ map: st, color: 0xe6e8ea, toneMapped: false }));
+          boxMM(57.22, 57.98, 1.15, 1.27, 32.38, 33.22, new THREE.MeshBasicMaterial({ color: 0xd2cdc4, toneMapped: false })); }
+        // 2a: 돌담 바다 쪽 너머(z < 33)에 길 밑 색(모래 판)이 납작하게 비쳤다 → 그쪽은 바다로 칠한다(아래 바다 셰이더)
+        // 3a: 난간 밑 길 턱과 방파제 사이 이음(검은 틈)을 흰 턱으로 덮는다(난간 줄을 따라)
+        { const wm = new THREE.MeshBasicMaterial({ color: 0xeeeeea, toneMapped: false, side: THREE.DoubleSide });
+          for (const r of SEA.rails) { const pos = []; for (let k = 0; k < r.length; k++) { const [x, z] = r[k], [px, pz] = r[Math.max(0, k - 1)], [nx, nz] = r[Math.min(r.length - 1, k + 1)], dx = nx - px, dz = nz - pz, L = Math.hypot(dx, dz) || 1, ox = -dz / L * .2, oz = dx / L * .2;
+              pos.push(x - ox, .125, z - oz, x + ox, .125, z + oz); }
+            const idx = []; for (let k = 0; k < r.length - 1; k++) { const a = k * 2; idx.push(a, a + 2, a + 1, a + 1, a + 2, a + 3); }
+            const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setIndex(idx); scene.add(new THREE.Mesh(g, wm)); } }
         boxMM(41.5, 42.04, 0, .45, 46.55, 49.45, new THREE.MeshBasicMaterial({ color: 0xd6d2ca, toneMapped: false }));   // 수영장 자동문 문턱: 계단 윗단과 수영장 바닥 사이로 바깥 바다(땅)가 띠처럼 비쳤다 → 계단과 같은 돌로 채운다(작가님 2026-11-20)   // 안내 팻말 4: 작업실 「출구」를 나선 산책로 시작, 서쪽 화단 쪽(난간 너머 모래밭이 아니라 길 안)
         floorArrow(FX + 9.5, DZ, Math.PI / 2, null, 0x6f7f8e, .5);   // 화살표: 산책로 끝에서 서쪽 수영장 자동문 쪽
         const VS = 'varying vec3 vWP; void main(){ vec4 w = modelMatrix * vec4(position,1.0); vWP = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }';
@@ -4115,8 +4126,8 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
             vec3 seaFar(float L){ return mix(vec3(.365, .70, .855), vec3(.44, .72, .87), smoothstep(15.0, 160.0, L)); }
             float h(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
             void main(){ float x = vWP.x, z = vWP.z, d0 = ddAt(vWP.xz), dd = max(d0, -.2);   // 모래 밑은 모래가 가린다(지우면 모래가 없는 자리에 구멍이 났다)
-              if (x < 52.6) { gl_FragColor = vec4(.80, .83, .70, 1.0); return; }   // 산책로·스포츠센터 쪽(서쪽)은 땅: 바다가 건물 밑·뒤로 비치지 않게(작가님 2026-11-20)
-              if (d0 < -.6) { gl_FragColor = vec4(.80, .76, .62, 1.0); return; }   // 길·방파제 밑 틈: 모래빛(검은 틈으로 보였다)   // 길·방파제 밑(방파제 윗선 틈으로 옥빛이 새지 않게 그늘색)   // 길·방파제 밑(틈으로 옥빛이 새지 않게 그늘색)
+              if (x < 52.6) discard;   // 땅 쪽은 잔디 판(아래 landPad)이 덮는다   // 산책로·스포츠센터 쪽(서쪽)은 땅: 바다가 건물 밑·뒤로 비치지 않게(작가님 2026-11-20)
+              if (d0 < -.6 && z > 33.2) { float gn = h(floor(vWP.xz * 18.0)) * .07 + h(floor(vWP.xz * 3.0)) * .04; gl_FragColor = vec4(vec3(.80, .76, .62) * (.95 + gn), 1.0); return; }   // 모래 결(잔 점)   // 길·방파제 밑 틈: 모래빛(검은 틈으로 보였다)   // 길·방파제 밑(방파제 윗선 틈으로 옥빛이 새지 않게 그늘색)   // 길·방파제 밑(틈으로 옥빛이 새지 않게 그늘색)
               vec3 tile = texture2D(seaT, vec2(z / 6.0 + time * .004, x / 6.0 - time * .008)).rgb;
               vec3 tint = mix(vec3(1.10, 1.06, 1.0), vec3(1.0), smoothstep(.0, 2.4, dd));      // 얕은 물은 밝게
               tint = mix(tint, vec3(.80, .87, .96), smoothstep(2.4, 7.0, dd));                  // 깊을수록 짙은 하늘색
@@ -4153,13 +4164,22 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
         const seaT = (n, m) => { const t = tex(`ip/new/sea/web/${n}.webp`); return rp(t, 1 / m); };   // 결 그림: GPT가 작가님 그림체로 그린 것(gpt-prompt-ip-7.md)
         const MAT = {
           cream: { c: 0xf2efe8, t: seaT('wall-cream', 2) }, creamDark: { c: 0xd8cdb8, t: seaT('wall-cream', 2) }, glass: { c: 0xffffff, t: seaT('glass-band', 2) }, blue: { c: 0x2a5cc4 }, steel: { c: 0xc9cdd1 }, sign: { c: 0x2b4ec9 },
-          lobby: { c: 0xdfe8ea }, step: { c: 0xd6d2ca }, terrazzo: { c: 0xe9e6e0, t: seaT('terrazzo', 1.6), noLm: true },   // 뺀 가로등·벤치의 구운 그림자가 길에 남았다 → 길은 구운 빛 없이 curb: { c: 0xd9d6cf, noLm: true, t: rp(noiseT('#d9d6cf', ['#c9c6bf', '#e6e3dc'], 900, 2), 1) },   // 짙은 회색 턱이 덧댄 판처럼 보였다(작가님 2026-11-20): 방파제 윗돌과 같은 밝은 돌색
+          lobby: { c: 0xdfe8ea }, step: { c: 0xd6d2ca, noLm: true }, terrazzo: { c: 0xe9e6e0, t: seaT('terrazzo', 1.6), noLm: true },   // 뺀 가로등·벤치의 구운 그림자가 길에 남았다 → 길은 구운 빛 없이 curb: { c: 0xd9d6cf, noLm: true, t: rp(noiseT('#d9d6cf', ['#c9c6bf', '#e6e3dc'], 900, 2), 1) },   // 짙은 회색 턱이 덧댄 판처럼 보였다(작가님 2026-11-20): 방파제 윗돌과 같은 밝은 돌색
           // 산책로 잔디·덤불·해송(작가님 2026-11-12 18번 1안, GPT 16차 gpt-prompt-ip-16.md): 3D는 그대로, 결 그림만 새로
           stone: { c: 0xffffff, t: seaT('stone-wall', 2) }, coping: { c: 0xd2cdc4 }, grass: { c: 0xe3e6d6, t: seaT('walk-lawn', 2) },
           ground: { c: 0xe3e6d6, t: seaT('walk-lawn', 2) }, seawall: { c: 0xffffff, t: seaT('stone-wall', 2) }, sand: { c: 0xdcdbd6, t: rp(tex('ip/new/beach/web/sand.webp'), 1 / 3) },
           soil: { c: 0x6b5440 }, shrub: { c: 0xe8ecdc, t: seaT('walk-shrub-leaf', 1.1), lmFloor: .5 }, hedge: { c: 0xdfe5d2, t: seaT('walk-shrub-leaf', 1.1) }, pineBark: { c: 0xa49888, noLm: true }, pineLeaf: { c: 0x2c4628 }, gateWood: { c: 0x4a3526 }, roofTile: { c: 0x454952 },
           rail: { c: 0xf4f4f0 }, pole: { c: 0x50555b }, lampHead: { c: 0xe9e4d8 }, wood: { c: 0xb98a5e },
         };
+        // 스포츠센터 쪽 땅(작가님 2026-11-20: 잔디 끝 너머가 맨 색면·바다로 보였다): 잔디가 멀리까지 이어지고, 그 끝은 숲 띠로 막는다
+        { const lt = tex('ip/new/sea/web/walk-lawn.webp'); lt.wrapS = lt.wrapT = THREE.RepeatWrapping; lt.repeat.set(80 / 2, 150 / 2);
+          const lp = new THREE.Mesh(new THREE.PlaneGeometry(80, 150), new THREE.MeshBasicMaterial({ map: lt, color: 0xc9d2b4, toneMapped: false })); lp.rotation.x = -Math.PI / 2; lp.position.set(52.6 - 40, -.04, 0 + 75); scene.add(lp);
+          const fT = tex('ip/new/beach/web/forest-far.webp'); if (fT) { const band = (ax, az, bx, bz) => { const L = Math.hypot(bx - ax, bz - az), g = new THREE.PlaneGeometry(L, 9); g.translate(0, 4.4, 0); const u = g.attributes.uv; for (let i = 0; i < u.count; i++) u.setX(i, u.getX(i) * L / 24);
+              const t = fT; t.wrapS = THREE.RepeatWrapping; const m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ map: t, transparent: true, alphaTest: .3, side: THREE.DoubleSide, toneMapped: false })); m.position.set((ax + bx) / 2, -.05, (az + bz) / 2); m.rotation.y = Math.atan2(-(bz - az), bx - ax); scene.add(m); };
+            band(30, 0, 30, 92); band(30, 92, 52.6, 108); }
+          { const lt2 = tex('ip/new/sea/web/walk-lawn.webp'); lt2.wrapS = lt2.wrapT = THREE.RepeatWrapping; lt2.repeat.set(5 / 2, 33 / 2); const p2 = new THREE.Mesh(new THREE.PlaneGeometry(5, 33), new THREE.MeshBasicMaterial({ map: lt2, color: 0xc9d2b4, toneMapped: false })); p2.rotation.x = -Math.PI / 2; p2.position.set(55.1, -.04, 16.0); scene.add(p2);
+            // 땅 끝(돌담 너머 바다 쪽 x 57.6)에 낮은 돌 옹벽: 잔디와 바다 사이로 하늘이 띠처럼 비쳤다
+            const sw = tex('ip/new/sea/web/stone-wall.webp'); sw.wrapS = sw.wrapT = THREE.RepeatWrapping; sw.repeat.set(33 / 2, 1.3 / 2); const rw = new THREE.Mesh(new THREE.PlaneGeometry(33, 1.3), new THREE.MeshBasicMaterial({ map: sw, color: 0xe6e8ea, side: THREE.DoubleSide, toneMapped: false })); rw.rotation.y = Math.PI / 2; rw.position.set(57.6, -.65, 16.0); scene.add(rw); } }   // 돌담 뒤 땅(하늘이 띠처럼 비쳤다)
         const seaG = new THREE.Group(); scene.add(seaG); const pineLeafMs = [], pineBarkMs = []; const treeB = { value: Array.from({ length: 8 }, () => new THREE.Vector2(1e4, 1e4)) };
         fetch('ip/new/sea/lightmaps.json').then(r => r.json()).then(({ scale }) => loadGLTF('ip/new/sea/sea.json', (gl) => {
           const lmT = {};
@@ -4951,7 +4971,8 @@ function redrawPanel(m) { const r = REDRAW.find(o => o.t === m.material.map); if
   }, { ppm: 900 });
   cardImg.onload = () => redrawPanel(screen);
   void screen; void kx; void kz;   // 키오스크 화면은 뺐다(작가님 2026-11-20). 발급은 데스크 위 안내지로
-  { const fm = new THREE.MeshBasicMaterial({ color: 0xc6bdb0, toneMapped: false }), f = new THREE.Mesh(new THREE.PlaneGeometry(1.12, .9), fm); f.rotation.x = -Math.PI / 2; f.position.set(18.76, .032, 11.5); scene.add(f); }   // 키오스크 자리 바닥(모델 바닥이 그 밑에 없어 검게 뚫려 보였다)
+  { const om = new THREE.MeshBasicMaterial({ map: LGM.lgOak.t, color: 0xe2c79c, toneMapped: false }); boxMM(18.3, 19.3, 0, 1.02, 11.9, 11.96, om);
+    const ft = canvasTex(64, 64, (g, W, H) => { g.clearRect(0, 0, W, H); for (let i = 0; i < 16; i++) { g.fillStyle = `rgba(255,255,255,${(i + 1) / 16})`; g.fillRect(i, i, W - 2 * i, H - 2 * i); } }), fm = new THREE.MeshBasicMaterial({ map: ft, transparent: true, depthWrite: false, color: 0xc4bbab, toneMapped: false }), f = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 2.0), fm);   /* 가장자리는 옅게 번져 바닥에 녹아들게 */ f.rotation.x = -Math.PI / 2; f.position.set(18.82, .034, 11.15); scene.add(f); }   // 그 자리 바닥에 구운 키오스크 그림자(검은 네모)를 덮는다   // 키오스크를 뺀 데스크 끝: 속이 비어 검게 보인 끝면을 같은 나무 판으로 막는다   // 키오스크를 뺀 자리: 데스크 끝을 같은 나무 몸통으로 막는다(위판 밑이 비어 검게 보였다, 작가님 2026-11-20)
 
   // 서쪽 로비 문(z 10.2~12.6, 높이 3.0) 위 안내판(작가님 2026-11-12): 수영장 「출구」판과 같은 파란 판에 흰 글자
   { const s = panel(.8, .35, (g, W, H) => { g.fillStyle = LB; g.fillRect(0, 0, W, H); g.strokeStyle = 'rgba(255,255,255,.85)'; g.lineWidth = H * .04; g.strokeRect(H * .08, H * .08, W - H * .16, H - H * .16);
@@ -5614,7 +5635,7 @@ const WALK_K = 1;   // 시험용으로 걸음 2배(작가님). 완성되면 1로
 const wrapA = a => Math.atan2(Math.sin(a), Math.cos(a));
 const PLACES = {
   outside: { pos: [0, 31], yaw: 0 }, lobby: { pos: [0, 17.2], yaw: 0 }, artist: { pos: [-12.8, 14.2], yaw: Math.PI / 2 }, works: { pos: [DOORX, R1.z0 + 4.6], yaw: 0 },   // 법과 권리: 첫 작품 정면
-  court: { pos: [0, 6.6], yaw: 0 }, ip: { pos: [14.4, -4.5], yaw: 0 }, obong: { pos: [0, -13.5], yaw: 0 }, lounge: { pos: [12.6, 13.8], yaw: -Math.PI / 2 },
+  court: { pos: [0, 6.6], yaw: 0 }, ip: { pos: [10.85, -4.5], yaw: -Math.PI / 2 },   /* 물빛 통로 안쪽 끝에서 해변 문을 보고(작가님 2026-11-20: 문 앞에서 벽을 보고 섰다) */ obong: { pos: [0, -13.5], yaw: 0 }, lounge: { pos: [12.6, 13.8], yaw: -Math.PI / 2 },
 };
 let walkTo = null, focus = null;   // focus: 작품을 보는 동안 카메라가 따로 선다
 const fadeEl = document.getElementById('fade');
