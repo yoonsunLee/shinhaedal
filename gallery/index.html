@@ -4826,6 +4826,15 @@ function redrawPanel(m) { const r = REDRAW.find(o => o.t === m.material.map); if
         const lw = new THREE.Mesh(new THREE.PlaneGeometry(14, 5), new THREE.MeshBasicMaterial({ color: 0xe6dfd2, toneMapped: false })); lw.rotation.y = Math.PI; lw.position.set(CX1 + 7.05, 2.5, 9.2); root.add(lw);
         // 창 아래로 내려다보면 그림 밑이 늘어져 보였다: 창과 그림 사이에 낮은 풀밭 바닥
         const gr = new THREE.Mesh(new THREE.PlaneGeometry(7.5, 40), new THREE.MeshBasicMaterial({ map: lgPencil('#a9c38f', ['#98b57e', '#bcd3a0', '#8fae78'], 5, 2600, .14), toneMapped: false })); gr.rotation.x = -Math.PI / 2; gr.position.set(CX1 + 3.8, -.1, 0); root.add(gr); }
+      // 틈 메우기(작가님 2026-11-20): ① 서쪽 벽 밑동 — 경사로 바닥과 벽 사이로 바깥 풀밭이 비쳤다 → 경사를 따라 오크 걸레받이
+      //   ② 북쪽 문 동쪽 모서리 — 문 옆 벽과 첫 유리 사이 세로 틈 → 크림 기둥
+      { const oak = new THREE.MeshBasicMaterial({ color: 0xcfae83, toneMapped: false });
+        { const zs = [CZ0, RZ0, RZ1, CZ1], pos = [], idx = [];   // 경사를 따라 꺾이는 얇은 띠(바닥 밑 0.4 m ~ 바닥 위 0.1 m)
+          for (const z of zs) pos.push(CX0 + .02, fy(z) - .4, z, CX0 + .02, fy(z) + .1, z);
+          for (let i = 0; i < zs.length - 1; i++) { const a = i * 2; idx.push(a, a + 2, a + 1, a + 1, a + 2, a + 3); }
+          const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setIndex(idx);
+          root.add(new THREE.Mesh(g, new THREE.MeshBasicMaterial({ color: 0xcfae83, side: THREE.DoubleSide, toneMapped: false }))); }
+        const post = new THREE.Mesh(new THREE.BoxGeometry(.16, CEIL, .2), new THREE.MeshBasicMaterial({ color: 0xece5d8, toneMapped: false })); post.position.set(CX1 - .05, CEIL / 2, CZ0 + .06); root.add(post); }
       // 유리 겉면: 아주 옅은 비침(맑은 칸)
       const sheen = (z0, z1, a) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(z1 - z0, CEIL), new THREE.MeshBasicMaterial({ color: 0xeef4fa, transparent: true, opacity: a, depthWrite: false, toneMapped: false }));
         m.rotation.y = -Math.PI / 2; m.position.set(CX1 + .01, CEIL / 2, (z0 + z1) / 2); m.renderOrder = 2; root.add(m); };
@@ -4941,7 +4950,7 @@ function redrawPanel(m) { const r = REDRAW.find(o => o.t === m.material.map); if
   }, { ppm: 900 });
   cardImg.onload = () => redrawPanel(screen);
   void screen; void kx; void kz;   // 키오스크 화면은 뺐다(작가님 2026-11-20). 발급은 데스크 위 안내지로
-  { const fm = new THREE.MeshBasicMaterial({ color: 0xb3aea7, toneMapped: false }), f = new THREE.Mesh(new THREE.PlaneGeometry(1.12, .9), fm); f.rotation.x = -Math.PI / 2; f.position.set(18.76, .032, 11.5); scene.add(f); }   // 키오스크 자리 바닥(모델 바닥이 그 밑에 없어 검게 뚫려 보였다)
+  { const fm = new THREE.MeshBasicMaterial({ color: 0xc6bdb0, toneMapped: false }), f = new THREE.Mesh(new THREE.PlaneGeometry(1.12, .9), fm); f.rotation.x = -Math.PI / 2; f.position.set(18.76, .032, 11.5); scene.add(f); }   // 키오스크 자리 바닥(모델 바닥이 그 밑에 없어 검게 뚫려 보였다)
 
   // 서쪽 로비 문(z 10.2~12.6, 높이 3.0) 위 안내판(작가님 2026-11-12): 수영장 「출구」판과 같은 파란 판에 흰 글자
   { const s = panel(.8, .35, (g, W, H) => { g.fillStyle = LB; g.fillRect(0, 0, W, H); g.strokeStyle = 'rgba(255,255,255,.85)'; g.lineWidth = H * .04; g.strokeRect(H * .08, H * .08, W - H * .16, H - H * .16);
