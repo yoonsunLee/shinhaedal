@@ -2856,12 +2856,15 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
   ];
   const ipSign = (n, x, z, ry, W = 1.35) => {
     const S = IP_SIGNS[n - 1], c = document.createElement('canvas'), t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = maxAniso;
-    const mat = new THREE.MeshBasicMaterial({ map: t, transparent: true, alphaTest: .35, toneMapped: false, visible: false }), matB = mat.clone();   // 뒷면은 글 없는 판(거꾸로 온 사람에게 글이 뒤집혀 보이지 않게)
+    const mat = new THREE.MeshBasicMaterial({ map: t, transparent: true, alphaTest: .35, toneMapped: false, visible: false });
     const m = new THREE.Mesh(new THREE.PlaneGeometry(W, W * .64), mat); m.rotation.y = ry; m.position.set(x, W * .32, z); scene.add(m);
-    const mb = new THREE.Mesh(m.geometry, matB); mb.rotation.y = ry + Math.PI; mb.position.set(x - Math.sin(ry) * .012, W * .32, z - Math.cos(ry) * .012); scene.add(mb);
+    // 보는 사람 쪽으로 돌아선다(작가님 2026-11-20: 어디서 봐도 글이 보이게). 바닥 높이는 그 자리 바닥에 맞춘다(모래 언덕에 묻히지 않게)
+    let base = null, hh = W * .64; const rc = new THREE.Raycaster();
+    animators.push(() => { if (!m.visible) return; m.rotation.y = Math.atan2(camera.position.x - x, camera.position.z - z);
+      if (base === null) { rc.set(new THREE.Vector3(x, 6, z), new THREE.Vector3(0, -1, 0)); const f = rc.intersectObjects(floors, false).find(f => f.object.visible); if (f) base = f.point.y; }
+      m.position.y = (base ?? 0) + hh / 2; });
     new THREE.ImageLoader().load(`ip/new/signs/${S.file}.webp`, (im) => {
-      const w = im.naturalWidth, h = im.naturalHeight; c.width = w; c.height = h; m.geometry.dispose(); m.geometry = mb.geometry = new THREE.PlaneGeometry(W, W * h / w); m.position.y = mb.position.y = W * h / w / 2;
-      { const tb = new THREE.Texture(im); tb.colorSpace = THREE.SRGBColorSpace; tb.needsUpdate = true; matB.map = tb; matB.visible = true; matB.needsUpdate = true; }
+      const w = im.naturalWidth, h = im.naturalHeight; c.width = w; c.height = h; m.geometry.dispose(); hh = W * h / w; m.geometry = new THREE.PlaneGeometry(W, hh);
       const draw = () => { const g = c.getContext('2d'); g.clearRect(0, 0, w, h); g.drawImage(im, 0, 0);
         const [a, b, cc, d] = S.R, X0 = a * w, Y0 = b * h, BW = (cc - a) * w, BH = (d - b) * h, cx = X0 + BW / 2; g.textAlign = 'center'; g.textBaseline = 'alphabetic';
         const u = BH / 10;   // 글 크기 단위
@@ -2935,7 +2938,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
     const pk = kind === 'big' ? .45 : .22; g.gain.setValueAtTime(.0001, t0); g.gain.linearRampToValueAtTime(pk, t0 + .08); src.connect(bp).connect(g); src.start(t0);
   };
   interior('ipBeach', [[CH.x1 - .3, BE.x1, BE.z0, BE.z1]], [SB.x0, SB.x1, SB.z0, SB.z1, SB.h], () => {
-    ipSign(1, CH.x1 + 1.7, PGz - 2.5, -.43);   // 안내 팻말 1: 물빛 통로에서 해변으로 나서면 왼쪽 앞
+    ipSign(1, CH.x1 + 3.4, PGz - 1.2, 0, 1.6);   // 안내 팻말 1: 물빛 통로에서 해변으로 나서면 바로 앞(조금 왼쪽)
     floorArrow(GAP.x - .3, -.6, Math.PI, null, 0x8a6236, .5);   // 화살표: 해변 한가운데서 남쪽 덩굴 터널 문 쪽
     const be0 = scene.children.length;
     // 모래: 「줍기」 모래 결을 거울로 이어 붙임(작은 자국은 지움)
@@ -3266,7 +3269,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
         const g = new THREE.PlaneGeometry(FW, H, 32, 1); g.translate(0, H / 2, 0); const uv = g.attributes.uv; for (let i = 0; i < uv.count; i++) uv.setX(i, .37 + uv.getX(i) * FW / tileW);
         { const ps = g.attributes.position; for (let i = 0; i < ps.count; i++) { const d = FW / 2 - Math.abs(ps.getX(i)); ps.setY(i, ps.getY(i) * (.45 + .55 * smooth(0, 3.6, d)) * .84); } }   // 두 끝은 덤불 머리째 낮아져 뒤 숲에 잦아든다(반듯하게 잘린 판 끝이 안 보이게)
         const fc = new THREE.Mesh(g, fm); place(fc, x, 0, z - .04, 0, -1); blockers.push(fc);
-        woodSign(x, h + .42, z - .2, Math.PI, '그늘길');   // 작가님 2A: 문 위 덤불에 숲길과 같은 나무 팻말 '출구'
+        woodSign(x, h + .42, z - .2, Math.PI, '숲길');   // 작가님 2A: 문 위 덤불에 숲길과 같은 나무 팻말 '출구'
         fc.userData.hole = (p) => p.x > hx0 && p.x < hx1 && p.y < hy;   // 문 모양 구멍은 눌러 지나간다
       }
       tree(x - w / 2 - 1.5, z - .45, .95); tree(x + w / 2 + 1.5, z - .5, 1.0); tree(x - 4.1, z - .3, 1.1); tree(x + 4.1, z - .35, 1.05);   // 끝은 나무로 감춘다
@@ -3595,8 +3598,8 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
       return { band, doorGlow, endLeaves, endCol };
     };
     interior('ipForest', [[FX0 - .1, 60, FZ0, FZ1], [49.5, 60, FZ1 - .1, 33]], [FX0 - .3, 64.5, FZ0 - .1, 38.5, 16], () => {
-      ipSign(2, P2.x1 + .55, P2.z1 + 2.7, -2.07, 1.15);   // 안내 팻말 2: 덩굴 터널을 나와 미로 첫 길 오른쪽 덤불 앞
-      ipSign(3, DX + 2.4, ez - 1.6, -.98);   // 안내 팻말 3: 등불 문을 지나 마당으로 가는 길
+      ipSign(2, P2.x1 + .45, P2.z1 + 2.7, 0, 1.2);   // 안내 팻말 2: 덩굴 터널을 나와 미로 첫 길 오른쪽 덤불 앞
+      ipSign(3, 52.6, 27.6, 0, 1.4);   // 안내 팻말 3: 「신해달 작가 작업실」 몸채 앞마당(정면 x 54.5) 남쪽 귀퉁이
       { const [ax, az] = cell(4, 3); floorArrow(ax, az, -Math.PI / 2, .036); }
       tapPad(FX1 + .1, 60, FZ0, 13.7, .03);   // 미로를 나온 오솔길 북쪽 띠(마사토 바닥이 z 13.6부터라 눌러도 안 잡혔다)   // 화살표: 미로 출구 바로 앞 모퉁이에서만 등불 문(동쪽) 쪽. 안쪽 길은 풀어 주지 않는다
       // 바닥: 흙길 결 위에 덤불 그림자(해가 서쪽에 낮게 있어 그림자가 동쪽으로 길게 눕는다)
@@ -3911,7 +3914,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
           boxMM(EX - GP - .1, EX + GP + .1, DH + .12, DH + .3, EZ - .1, EZ + .55, pm);
           gable(EX, EZ + .22, false, .85, 2 * GP + .9, 3.55, 3.02, .3, -1, .9);
           // '출구' 현판(작가님 6A): 인방 위 가로, 먹색 옻칠 판에 미색 글
-          const draw = (g, W, H) => { g.fillStyle = '#231c18'; g.fillRect(0, 0, W, H); g.strokeStyle = '#8a6a3c'; g.lineWidth = 6; g.strokeRect(8, 8, W - 16, H - 16); g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = '#efe2c8'; { let fs = H * .5; g.font = `700 ${fs}px ${FONT_B}`; const tw = g.measureText('바닷가 산책로').width; if (tw > W * .86) fs *= W * .86 / tw; g.font = `700 ${fs}px ${FONT_B}`; } g.fillText('바닷가 산책로', W / 2, H * .54); };   // 출구 → 다음 공간 이름(작가님 2026-11-12)
+          const draw = (g, W, H) => { g.fillStyle = '#231c18'; g.fillRect(0, 0, W, H); g.strokeStyle = '#8a6a3c'; g.lineWidth = 6; g.strokeRect(8, 8, W - 16, H - 16); g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = '#efe2c8'; { let fs = H * .5; g.font = `700 ${fs}px ${FONT_B}`; const tw = g.measureText('스포츠센터 가는 길').width; if (tw > W * .86) fs *= W * .86 / tw; g.font = `700 ${fs}px ${FONT_B}`; } g.fillText('스포츠센터 가는 길', W / 2, H * .54); };   // 작가님 2026-11-20: '바닷가 산책로' → 스포츠센터 가는 길   // 출구 → 다음 공간 이름(작가님 2026-11-12)
           const xt = canvasTex(512, 192, draw); document.fonts && document.fonts.ready.then(() => { draw(xt.image.getContext('2d'), 512, 192); xt.needsUpdate = true; });
           boxMM(EX - .42, EX + .42, DH + .32, DH + .6, EZ - .16, EZ - .1, sJamb);
           const xp = new THREE.Mesh(new THREE.PlaneGeometry(.76, .26), new THREE.MeshBasicMaterial({ map: xt, toneMapped: false })); xp.position.set(EX, DH + .46, EZ - .165); xp.rotation.y = Math.PI; scene.add(xp); }
@@ -4067,7 +4070,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
       { const np = globalThis.noPawAt; globalThis.noPawAt = (x, z) => (np && np(x, z)) || (onBeach(x, z) && coastD(x, z) > 1.3); }   // 모래에는 발자국을 남기지 않는다(해변과 같이, 작가님)
       const DOOR_NEAR = (x, z) => x > 40.4 && x < 45.6 && Math.abs(z - DZ) < 1.9;
       interior('ipSea', rects, [30, 66, 33.0, 63, 12], () => {
-        ipSign(4, SEA.SP[0][0] - .8, SEA.SP[0][1] + 2.3, 2.2, 1.1);   // 안내 팻말 4: 작업실 「출구」를 나선 산책로 시작, 서쪽 화단 쪽(난간 너머 모래밭이 아니라 길 안)
+        ipSign(4, SEA.SP[0][0] - .55, SEA.SP[0][1] + 2.4, 0, 1.4);   // 안내 팻말 4: 작업실 「출구」를 나선 산책로 시작, 서쪽 화단 쪽(난간 너머 모래밭이 아니라 길 안)
         floorArrow(FX + 9.5, DZ, Math.PI / 2, null, 0x6f7f8e, .5);   // 화살표: 산책로 끝에서 서쪽 수영장 자동문 쪽
         const VS = 'varying vec3 vWP; void main(){ vec4 w = modelMatrix * vec4(position,1.0); vWP = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }';
         const U = { time: { value: 0 }, cam: { value: new THREE.Vector3() }, sun: { value: new THREE.Vector3(...SEA.sun).normalize() } };
@@ -5656,12 +5659,35 @@ function endDrag(e) {
   if (!wasClick || e.type === 'pointercancel') return;
   const h = hitAt(e.clientX, e.clientY);
   if (cardOpen && !(h && h.object.userData.info)) { closeCard(); return; }   // 창이 떠 있을 때 다른 곳을 누르면 창만 닫는다(작가님). 다른 작품을 누르면 그 창으로 바뀐다
+  if (!(h && (h.object.userData.info || floors.includes(h.object))) && throughDoor(e.clientX, e.clientY, h)) return;   // 열린 문 너머 다음 공간 바닥을 눌렀을 때(작가님 2026-11-20)
   if (!h) return;
   const info = h.object.userData.info;
   if (info && info.act) { info.act(); return; }
   if (info) { openCard(info); cardAt = { x: h.point.x, z: h.point.z, d0: Math.max(3.5, Math.hypot(me.x - h.point.x, me.z - h.point.z) + 1.5) }; return; }
   if (floors.includes(h.object)) { const path = findPath(me.x, me.z, h.point.x, h.point.z) || [[h.point.x, h.point.z]]; walkTo = { x: h.point.x, z: h.point.z, stuck: 0, path }; focus = null; hideHint(); showMarker(h.point.x, h.point.y, h.point.z); return; }
+  if (h.face && h.point.y < 1.2 && h.face.normal.clone().transformDirection(h.object.matrixWorld).y > .75) {   // 계단·문턱처럼 위를 보는 낮은 면도 바닥처럼 걸어 간다
+    const path = findPath(me.x, me.z, h.point.x, h.point.z) || [[h.point.x, h.point.z]]; walkTo = { x: h.point.x, z: h.point.z, stuck: 0, path }; focus = null; hideHint(); showMarker(h.point.x, h.point.y, h.point.z); return; }
   if (h.object.userData.stopAt) { walkTo = { x: h.point.x, z: h.point.z, stuck: 50 }; focus = null; hideHint(); }   // 덤불을 누르면 그쪽으로 곧장 걷다 덤불 앞에서 멈춘다(너머로 가지 않는다, 작가님 2026-11-20)
+}
+/* 열린 문 구멍(viewPortal) 너머를 눌렀을 때: 그 공간 바닥을 찾아 문을 지나 그 자리까지 걷는다.
+   문 구멍은 다른 공간을 그림처럼 비추는 것이라 보통 누름이 그 바닥에 닿지 않았다. 문 너머 공간 좌표에서 다시 쏴 보고, 이쪽 좌표로 되돌려 걸을 곳을 정한다
+   (좌표가 다른 문은 걸어서 문 선을 넘을 때 stepPortals가 목적지를 함께 옮긴다) */
+function throughDoor(cx, cy, h0) {
+  ndc.set(cx / innerWidth * 2 - 1, -(cy / innerHeight) * 2 + 1); ray.setFromCamera(ndc, camera);
+  const shown = (o) => { for (let p = o; p; p = p.parent) if (!p.visible) return false; return true; };
+  let best = null;
+  for (const V of VIEWS) { if (!shown(V.hole)) continue; const hh = ray.intersectObject(V.hole, false)[0]; if (!hh || (h0 && h0.distance < hh.distance - .05) || (best && best.d < hh.distance)) continue; best = { V, d: hh.distance, p: hh.point }; }
+  if (!best) return false;
+  const { V } = best, T = INTERIORS.find(I => I.name === V.target); if (!T) return false;
+  const mine = (f) => { const I = inInterior(f.point.x, f.point.z); return I && I.name === V.target; };   // 늦게 받는 모델 바닥(수영장 데크 등)은 objs에 없어 자리로 가린다
+  const o2 = ray.ray.origin.clone().applyMatrix4(V.M), d2 = ray.ray.direction.clone().transformDirection(V.M), r2 = new THREE.Raycaster(o2, d2, best.d - .1, 80);
+  let P = (r2.intersectObjects(floors, false).find(mine) || {}).point;
+  if (!P && d2.y < -.02) { const t = (.3 - o2.y) / d2.y; P = o2.clone().addScaledVector(d2, t); if (t > 40) P = null; }   // 문 너머 바닥이 아직 안 잡히면 바닥 높이쯤 평면으로
+  if (!P) return false;
+  const back = P.clone().applyMatrix4(V.M.clone().invert());   // 이쪽 좌표로
+  const door = [V.S[0], V.S[1]], pre = findPath(me.x, me.z, door[0], door[1]) || [];   // 문 가운데를 지나 한 걸음 더(문설주에 걸리지 않게)
+  walkTo = { x: back.x, z: back.z, stuck: 0, path: [...pre, [door[0] + V.fwd.x * .7, door[1] + V.fwd.z * .7], [back.x, back.z]] }; focus = null; hideHint(); showMarker(best.p.x, best.p.y, best.p.z);
+  return true;
 }
 canvas.addEventListener('pointerup', endDrag); canvas.addEventListener('pointercancel', endDrag);
 canvas.addEventListener('pointerleave', () => { tip.hidden = true; });
