@@ -2224,7 +2224,7 @@ interior('nth', [[C4.x0 - .1, R4.x0 + .3, -26.3, -19.9], [R4.x0, R4.x1, R4.z0, R
 // 섹션이 아니라 마당이라 글자는 두지 않는다
 interior('exit', [[C5.ax0, C5.ax1, C5.z0 - .3, C5.bz0 + .1], [C5.ax0, C5.x1 + .2, C5.bz0, C5.bz1], [R1.x1 + .2, -10.3, CDOOR.z0, CDOOR.z1]],
   [C5.ax0 - .25, C5.x1, C5.z0 - .1, CDOOR.z1 + .25, C5.h + .3], () => {
-  const T = .2, dm = std({ color: 0x1a1e2a, roughness: .95 }), dmD = std({ color: 0x1a1e2a, roughness: .95, side: THREE.DoubleSide });
+  const T = .2, dm = new THREE.MeshBasicMaterial({ color: 0x23273a }), dmD = new THREE.MeshBasicMaterial({ color: 0x23273a, side: THREE.DoubleSide });   // 빛 받는 면만 회갈색으로 떠 보였다(작가님 2026-11-20): 벽은 빛과 상관없이 같은 짙은 남색
   const W = (x0, x1, z0, z1, h = C5.h) => { const m = boxMM(x0, x1, 0, h, z0, z1, dm); blockers.push(m); solid(x0, x1, z0, z1); };
   W(C5.ax0 - T, C5.ax0, C5.z0, C5.bz1);              // 서쪽(꺾이는 벽). 룸4 벽 안으로 나오지 않게(문 옆 까만 기둥)
   W(C5.ax1, C5.ax1 + T, C5.z0, C5.bz0);              // 첫 길 동쪽
@@ -2243,9 +2243,9 @@ interior('exit', [[C5.ax0, C5.ax1, C5.z0 - .3, C5.bz0 + .1], [C5.ax0, C5.x1 + .2
   const cm = std({ color: 0x14171f, roughness: 1, side: THREE.DoubleSide });
   ceiling(C5.ax0, C5.ax1, C5.z0 - .2, C5.bz0, C5.h, cm, 2.4); ceiling(C5.ax0, -10.4, C5.bz0, C5.bz1, C5.h, cm, 2.4); ceiling(R1.x1 + .2, -10.4, C5.bz1, CDOOR.z1, C5.h, cm, 2.4);
   // 꺾이는 곳 정면 벽(작가님 2026-11-12: 룸4에서 보면 검은 구멍 같았다): 벽에 빛을 내리고, 꺾이는 쪽을 알리는 글
-  { const l = new THREE.PointLight(0xf3e6d0, 2.2, 6.5, 1.4); l.position.set(-15.8, 2.7, -7.0); scene.add(l);
-    const wash = new THREE.Mesh(new THREE.PlaneGeometry(C5.ax1 - C5.ax0, C5.h), new THREE.MeshBasicMaterial({ map: canvasTex(64, 256, (g, W, H) => { const gr = g.createLinearGradient(0, 0, 0, H); gr.addColorStop(0, 'rgba(240,226,200,.32)'); gr.addColorStop(.55, 'rgba(240,226,200,.12)'); gr.addColorStop(1, 'rgba(240,226,200,.04)'); g.fillStyle = gr; g.fillRect(0, 0, W, H); }), transparent: true, depthWrite: false, toneMapped: false }));
-    place(wash, (C5.ax0 + C5.ax1) / 2, C5.h / 2, R1.z0 - .2 - .012, 0, -1);
+  { const l = new THREE.PointLight(0xdfe3ec, .6, 6.5, 1.4); l.position.set(-15.8, 2.7, -7.0); scene.add(l);
+    const wash = new THREE.Mesh(new THREE.PlaneGeometry(R1.x1 + .2 - C5.ax0, C5.h),   /* 벽 한 칸만 밝아 옆과 색이 달라 보였다(작가님 2026-11-20) → 벽 전체 */ new THREE.MeshBasicMaterial({ map: canvasTex(64, 256, (g, W, H) => { const gr = g.createLinearGradient(0, 0, 0, H); gr.addColorStop(0, 'rgba(240,226,200,.32)'); gr.addColorStop(.55, 'rgba(240,226,200,.12)'); gr.addColorStop(1, 'rgba(240,226,200,.04)'); g.fillStyle = gr; g.fillRect(0, 0, W, H); }), transparent: true, depthWrite: false, toneMapped: false }));
+    place(wash, (C5.ax0 + R1.x1 + .2) / 2, C5.h / 2, R1.z0 - .2 - .012, 0, -1); scene.remove(wash);   // 밝힌 벽만 색이 달라 보였다(작가님 2026-11-20): 다른 벽과 같은 어두운 색으로, 글만 밝게
     doorSign('← 중정', '', -15.8, 1.8, R1.z0 - .2 - .016, 0, -1, 1.6, 'center', '#e2d6c0').scale.setScalar(1.9); }   // 남쪽을 보면 왼쪽(동쪽)으로 꺾인다
   // 빛나는 간유리가 전실에 흘리는 빛(문 쪽에서만)
   { const l = new THREE.PointLight(0xfff3e0, 1.3, 7, 1.6); l.position.set(-11.0, 1.7, (CDOOR.z0 + CDOOR.z1) / 2); scene.add(l); }
@@ -4085,6 +4085,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
       const DOOR_NEAR = (x, z) => x > 40.4 && x < 45.6 && Math.abs(z - DZ) < 1.9;
       interior('ipSea', rects, [30, 66, 33.0, 63, 12], () => {
         ipSign(4, SEA.SP[0][0] - .55, SEA.SP[0][1] + 2.4, 0, 1.4);
+        boxMM(57.45, 57.6, -1.6, 2.3, 32.6, 33.0, new THREE.MeshBasicMaterial({ color: 0xcfd2d6, toneMapped: false }));   // 잘라 낸 돌담 끝 마구리(속이 비어 보이지 않게)
         boxMM(41.5, 42.04, 0, .45, 46.55, 49.45, new THREE.MeshBasicMaterial({ color: 0xd6d2ca, toneMapped: false }));   // 수영장 자동문 문턱: 계단 윗단과 수영장 바닥 사이로 바깥 바다(땅)가 띠처럼 비쳤다 → 계단과 같은 돌로 채운다(작가님 2026-11-20)   // 안내 팻말 4: 작업실 「출구」를 나선 산책로 시작, 서쪽 화단 쪽(난간 너머 모래밭이 아니라 길 안)
         floorArrow(FX + 9.5, DZ, Math.PI / 2, null, 0x6f7f8e, .5);   // 화살표: 산책로 끝에서 서쪽 수영장 자동문 쪽
         const VS = 'varying vec3 vWP; void main(){ vec4 w = modelMatrix * vec4(position,1.0); vWP = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }';
@@ -4168,7 +4169,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
             if (!lmT[key]) { const t = tex(`ip/new/sea/lm-${key}.webp`); t.flipY = false; t.channel = 1; lmT[key] = t; }
             if (o.material.name === 'lampHead' || o.material.name === 'pole' || o.material.name === 'wood') { o.visible = false; return; }   // 가로등·벤치는 뺐다(작가님 2026-11-20)
             if (key === 'Wall' && o.material.name === 'grass') { const P = o.geometry.attributes.position, v = new THREE.Vector3(); for (let i = 0; i < P.count; i++) { v.fromBufferAttribute(P, i).applyMatrix4(o.matrixWorld); if (v.x < 44.2) { const k = Math.max(0, Math.min(1, (v.x - 42.4) / 1.8)); P.setY(i, Math.min(P.getY(i), .4 + (P.getY(i) - .4) * k)); } } P.needsUpdate = true; o.geometry.computeBoundingSphere(); }   // 스포츠센터 벽 앞 잔디 언덕이 창을 가렸다: 벽 쪽 1.8 m는 낮춘다(작가님 2026-11-20)
-            if (key === 'Wall' && (o.material.name === 'stone' || o.material.name === 'coping')) o.userData.clipX = 59.0;   // 마당 남쪽 돌담이 바다 위로 길게 나갔다: 모래 끝(x 59)에서 자른다
+            if (key === 'Wall' && (o.material.name === 'stone' || o.material.name === 'coping')) o.userData.clipX = 57.6;   // 마당 남쪽 돌담이 모래·바다 위로 길게 나갔다: 방파제 끝(x 57.6)에서 자른다
             const spec = MAT[o.material.name] || { c: 0xffffff }; if (o.material.name === 'pineLeaf') pineLeafMs.push(o); if (o.material.name === 'pineBark') pineBarkMs.push(o);
             o.material = new THREE.MeshBasicMaterial({ color: spec.c, map: spec.t || null, lightMap: spec.noLm ? null : lmT[key], lightMapIntensity: scale * Math.PI * .95, toneMapped: false });
             if (spec === MAT.grass || spec === MAT.ground) o.material.onBeforeCompile = sh => {   // 옛 해송 줄기 밑 구운 그림자(검은 구멍처럼 보임)만 밝힌다(작가님 2026-11-14, 해변 나무로 바꾼 뒤)
