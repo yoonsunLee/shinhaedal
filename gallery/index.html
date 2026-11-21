@@ -1604,7 +1604,11 @@ interior('pov', [[C2.x0, R1.x0 + .3, C2.z0, C2.z1], [C2.x0, C2.bx1, R2.z1 - .3, 
     g.save(); g.textAlign = 'left'; g.textBaseline = 'middle';
     const lay = povLayout(g, ppm); g.filter = `blur(${.035 * ppm}px)`; g.fillStyle = 'rgba(60,40,20,.38)';
     for (const [ch, x] of lay) g.fillText(ch, x + .025 * ppm, Hc * .5 + .035 * ppm);
+    const [lc, lx] = lay[lay.length - 1], right = lx + g.measureText(lc).width, fz = Math.round(g.font.match(/(\d+(?:\.\d+)?)px/)[1]);
     g.restore();
+    // 작게 「Point of view」(작가님 2026-11-21): V 오른쪽 끝에 맞춰 글자 밑
+    g.save(); g.textAlign = 'right'; g.textBaseline = 'top'; g.fillStyle = 'rgba(40,36,32,.72)'; g.font = `500 ${.2 * ppm}px "Noto Sans KR", sans-serif`;
+    g.fillText('Point of view', right, Hc * .5 + fz * .42); g.restore();
   });
   {
     const PPM = 160, W = Math.round(POVW.L * PPM), H = Math.round(POVW.H * PPM);
