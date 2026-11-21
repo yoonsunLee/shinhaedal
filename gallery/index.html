@@ -4075,29 +4075,35 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
       const SP = SEA.SP.map(([x, z]) => new THREE.Vector3(x, 0, z)), [FX, DZ] = SEA.door, [GX, GZ, GH, GHH] = SEA.gate, [SAND0, SAND1, SANDW] = SEA.sand;
       const CO = SEA.coast, CN = SEA.coastN, ST = SEA.stairs;
       // 걷는 칸: 길, 앞마당, 계단·모래사장(물가 앞까지), 자동문 문턱
-      const rects = SP.filter((_, i) => i % 2 === 0).map(p => [p.x - 1.05, p.x + 1.05, p.z - 1.05, p.z + 1.05]);
-      rects.push([SEA.plaza[0], SEA.plaza[3] + .1, SEA.plaza[1] + .05, SEA.plaza[2] - .05], [41.7, 43.8, 46.9, 49.1]);
-      for (let k = 2; k < CO.length; k += 2) { const [x, z] = CO[k]; if (z > 46.6) break; const cx = x + CN[k][0] * 3.1, cz = z + CN[k][1] * 3.1; rects.push([cx - 2.3, cx + 2.3, Math.max(33.15, cz - 2.3), cz + 2.3]); }
-      for (let k = ST.ia; k <= ST.ib; k++) { const [x, z] = CO[k]; rects.push([x - 1.4, x + 1.8, z - .4, z + .4]); }   // 계단 띠: 길과 모래 사이가 비어 내려가지 못하던 것(작가님 2026-11-12)
+      // 숲길(작가님 2026-11-21 결정, 전문가 셋 회의): 바다·모래·방파제를 걷고 가문비 숲에 둘러싸인 스포츠센터. 대문에서 한 번 완만하게 굽는 흙길 → 화강석 광장
+      const FOREST = true;
+      const FP = (() => { const P0 = [53.5, 33.2], P1 = [56.4, 39.5], P2 = [55.0, 44.6], P3 = [51.6, 47.6], out = [];   // 3차 베지에, 0.5 m 간격
+        for (let i = 0; i <= 40; i++) { const t = i / 40, a = (1 - t) ** 3, b = 3 * (1 - t) ** 2 * t, c = 3 * (1 - t) * t * t, d = t ** 3; out.push([a * P0[0] + b * P1[0] + c * P2[0] + d * P3[0], a * P0[1] + b * P1[1] + c * P2[1] + d * P3[1]]); } return out; })();
+      const PLZ = { x0: 42.3, x1: 52.4, z0: 44.0, z1: 52.0 };
+      const rects = FOREST ? [] : SP.filter((_, i) => i % 2 === 0).map(p => [p.x - 1.05, p.x + 1.05, p.z - 1.05, p.z + 1.05]);
+      if (FOREST) { for (const [x, z] of FP) rects.push([x - 1.15, x + 1.15, z - 1.15, z + 1.15]); rects.push([PLZ.x0 + .9, PLZ.x1, PLZ.z0, PLZ.z1], [41.7, 43.8, 46.9, 49.1]); }
+      if (!FOREST) rects.push([SEA.plaza[0], SEA.plaza[3] + .1, SEA.plaza[1] + .05, SEA.plaza[2] - .05], [41.7, 43.8, 46.9, 49.1]);
+      if (!FOREST) for (let k = 2; k < CO.length; k += 2) { const [x, z] = CO[k]; if (z > 46.6) break; const cx = x + CN[k][0] * 3.1, cz = z + CN[k][1] * 3.1; rects.push([cx - 2.3, cx + 2.3, Math.max(33.15, cz - 2.3), cz + 2.3]); }
+      if (!FOREST) for (let k = ST.ia; k <= ST.ib; k++) { const [x, z] = CO[k]; rects.push([x - 1.4, x + 1.8, z - .4, z + .4]); }   // 계단 띠: 길과 모래 사이가 비어 내려가지 못하던 것(작가님 2026-11-12)
       const inSea = (x, z) => rects.some(r => x > r[0] && x < r[1] && z > r[2] && z < r[3]);
       // 모래·계단 높이: 길 바다 쪽 가장자리(CO)에서 바다 쪽으로 잰 거리
       const coastD = (x, z) => { let bd = 1e9, sg = -1; for (let k = 0; k < CO.length - 1; k++) { const [ax, az] = CO[k], [bx, bz] = CO[k + 1]; if (az > 50) break; const ux = bx - ax, uz = bz - az, L2 = ux * ux + uz * uz, t = Math.max(0, Math.min(1, ((x - ax) * ux + (z - az) * uz) / L2)), qx = ax + ux * t, qz = az + uz * t, d = Math.hypot(x - qx, z - qz);
         if (d < bd) { bd = d; sg = (x - qx) * CN[k][0] + (z - qz) * CN[k][1] > 0 ? 1 : -1; } } return bd * sg; };
       const sandY = (d) => { const t = Math.min(1, Math.max(0, d / SANDW)); return SAND0 + (SAND1 - SAND0) * t * t * (3 - 2 * t); };
       const onBeach = (x, z) => inSea(x, z) && z < 49.7 && x > 50 && coastD(x, z) > -.15;   // 모래 걷는 칸 남쪽 끝(z 49.4)까지. 예전 47.5는 모래 남쪽 끝에서 눈높이가 길 높이로 튀어 올랐다(작가님 2026-11-14)
-      globalThis.SEA_LIFT = (x, z) => { if (!onBeach(x, z)) return null; const d = coastD(x, z) + .15; return Math.max(sandY(d), Math.min(0, .05 - ST.rise * d / ST.run)); };   // 수영장 animator가 EYE_LIFT에 쓴다
+      globalThis.SEA_LIFT = (x, z) => { if (FOREST || !onBeach(x, z)) return null; const d = coastD(x, z) + .15; return Math.max(sandY(d), Math.min(0, .05 - ST.rise * d / ST.run)); };   // 수영장 animator가 EYE_LIFT에 쓴다
       { const np = globalThis.noPawAt; globalThis.noPawAt = (x, z) => (np && np(x, z)) || (onBeach(x, z) && coastD(x, z) > 1.3) || (inSea(x, z) && x > 55.7); }   // 계단·모래사장에도 발자국을 남기지 않는다(작가님 2026-11-21: 계단 발자국이 오래 남음)   // 모래에는 발자국을 남기지 않는다(해변과 같이, 작가님)
       const DOOR_NEAR = (x, z) => x > 40.4 && x < 45.6 && Math.abs(z - DZ) < 1.9;
       interior('ipSea', rects, [30, 66, 33.0, 63, 12], () => {
-        ipSign(4, SEA.SP[0][0] - .55, SEA.SP[0][1] + 2.4, Math.PI, 1.4);
+        if (FOREST) ipSign(4, 52.9, 45.0, -Math.PI * .75, 1.4); else ipSign(4, SEA.SP[0][0] - .55, SEA.SP[0][1] + 2.4, Math.PI, 1.4);   // 숲길: 광장 입구
         // 작가님 2026-11-20 결정(다 a)
         // 1a: 잘라 낸 돌담 끝을 돌기둥으로 마감(같은 돌 결 + 윗돌)
-        { const st = tex('ip/new/sea/web/stone-wall.webp'); st.wrapS = st.wrapT = THREE.RepeatWrapping; st.repeat.set(.3, 1.4);
+        if (!FOREST) { const st = tex('ip/new/sea/web/stone-wall.webp'); st.wrapS = st.wrapT = THREE.RepeatWrapping; st.repeat.set(.3, 1.4);
           boxMM(57.3, 57.9, -1.6, 1.15, 32.45, 33.15, new THREE.MeshBasicMaterial({ map: st, color: 0xe6e8ea, toneMapped: false }));
           boxMM(57.22, 57.98, 1.15, 1.27, 32.38, 33.22, new THREE.MeshBasicMaterial({ color: 0xd2cdc4, toneMapped: false })); }
         // 2a: 돌담 바다 쪽 너머(z < 33)에 길 밑 색(모래 판)이 납작하게 비쳤다 → 그쪽은 바다로 칠한다(아래 바다 셰이더)
         // 3a: 난간 밑 길 턱과 방파제 사이 이음(검은 틈)을 흰 턱으로 덮는다(난간 줄을 따라)
-        { const wm = new THREE.MeshBasicMaterial({ color: 0xeeeeea, toneMapped: false, side: THREE.DoubleSide });
+        if (!FOREST) { const wm = new THREE.MeshBasicMaterial({ color: 0xeeeeea, toneMapped: false, side: THREE.DoubleSide });
           for (const r of SEA.rails) { const pos = []; for (let k = 0; k < r.length; k++) { const [x, z] = r[k], [px, pz] = r[Math.max(0, k - 1)], [nx, nz] = r[Math.min(r.length - 1, k + 1)], dx = nx - px, dz = nz - pz, L = Math.hypot(dx, dz) || 1, ox = -dz / L * .2, oz = dx / L * .2;
               pos.push(x - ox, .125, z - oz, x + ox, .125, z + oz); }
             const idx = []; for (let k = 0; k < r.length - 1; k++) { const a = k * 2; idx.push(a, a + 2, a + 1, a + 1, a + 2, a + 3); }
@@ -4147,7 +4153,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
               float L = length(vWP - cameraPosition); c = mix(c, seaFar(L), smoothstep(6.0, 26.0, L));   // 멀수록 먼 바다 색
               gl_FragColor = vec4(c, mix(.72, .97, smoothstep(.0, 2.5, dd)));                    // 얕은 물은 모래가 살짝 비친다
             }` }));
-        sea.rotation.x = -Math.PI / 2; sea.position.set(80, -1.2, 45); sea.renderOrder = 2; scene.add(sea);
+        sea.rotation.x = -Math.PI / 2; sea.position.set(80, -1.2, 45); sea.renderOrder = 2; if (!FOREST) scene.add(sea);
         // 물가 거품: 해변과 같은 거품 그림(foam.webp) 두 줄이 물 끝과 함께 몇 초마다 밀려왔다 빠진다
         { const foamT = new THREE.TextureLoader().load('ip/new/beach/web/foam.webp'); foamT.wrapS = THREE.RepeatWrapping; foamT.wrapT = THREE.ClampToEdgeWrapping; foamT.anisotropy = maxAniso;
           const strip = (off, W, phase, op) => { const pos = [], nrm = [], uv = [], idx = []; let L = 0, n = 0;
@@ -4161,7 +4167,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
                   vec3 w = position + vec3(nrm.x, 0.0, nrm.z) * o; vUv = uv; gl_Position = projectionMatrix * viewMatrix * vec4(w, 1.0); }`,
               fragmentShader: `uniform sampler2D foamT; varying vec2 vUv; void main(){ vec4 c = texture2D(foamT, vUv); if (c.a < .02) discard; gl_FragColor = vec4(c.rgb, c.a * ${op.toFixed(2)}); }` }));
             m.frustumCulled = false; m.renderOrder = 3; scene.add(m); };
-          strip(.12, 1.0, 0, 1); strip(.9, .8, -.6, .5); }
+          if (!FOREST) { strip(.12, 1.0, 0, 1); strip(.9, .8, -.6, .5); } }
         // Blender로 지은 것(해·하늘빛·그림자를 구운 lightmap). 재질 이름마다 색과 결 그림
         const rp = (t, s) => { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(s, s); t.anisotropy = maxAniso; return t; };
         const noiseT = (base, dots, n, sz, seed = 3) => canvasTex(256, 256, (g, W, H) => { g.fillStyle = base; g.fillRect(0, 0, W, H); let s = seed; const r = () => ((s = (s * 16807) % 2147483647) / 2147483647);
@@ -4177,7 +4183,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
           rail: { c: 0xf4f4f0 }, pole: { c: 0x50555b }, lampHead: { c: 0xe9e4d8 }, wood: { c: 0xb98a5e },
         };
         // 스포츠센터 쪽 땅(작가님 2026-11-20: 잔디 끝 너머가 맨 색면·바다로 보였다): 잔디가 멀리까지 이어지고, 그 끝은 숲 띠로 막는다
-        { const lt = tex('out/forest/web/floor-moss.webp'); lt.wrapS = lt.wrapT = THREE.RepeatWrapping; lt.repeat.set(80 / 4, 150 / 4);   /* 작가님 2026-11-21: 갤러리 밖 숲처럼(이끼 바닥 + 가문비나무) */
+        if (!FOREST) { const lt = tex('out/forest/web/floor-moss.webp'); lt.wrapS = lt.wrapT = THREE.RepeatWrapping; lt.repeat.set(80 / 4, 150 / 4);   /* 작가님 2026-11-21: 갤러리 밖 숲처럼(이끼 바닥 + 가문비나무) */
           const lp = new THREE.Mesh(new THREE.PlaneGeometry(80, 150), new THREE.MeshBasicMaterial({ map: lt, color: 0xffffff, toneMapped: false })); lp.rotation.x = -Math.PI / 2; lp.position.set(52.6 - 40, -.04, 0 + 75); scene.add(lp);
           // 갤러리 바깥과 같은 가문비나무 숲(그림 판 열십자, out/forest): 마당 돌담 뒤(북쪽)와 스포츠센터 뒤(서쪽)
           { let sd = 7; const rnd = () => (sd = (sd * 16807) % 2147483647) / 2147483647, spots = [];
@@ -4193,6 +4199,73 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
           { const lt2 = tex('out/forest/web/floor-moss.webp'); lt2.wrapS = lt2.wrapT = THREE.RepeatWrapping; lt2.repeat.set(5 / 4, 33 / 4); const p2 = new THREE.Mesh(new THREE.PlaneGeometry(5, 33), new THREE.MeshBasicMaterial({ map: lt2, color: 0xffffff, toneMapped: false })); p2.rotation.x = -Math.PI / 2; p2.position.set(55.1, -.04, 16.0); scene.add(p2);
             // 땅 끝(돌담 너머 바다 쪽 x 57.6)에 낮은 돌 옹벽: 잔디와 바다 사이로 하늘이 띠처럼 비쳤다
             const sw = tex('ip/new/sea/web/stone-wall.webp'); sw.wrapS = sw.wrapT = THREE.RepeatWrapping; sw.repeat.set(33 / 2, 1.3 / 2); const rw = new THREE.Mesh(new THREE.PlaneGeometry(33, 1.3), new THREE.MeshBasicMaterial({ map: sw, color: 0xe6e8ea, side: THREE.DoubleSide, toneMapped: false })); rw.rotation.y = Math.PI / 2; rw.position.set(57.6, -.65, 16.0); scene.add(rw); } }   // 돌담 뒤 땅(하늘이 띠처럼 비쳤다)
+        // ── 숲길 짓기(FOREST) ──
+        if (FOREST) {
+          const OFW = 'out/forest/web/', rT = (f, rx, ry) => { const t = tex(OFW + f); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rx, ry); t.anisotropy = maxAniso; return t; };
+          // 이끼 바닥(넓게)
+          { const g = new THREE.Mesh(new THREE.PlaneGeometry(90, 90), new THREE.MeshBasicMaterial({ map: rT('floor-moss.webp', 90 / 4, 90 / 4), toneMapped: false })); g.rotation.x = -Math.PI / 2; g.position.set(48, -.01, 50); scene.add(g); floors.push(g); }
+          // 흙길(마사토): 굽은 띠, 가장자리 나무 경계목
+          const ribbon = (half, y, mat, uvScale) => { const pos = [], uv = [], idx = []; let L = 0;
+            FP.forEach(([x, z], i) => { const [ax, az] = FP[Math.max(0, i - 1)], [bx, bz] = FP[Math.min(FP.length - 1, i + 1)], dx = bx - ax, dz = bz - az, l = Math.hypot(dx, dz) || 1, nx = -dz / l, nz = dx / l;
+              if (i) L += Math.hypot(x - FP[i - 1][0], z - FP[i - 1][1]); pos.push(x + nx * half, y, z + nz * half, x - nx * half, y, z - nz * half); uv.push(0, L / uvScale, 1, L / uvScale);
+              if (i) { const q = (i - 1) * 2; idx.push(q, q + 2, q + 1, q + 1, q + 2, q + 3); } });
+            const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); g.setIndex(idx);
+            const m = new THREE.Mesh(g, mat); m.material.side = THREE.DoubleSide; scene.add(m); return m; };
+          const dirtT = canvasTex(256, 256, (g, W, H) => { g.fillStyle = '#b8a582'; g.fillRect(0, 0, W, H); let sd = 3; const r = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
+            for (let i = 0; i < 2600; i++) { g.fillStyle = ['#a8936f', '#c9b894', '#9c8664', '#d4c4a2'][i % 4]; g.globalAlpha = .25 + r() * .4; const s = 1 + r() * 3; g.fillRect(r() * W, r() * H, s, s); } }, [1, 1]);
+          floors.push(ribbon(1.2, .015, new THREE.MeshBasicMaterial({ map: dirtT, toneMapped: false }), 2.4));
+          ribbon(1.32, .012, new THREE.MeshBasicMaterial({ color: 0x6d5a43, toneMapped: false }), 1);   // 경계목(길 양옆 가는 띠)
+          // 화강석 판석 광장 + 벤치 하나
+          { const gT = canvasTex(512, 512, (g, W, H) => { g.fillStyle = '#c9c6c0'; g.fillRect(0, 0, W, H); let sd = 9; const r = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
+              for (let i = 0; i < 9000; i++) { g.fillStyle = ['#b9b6b0', '#d8d5cf', '#a9a6a0', '#e2dfd9'][i % 4]; g.globalAlpha = .35; g.fillRect(r() * W, r() * H, 1.5, 1.5); }
+              g.globalAlpha = 1; g.strokeStyle = '#9d9a94'; g.lineWidth = 3; for (let k = 0; k <= 4; k++) { g.beginPath(); g.moveTo(0, k * H / 4); g.lineTo(W, k * H / 4); g.stroke(); }
+              for (let row = 0; row < 4; row++) for (let k = 0; k <= 2; k++) { const x = (k + (row % 2) * .5) * W / 2; g.beginPath(); g.moveTo(x, row * H / 4); g.lineTo(x, (row + 1) * H / 4); g.stroke(); } }, [(PLZ.x1 - PLZ.x0) / 2.4, (PLZ.z1 - PLZ.z0) / 2.4]);
+            const pl = new THREE.Mesh(new THREE.PlaneGeometry(PLZ.x1 - PLZ.x0, PLZ.z1 - PLZ.z0), new THREE.MeshBasicMaterial({ map: gT, toneMapped: false })); pl.rotation.x = -Math.PI / 2; pl.position.set((PLZ.x0 + PLZ.x1) / 2, .02, (PLZ.z0 + PLZ.z1) / 2); scene.add(pl); floors.push(pl);
+            const wd = new THREE.MeshBasicMaterial({ color: 0x8a6a48, toneMapped: false }), ir = new THREE.MeshBasicMaterial({ color: 0x3a3a3a, toneMapped: false });
+            boxMM(49.0, 50.8, .42, .48, 51.0, 51.45, wd); for (const x of [49.15, 50.55]) boxMM(x, x + .1, 0, .42, 51.05, 51.4, ir); solid(48.9, 50.9, 50.9, 51.55); }
+          // 길가 양치(1.6~2.4 m 옆)
+          { const fT = tex(OFW + 'fern-clump.webp'), fm = new THREE.MeshBasicMaterial({ map: fT, alphaTest: .5, side: THREE.DoubleSide, toneMapped: false });
+            let sd = 21; const r = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
+            FP.forEach(([x, z], i) => { if (i % 2) return; const [bx, bz] = FP[Math.min(FP.length - 1, i + 1)], dx = bx - x, dz = bz - z, l = Math.hypot(dx, dz) || 1, nx = -dz / l, nz = dx / l;
+              for (const sg of [-1, 1]) { const d = 1.7 + r() * .8, s = .7 + r() * .5, fx = x + nx * d * sg, fz = z + nz * d * sg; if (fx > PLZ.x0 - .5 && fx < PLZ.x1 + .5 && fz > PLZ.z0 - .5 && fz < PLZ.z1 + .5) continue; for (const a of [0, Math.PI / 2]) { const m = new THREE.Mesh(new THREE.PlaneGeometry(s * 1.4, s), fm); m.position.set(fx, s / 2 - .05, fz); m.rotation.y = a + r(); scene.add(m); } } }); }
+          // 가문비나무(갤러리 바깥과 같은 그림 판 열십자): 길 3 m·광장 3 m·건물에서 비켜, 대문 쪽은 빽빽하고 광장 쪽은 성기게
+          { let sd = 7; const rnd = () => (sd = (sd * 16807) % 2147483647) / 2147483647, spots = [];
+            const dPath = (x, z) => Math.min(...FP.map(([a, b]) => Math.hypot(x - a, z - b)));
+            for (let x = 29; x <= 68; x += 2.3) for (let z = 33.6; z <= 74; z += 2.3) { const px = x + (rnd() - .5) * 1.8, pz = z + (rnd() - .5) * 1.8;
+              if (px > 35 && px < 43.2 && pz > 36 && pz < 60) continue;   // 건물
+              if (px > PLZ.x0 - 1 && px < PLZ.x1 + 3 && pz > PLZ.z0 - 3 && pz < PLZ.z1 + 3) continue;   // 광장
+              if (dPath(px, pz) < 3.0) continue;
+              const nearPlz = Math.max(0, 1 - Math.hypot(px - 50, pz - 48) / 12); if (rnd() < nearPlz * .7) continue;   // 광장 가까이 성기게
+              spots.push([px, pz]); }
+            const cg = new THREE.BufferGeometry(), W = 1 / 3, pos = [], uv = [], idx = [];
+            for (const a of [0, Math.PI / 2]) { const c = Math.cos(a) * W / 2, sn = Math.sin(a) * W / 2, n = pos.length / 3; pos.push(-c, 0, -sn, c, 0, sn, c, 1, sn, -c, 1, -sn); uv.push(0, 0, 1, 0, 1, 1, 0, 1); idx.push(n, n + 1, n + 2, n, n + 2, n + 3); }
+            cg.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); cg.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); cg.setIndex(idx);
+            const ims = ['spruce-a', 'spruce-b', 'spruce-c'].map(f => new THREE.InstancedMesh(cg, new THREE.MeshBasicMaterial({ map: tex(OFW + f + '.webp'), alphaTest: .5, side: THREE.DoubleSide, toneMapped: false }), spots.length)), cn = [0, 0, 0];
+            const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), pv = new THREE.Vector3(), sv = new THREE.Vector3(), cc = new THREE.Color();
+            for (const [x, z] of spots) { const h = 15 + rnd() * 8, k = (rnd() * 3) | 0; m4.compose(pv.set(x, -.06, z), q.setFromEuler(e.set(0, rnd() * 6.28, 0)), sv.set(h * (.92 + rnd() * .16), h, h * (.92 + rnd() * .16))); ims[k].setMatrixAt(cn[k], m4); ims[k].setColorAt(cn[k]++, cc.setScalar(.82 + rnd() * .18)); }
+            ims.forEach((m, k) => { m.count = cn[k]; scene.add(m); });
+            const barkT = tex(OFW + 'bark-spruce.webp'); barkT.wrapS = barkT.wrapT = THREE.RepeatWrapping; barkT.repeat.set(1.5, 10);
+            const near = spots.filter(([x, z]) => dPath(x, z) < 6), stems = new THREE.InstancedMesh(new THREE.CylinderGeometry(.14, .24, 1, 8, 1, true), new THREE.MeshBasicMaterial({ map: barkT, color: 0xbfb6aa, toneMapped: false }), near.length);
+            near.forEach(([x, z], i) => { const H = 7; m4.compose(pv.set(x, H / 2 - .05, z), q.identity(), sv.set(.9, H, .9)); stems.setMatrixAt(i, m4); }); scene.add(stems);
+            // 먼 숲 띠(둘레)
+            { const band = tex(OFW + 'spruce-far-band.webp'); band.wrapS = THREE.RepeatWrapping; const R = 42, Hb = 22, g = new THREE.CylinderGeometry(R, R, Hb, 64, 1, true); const u = g.attributes.uv; for (let i = 0; i < u.count; i++) u.setX(i, u.getX(i) * 6); g.translate(0, Hb / 2 - .1, 0);
+              const m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ map: band, alphaTest: .5, side: THREE.DoubleSide, toneMapped: false, color: 0xe8eeec })); m.position.set(48, 0, 50); scene.add(m); } }
+          // 아침 햇살 줄기 셋(굽은 곳 위로 비스듬히, 동쪽에서)과 발목 높이 옅은 안개
+          { const rayT = canvasTex(64, 256, (g, W, H) => { const gr = g.createLinearGradient(0, 0, 0, H); gr.addColorStop(0, 'rgba(255,244,214,0)'); gr.addColorStop(.35, 'rgba(255,244,214,.55)'); gr.addColorStop(1, 'rgba(255,244,214,0)'); g.fillStyle = gr; g.fillRect(0, 0, W, H);
+              const gx = g.createLinearGradient(0, 0, W, 0); gx.addColorStop(0, 'rgba(0,0,0,1)'); gx.addColorStop(.5, 'rgba(0,0,0,0)'); gx.addColorStop(1, 'rgba(0,0,0,1)'); g.globalCompositeOperation = 'destination-out'; g.fillStyle = gx; g.fillRect(0, 0, W, H); });
+            for (const [x, z, w, op] of [[55.6, 40.5, 1.6, .5], [54.2, 43.2, 1.1, .38], [56.8, 38.0, .9, .32]]) { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, 14), new THREE.MeshBasicMaterial({ map: rayT, transparent: true, opacity: op, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, toneMapped: false }));
+              m.position.set(x + 2.6, 6.2, z); m.rotation.set(0, Math.PI / 2, -.42); m.renderOrder = 5; scene.add(m); }
+            const mistT = canvasTex(256, 256, (g, W, H) => { const gr = g.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W / 2); gr.addColorStop(0, 'rgba(232,240,246,.55)'); gr.addColorStop(1, 'rgba(232,240,246,0)'); g.fillStyle = gr; g.fillRect(0, 0, W, H); });
+            for (const [x, z, s] of [[54.5, 37, 9], [55, 42, 8], [47, 40, 10], [58, 50, 10], [46, 56, 10]]) { const m = new THREE.Mesh(new THREE.PlaneGeometry(s, s), new THREE.MeshBasicMaterial({ map: mistT, transparent: true, opacity: .5, depthWrite: false, toneMapped: false })); m.rotation.x = -Math.PI / 2; m.position.set(x, .35, z); m.renderOrder = 4; scene.add(m); } }
+          // 건물 밑동 이끼·흙 얼룩(아트 디렉터 제안, 작가님 2026-11-21): 크림 벽 아래 0.9 m, 문 계단은 비움
+          { const stT = canvasTex(512, 128, (g, W, H) => { g.clearRect(0, 0, W, H); let sd = 13; const r = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
+              const gr = g.createLinearGradient(0, H, 0, 0); gr.addColorStop(0, 'rgba(86,92,60,.55)'); gr.addColorStop(.45, 'rgba(110,104,78,.22)'); gr.addColorStop(1, 'rgba(110,104,78,0)'); g.fillStyle = gr; g.fillRect(0, 0, W, H);
+              for (let i = 0; i < 220; i++) { const x = r() * W, h = H * (.25 + r() * .6); g.fillStyle = `rgba(${70 + r() * 30},${84 + r() * 30},${50 + r() * 20},${.12 + r() * .18})`; g.fillRect(x, H - h, 2 + r() * 8, h); } });
+            stT.wrapS = THREE.RepeatWrapping;
+            const strip = (x0, z0, x1, z1, ry) => { const L = Math.hypot(x1 - x0, z1 - z0), t = stT.clone(); t.repeat.set(L / 4, 1); t.needsUpdate = true; const m = new THREE.Mesh(new THREE.PlaneGeometry(L, .9), new THREE.MeshBasicMaterial({ map: t, transparent: true, depthWrite: false, toneMapped: false }));
+              m.position.set((x0 + x1) / 2, .45, (z0 + z1) / 2); m.rotation.y = ry; m.renderOrder = 3; scene.add(m); };
+            strip(42.05, 37.2, 42.05, 45.5, Math.PI / 2); strip(42.05, 50.5, 42.05, 58.8, Math.PI / 2); strip(36, 36.98, 42.2, 36.98, Math.PI); strip(36, 59.02, 42.2, 59.02, 0); }
+        }
         const seaG = new THREE.Group(); scene.add(seaG); const pineLeafMs = [], pineBarkMs = []; const treeB = { value: Array.from({ length: 8 }, () => new THREE.Vector2(1e4, 1e4)) };
         fetch('ip/new/sea/lightmaps.json').then(r => r.json()).then(({ scale }) => loadGLTF('ip/new/sea/sea.json', (gl) => {
           const lmT = {};
@@ -4200,7 +4273,8 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
           gl.scene.traverse(o => { if (!o.isMesh) return;
             let n = o; while (n && !['Building', 'Wall', 'Floor', 'Ground', 'Props', 'Trees'].includes(n.name)) n = n.parent; const key = n ? n.name : 'Props';
             if (!lmT[key]) { const t = tex(`ip/new/sea/lm-${key}.webp`); t.flipY = false; t.channel = 1; lmT[key] = t; }
-            if (o.material.name === 'lampHead' || o.material.name === 'pole' || o.material.name === 'wood') { o.visible = false; return; }   // 가로등·벤치는 뺐다(작가님 2026-11-20)
+            if (o.material.name === 'lampHead' || o.material.name === 'pole' || o.material.name === 'wood') { o.visible = false; return; }
+            if (FOREST && (key === 'Floor' || key === 'Ground' || key === 'Props' || key === 'Trees' || (key === 'Wall' && !['stone', 'coping', 'gateWood'].includes(o.material.name)))) { o.visible = false; return; }   // 숲길: 길·모래·방파제·난간·화단·나무는 숨긴다(건물·마당 돌담·대문만 남김)   // 가로등·벤치는 뺐다(작가님 2026-11-20)
             if (key === 'Wall' && o.material.name === 'grass') { const P = o.geometry.attributes.position, v = new THREE.Vector3(); for (let i = 0; i < P.count; i++) { v.fromBufferAttribute(P, i).applyMatrix4(o.matrixWorld); if (v.x < 44.2) { const k = Math.max(0, Math.min(1, (v.x - 42.4) / 1.8)); P.setY(i, Math.min(P.getY(i), .4 + (P.getY(i) - .4) * k)); } } P.needsUpdate = true; o.geometry.computeBoundingSphere(); }   // 스포츠센터 벽 앞 잔디 언덕이 창을 가렸다: 벽 쪽 1.8 m는 낮춘다(작가님 2026-11-20)
             if (key === 'Wall' && (o.material.name === 'stone' || o.material.name === 'coping')) o.userData.clipX = 57.6;   // 마당 남쪽 돌담이 모래·바다 위로 길게 나갔다: 방파제 끝(x 57.6)에서 자른다
             const spec = MAT[o.material.name] || { c: 0xffffff }; if (o.material.name === 'pineLeaf') pineLeafMs.push(o); if (o.material.name === 'pineBark') pineBarkMs.push(o);
@@ -4212,9 +4286,13 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
                 .replace('lightMapTexel.rgb * lightMapIntensity', 'max(lightMapTexel.rgb, vec3(.55 * treeLift(vTW.xz, treeB))) * lightMapIntensity')
                 .replace('void main() {', 'float treeLift(vec2 p, vec2 b[8]) { float d = 99.; for (int i = 0; i < 8; i++) d = min(d, distance(p, b[i])); return 1. - smoothstep(.7, 1.5, d); }\nvoid main() {'); };
             if (spec.lmFloor) o.material.onBeforeCompile = sh => { sh.fragmentShader = sh.fragmentShader.replace('lightMapTexel.rgb * lightMapIntensity', `max(lightMapTexel.rgb * lightMapIntensity, vec3(${(spec.lmFloor * Math.PI).toFixed(3)}))`); };   // 숨긴 해송 덩어리가 구워 둔 까만 그림자를 덜어 냄
+            if (FOREST && key === 'Building') o.material.onBeforeCompile = sh => {   // 숲길: 뺀 화단·덤불이 건물 아랫벽에 구워 둔 검은 그림자를 덜어 냄(3 m 아래만)
+              sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying float vWY;').replace('#include <project_vertex>', '#include <project_vertex>\nvWY = (modelMatrix * vec4(transformed, 1.0)).y;');
+              sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying float vWY;').replace('lightMapTexel.rgb * lightMapIntensity', 'max(lightMapTexel.rgb, vec3(.62 * (1. - smoothstep(2.6, 3.4, vWY)))) * lightMapIntensity'); };
             if (o.userData.clipX) { const cx = o.userData.clipX.toFixed(2); o.material.onBeforeCompile = sh => {
               sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying float vWX;').replace('#include <project_vertex>', '#include <project_vertex>\nvWX = (modelMatrix * vec4(transformed, 1.0)).x;');
-              sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying float vWX;').replace('void main() {', 'void main() {\n  if (vWX > ' + cx + ') discard;'); }; }
+              sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying float vWX;').replace('void main() {', 'void main() {\n  if (vWX > ' + cx + ') discard;');
+              if (FOREST) sh.fragmentShader = sh.fragmentShader.replace('lightMapTexel.rgb * lightMapIntensity', 'max(lightMapTexel.rgb, vec3(.62)) * lightMapIntensity'); }; }   // 숲길: 뺀 방파제·화단이 돌담에 구워 둔 검은 그림자를 덜어 냄
             if (key === 'Floor' || key === 'Ground') floors.push(o); if (key === 'Building' || key === 'Wall') blockers.push(o); });
           seaG.add(gl.scene); interiorKey = '';
           // 해송 → 해변 나무 그림(작가님 2026-11-14 1안: 솔잎 다발도 징그럽다). 해송 줄기·잎 덩어리는 숨기고, 줄기 밑동 자리에
@@ -4222,7 +4300,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
           gl.scene.updateMatrixWorld(true);
           for (const o of pineLeafMs) o.visible = false;
           const bases = [];
-          for (const o of pineBarkMs) { o.visible = false;
+          if (!FOREST) for (const o of pineBarkMs) { o.visible = false;
             const P = o.geometry.attributes.position, v = new THREE.Vector3(); for (let k = 0; k < P.count; k++) { v.fromBufferAttribute(P, k).applyMatrix4(o.matrixWorld); if (v.y < .9 && !bases.some(q => Math.hypot(q[0] - v.x, q[1] - v.z) < 1.2)) bases.push([v.x, v.z]); } }
           const NB2 = 'ip/new/beach/web/', cards = [['tree-a.webp', .468], ['tree-b.webp', .516], ['tree-c.webp', .386]].map(([f, u]) => { const H = 6.0, W = H * 1536 / 2048, g = new THREE.PlaneGeometry(W, H); g.translate((.5 - u) * W, H / 2 - .06, 0); return { g, m: new THREE.MeshBasicMaterial({ map: tex(NB2 + f), alphaTest: .5, toneMapped: false, side: THREE.DoubleSide }) }; });
           bases.slice(0, 8).forEach(([x, z], i) => treeB.value[i].set(x, z));
@@ -4240,9 +4318,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
         { const p = promoPoster(0, .75, { big: true, toneMapped: false }); if (p) { p.position.set(FX + .1, 1.75, 44.4); p.rotation.y = Math.PI / 2; scene.add(p); } }
         // 막는 선: 흰 난간, 화단 턱(육지 쪽), 문간 앞 바다 쪽 가장자리(난간 시작 전), 북쪽 돌담(문간만 열림), 가로등, 벤치
         const lineSolid = (line) => { for (let k = 0; k < line.length - 1; k++) { const [ax, az] = line[k], [bx, bz] = line[k + 1]; solid(Math.min(ax, bx) - .05, Math.max(ax, bx) + .05, Math.min(az, bz) - .05, Math.max(az, bz) + .05); } };
-        for (const r of SEA.rails) lineSolid(r);
-        lineSolid(SEA.land.slice(0, SEA.land.length - 2));
-        lineSolid(CO.slice(0, 7));
+        if (!FOREST) { for (const r of SEA.rails) lineSolid(r); lineSolid(SEA.land.slice(0, SEA.land.length - 2)); lineSolid(CO.slice(0, 7)); }
         solid(40.9, GX - GH - .02, GZ + .1, GZ + .5); solid(GX + GH + .02, 70, GZ + .1, GZ + .5);
         let doorK = 0;
         animators.push((t, dt, me) => {
@@ -5836,7 +5912,7 @@ navBtns.forEach(b => b.addEventListener('click', () => { closeMap(); closeCard()
 const ZONE_NAME = { lobby: '로비', artist: '작가소개', works: '작품관', court: '중정', ip: 'IP관', obong: '일월오봉단관', lounge: '라운지', outside: '바깥 마당' };
 const SUBNAV = {
   works: [['법과 권리', PLACES.works.pos, 0], ['POV', [-29.2, -4.6], 0], ['우주조약', [-38.8, -20.8], 0], ['N차적 저작물', [-20.5, -19.6], 0]],
-  ip: [['물빛 통로', PLACES.ip.pos, -Math.PI / 2], ['해변', [17, -4.5], -1.3], ['그늘길', [23, 5.8], Math.PI], ['숲길', [23.5, 14.5], Math.PI], ['작업실 문 앞', [51.6, 25.2], -Math.PI / 2], ['바닷가 산책로', [53.87, 37.4], Math.PI], ['수영장', [40.5, 48.0], Math.PI / 2]],   // 산책로·수영장은 2026-11-11 전수 점검에서 더함
+  ip: [['물빛 통로', PLACES.ip.pos, -Math.PI / 2], ['해변', [17, -4.5], -1.3], ['그늘길', [23, 5.8], Math.PI], ['숲길', [23.5, 14.5], Math.PI], ['작업실 문 앞', [51.6, 25.2], -Math.PI / 2], ['스포츠센터 가는 길', [53.87, 37.4], Math.PI], ['수영장', [40.5, 48.0], Math.PI / 2]],   // 산책로·수영장은 2026-11-11 전수 점검에서 더함
 };
 const SEC_IN = {};   // 섹션마다 그 자리의 안쪽 공간 이름(지금 섹션 찾기)
 for (const [k, list] of Object.entries(SUBNAV)) SEC_IN[k] = list.map(([, pos]) => { const I = inInterior(pos[0], pos[1]); return I ? I.name : ''; });
