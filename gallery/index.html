@@ -610,6 +610,7 @@ function textBlock(g, lines, x, y, lh) { lines.forEach((l, i) => g.fillText(l, x
 
 /* ───────── 재질 무늬 ───────── */
 const T = {};
+const FOREST = true;   // IP관 마지막 구간: 바닷가 산책로 대신 가문비 숲길(작가님 2026-11-21)
 // 바깥벽: 현무암 잔다듬 큰 판 1200 × 600 mm 통줄눈. 2.4 m 안에 가로 2장 × 세로 4장, 판마다 먹회색이 조금씩 다르고 작은 기공이 흩어진다
 // 같은 무늬로 색(T.facade)과 요철(T.facadeBump)을 함께 그린다: 줄눈과 기공은 오목하게
 const BASALT = { cols: 2, rows: 4, seed: 41 };
@@ -3920,6 +3921,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
         const exitGlass = new THREE.MeshBasicMaterial({ map: plankT, color: NAVY.clone(), toneMapped: false }), exitLeaves = [];
         const batten = new THREE.MeshBasicMaterial({ map: plankT, color: new THREE.Color(.62, .56, .5), toneMapped: false });
         { for (const s of [-1, 1]) boxMM(EX + s * (half + .06) - .06, EX + s * (half + .06) + .06, 0, DH + .12, EZ - .12, EZ + .12, sJamb);
+          if (FOREST) for (const s of [-1, 1]) { const a0 = EX + s * (half + .1), a1 = EX + s * (half + .34); boxMM(Math.min(a0, a1), Math.max(a0, a1), 0, DH + .12, EZ - .1, EZ + .1, sJamb); }   // 문틀과 지붕 기둥 사이 좁은 틈을 메움(마당에서 다음 공간이 비쳤다, 작가님 2026-11-21)
           boxMM(EX - half - .12, EX + half + .12, DH, DH + .12, EZ - .12, EZ + .12, sJamb);
           boxMM(EX - half - .05, EX + half + .05, 0, .06, EZ - .1, EZ + .1, sJamb);   // 문지방
           for (const sd of [-1, 1]) { const g = new THREE.Group(), lw = half - .01; exitLeaves.push([g, sd]);   // 돌쩌귀(문설주 쪽)에 매단다
@@ -4032,7 +4034,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
         const BC = [.88, .94, .86];
         // 남쪽 띠는 「창밖 하늘」 복도 자리(x EX ± 1.3)만 복도 지붕 위로 올린다(복도 안을 가로지르지 않게)
         const CUT0 = EX - 1.5, CUT1 = EX + 1.5, RUN1 = 63.6, bandCut = (ax, z, bx, H, T, col, tile, c0 = CUT0, c1 = CUT1) => { band(ax, z, c0, z, H, T, col, tile); band(c0, z, Math.min(c1, bx), z, H, T, col, tile, 2.9, c0 - ax); if (bx > c1) band(c1, z, bx, z, H, T, col, tile, 0, c1 - ax); };   // 바깥 띠(35.5, 36.6)는 꺾인 복도 끝(RUN1)까지 올린다
-        band(47.4, 16.2, 62, 16.2, 5.5, bambooT, BC, 9); band(61.6, 16.2, 61.6, 34.9, 5.5, bambooT, BC, 9); band(47.4, 34.9, 52.0, 34.9, 5.5, bambooT, BC, 9); band(55.2, 34.9, 62, 34.9, 5.5, bambooT, BC, 9);   // 남쪽 문간 앞은 바닷가 길이 지나도록 비운다
+        band(47.4, 16.2, 62, 16.2, 5.5, bambooT, BC, 9); band(61.6, 16.2, 61.6, 34.9, 5.5, bambooT, BC, 9); band(47.4, 34.9, FOREST ? 52.6 : 52.0, 34.9, 5.5, bambooT, BC, 9); band(FOREST ? 54.4 : 55.2, 34.9, 62, 34.9, 5.5, bambooT, BC, 9);   /* 숲길(2026-11-21): 대문 옆 틈으로 다음 공간이 비쳐 대문 폭만 남기고 막음 */   // 남쪽 문간 앞은 바닷가 길이 지나도록 비운다
         { const back = band(FX1 - WW - .45, ez - 9, FX1 - WW - .45, ez + 9, 6.6, bambooT, [.72, .8, .72], 10);   // 미로를 나오면 등불 문 뒤로 대숲(숨긴 미로 너머 해변이 비치지 않게)
           const backD = new THREE.Mesh(new THREE.PlaneGeometry(18, 5.2), new THREE.MeshBasicMaterial({ color: new THREE.Color(...lin([.2, .3, .22])), toneMapped: false, side: THREE.DoubleSide }));   // 대 사이 틈 뒤 그늘
           backD.rotation.y = Math.PI / 2; backD.position.set(FX1 - WW - 1.1, 2.6, ez); scene.add(backD);
@@ -4042,8 +4044,10 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
           for (const [z0, z1] of [[ez - 9, ez - CW / 2], [ez + CW / 2, ez + 9]]) { sides.push(band(FX1 + .12, z0, FX1 + .12, z1, 6.2, bambooT, [.72, .8, .72], 10));
             const d = new THREE.Mesh(new THREE.PlaneGeometry(z1 - z0, 5.2), backD.material); d.rotation.y = Math.PI / 2; d.position.set(FX1 - .06, 2.6, (z0 + z1) / 2); scene.add(d); sides.push(d); }
           animators.push((t, dt, me) => { const v = me.x > FX1 + 1.6; back.visible = backD.visible = backN.visible = v; for (const o of sides) o.visible = v; }); }
+        if (FOREST) { const dm = new THREE.MeshBasicMaterial({ color: new THREE.Color(...lin([.2, .3, .22])), toneMapped: false, side: THREE.DoubleSide });   // 숲길(2026-11-21): 대문 옆 대 사이 틈으로 다음 공간(숲)이 비쳤다 → 대숲 뒤 그늘 판, 대문 폭만 비움
+          for (const [x0, x1] of [[40, 52.6], [54.4, 63]]) { const d = new THREE.Mesh(new THREE.PlaneGeometry(x1 - x0, 6.4), dm); d.position.set((x0 + x1) / 2, 3.2, 35.9); scene.add(d); } }
         band(48.4, 16.2, 48.4, 21.6, 5.5, bambooT, BC, 9); band(48.4, 28.2, 48.4, 34.9, 5.5, bambooT, BC, 9); band(48.4, 21.3, 44.3, 21.3, 5.5, bambooT, BC, 9); band(44.3, 27.7, 48.4, 27.7, 5.5, bambooT, BC, 9);   /* 길을 넓히며 대숲도 0.8 m씩 물림(2026-11-13) */   // 오솔길 양옆도 대숲(마당에서 노을빛 미로가 비치지 않게)
-        band(48.0, 15.6, 63, 15.6, 6.2, bambooT, [.68, .76, .68], 11); band(62.2, 15.6, 62.2, 35.5, 6.2, bambooT, [.68, .76, .68], 11); band(40, 35.5, 51.7, 35.5, 7.2, bambooT, [.68, .76, .68], 11); band(55.5, 35.5, 63, 35.5, 7.2, bambooT, [.68, .76, .68], 11); band(46.6, 31.0, 46.6, 35.5, 6.2, bambooT, [.68, .76, .68], 11);
+        band(48.0, 15.6, 63, 15.6, 6.2, bambooT, [.68, .76, .68], 11); band(62.2, 15.6, 62.2, 35.5, 6.2, bambooT, [.68, .76, .68], 11); band(40, 35.5, FOREST ? 52.3 : 51.7, 35.5, 7.2, bambooT, [.68, .76, .68], 11); band(FOREST ? 54.7 : 55.5, 35.5, 63, 35.5, 7.2, bambooT, [.68, .76, .68], 11); band(46.6, 31.0, 46.6, 35.5, 6.2, bambooT, [.68, .76, .68], 11);
         for (const a of [0, Math.PI / 2]) { const m = new THREE.Mesh(new THREE.PlaneGeometry(3.2, 4.8), new THREE.MeshBasicMaterial({ map: pineT, alphaTest: .45, toneMapped: false, side: THREE.DoubleSide, color: new THREE.Color(...lin([.95, .97, .92])) })); m.position.set(59.4, 2.4, 31.4); m.rotation.y = a + .2; scene.add(m); }   // 문간에서 동쪽으로 1 m(작가님 2026-11-12)
         const nring = (ax, az, bx, bz, H, y0 = 0, s0 = 0) => { const L = Math.hypot(bx - ax, bz - az), gg = new THREE.PlaneGeometry(L, H - y0); gg.translate(0, (H + y0) / 2, 0); const u = gg.attributes.uv; for (let i = 0; i < u.count; i++) u.setXY(i, (u.getX(i) * L + s0) / 24, y0 / H + u.getY(i) * (1 - y0 / H));
           const m = new THREE.Mesh(gg, new THREE.MeshBasicMaterial({ map: BEACH.T.farD, transparent: true, alphaTest: .45, toneMapped: false, side: THREE.DoubleSide, color: 0x9fb2a2 })); m.position.set((ax + bx) / 2, 0, (az + bz) / 2); m.rotation.y = -Math.atan2(bz - az, bx - ax); scene.add(m); };
@@ -4076,7 +4080,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
       const CO = SEA.coast, CN = SEA.coastN, ST = SEA.stairs;
       // 걷는 칸: 길, 앞마당, 계단·모래사장(물가 앞까지), 자동문 문턱
       // 숲길(작가님 2026-11-21 결정, 전문가 셋 회의): 바다·모래·방파제를 걷고 가문비 숲에 둘러싸인 스포츠센터. 대문에서 한 번 완만하게 굽는 흙길 → 화강석 광장
-      const FOREST = true;
+      // FOREST: 맨 위(const T 옆)로 옮김 — 작업실 마당 대숲도 이 값을 본다
       const FP = (() => { const P0 = [53.5, 33.2], P1 = [56.4, 39.5], P2 = [55.0, 44.6], P3 = [51.6, 47.6], out = [];   // 3차 베지에, 0.5 m 간격
         for (let i = 0; i <= 40; i++) { const t = i / 40, a = (1 - t) ** 3, b = 3 * (1 - t) ** 2 * t, c = 3 * (1 - t) * t * t, d = t ** 3; out.push([a * P0[0] + b * P1[0] + c * P2[0] + d * P3[0], a * P0[1] + b * P1[1] + c * P2[1] + d * P3[1]]); } return out; })();
       const PLZ = { x0: 42.3, x1: 52.4, z0: 44.0, z1: 52.0 };
@@ -4220,13 +4224,20 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
           // 화강석 판석 광장 + 벤치 하나
           { const gT = canvasTex(512, 512, stoneDraw, [(PLZ.x1 - PLZ.x0) / 2.4, (PLZ.z1 - PLZ.z0) / 2.4]);
             const pl = new THREE.Mesh(new THREE.PlaneGeometry(PLZ.x1 - PLZ.x0, PLZ.z1 - PLZ.z0), new THREE.MeshBasicMaterial({ map: gT, toneMapped: false })); pl.rotation.x = -Math.PI / 2; pl.position.set((PLZ.x0 + PLZ.x1) / 2, .02, (PLZ.z0 + PLZ.z1) / 2); scene.add(pl); floors.push(pl);
-            const wd = new THREE.MeshBasicMaterial({ color: 0x8a6a48, toneMapped: false }), ir = new THREE.MeshBasicMaterial({ color: 0x3a3a3a, toneMapped: false });
-            boxMM(49.0, 50.8, .42, .48, 51.0, 51.45, wd); for (const x of [49.15, 50.55]) boxMM(x, x + .1, 0, .42, 51.05, 51.4, ir); solid(48.9, 50.9, 50.9, 51.55); }
+            { const B = .015, sh = new THREE.Shape(); sh.moveTo(-.9 + B, B); sh.lineTo(.9 - B, B); sh.lineTo(.9 - B, .42 - B); sh.lineTo(-.9 + B, .42 - B); sh.closePath();   // 갤러리 밖 광장 돌 의자와 같은 것(작가님 2026-11-21)
+              const geo = new THREE.ExtrudeGeometry(sh, { depth: .5 - 2 * B, bevelEnabled: true, bevelThickness: B, bevelSize: B, bevelSegments: 2, curveSegments: 1 }); geo.translate(0, 0, -(.5 - 2 * B) / 2);
+              const st = T.stoneSeat.clone(); st.wrapS = st.wrapT = THREE.RepeatWrapping; st.repeat.set(1 / 1.2, 1 / 1.2); st.needsUpdate = true;
+              const m = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: st, color: 0xbdbab4, toneMapped: false })); m.position.set(49.9, 0, 51.2); scene.add(m); solid(48.95, 50.85, 50.9, 51.5); } }
+          // 대문 오른쪽 담(작가님 2026-11-21: 왼쪽과 통일): 바다 쪽으로 낮아지던 담을 대문에서 자르고 왼쪽과 같은 높이·결로 마당 끝까지
+          { const wt = tex('ip/new/sea/web/stone-wall.webp'); wt.wrapS = wt.wrapT = THREE.RepeatWrapping;
+            boxMM(54.42, 62.4, 0, 2.2, 32.6, 33.0, new THREE.MeshBasicMaterial({ map: wt, color: 0xe6e3de, toneMapped: false }), [2, 2]);
+            boxMM(54.4, 62.44, 2.2, 2.3, 32.56, 33.04, new THREE.MeshBasicMaterial({ color: 0xd2cdc4, toneMapped: false })); }
           // 길가 풀은 두지 않는다(작가님 2026-11-21: 돌길 + 이끼 바닥만, 깔끔하게)
           // 가문비나무(갤러리 바깥과 같은 그림 판 열십자): 길 3 m·광장 3 m·건물에서 비켜, 대문 쪽은 빽빽하고 광장 쪽은 성기게
           { let sd = 7; const rnd = () => (sd = (sd * 16807) % 2147483647) / 2147483647, spots = [];
             const dPath = (x, z) => Math.min(...FP.map(([a, b]) => Math.hypot(x - a, z - b)));
             for (let x = 29; x <= 68; x += 2.3) for (let z = 33.6; z <= 74; z += 2.3) { const px = x + (rnd() - .5) * 1.8, pz = z + (rnd() - .5) * 1.8;
+              if (pz < 36.6) continue;   // 마당 담 바로 뒤(대숲 그늘 판 z 35.9 앞)는 비움: 마당에서 대문 옆으로 이 나무들이 비쳤다(작가님 2026-11-21)
               if (px > 35 && px < 43.2 && pz > 36 && pz < 60) continue;   // 건물
               if (px > PLZ.x0 - 1 && px < PLZ.x1 + 3 && pz > PLZ.z0 - 3 && pz < PLZ.z1 + 3) continue;   // 광장
               if (dPath(px, pz) < 3.0) continue;
@@ -4250,13 +4261,12 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
               const gx = g.createLinearGradient(0, 0, W, 0); gx.addColorStop(0, 'rgba(0,0,0,1)'); gx.addColorStop(.5, 'rgba(0,0,0,0)'); gx.addColorStop(1, 'rgba(0,0,0,1)'); g.globalCompositeOperation = 'destination-out'; g.fillStyle = gx; g.fillRect(0, 0, W, H); });
             for (const [x, z, w, op] of [[55.6, 40.5, 1.6, .5], [54.2, 43.2, 1.1, .38], [56.8, 38.0, .9, .32]]) { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, 14), new THREE.MeshBasicMaterial({ map: rayT, transparent: true, opacity: op, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, toneMapped: false }));
               m.position.set(x + 2.6, 6.2, z); m.rotation.set(0, Math.PI / 2, -.42); m.renderOrder = 5; scene.add(m); }
-            const mistT = canvasTex(256, 256, (g, W, H) => { const gr = g.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W / 2); gr.addColorStop(0, 'rgba(232,240,246,.55)'); gr.addColorStop(1, 'rgba(232,240,246,0)'); g.fillStyle = gr; g.fillRect(0, 0, W, H); });
-            for (const [x, z, s] of [[54.5, 37, 9], [55, 42, 8], [47, 40, 10], [58, 50, 10], [46, 56, 10]]) { const m = new THREE.Mesh(new THREE.PlaneGeometry(s, s), new THREE.MeshBasicMaterial({ map: mistT, transparent: true, opacity: .5, depthWrite: false, toneMapped: false })); m.rotation.x = -Math.PI / 2; m.position.set(x, .35, z); m.renderOrder = 4; scene.add(m); } }
+            /* 낮은 안개는 뺐다(작가님 2026-11-21: 나무 밑동이 하얗게 덮였다) */ }
           // 건물 밑동 이끼·흙 얼룩(아트 디렉터 제안, 작가님 2026-11-21): 크림 벽 아래 0.9 m, 문 계단은 비움
           { const stT = tex('ip/new/forest/wall-base-grime.webp');   // GPT 그림(작가님 2026-11-21)
             stT.wrapS = THREE.RepeatWrapping;
             const strip = (x0, z0, x1, z1, ry) => { const L = Math.hypot(x1 - x0, z1 - z0), t = stT.clone(); t.repeat.set(L / 7.2, 1); t.needsUpdate = true; const m = new THREE.Mesh(new THREE.PlaneGeometry(L, .9), new THREE.MeshBasicMaterial({ map: t, transparent: true, depthWrite: false, toneMapped: false }));
-              m.position.set((x0 + x1) / 2, .45, (z0 + z1) / 2); m.rotation.y = ry; m.renderOrder = 3; scene.add(m); };
+              m.material.polygonOffset = true; m.material.polygonOffsetFactor = -2; m.material.polygonOffsetUnits = -4; m.position.set((x0 + x1) / 2 + Math.sin(ry) * .03, .45, (z0 + z1) / 2 + Math.cos(ry) * .03); m.rotation.y = ry; m.renderOrder = 3; scene.add(m); };   // 벽에서 3 cm 띄움(벽과 겹쳐 움직일 때 지글거렸다)
             strip(42.05, 37.2, 42.05, 45.5, Math.PI / 2); strip(42.05, 50.5, 42.05, 58.8, Math.PI / 2); strip(36, 36.98, 42.2, 36.98, Math.PI); strip(36, 59.02, 42.2, 59.02, 0); }
         }
         const seaG = new THREE.Group(); scene.add(seaG); const pineLeafMs = [], pineBarkMs = []; const treeB = { value: Array.from({ length: 8 }, () => new THREE.Vector2(1e4, 1e4)) };
@@ -4269,7 +4279,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
             if (o.material.name === 'lampHead' || o.material.name === 'pole' || o.material.name === 'wood') { o.visible = false; return; }
             if (FOREST && (key === 'Floor' || key === 'Ground' || key === 'Props' || key === 'Trees' || (key === 'Wall' && !['stone', 'coping', 'gateWood'].includes(o.material.name)))) { o.visible = false; return; }   // 숲길: 길·모래·방파제·난간·화단·나무는 숨긴다(건물·마당 돌담·대문만 남김)   // 가로등·벤치는 뺐다(작가님 2026-11-20)
             if (key === 'Wall' && o.material.name === 'grass') { const P = o.geometry.attributes.position, v = new THREE.Vector3(); for (let i = 0; i < P.count; i++) { v.fromBufferAttribute(P, i).applyMatrix4(o.matrixWorld); if (v.x < 44.2) { const k = Math.max(0, Math.min(1, (v.x - 42.4) / 1.8)); P.setY(i, Math.min(P.getY(i), .4 + (P.getY(i) - .4) * k)); } } P.needsUpdate = true; o.geometry.computeBoundingSphere(); }   // 스포츠센터 벽 앞 잔디 언덕이 창을 가렸다: 벽 쪽 1.8 m는 낮춘다(작가님 2026-11-20)
-            if (key === 'Wall' && (o.material.name === 'stone' || o.material.name === 'coping')) o.userData.clipX = 57.6;   // 마당 남쪽 돌담이 모래·바다 위로 길게 나갔다: 방파제 끝(x 57.6)에서 자른다
+            if (key === 'Wall' && (o.material.name === 'stone' || o.material.name === 'coping')) o.userData.clipX = FOREST ? 54.42 : 57.6;   // 마당 남쪽 돌담이 모래·바다 위로 길게 나갔다: 방파제 끝(x 57.6)에서 자른다
             const spec = MAT[o.material.name] || { c: 0xffffff }; if (o.material.name === 'pineLeaf') pineLeafMs.push(o); if (o.material.name === 'pineBark') pineBarkMs.push(o);
             o.material = new THREE.MeshBasicMaterial({ color: spec.c, map: spec.t || null, lightMap: spec.noLm ? null : lmT[key], lightMapIntensity: scale * Math.PI * .95, toneMapped: false });
             if (spec === MAT.grass || spec === MAT.ground) o.material.onBeforeCompile = sh => {   // 옛 해송 줄기 밑 구운 그림자(검은 구멍처럼 보임)만 밝힌다(작가님 2026-11-14, 해변 나무로 바꾼 뒤)
@@ -4324,7 +4334,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
       linkInteriors('ipForest', 'ipSea');
       LINK_IF['ipForest|ipSea'] = () => false; LINK_IF['ipSea|ipForest'] = () => false;
       { const yard = INTERIORS.find(I => I.name === 'ipForest'), seaI = INTERIORS.find(I => I.name === 'ipSea');
-        const out = viewPortal('ipForest', 'ipSea', [GX, 33.0, Math.PI], [GX, 33.0, Math.PI], GH * 2 + 1.0, GHH + .12, 0, { back: .25, fallback: 0xd4e8f6 });
+        const out = viewPortal('ipForest', 'ipSea', [GX, 33.0, Math.PI], [GX, 33.0, Math.PI], GH * 2 + (FOREST ? .3 : 1.0), GHH + .12, 0, { back: .25, fallback: 0xd4e8f6 });   // 숲길: 대문 옆으로 다음 공간이 비쳐 여유 폭을 줄임(작가님 2026-11-21)
         const inn = viewPortal('ipSea', 'ipForest', [GX, 33.0, 0], [GX, 33.0, 0], GH * 2, GHH, 0, { back: .2, fallback: 0x2a3050 });
         scene.add(out.hole); yard.objs.push(out.hole); scene.add(inn.hole); seaI.objs.push(inn.hole);
         // 밤 마당에서 낮 산책로로 나서는 순간, 눈이 적응하듯 0.35초 동안 밝아진다
