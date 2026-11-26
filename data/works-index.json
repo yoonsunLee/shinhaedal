@@ -216,33 +216,6 @@
   ]
  },
  {
-  "id": "HD-2026-022",
-  "title": "도달주의 : 緣(연)",
-  "title_en": "",
-  "year": 2026,
-  "size": "50 × 50",
-  "thumb": "assets/works/HD-2026-022/thumb.webp",
-  "has_audio": false,
-  "series_key": "도달주의택연",
-  "series_order": 2,
-  "tw": 560,
-  "th": 522,
-  "thumb_set": [
-   [
-    "assets/works/HD-2026-022/thumb320.webp",
-    320
-   ],
-   [
-    "assets/works/HD-2026-022/thumb.webp",
-    560
-   ],
-   [
-    "assets/works/HD-2026-022/thumb700.webp",
-    700
-   ]
-  ]
- },
- {
   "id": "HD-2026-021",
   "title": "도달주의 : 擇(택)",
   "title_en": "",
@@ -270,28 +243,28 @@
   ]
  },
  {
-  "id": "HD-2026-020",
-  "title": "도달주의 : ∞From",
+  "id": "HD-2026-022",
+  "title": "도달주의 : 緣(연)",
   "title_en": "",
   "year": 2026,
-  "size": "91 × 91",
-  "thumb": "assets/works/HD-2026-020/thumb.webp",
+  "size": "50 × 50",
+  "thumb": "assets/works/HD-2026-022/thumb.webp",
   "has_audio": false,
-  "series_key": "도달주의",
+  "series_key": "도달주의택연",
   "series_order": 2,
   "tw": 560,
-  "th": 560,
+  "th": 522,
   "thumb_set": [
    [
-    "assets/works/HD-2026-020/thumb320.webp",
+    "assets/works/HD-2026-022/thumb320.webp",
     320
    ],
    [
-    "assets/works/HD-2026-020/thumb.webp",
+    "assets/works/HD-2026-022/thumb.webp",
     560
    ],
    [
-    "assets/works/HD-2026-020/thumb700.webp",
+    "assets/works/HD-2026-022/thumb700.webp",
     700
    ]
   ]
@@ -319,6 +292,33 @@
    ],
    [
     "assets/works/HD-2026-019/thumb700.webp",
+    700
+   ]
+  ]
+ },
+ {
+  "id": "HD-2026-020",
+  "title": "도달주의 : ∞From",
+  "title_en": "",
+  "year": 2026,
+  "size": "91 × 91",
+  "thumb": "assets/works/HD-2026-020/thumb.webp",
+  "has_audio": false,
+  "series_key": "도달주의",
+  "series_order": 2,
+  "tw": 560,
+  "th": 560,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-020/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2026-020/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2026-020/thumb700.webp",
     700
    ]
   ]
@@ -432,6 +432,33 @@
   ]
  },
  {
+  "id": "HD-2026-013",
+  "title": "바람은 점유",
+  "title_en": "WIND, WISH: Possession",
+  "year": 2026,
+  "size": "38 × 38",
+  "thumb": "assets/works/HD-2026-013/thumb.webp",
+  "has_audio": false,
+  "series_key": "바람은점유",
+  "series_order": 1,
+  "tw": 560,
+  "th": 560,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-013/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2026-013/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2026-013/thumb700.webp",
+    700
+   ]
+  ]
+ },
+ {
   "id": "HD-2026-014",
   "title": "대기권에서 기대권을 기대하며 대기하는 밤",
   "title_en": "AIRSPACE, HEARTSPACE: The Right to Wait",
@@ -458,33 +485,6 @@
    ]
   ],
   "sold": true
- },
- {
-  "id": "HD-2026-013",
-  "title": "바람은 점유",
-  "title_en": "WIND, WISH: Possession",
-  "year": 2026,
-  "size": "38 × 38",
-  "thumb": "assets/works/HD-2026-013/thumb.webp",
-  "has_audio": false,
-  "series_key": "바람은점유",
-  "series_order": 1,
-  "tw": 560,
-  "th": 560,
-  "thumb_set": [
-   [
-    "assets/works/HD-2026-013/thumb320.webp",
-    320
-   ],
-   [
-    "assets/works/HD-2026-013/thumb.webp",
-    560
-   ],
-   [
-    "assets/works/HD-2026-013/thumb700.webp",
-    700
-   ]
-  ]
  },
  {
   "id": "HD-2026-012",
