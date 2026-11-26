@@ -15,7 +15,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta name="gallery-variant" content="site">
-<meta name="gallery-build" content="4531abc22e62">
+<meta name="gallery-build" content="b6e1a857244a">
 <link rel="stylesheet" href="../assets/fonts.css">
 <style>
 /* 레이아웃: 화면 전체가 3D 전시장, 그 위에 옻칠처럼 검은 패널이 가장자리에만 얹힌다. 한 가지 어두운 화면으로 고정. */
@@ -463,6 +463,7 @@ const ABOUT = {
 const CV = [
   ['EDUCATION', [['2014.02', '중앙대학교 일반대학원 법학과 박사수료'], ['2012.02', '중앙대학교 일반대학원 법학과 석사'], ['2009.02', '단국대학교 법학과 학사']]],
   ['CERTIFICATIONS', [['2024.09', '국가유산수리장인전문교육(칠공) 수료'], ['2022.05', '국가유산수리기능자(칠공) 취득']]],
+  ['COMPETITIONS', [['2026', 'LART 재료의 언어전 공모전 선정'], ['2025', '세종시문화관광재단 한글콘텐츠 공모전 선정']]],
   ['BRAND & ACTIVITIES', [['2025.09', '소담상회 인사점 입점'], ['2025.09', '한글복합문화공간 \'한글상점\' 입점'], ['2022.04', '아이디어스 해달자개 브랜드 입점']]],
 ];
 const PRESS = [
@@ -1305,9 +1306,8 @@ function exhibitUpcoming(wx, nx, zc, y = 2.3) {
   // 남쪽 벽: CV. 학력 · 자격 · 브랜드와 활동을 분류별 세 단으로. 전시 이력은 눌렀을 때 뜨는 창에
   const sz = AR.z1 - .16, CH = 2.9;
   const cvWall = letters(11.4, CH, (g, W, H) => {
-    font(g, CM(CH, H, 7), 700, FONT_M, ACCENT); g.fillText('CURRICULUM VITAE', 0, CM(CH, H, 8));
-    font(g, CM(CH, H, 31), 400, FONT_K); g.fillText('CV', 0, CM(CH, H, 44));
-    const cw = W / 3, heads = [['학력', 'EDUCATION'], ['자격', 'CERTIFICATIONS'], ['브랜드와 활동', 'BRAND & ACTIVITIES']];
+    // CV 제목은 뺐다(작가님 2026-11-26)
+    const cw = W / 4, heads = [['학력', 'EDUCATION'], ['자격', 'CERTIFICATIONS'], ['공모전', 'COMPETITIONS'], ['브랜드와 활동', 'BRAND & ACTIVITIES']];
     CV.forEach(([, rows], c) => {
       const x = c * cw;
       font(g, CM(CH, H, 17), 400, FONT_K); g.fillText(heads[c][0], x, CM(CH, H, 80));
