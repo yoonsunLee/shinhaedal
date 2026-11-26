@@ -1,5 +1,32 @@
 [
  {
+  "id": "HD-2026-021",
+  "title": "도달주의 : 擇(택)",
+  "title_en": "",
+  "year": 2026,
+  "size": "50 × 50",
+  "thumb": "assets/works/HD-2026-021/thumb.webp",
+  "has_audio": false,
+  "series_key": "도달주의택연",
+  "series_order": null,
+  "tw": 560,
+  "th": 511,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-021/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2026-021/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2026-021/thumb700.webp",
+    700
+   ]
+  ]
+ },
+ {
   "id": "HD-2026-011",
   "title": "N차적 저작물B",
   "title_en": "N-th Degree Derivative Works B",
@@ -411,6 +438,384 @@
    ]
   ],
   "sold": true
+ },
+ {
+  "id": "HD-2026-030",
+  "title": "퍼블리시티권",
+  "title_en": "",
+  "year": 2026,
+  "size": "22 × 22",
+  "thumb": "assets/works/HD-2026-030/thumb.webp",
+  "has_audio": false,
+  "series_key": "",
+  "series_order": null,
+  "tw": 560,
+  "th": 558,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-030/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2026-030/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2026-030/thumb700.webp",
+    700
+   ]
+  ]
+ },
+ {
+  "id": "HD-2026-029",
+  "title": "초상권",
+  "title_en": "",
+  "year": 2026,
+  "size": "",
+  "thumb": "assets/works/HD-2026-029/thumb.webp",
+  "has_audio": false,
+  "series_key": "",
+  "series_order": null,
+  "tw": 560,
+  "th": 560,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-029/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2026-029/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2026-029/thumb700.webp",
+    700
+   ]
+  ]
+ },
+ {
+  "id": "HD-2026-028",
+  "title": "효력발생 : 하트",
+  "title_en": "",
+  "year": 2026,
+  "size": "22 × 22",
+  "thumb": "assets/works/HD-2026-028/thumb.webp",
+  "has_audio": false,
+  "series_key": "",
+  "series_order": null,
+  "tw": 560,
+  "th": 560,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-028/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2026-028/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2026-028/thumb700.webp",
+    700
+   ]
+  ]
+ },
+ {
+  "id": "HD-2026-027",
+  "title": "nn차적 저작물 d",
+  "title_en": "",
+  "year": 2026,
+  "size": "22 × 22",
+  "thumb": "assets/works/HD-2026-027/thumb.webp",
+  "has_audio": false,
+  "series_key": "n-th-derivative",
+  "series_order": null,
+  "tw": 556,
+  "th": 560,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-027/thumb320.webp",
+    318
+   ],
+   [
+    "assets/works/HD-2026-027/thumb.webp",
+    556
+   ],
+   [
+    "assets/works/HD-2026-027/thumb700.webp",
+    695
+   ]
+  ]
+ },
+ {
+  "id": "HD-2026-026",
+  "title": "nn차적 저작물 c",
+  "title_en": "",
+  "year": 2026,
+  "size": "22 × 22",
+  "thumb": "assets/works/HD-2026-026/thumb.webp",
+  "has_audio": false,
+  "series_key": "n-th-derivative",
+  "series_order": null,
+  "tw": 560,
+  "th": 560,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-026/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2026-026/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2026-026/thumb700.webp",
+    700
+   ]
+  ]
+ },
+ {
+  "id": "HD-2026-025",
+  "title": "nn차적 저작물 c",
+  "title_en": "",
+  "year": 2026,
+  "size": "22 × 22",
+  "thumb": "assets/works/HD-2026-025/thumb.webp",
+  "has_audio": false,
+  "series_key": "n-th-derivative",
+  "series_order": null,
+  "tw": 560,
+  "th": 560,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-025/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2026-025/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2026-025/thumb700.webp",
+    700
+   ]
+  ]
+ },
+ {
+  "id": "HD-2026-024",
+  "title": "내용증명 : LOVE CLAIM",
+  "title_en": "",
+  "year": 2026,
+  "size": "60.6 x 60.6",
+  "thumb": "assets/works/HD-2026-024/thumb.webp",
+  "has_audio": false,
+  "series_key": "",
+  "series_order": null,
+  "tw": 560,
+  "th": 560,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-024/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2026-024/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2026-024/thumb700.webp",
+    700
+   ]
+  ]
+ },
+ {
+  "id": "HD-2026-023",
+  "title": "그 의사에 의한다.",
+  "title_en": "",
+  "year": 2026,
+  "size": "65.2 × 65.2",
+  "thumb": "assets/works/HD-2026-023/thumb.webp",
+  "has_audio": false,
+  "series_key": "",
+  "series_order": null,
+  "tw": 560,
+  "th": 560,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-023/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2026-023/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2026-023/thumb700.webp",
+    700
+   ]
+  ]
+ },
+ {
+  "id": "HD-2026-022",
+  "title": "도달주의 : 緣(연)",
+  "title_en": "",
+  "year": 2026,
+  "size": "50 × 50",
+  "thumb": "assets/works/HD-2026-022/thumb.webp",
+  "has_audio": false,
+  "series_key": "도달주의택연",
+  "series_order": 2,
+  "tw": 560,
+  "th": 522,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-022/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2026-022/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2026-022/thumb700.webp",
+    700
+   ]
+  ]
+ },
+ {
+  "id": "HD-2026-020",
+  "title": "도달주의 : ∞From",
+  "title_en": "",
+  "year": 2026,
+  "size": "91 × 91",
+  "thumb": "assets/works/HD-2026-020/thumb.webp",
+  "has_audio": false,
+  "series_key": "도달주의",
+  "series_order": 2,
+  "tw": 560,
+  "th": 560,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-020/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2026-020/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2026-020/thumb700.webp",
+    700
+   ]
+  ]
+ },
+ {
+  "id": "HD-2026-019",
+  "title": "도달주의 : Dear∞",
+  "title_en": "",
+  "year": 2026,
+  "size": "91 × 91",
+  "thumb": "assets/works/HD-2026-019/thumb.webp",
+  "has_audio": false,
+  "series_key": "도달주의",
+  "series_order": 1,
+  "tw": 560,
+  "th": 560,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-019/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2026-019/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2026-019/thumb700.webp",
+    700
+   ]
+  ]
+ },
+ {
+  "id": "HD-2026-018",
+  "title": "우주조약 II",
+  "title_en": "",
+  "year": 2026,
+  "size": "38 × 38",
+  "thumb": "assets/works/HD-2026-018/thumb.webp",
+  "has_audio": false,
+  "series_key": "",
+  "series_order": null,
+  "tw": 560,
+  "th": 560,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-018/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2026-018/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2026-018/thumb700.webp",
+    700
+   ]
+  ]
+ },
+ {
+  "id": "HD-2026-017",
+  "title": "소급효 금지의 원칙",
+  "title_en": "",
+  "year": 2026,
+  "size": "",
+  "thumb": "assets/works/HD-2026-017/thumb.webp",
+  "has_audio": false,
+  "series_key": "",
+  "series_order": null,
+  "tw": 397,
+  "th": 560,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-017/thumb320.webp",
+    227
+   ],
+   [
+    "assets/works/HD-2026-017/thumb.webp",
+    397
+   ],
+   [
+    "assets/works/HD-2026-017/thumb700.webp",
+    497
+   ]
+  ]
+ },
+ {
+  "id": "HD-2026-016",
+  "title": "주인공! 아니, 주권!",
+  "title_en": "",
+  "year": 2026,
+  "size": "50 × 50",
+  "thumb": "assets/works/HD-2026-016/thumb.webp",
+  "has_audio": false,
+  "series_key": "",
+  "series_order": null,
+  "tw": 560,
+  "th": 560,
+  "thumb_set": [
+   [
+    "assets/works/HD-2026-016/thumb320.webp",
+    320
+   ],
+   [
+    "assets/works/HD-2026-016/thumb.webp",
+    560
+   ],
+   [
+    "assets/works/HD-2026-016/thumb700.webp",
+    700
+   ]
+  ]
  },
  {
   "id": "HD-2026-015",
