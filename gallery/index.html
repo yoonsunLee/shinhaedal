@@ -15,7 +15,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta name="gallery-variant" content="site">
-<meta name="gallery-build" content="b07f3b80f5cb">
+<meta name="gallery-build" content="cb98b2a663a3">
 <link rel="stylesheet" href="../assets/fonts.css">
 <style>
 /* 레이아웃: 화면 전체가 3D 전시장, 그 위에 옻칠처럼 검은 패널이 가장자리에만 얹힌다. 한 가지 어두운 화면으로 고정. */
@@ -444,7 +444,7 @@ function exCard(e) {
   const url = c.toDataURL('image/png'); EX_CARD.set(e.id, url); return url;
 }
 const posterSrc = e => !e.poster_url ? exCard(e) : LOCAL_POSTERS.has(e.id) ? `posters/${e.id}.webp` : `${SITE}/${e.poster_url}`;
-const SCALE = 1;              // 작품은 실제 크기(작가님 결정 2026-11-26)
+const SCALE = 1.5;            // 작품은 실제 크기의 1.5배(작가님 2026-11-26: 1배는 작고 2.5배는 커서 1.5배, 작품관을 서쪽으로 넓힘)
 const LOCAL_IMG = new Set(['HD-2025-001', 'HD-2025-002', 'HD-2025-004', 'HD-2026-001', 'HD-2026-002', 'HD-2026-003', 'HD-2026-004', 'HD-2026-005', 'HD-2026-006', 'HD-2026-007', 'HD-2026-008', 'HD-2026-009', 'HD-2026-010', 'HD-2026-011', 'HD-2026-012']);
 const workImg = w => LOCAL_IMG.has(w.id) ? `img/${w.id}.webp` : `${SITE}/${w.thumb}`;
 const TOY_ID = 'HD-2026-012';
@@ -1500,7 +1500,7 @@ function hang(list, slots, extra = []) {
 //        끝의 놋쇠 문틀(2.4 × 2.4) 안에 6 m 뒤 가벽의 첫 작품만 액자처럼 들어온다. 통로 벽에는 글을 두지 않는다(작가님 결정)
 // 룸1: 12 × 10 m, 천장 4.5 m. 흰 벽과 밝은 나무 바닥에 작품만. 정면 가벽에 「이 세계의 얼빵해달, 저작인접권자가 되었다!」 한 점(작가 지정),
 //      나머지는 같은 눈높이로 오른쪽 벽부터 차례차례
-const DOORX = -17.25, R1 = { x0: DOORX - 12, x1: DOORX + 6, z0: -5.6, z1: 6.4, h: 3.3 }, C1 = { x0: DOORX - 1.3, x1: DOORX + 1.3, z0: R1.z1, z1: 9.25, h: 2.6 };
+const DOORX = -17.25, R1 = { x0: DOORX - 14, x1: DOORX + 6, z0: -5.6, z1: 6.4, h: 3.3 }, C1 = { x0: DOORX - 1.3, x1: DOORX + 1.3, z0: R1.z1, z1: 9.25, h: 2.6 };
 const R1_GABLE = R1.z1 - 6;
 const oakT = canvasTex(512, 512, (g, w, h) => {   // 밝은 참나무 마루(폭 18 cm 쪽널)
   const n = 8, s = w / n; let seed = 7; const r = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
@@ -1508,18 +1508,21 @@ const oakT = canvasTex(512, 512, (g, w, h) => {   // 밝은 참나무 마루(폭
   for (let i = 0; i < n; i++) { let y = -r() * h; while (y < h) { const L = h * (.35 + r() * .45), v = Math.round(214 + r() * 16); g.fillStyle = `rgb(${v},${v - 18},${v - 42})`; g.fillRect(i * s, y, s - 1.5, L - 1.5); g.fillStyle = 'rgba(150,120,85,.08)'; for (let k = 0; k < 5; k++) g.fillRect(i * s + r() * s, y, 1, L); y += L; } }
 });
 /* ── 작품관 한 공간(작가님 결정 2026-11-26) ──
-   룸1~4를 큰 한 공간(18 × 12 m, 천장 4 m)으로. 흰 둘레 벽 + 흰 벽(높이 2.8 m, 천장에 닿지 않음)으로 구역만 나눈다.
-   작품은 실제 크기(1:1), 가운데 145 cm 한 줄. 동선 가안(작가님 2026-11-26): 첫 작품 벽을 동쪽 벽까지 이어 입구 쪽을 앞마당으로 →
+   룸1~4를 큰 한 공간(20 × 12 m, 천장 3.3 m)으로. 흰 둘레 벽 + 흰 벽(높이 2.8 m, 천장에 닿지 않음)으로 구역만 나눈다.
+   작품은 실제 크기의 1.5배, 가운데 145 cm 한 줄. 동선 가안(작가님 2026-11-26): 첫 작품 벽을 동쪽 벽까지 이어 입구 쪽을 앞마당으로 →
    왼쪽(서쪽)으로 ① 저작권 → 서쪽 벽 ② N차적 → 북쪽 벽에서 내려온 칸막이 3개가 나눈 칸 ③ POV · ④ 의사표시 · ⑤ 점유→공역 · ⑥ 헌법 → 출구.
    소급효는 마지막일 필요 없음(작가님): ⑥ 헌법 안에 조문 차례로. 작품은 발행 자료로 저절로 걸리고, 자리가 모자라면 여유 벽 → 덧 벽(빠지는 작품 없음) */
 const HALL_LEFT = [];   // 자리가 모자라 못 건 작품(경고용)
 const HALL_DOOR = { x0: -13.25, x1: -11.45, h: 2.6 };   // 북쪽 벽 출구 → 어두운 전실(중정으로)
-const PT = -1.8;   // 칸막이 남쪽 끝(북쪽 벽에서 3.8 m)
+// 1.5배로 걸면서(작가님 2026-11-26) 방을 서쪽으로 넓혀 20 m. 칸 폭은 구역마다 걸 작품 길이에 맞춘다
+const PT = -.8;   // 칸막이 남쪽 끝(북쪽 벽에서 4.8 m). 첫 작품 벽 뒤 통로 1.7 m
+const BAY = { z3: 4.0, z4: 5.0, z5: 3.2 };   // 칸 폭: ③ POV · ④ 의사표시(도달주의 한 쌍) · ⑤ 점유→공역. ⑥은 남는 동쪽
+const P1x = R1.x0 + BAY.z3, P2x = P1x + .2 + BAY.z4, P3x = P2x + .2 + BAY.z5;
 const ISL_H = 2.8, ISL = {
-  F: [-23.75, R1.x1, .9, 1.1],          // 첫 작품 벽: 동쪽 벽에 붙어 입구 쪽 앞마당을 만든다(입구에서 5.3 m)
-  P1: [-24.85, -24.65, R1.z0, PT],      // 칸막이 ③|④
-  P2: [-18.85, -18.65, R1.z0, PT],      // 칸막이 ④|⑤
-  P3: [-15.35, -15.15, R1.z0, PT],      // 칸막이 ⑤|⑥
+  F: [P1x + 1.1, R1.x1, .9, 1.1],       // 첫 작품 벽: 동쪽 벽에 붙어 입구 쪽 앞마당을 만든다(입구에서 5.3 m). 서쪽 끝은 ④ 칸 앞
+  P1: [P1x, P1x + .2, R1.z0, PT],       // 칸막이 ③|④
+  P2: [P2x, P2x + .2, R1.z0, PT],       // 칸막이 ④|⑤
+  P3: [P3x, P3x + .2, R1.z0, PT],       // 칸막이 ⑤|⑥
 };
 // 구역 정하기: 어드민 zone 칸(앞으로) → 제목 → 연작. 구역 안 차례는 아래 낱말 차례(법학박사 자문 순서, 헌법은 조문 차례)
 const ZONES = ['z1', 'z2', 'z3', 'z4', 'z5', 'z6'];
@@ -1550,8 +1553,8 @@ const HF = (name, o, n, len, rev = false) => ({ name: '작품관 · ' + name, o,
 const PL = PT - .3 - (R1.z0 + .4);   // 칸막이 한 면에 거는 길이
 const FACES = {
   first: HF('첫 작품', [DOORX - 1.5, ISL.F[3] + .01], [0, 1], 3.0),
-  z1: [HF('앞마당 남쪽 벽', [DOORX - 1.6, R1.z1 - .02], [0, -1], (DOORX - 1.6) - (R1.x0 + .5)), HF('첫 작품 벽 앞면 서쪽', [ISL.F[0] + .3, ISL.F[3] + .01], [0, 1], (DOORX - 1.2) - (ISL.F[0] + .3), true)],
-  z2: [HF('서쪽 벽', [R1.x0 + .02, R1.z1 - .6], [1, 0], R1.z1 - .6 - (R1.z0 + .6))],
+  z1: [HF('앞마당 남쪽 벽', [DOORX - 1.6, R1.z1 - .02], [0, -1], Math.min(8, (DOORX - 1.6) - (R1.x0 + .5))),   /* 입구 가까이에 모이게 8 m까지만 */ HF('첫 작품 벽 앞면 서쪽', [ISL.F[0] + .3, ISL.F[3] + .01], [0, 1], (DOORX - 1.2) - (ISL.F[0] + .3), true)],
+  z2: [HF('서쪽 벽', [R1.x0 + .02, R1.z1 - .3], [1, 0], R1.z1 - .3 - (R1.z0 + .3))],
   z3: [HF('③ 칸 북쪽 벽', [R1.x0 + .4, R1.z0 + .02], [0, 1], ISL.P1[0] - .3 - (R1.x0 + .4)), HF('칸막이1 서면', [ISL.P1[0] - .01, R1.z0 + .4], [-1, 0], PL)],
   z4: [HF('칸막이1 동면', [ISL.P1[1] + .01, PT - .3], [1, 0], PL), HF('④ 칸 북쪽 벽', [ISL.P1[1] + .3, R1.z0 + .02], [0, 1], ISL.P2[0] - .3 - (ISL.P1[1] + .3)), HF('칸막이2 서면', [ISL.P2[0] - .01, R1.z0 + .4], [-1, 0], PL),
        HF('첫 작품 벽 뒷면 ④ 앞', [ISL.P2[0], ISL.F[2] - .01], [0, -1], ISL.P2[0] - (ISL.F[0] + .3), true)],
@@ -1563,8 +1566,8 @@ const FACES = {
           HF('첫 작품 벽 뒷면 동쪽', [R1.x1 - .3, ISL.F[2] - .01], [0, -1], R1.x1 - .3 - ISL.P2[1], true)],
 };
 // 자리가 다 차면 세울 덧 벽(앞마당 서쪽). 양면을 쓴다
-const EXTRA_ISL = [[-28.4, -25.4, 3.6, 3.8]];
-const HALL_CS = .32, HALL_CAPW = .06 + (CAP_W - .08) * HALL_CS;   // 실제 크기에 맞춘 작은 캡션(작품 오른쪽 아래)
+const EXTRA_ISL = [[R1.x0 + 3.5, R1.x0 + 6.5, 3.6, 3.8]];
+const HALL_CS = .32 * SCALE, HALL_CAPW = .06 + (CAP_W - .08) * HALL_CS;   // 캡션도 작품과 같은 배율(작가님 2026-11-26)
 // 짝 작품(도달주의, 작가님 2026-11-26): 두 점 사이 12 cm, 캡션은 바깥 양옆(앞 작품은 왼쪽, 뒤 작품은 오른쪽)
 const PAIRS = [['dear', 'from'], ['擇', '緣']], PAIR_GAP = .12;
 function pairUp(list) {
@@ -1576,7 +1579,7 @@ function pairUp(list) {
   }
   return out;
 }
-const hallGap = (a, b) => { const s = Math.max(a[0], a[1], b[0], b[1]); return s <= .3 ? .6 : s <= .66 ? .9 : 1.2; };   // 크기별 작품 사이(캡션 뒤에서 다음 작품까지)
+const hallGap = (a, b) => { const s = Math.max(a[0], a[1], b[0], b[1]) / SCALE; return s <= .3 ? .6 : s <= .66 ? .9 : 1.2; };   // 실제 크기로 나눠 견준다(배율이 바뀌어도 같은 작품은 같은 간격)   // 크기별 작품 사이(캡션 뒤에서 다음 작품까지)
 function hallHang(faceList, items) {
   const fill = faceList.map(f => ({ f, its: [], used: 0 }));
   let fi = 0; const left = [];
@@ -1632,10 +1635,11 @@ interior('law', [[C1.x0, C1.x1, C1.z0 - .2, C1.z1 + .3], [R1.x0, R1.x1, R1.z0, R
   // 흰 벽(높이 2.8 m): 첫 작품 벽 + 칸막이 셋
   for (const k of ['F', 'P1', 'P2', 'P3']) { const [x0, x1, z0, z1] = ISL[k]; wall(x0, x1, 0, ISL_H, z0, z1); }
   // 빛: 큰 공간을 고르게(천장 아래 3 × 2), 통로는 한지 띠 아래
-  for (const x of [-26.2, -20.2, -14.2]) for (const z of [-2.4, 3.4]) { const l = new THREE.PointLight(0xfff6ea, 4.2, 9, 1.2); l.position.set(x, R1.h - .4, z); scene.add(l); }
+  for (let x = R1.x0 + 3; x < R1.x1 - 1; x += 5.5) for (const z of [-2.6, 3.4]) { const l = new THREE.PointLight(0xfff6ea, 4.2, 9, 1.2); l.position.set(x, R1.h - .4, z); scene.add(l); }
   const lc = new THREE.PointLight(0xfff3df, 2.2, 6, 1.4); lc.position.set(DOORX, C1.h - .3, (C1.z0 + C1.z1) / 2); scene.add(lc);
   // 바닥 화살표: 첫 작품 → 왼쪽(서쪽) 앞마당 ① → 서쪽 벽 ② → 칸마다 들어갔다 나오며 동쪽으로 ③④⑤⑥ → 출구
-  floorArrows([[-21.4, 3.7, Math.PI / 2], [-27.4, .6, 0], [-21.8, -.5, -Math.PI / 2], [-17.0, -.5, -Math.PI / 2], [-13.2, -1.2, 0]]);
+  { const cz = (PT + ISL.F[2]) / 2;   // 칸막이 끝과 첫 작품 벽 사이 통로
+    floorArrows([[DOORX - 5, 3.7, Math.PI / 2], [R1.x0 + 2.5, 1.6, 0], [(P1x + P2x) / 2, cz, -Math.PI / 2], [(P2x + P3x) / 2, cz, -Math.PI / 2], [-13.2, -1.2, 0]]); }
   // 걸기
   const all = hangable.map(w => ({ w, sz: parseSize(w.size).map(v => v / 100 * SCALE) }));
   const first = all.find(it => it.w.id === FIRST_WORK);
