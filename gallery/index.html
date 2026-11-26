@@ -15,7 +15,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta name="gallery-variant" content="site">
-<meta name="gallery-build" content="cb98b2a663a3">
+<meta name="gallery-build" content="0d6babd6b710">
 <link rel="stylesheet" href="../assets/fonts.css">
 <style>
 /* 레이아웃: 화면 전체가 3D 전시장, 그 위에 옻칠처럼 검은 패널이 가장자리에만 얹힌다. 한 가지 어두운 화면으로 고정. */
@@ -1525,35 +1525,40 @@ const ISL_H = 2.8, ISL = {
   P3: [P3x, P3x + .2, R1.z0, PT],       // 칸막이 ⑤|⑥
 };
 // 구역 정하기: 어드민 zone 칸(앞으로) → 제목 → 연작. 구역 안 차례는 아래 낱말 차례(법학박사 자문 순서, 헌법은 조문 차례)
-const ZONES = ['z1', 'z2', 'z3', 'z4', 'z5', 'z6'];
+const ZONES = ['z0', 'z1', 'z2', 'z3', 'z4', 'z5', 'z6'];
 const ZONE_WORDS = {
+  z0: ['퍼블리시티권', '초상권', 'ㄷㅎㅁㄱㅎㅂ'],   // 첫 작품 벽 앞면, 첫 작품 왼쪽에 이 차례로(작가님 2026-11-26)
   z1: ['저작인접권자', '권리누적', '블루북', '권리소진'],
-  z4: ['내용증명', 'dear', 'from', '擇', '緣', '그의사에의한다', '효력발생'],
+  z4: ['내용증명', 'dear', 'from', '擇', '緣', '그의사에의한다'],
   z5: ['바람은점유', '대기권', '무주의바다', '우주조약'],   // 우주조약 II는 같은 자리, 번호 차례로 뒤
-  z6: ['ㄷㅎㅁㄱㅎㅂ', '주권', '행복추구권', '소급효', '초상권', '퍼블리시티권'],   // 전문·제1조 → 제1조 2항 → 제10조 → 제13조 → 얼굴의 권리
+  z6: ['주권', '행복추구권', '소급효'],   // 제1조 2항 → 제10조 → 제13조
 };
 const SERIES_ZONE = { 'n-th-derivative': 'z2', pov: 'z3', territory: 'z5' };
 const normT = (t) => String(t || '').toLowerCase().replace(/[\s!?.,:;'"·∞*()\-–—「」]/g, '');
 function hallZoneOf(w) {
   if (w.zone && ZONES.includes(w.zone)) return w.zone;
   const t = normT(w.title);
-  for (const z of ['z6', 'z4', 'z5', 'z1']) if (ZONE_WORDS[z].some(k => t.includes(k))) return z;
+  if (t.includes('효력발생')) return 'z2';   // 효력발생 하트는 nn차적 d 옆(작가님 2026-11-26)
+  for (const z of ['z0', 'z6', 'z4', 'z5', 'z1']) if (ZONE_WORDS[z].some(k => t.includes(k))) return z;
   return SERIES_ZONE[w.series_key] || null;   // 모르는 작품은 신작·여유 벽으로
 }
 function zoneRank(w, z) {
   if (w.zone_order != null) return w.zone_order;
+  if (z === 'z2' && normT(w.title).includes('효력발생')) return 1e6;
+  if (z === 'z3' && POV_ORDER_H[w.id] != null) return POV_ORDER_H[w.id];   // N차적 연작 맨 뒤(nn차적 d 다음)
   const t = normT(w.title), ks = ZONE_WORDS[z] || [];
   const i = ks.findIndex(k => t.includes(k));
   if (i >= 0) return i;
   return w.series_order ?? ORDER_FALLBACK[w.id] ?? POV_ORDER_H[w.id] ?? 99;
 }
-const POV_ORDER_H = { 'HD-2026-006': 1, 'HD-2026-003': 2, 'HD-2026-007': 3, 'HD-2026-010': 4 };   // 출근 → 업무 중 → 퇴근 → 유급휴일
+const POV_ORDER_H = { 'HD-2026-006': 1, 'HD-2026-007': 2, 'HD-2026-003': 3, 'HD-2026-010': 4 };   // 출근 → 퇴근(같은 북쪽 벽) → 업무 중 → 유급휴일(작가님 2026-11-26)
 // 벽면: o 시작점, d 읽는 쪽(보는 사람의 오른쪽), n 방 쪽, len 길이, rev 걷는 차례가 d와 반대
-const HF = (name, o, n, len, rev = false) => ({ name: '작품관 · ' + name, o, n, d: [n[1], -n[0]], len, rev });
+const HF = (name, o, n, len, rev = false, end = false) => ({ name: '작품관 · ' + name, o, n, d: [n[1], -n[0]], len, rev, end });   // end: 가운데 대신 끝(첫 작품 쪽)에 붙여 건다
 const PL = PT - .3 - (R1.z0 + .4);   // 칸막이 한 면에 거는 길이
 const FACES = {
   first: HF('첫 작품', [DOORX - 1.5, ISL.F[3] + .01], [0, 1], 3.0),
-  z1: [HF('앞마당 남쪽 벽', [DOORX - 1.6, R1.z1 - .02], [0, -1], Math.min(8, (DOORX - 1.6) - (R1.x0 + .5))),   /* 입구 가까이에 모이게 8 m까지만 */ HF('첫 작품 벽 앞면 서쪽', [ISL.F[0] + .3, ISL.F[3] + .01], [0, 1], (DOORX - 1.2) - (ISL.F[0] + .3), true)],
+  z1: [HF('앞마당 남쪽 벽', [DOORX - 1.6, R1.z1 - .02], [0, -1], Math.min(8, (DOORX - 1.6) - (R1.x0 + .5))),   /* 입구 가까이에 모이게 8 m까지만 */],
+  z0: [HF('첫 작품 벽 앞면 서쪽', [ISL.F[0] + .3, ISL.F[3] + .01], [0, 1], (DOORX - 1.2) - (ISL.F[0] + .3), false, true)],
   z2: [HF('서쪽 벽', [R1.x0 + .02, R1.z1 - .3], [1, 0], R1.z1 - .3 - (R1.z0 + .3))],
   z3: [HF('③ 칸 북쪽 벽', [R1.x0 + .4, R1.z0 + .02], [0, 1], ISL.P1[0] - .3 - (R1.x0 + .4)), HF('칸막이1 서면', [ISL.P1[0] - .01, R1.z0 + .4], [-1, 0], PL)],
   z4: [HF('칸막이1 동면', [ISL.P1[1] + .01, PT - .3], [1, 0], PL), HF('④ 칸 북쪽 벽', [ISL.P1[1] + .3, R1.z0 + .02], [0, 1], ISL.P2[0] - .3 - (ISL.P1[1] + .3)), HF('칸막이2 서면', [ISL.P2[0] - .01, R1.z0 + .4], [-1, 0], PL),
@@ -1594,7 +1599,7 @@ function hallHang(faceList, items) {
   for (const F of fill) {
     if (!F.its.length) continue;
     const seq = F.f.rev ? [...F.its].reverse() : F.its;
-    let a = Math.max(.15, (F.f.len - F.used) / 2);
+    let a = Math.max(.15, F.f.end ? F.f.len - F.used : (F.f.len - F.used) / 2);
     seq.forEach((it, i) => {
       if (i) a += hallGap(seq[i - 1].sz, it.sz);
       const at = (c) => [F.f.o[0] + F.f.d[0] * c, F.f.o[1] + F.f.d[1] * c], [dx, dz] = F.f.d, [nx, nz] = F.f.n;
