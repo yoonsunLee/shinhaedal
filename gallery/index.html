@@ -15,7 +15,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta name="gallery-variant" content="site">
-<meta name="gallery-build" content="6c2f362303c7">
+<meta name="gallery-build" content="72eef566a810">
 <link rel="stylesheet" href="../assets/fonts.css">
 <style>
 /* 레이아웃: 화면 전체가 3D 전시장, 그 위에 옻칠처럼 검은 패널이 가장자리에만 얹힌다. 한 가지 어두운 화면으로 고정. */
@@ -1440,7 +1440,7 @@ const poolMat = (op) => new THREE.MeshBasicMaterial({ map: POOL_T, transparent: 
 // 방마다 세기: 1관 흰 벽 그대로, 2관 노랑 벽지는 진하게(벽지 색은 그대로 둔다), 4관 남색 벽감은 진짜 빛이 있어 옅게
 const POOL_M = { '룸1': poolMat(1), '룸2': poolMat(1.6), '룸4': poolMat(.35), '작품': poolMat(1) };   // '작품' = 작품관 한 공간(2026-11-26)
 // 작가 소장(어드민 NFS) 작품: 파란 스티커(작가님 2026-11-26). 판매완료 빨간 스티커는 발행 자료 sold를 그대로 쓴다. NFS는 발행 자료에 칸이 없어 여기 적는다
-const NFS_IDS = WORKS_INDEX.some(w => 'nfs' in w) ? WORKS_INDEX.filter(w => w.nfs).map(w => w.id) : ['HD-2026-001', 'HD-2026-008', 'HD-2026-010', 'HD-2026-015'];   // 작가 소장(파란 스티커): 홈페이지 자료의 nfs(어드민 'NFS (비매)'). 자료에 아직 없으면 예전 목록(2026-11-26)
+const NFS_IDS = WORKS_INDEX.filter(w => w.nfs).map(w => w.id);   // 작가 소장(파란 스티커): 어드민 'NFS (비매)' → 홈페이지 자료의 nfs 만 따른다(작가님 2026-11-26: 데이터는 어드민 기준)
 // 작품 한 점: (x, cy, z)에 n 쪽을 보게 걸고, 캡션은 d(보는 사람의 오른쪽) 쪽 아래. capAt: 캡션 자리를 따로 줄 때 [x, z]
 function putWork(w, ww, hh, x, cy, z, [nx, nz], [dx, dz], light, where, capAt) {
   const g = new THREE.Group(), hallW = String(where || '').startsWith('작품관');   // 작품관 한 공간이면 실제 크기에 맞춰 작게(캡션·스티커·빛)
