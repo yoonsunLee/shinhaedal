@@ -476,8 +476,10 @@ def main():
     series_rows = sb_optional("series?select=*", "series")
     settings_rows = sb_optional("site_settings?select=key,value", "site_settings")
     # 판매완료 여부(갤러리 빨간 스티커용) — DB 뷰 works_status 의 판정만 쓴다. 가격·다른 상태는 내보내지 않는다
-    sold_ids = {r.get("id") for r in sb_optional("works_status?select=id,effective_status", "works_status")
-                if r.get("effective_status") == "sold"}
+    status_rows = sb_optional("works_status?select=id,effective_status", "works_status")
+    sold_ids = {r.get("id") for r in status_rows if r.get("effective_status") == "sold"}
+    # 작가 소장(NFS, 갤러리 파란 스티커용, 2026-11-26). 판매완료처럼 표시만 내보낸다
+    nfs_ids = {r.get("id") for r in status_rows if r.get("effective_status") == "nfs"}
 
     if not works:
         sys.exit("공개 작품이 0건 — 반영 중단")
@@ -636,6 +638,8 @@ def main():
             entry["thumb_set"] = tset
         if work_id in sold_ids:
             entry["sold"] = True   # 판매완료만 표시(그 밖엔 키 자체가 없다)
+        elif work_id in nfs_ids:
+            entry["nfs"] = True    # 작가 소장(NFS)만 표시
         index_entries.append(entry)
 
     write_json(os.path.join(data_dir, "works-index.json"), index_entries)
