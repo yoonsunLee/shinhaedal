@@ -15,7 +15,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta name="gallery-variant" content="site">
-<meta name="gallery-build" content="0d6babd6b710">
+<meta name="gallery-build" content="4248e1297d4a">
 <link rel="stylesheet" href="../assets/fonts.css">
 <style>
 /* 레이아웃: 화면 전체가 3D 전시장, 그 위에 옻칠처럼 검은 패널이 가장자리에만 얹힌다. 한 가지 어두운 화면으로 고정. */
@@ -1249,6 +1249,7 @@ function exhibitUpcoming(wx, nx, zc, y = 2.3) {
     textBlock(g, headLines, x0, cm(58), cm(32));
     font(g, cm(7), 700, FONT_M, ACCENT); g.fillText('ARTIST NOTE', x0, cm(8));
     font(g, cm(20), 400, FONT_K); const ink = x0 - Math.max(...headLines.map(l => g.measureText(l).actualBoundingBoxLeft));   // 제목 글자 왼쪽 끝에 맞춤
+    font(g, cm(6.5), 700, FONT_B, '#3b342d'); g.fillText('캡션 밑 스티커의 의미', ink, cm(206));   // 제목(작가님 2026-11-26)
     font(g, cm(7.5), 500, FONT_B, '#3b342d'); g.textBaseline = 'middle';
     [['#c8231c', '컬렉팅 완료', 222], ['#2f5d9e', '작가 소장', 240]].forEach(([c, t, y]) => {   // 색은 작품 스티커와 같게
       g.fillStyle = c; g.beginPath(); g.arc(ink + cm(4), cm(y), cm(4), 0, Math.PI * 2); g.fill();
@@ -1327,7 +1328,7 @@ function exhibitUpcoming(wx, nx, zc, y = 2.3) {
   // 동쪽 벽(로비 문 오른쪽 빈 벽): 지금 전시 + 예정 전시(작가님 2026-11-13). CV 옆이라 '작가 이야기'가 전시로 이어진다
   { const ex = AR.x1 - .16; exhibitSolo(ex, -1, 12.95); exhibitUpcoming(ex, -1, 17.55); }
   // 언론 보도는 작가소개에 두지 않는다(홈페이지 Press 페이지에서)
-  stampMark('artist', -19.5, 14.6, .7);   // 작가 사진과 About 글 바로 앞, 조금 작게
+  stampMark('artist', (HEAD_L + HEAD_R) / 2, AR.z0 + 1.3, .7);   // 조개 도장: 스티커 뜻 풀이 앞(작가님 2026-11-26, 전에는 작가 사진 앞)
 }
 
 /* ───────── 작품 전시관: 자료를 받아 저절로 건다 ───────── */
@@ -1374,7 +1375,8 @@ const INTERIORS = [];
 const arrowT = canvasTex(256, 256, (g, w, h) => { g.clearRect(0, 0, w, h); g.fillStyle = '#ffffff'; g.beginPath(); g.moveTo(w * .5, h * .04); g.lineTo(w * .96, h * .5); g.lineTo(w * .7, h * .5); g.lineTo(w * .7, h * .9); g.lineTo(w * .3, h * .9); g.lineTo(w * .3, h * .5); g.lineTo(w * .04, h * .5); g.closePath(); g.fill(); /* 머리가 크고 몸통이 짧은 굵은 화살표(작가님 예시) */ });
 const arrowM = new THREE.MeshBasicMaterial({ map: arrowT, color: 0x77726c, alphaTest: .5, toneMapped: false });   // 옅은 먹색, 비치지 않게 불투명(작가님)
 const arrowLightM = new THREE.MeshBasicMaterial({ map: arrowT, color: 0xd8d2c6, alphaTest: .5, toneMapped: false });   /* 어두운 방도 비치지 않게 */   // 어두운 방(룸3·룸4)은 옅은 상아색
-function floorArrows(list, y = .046, mat = arrowM) { for (const [x, z, yaw] of list) { const grp = new THREE.Group(), m = new THREE.Mesh(new THREE.PlaneGeometry(.6, .6), mat);   /* 0.6 m(전문가 자문) */ m.rotation.x = -Math.PI / 2; m.renderOrder = 2; grp.add(m); grp.position.set(x, y, z); grp.rotation.y = yaw; scene.add(grp); } }
+function floorArrows(list, y = .046, mat = arrowM) { return;   // 바닥 화살표는 모두 뺐다(작가님 2026-11-26)
+  for (const [x, z, yaw] of list) { const grp = new THREE.Group(), m = new THREE.Mesh(new THREE.PlaneGeometry(.6, .6), mat);   /* 0.6 m(전문가 자문) */ m.rotation.x = -Math.PI / 2; m.renderOrder = 2; grp.add(m); grp.position.set(x, y, z); grp.rotation.y = yaw; scene.add(grp); } }
 // 이어 붙이기(작가님 결정: 가상공간이라 장면을 실제 길로 다 잇지 않는다). 장면은 떨어진 섬이고, 통로 끝 문과 다음 장면의 첫 문을 똑같이 만들어 두면
 // 문을 지나는 순간 관람객(과 카메라·발자국)을 다음 섬의 같은 자리로 옮긴다. a·b: [x, z, yaw] = 문 가운데와 앞으로 지나가는 방향(yaw 0 = 북쪽), w: 문 폭
 const LINKS = {}, PORTALS = [];
@@ -1450,11 +1452,13 @@ function putWork(w, ww, hh, x, cy, z, [nx, nz], [dx, dz], light, where, capAt) {
   const CAP_GAP = .06, cw = (CAP_W - .08) * CS, lb = caption(w, light, !!(capAt && capAt[3])), cc = ww / 2 + CAP_GAP + cw / 2, [lx, lz] = capAt || [x + dx * cc + nx * .01, z + dz * cc + nz * .01];
   lb.scale.setScalar(CS); place(lb, lx, capAt && capAt[2] != null ? capAt[2] : cy - hh / 2 + CAP_H * CS / 2, lz, nx, nz);   // capAt[2]: 캡션 아랫줄 높이를 따로 줄 때(벽감)
   // 판매완료 작품: 오른쪽 아래 모서리 바로 밑에 빨간 동그라미 스티커(작가님 2026-11-15). 판매 여부는 발행 자료 works-index.json 의 sold(판매완료만 true)
-  if (w.sold) { const dot = new THREE.Mesh(new THREE.CircleGeometry(.022, 28), new THREE.MeshBasicMaterial({ color: 0xc8231c, toneMapped: false }));
-    dot.position.set(ww / 2 - .028, -hh / 2 - .036, .004); g.add(dot); }
-  else if (NFS_IDS.includes(w.id)) { const dot = new THREE.Mesh(new THREE.CircleGeometry(.022, 28), new THREE.MeshBasicMaterial({ color: 0x2f5d9e, toneMapped: false }));   // 작가 소장: 같은 자리 파란 점
-    dot.position.set(ww / 2 - .028, -hh / 2 - .036, .004); g.add(dot); }
-  if (hallW) for (const c of g.children) if (c.geometry && c.geometry.type === 'CircleGeometry') { c.scale.setScalar(.42); c.position.set(ww / 2 - .012, -hh / 2 - .016, .004); }   // 작품관 한 공간: 스티커 지름 약 1.8 cm
+  if (w.sold) { const dot = new THREE.Mesh(new THREE.CircleGeometry(.04, 32), new THREE.MeshBasicMaterial({ color: 0xc8231c, toneMapped: false }));   // 스티커 지름 8 cm(작가님 2026-11-26: 더 크게)
+    dot.position.set(ww / 2 - .046, -hh / 2 - .06, .004); g.add(dot); }
+  else if (NFS_IDS.includes(w.id)) { const dot = new THREE.Mesh(new THREE.CircleGeometry(.04, 32), new THREE.MeshBasicMaterial({ color: 0x2f5d9e, toneMapped: false }));   // 작가 소장: 같은 자리 파란 점
+    dot.position.set(ww / 2 - .046, -hh / 2 - .06, .004); g.add(dot); }
+  if (hallW) for (const c of [...g.children]) if (c.geometry && c.geometry.type === 'CircleGeometry') {   // 작품관: 스티커는 캡션 밑, 캡션 글 첫머리에 맞춰(작가님 2026-11-26). 지름 6 cm
+    const r = .03 / CS, half = (CAP_W - .08) / 2, right = !!(capAt && capAt[3]);
+    g.remove(c); c.scale.setScalar(r / .04); c.position.set(right ? half - r : -half + r, -CAP_H / 2 - r - .025 / CS, .004); lb.add(c); }
   const D = DETAIL[w.id] || {};
   const info = { kind: D.en || w.title_en || w.id, title: w.title, meta: D.medium || `${w.year} · ${w.size} cm`, body: (D.body || []).join('\n\n'), ex: D.ex, img: workImg(w), id: w.id,
     links: [[`${SITE}/works/w/${w.id}/`, '작품 페이지'], [`${SITE}/contact/`, '작품 문의', true]], where, focus: focusFrom(x, cy, z, nx, nz, hallW ? Math.max(.7, hh * 1.7) : Math.max(2.4, hh * 1.6)) };
@@ -1512,24 +1516,39 @@ const oakT = canvasTex(512, 512, (g, w, h) => {   // 밝은 참나무 마루(폭
    작품은 실제 크기의 1.5배, 가운데 145 cm 한 줄. 동선 가안(작가님 2026-11-26): 첫 작품 벽을 동쪽 벽까지 이어 입구 쪽을 앞마당으로 →
    왼쪽(서쪽)으로 ① 저작권 → 서쪽 벽 ② N차적 → 북쪽 벽에서 내려온 칸막이 3개가 나눈 칸 ③ POV · ④ 의사표시 · ⑤ 점유→공역 · ⑥ 헌법 → 출구.
    소급효는 마지막일 필요 없음(작가님): ⑥ 헌법 안에 조문 차례로. 작품은 발행 자료로 저절로 걸리고, 자리가 모자라면 여유 벽 → 덧 벽(빠지는 작품 없음) */
+// 갤러리에 적어 둔 글(DETAIL)이 없는 작품은 홈페이지 작품 자료(data/works/<id>.json)에서 재료·영문 제목·설명·전시 이력을 채운다(작가님 2026-11-26: 신작 재료·정보가 빠짐).
+// 적어 둔 글이 있으면 그대로 두고, 빈 칸만 채운다
+await Promise.all(hangable.map(async w => {
+  const D = DETAIL[w.id] || {};
+  if (D.medium && D.en && (D.body || []).length && D.ex) return;
+  const j = await getJSON('works/' + w.id + '.json', null); if (!j) return;
+  const size = String(j.size || w.size || '').replace(/\s*[xX*×]\s*/, ' × ');
+  if (!D.medium && j.material) D.medium = `${j.material} · ${size} cm · ${j.year || w.year}`;
+  if (!D.en && j.title_en) D.en = j.title_en;
+  if (!(D.body || []).length && j.caption) D.body = j.caption.split(/\n\s*\n/).map(t => t.trim()).filter(Boolean);
+  if (!D.ex && j.exhibitions) D.ex = j.exhibitions.split('\n').map(t => t.trim()).filter(Boolean);
+  DETAIL[w.id] = D;
+}));
+const HALL_STAMP = [R1.x0 + 1.4, 3.4];   // 조개 도장: 서쪽 벽 N차적 저작물 A·B 앞(예전처럼 N차적 저작물B 앞)
 const HALL_LEFT = [];   // 자리가 모자라 못 건 작품(경고용)
 const HALL_DOOR = { x0: -13.25, x1: -11.45, h: 2.6 };   // 북쪽 벽 출구 → 어두운 전실(중정으로)
 // 1.5배로 걸면서(작가님 2026-11-26) 방을 서쪽으로 넓혀 20 m. 칸 폭은 구역마다 걸 작품 길이에 맞춘다
-const PT = -.8;   // 칸막이 남쪽 끝(북쪽 벽에서 4.8 m). 첫 작품 벽 뒤 통로 1.7 m
-const BAY = { z3: 4.0, z4: 5.0, z5: 3.2 };   // 칸 폭: ③ POV · ④ 의사표시(도달주의 한 쌍) · ⑤ 점유→공역. ⑥은 남는 동쪽
+const PT = -1.3;   // 칸막이 남쪽 끝(북쪽 벽에서 4.3 m). 첫 작품 벽 뒤 통로 2.6 m(작가님 2026-11-26: 1.7 m는 좁다)
+const BAY = { z3: 4.0, z4: 5.0, z5: 4.4 };   // ⑤ 칸이 좁아(작가님 2026-11-26) 3.2 → 4.4 m. ⑥ 북쪽 벽이 비어 그만큼 ⑥을 줄임   // 칸 폭: ③ POV · ④ 의사표시(도달주의 한 쌍) · ⑤ 점유→공역. ⑥은 남는 동쪽
 const P1x = R1.x0 + BAY.z3, P2x = P1x + .2 + BAY.z4, P3x = P2x + .2 + BAY.z5;
 const ISL_H = 2.8, ISL = {
-  F: [P1x + 1.1, R1.x1, .9, 1.1],       // 첫 작품 벽: 동쪽 벽에 붙어 입구 쪽 앞마당을 만든다(입구에서 5.3 m). 서쪽 끝은 ④ 칸 앞
+  F: [P1x + 1.1, R1.x1, 1.3, 1.5],       // 첫 작품 벽: 동쪽 벽에 붙어 입구 쪽 앞마당을 만든다(입구에서 5.3 m). 서쪽 끝은 ④ 칸 앞
   P1: [P1x, P1x + .2, R1.z0, PT],       // 칸막이 ③|④
   P2: [P2x, P2x + .2, R1.z0, PT],       // 칸막이 ④|⑤
   P3: [P3x, P3x + .2, R1.z0, PT],       // 칸막이 ⑤|⑥
 };
 // 구역 정하기: 어드민 zone 칸(앞으로) → 제목 → 연작. 구역 안 차례는 아래 낱말 차례(법학박사 자문 순서, 헌법은 조문 차례)
-const ZONES = ['z0', 'z1', 'z2', 'z3', 'z4', 'z5', 'z6'];
+const ZONES = ['z0', 'z1', 'z2', 'z3', 'z4', 'z5', 'z6', 'z7'];
 const ZONE_WORDS = {
   z0: ['퍼블리시티권', '초상권', 'ㄷㅎㅁㄱㅎㅂ'],   // 첫 작품 벽 앞면, 첫 작품 왼쪽에 이 차례로(작가님 2026-11-26)
   z1: ['저작인접권자', '권리누적', '블루북', '권리소진'],
-  z4: ['내용증명', 'dear', 'from', '擇', '緣', '그의사에의한다'],
+  z4: ['내용증명', 'dear', 'from', '擇', '緣'],
+  z7: ['그의사에의한다'],   // 출구 쪽 ⑥ 북쪽 빈 벽(작가님 2026-11-26)
   z5: ['바람은점유', '대기권', '무주의바다', '우주조약'],   // 우주조약 II는 같은 자리, 번호 차례로 뒤
   z6: ['주권', '행복추구권', '소급효'],   // 제1조 2항 → 제10조 → 제13조
 };
@@ -1539,7 +1558,7 @@ function hallZoneOf(w) {
   if (w.zone && ZONES.includes(w.zone)) return w.zone;
   const t = normT(w.title);
   if (t.includes('효력발생')) return 'z2';   // 효력발생 하트는 nn차적 d 옆(작가님 2026-11-26)
-  for (const z of ['z0', 'z6', 'z4', 'z5', 'z1']) if (ZONE_WORDS[z].some(k => t.includes(k))) return z;
+  for (const z of ['z0', 'z7', 'z6', 'z4', 'z5', 'z1']) if (ZONE_WORDS[z].some(k => t.includes(k))) return z;
   return SERIES_ZONE[w.series_key] || null;   // 모르는 작품은 신작·여유 벽으로
 }
 function zoneRank(w, z) {
@@ -1564,7 +1583,8 @@ const FACES = {
   z4: [HF('칸막이1 동면', [ISL.P1[1] + .01, PT - .3], [1, 0], PL), HF('④ 칸 북쪽 벽', [ISL.P1[1] + .3, R1.z0 + .02], [0, 1], ISL.P2[0] - .3 - (ISL.P1[1] + .3)), HF('칸막이2 서면', [ISL.P2[0] - .01, R1.z0 + .4], [-1, 0], PL),
        HF('첫 작품 벽 뒷면 ④ 앞', [ISL.P2[0], ISL.F[2] - .01], [0, -1], ISL.P2[0] - (ISL.F[0] + .3), true)],
   z5: [HF('칸막이2 동면', [ISL.P2[1] + .01, PT - .3], [1, 0], PL), HF('⑤ 칸 북쪽 벽', [ISL.P2[1] + .3, R1.z0 + .02], [0, 1], ISL.P3[0] - .3 - (ISL.P2[1] + .3)), HF('칸막이3 서면', [ISL.P3[0] - .01, R1.z0 + .4], [-1, 0], PL)],
-  z6: [HF('칸막이3 동면', [ISL.P3[1] + .01, PT - .3], [1, 0], PL), HF('동쪽 벽', [R1.x1 - .02, R1.z0 + .4], [-1, 0], ISL.F[2] - .3 - (R1.z0 + .4), true), HF('⑥ 칸 북쪽 벽', [ISL.P3[1] + .3, R1.z0 + .02], [0, 1], HALL_DOOR.x0 - .1 - (ISL.P3[1] + .3))],
+  z6: [HF('칸막이3 동면', [ISL.P3[1] + .01, PT - .3], [1, 0], PL), HF('동쪽 벽', [R1.x1 - .02, R1.z0 + .4], [-1, 0], ISL.F[2] - .3 - (R1.z0 + .4), true)],
+  z7: [HF('⑥ 칸 북쪽 벽 (출구 쪽)', [ISL.P3[1] + .3, R1.z0 + .02], [0, 1], HALL_DOOR.x0 - .1 - (ISL.P3[1] + .3))],
   // 신작 벽(작가님 2026-11-26: 앞마당 오른쪽 막힌 구석) → 여유 벽(첫 작품 벽 뒷면 동쪽). 구역 모를 작품·넘친 작품이 이 차례로
   // 남쪽 벽을 먼저 채운다: 입구에서 보면 등 뒤라 첫 작품이 혼자 보인다
   spare: [HF('신작 벽 · 앞마당 남쪽 벽 동쪽', [R1.x1 - .3, R1.z1 - .02], [0, -1], R1.x1 - .3 - (DOORX + 1.5)), HF('신작 벽 · 첫 작품 벽 앞면 동쪽', [DOORX + 1.2, ISL.F[3] + .01], [0, 1], R1.x1 - .3 - (DOORX + 1.2)),
@@ -1642,9 +1662,7 @@ interior('law', [[C1.x0, C1.x1, C1.z0 - .2, C1.z1 + .3], [R1.x0, R1.x1, R1.z0, R
   // 빛: 큰 공간을 고르게(천장 아래 3 × 2), 통로는 한지 띠 아래
   for (let x = R1.x0 + 3; x < R1.x1 - 1; x += 5.5) for (const z of [-2.6, 3.4]) { const l = new THREE.PointLight(0xfff6ea, 4.2, 9, 1.2); l.position.set(x, R1.h - .4, z); scene.add(l); }
   const lc = new THREE.PointLight(0xfff3df, 2.2, 6, 1.4); lc.position.set(DOORX, C1.h - .3, (C1.z0 + C1.z1) / 2); scene.add(lc);
-  // 바닥 화살표: 첫 작품 → 왼쪽(서쪽) 앞마당 ① → 서쪽 벽 ② → 칸마다 들어갔다 나오며 동쪽으로 ③④⑤⑥ → 출구
-  { const cz = (PT + ISL.F[2]) / 2;   // 칸막이 끝과 첫 작품 벽 사이 통로
-    floorArrows([[DOORX - 5, 3.7, Math.PI / 2], [R1.x0 + 2.5, 1.6, 0], [(P1x + P2x) / 2, cz, -Math.PI / 2], [(P2x + P3x) / 2, cz, -Math.PI / 2], [-13.2, -1.2, 0]]); }
+  // 바닥 화살표는 뺐다(작가님 2026-11-26)
   // 걸기
   const all = hangable.map(w => ({ w, sz: parseSize(w.size).map(v => v / 100 * SCALE) }));
   const first = all.find(it => it.w.id === FIRST_WORK);
@@ -2388,6 +2406,7 @@ interior('nth', [[C4.x0 - .1, R4.x0 + .3, -26.3, -19.9], [R4.x0, R4.x1, R4.z0, R
     INTERIORS.splice(i, 1); }
   for (const arr of [blockers, pickables, floors]) for (let k = arr.length - 1; k >= 0; k--) if (gone.has(arr[k])) arr.splice(k, 1);
 }
+stampMark('works', HALL_STAMP[0], HALL_STAMP[1]); INTERIORS.find(I => I.name === 'law').objs.push(stampMarks.works.g);   // 작품관 조개 도장: 룸4와 함께 사라져 한 공간 작품관에 다시 둔다(2026-11-26). 방 안에서만 보이게 작품관 물건으로
 /* ── 문턱⑤: 룸4 → 중정 ── */
 // 한 번 꺾인 짧은 전실. 남쪽으로 가다 동쪽으로 꺾으면, 어둠 끝에 한낮을 등진 간유리 미닫이 두 짝만 빛난다(광원은 그것뿐).
 // 문이 열리면 처마 그늘 아래로 나서고, 눈이 밝음에 적응하듯 밝기가 1~1.5초에 걸쳐 돌아온다(섬광 없음). 문을 나서면 은은한 바람 소리.
@@ -3058,7 +3077,8 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
   //   ang: 가리키는 쪽(0 = -z 북쪽, π/2 = -x 서쪽 … 화면 yaw와 같은 셈), y: 바닥 높이(모르면 null → 바닥을 찾아 얹는다)
   const arrowT = canvasTex(256, 256, (g, W, H) => { g.clearRect(0, 0, W, H); g.strokeStyle = '#fff'; g.lineCap = 'round'; g.lineJoin = 'round'; g.lineWidth = W * .1;
     for (const [y0, a] of [[H * .62, .55], [H * .36, 1]]) { g.globalAlpha = a; g.beginPath(); g.moveTo(W * .28, y0 + H * .14); g.lineTo(W * .5, y0 - H * .08); g.lineTo(W * .72, y0 + H * .14); g.stroke(); } });
-  const floorArrow = (x, z, ang, y = null, col = 0xffffff, op = .42) => {   // col: 바닥이 밝으면 짙은 색(흰 화살표는 모래·타일에서 안 보였다)
+  const floorArrow = (x, z, ang, y = null, col = 0xffffff, op = .42) => { return;   // 바닥 화살표는 모두 뺐다(작가님 2026-11-26)
+   // col: 바닥이 밝으면 짙은 색(흰 화살표는 모래·타일에서 안 보였다)
     const m = new THREE.Mesh(new THREE.PlaneGeometry(.62, .62), new THREE.MeshBasicMaterial({ map: arrowT, color: col, transparent: true, opacity: op, depthWrite: false, toneMapped: false }));
     m.rotation.order = 'YXZ'; m.rotation.set(-Math.PI / 2, ang, 0); m.position.set(x, (y ?? 0) + .02, z); m.renderOrder = 4; scene.add(m);
     if (y == null) { let tries = 0; const rc = new THREE.Raycaster(); animators.push(() => { if (tries > 1e8 || !m.visible || (tries++ & 7)) return;
@@ -6078,7 +6098,8 @@ mapEl.addEventListener('click', e => { if (e.target === mapEl) closeMap(); });
 navBtns.forEach(b => b.addEventListener('click', () => { closeMap(); closeCard(); const p = PLACES[b.dataset.go]; jump(p.pos, p.yaw); }));
 const ZONE_NAME = { lobby: '로비', artist: '작가소개', works: '작품관', court: '중정', ip: 'IP관', obong: '일월오봉단관', lounge: '라운지', outside: '바깥 마당' };
 const SUBNAV = {
-  works: [['입구', PLACES.works.pos, 0]],   // 구역 이름은 작가님이 정하면 넣는다
+  // 작품관 섹션 단추(입구)는 뺐다(작가님 2026-11-26). 안내도 위 작품관 칸으로 간다
+
   ip: [['물빛 통로', PLACES.ip.pos, -Math.PI / 2], ['해변', [17, -4.5], -1.3], ['그늘길', [23, 5.8], Math.PI], ['숲길', [23.5, 14.5], Math.PI], ['작업실 문 앞', [51.6, 25.2], -Math.PI / 2], ['스포츠센터 가는 길', [53.87, 37.4], Math.PI], ['수영장', [40.5, 48.0], Math.PI / 2]],   // 산책로·수영장은 2026-11-11 전수 점검에서 더함
 };
 const SEC_IN = {};   // 섹션마다 그 자리의 안쪽 공간 이름(지금 섹션 찾기)
