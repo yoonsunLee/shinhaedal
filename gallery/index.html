@@ -15,7 +15,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta name="gallery-variant" content="site">
-<meta name="gallery-build" content="c2635bc59330">
+<meta name="gallery-build" content="4531abc22e62">
 <link rel="stylesheet" href="../assets/fonts.css">
 <style>
 /* 레이아웃: 화면 전체가 3D 전시장, 그 위에 옻칠처럼 검은 패널이 가장자리에만 얹힌다. 한 가지 어두운 화면으로 고정. */
@@ -836,9 +836,7 @@ ground(ROOMS.lounge.x0, ROOMS.lounge.x1, ROOMS.lounge.z0, ROOMS.lounge.z1, .02, 
   // 크기와 줄을 고르게(작가님: 삐뚤빼뚤 놓지 말 것)
   for (let z = 6.2; z > -6.6; z -= 1.15) stone(0, z, 1.2, .8);
   for (const x of [-6.9, -5.6, -4.3, -3.0, -1.7, 1.7, 3.0, 4.3, 5.6, 6.9]) stone(x, -4.5, .9, 1.0);
-  // 축선에 깔린 가는 빛줄: 한낮에는 아주 흐리게(차선처럼 보인다는 지적)
-  const glow = new THREE.MeshBasicMaterial({ color: 0xcfc6b2, toneMapped: false });
-  boxMM(-.025, .025, .03, .045, -5.5, 5.5, glow);
+  // 축선의 가는 빛줄은 지웠다(작가님 결정 2026-11-25, 자문 4-A: 늘 같은 밝기로 떠서 차선처럼 보임)
   window.COURT_STEPS = STEPS;
 }
 
@@ -865,7 +863,18 @@ function wallLine(axis, fixed, a0, a1, parts, doors = []) {
     if (!door) { if (axis === 'x') solid(s0, s1, fixed - WT / 2, fixed + WT / 2); else solid(fixed - WT / 2, fixed + WT / 2, s0, s1); }
   }
 }
-const F = M.facade, C = M.changho, O = M.earth, G = M.white, P = M.navy, A = M.plaster, L = M.plaster, U = LG_STANDIN[1];   // U: 해달 라운지 안쪽 면. 모델 받기 전 대신 서는 크림 민무늬(예전 흰 벽은 지움), 모델이 오면 숨긴다
+// 일월오봉단관 옆·뒷벽(작가님 결정 2026-11-25, 자문 2-A): 흙벽 → 먹색 옻칠. 그림 벽(z −27)에서 튄 빛이 멀수록 옅어지게 벽에 아주 엷게 그려 넣는다(빛 계산 없음)
+const OBW = new THREE.MeshStandardMaterial({ color: 0x1e1916, roughness: .34, metalness: 0, envMapIntensity: .5 });
+OBW.onBeforeCompile = (sh) => {
+  sh.vertexShader = `varying vec3 vObW;
+` + sh.vertexShader.replace('#include <project_vertex>', `#include <project_vertex>
+  vObW = (modelMatrix * vec4(transformed, 1.0)).xyz;`);
+  sh.fragmentShader = `varying vec3 vObW;
+` + sh.fragmentShader.replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
+  { float d = max(0.0, vObW.z + 27.0), hy = clamp(vObW.y / 9.0, 0.0, 1.0);
+    totalEmissiveRadiance += vec3(1.0, .84, .66) * (0.012 + 0.05 * exp(-d / 6.5)) * (0.55 + 0.45 * hy) + vec3(1.0, .8, .55) * 0.018 * smoothstep(0.9, 0.0, vObW.y); }`);
+};
+const F = M.facade, C = M.changho, O = OBW, G = M.white, P = M.navy, A = M.plaster, L = M.plaster, U = LG_STANDIN[1];   // U: 해달 라운지 안쪽 면. 모델 받기 전 대신 서는 크림 민무늬(예전 흰 벽은 지움), 모델이 오면 숨긴다
 // 오봉단관
 wallLine('x', -27, -10.4, 10.4, [[0, HO, F, O]]);
 wallLine('z', -10.4, -27, -20, [[0, HO, F, O]]);
@@ -889,7 +898,9 @@ wallLine('x', 9.4, 10.4, 21, [[0, HS, P, U], [HS, HW, P, F]], [[16.736, 18.104, 
 // 로비 북쪽은 아래가 중정으로 열리고, 툇마루 반자(3.4 m) 위로는 천장까지 통유리. 가장자리와 유리 살은 가는 놋쇠
 {
   const g0 = RING + .315 + .45, g1 = ROOMS.lobby.ceil;   // 처마 위 나무 띠 위에서 시작
-  const gl = new THREE.Mesh(new THREE.PlaneGeometry(12, g1 - g0), M.glass); gl.position.set(0, (g0 + g1) / 2, 9.4); scene.add(gl);
+  // 젖빛 유리(작가님 결정 2026-11-25, 자문 5-A): 중정에서 로비 안 한지 천장이 '불 켜진 상자'로 비치지 않게
+  const LOBBY_FROST = new THREE.MeshPhysicalMaterial({ color: 0xe9eeee, roughness: .6, metalness: 0, transparent: true, opacity: .76, depthWrite: false, side: THREE.DoubleSide });
+  const gl = new THREE.Mesh(new THREE.PlaneGeometry(12, g1 - g0), LOBBY_FROST); gl.position.set(0, (g0 + g1) / 2, 9.4); scene.add(gl);
   for (const x of [-4, -2, 0, 2, 4]) boxMM(x - .025, x + .025, g0, g1, 9.37, 9.43, M.brass);
   boxMM(-6, 6, g0 - .03, g0 + .03, 9.37, 9.43, M.brass);
 }
@@ -1207,11 +1218,12 @@ function exhibitUpcoming(wx, nx, zc, y = 2.3) {
   const CM = (hm, H, cm) => H * cm / 100 / hm;   // 패널 높이 hm(m) 안에서 cm 크기 글자의 px
   // 서쪽 벽: 작가 사진과 About
   const frame = new THREE.Group();
-  const photo = cutout('ip/artist-profile-1.webp', 2.4, { alpha: false }); frame.add(photo);
-  place(frame, wx, .7, 16.6, 1, 0);
-  const aboutInfo = { kind: 'About', title: '신해달 · 나전칠기 아티스트', body: [ABOUT.head + ' ' + ABOUT.lead, ...ABOUT.intro].join('\n\n'), img: 'ip/artist-profile-1.webp', links: [[SITE + '/about/', 'About 페이지']], focus: focusFrom(wx, 1.9, 14.6, 1, 0, 3.8) };
+  // 사진 폭 약 2 m(높이 2.95), 글판도 같은 비율(×1.23)로 키움(작가님 2026-11-25, 자문 3A). 글은 그대로
+  const photo = cutout('ip/artist-profile-1.webp', 2.95, { alpha: false }); frame.add(photo);
+  place(frame, wx, .6, 16.75, 1, 0);
+  const aboutInfo = { kind: 'About', title: '신해달 · 나전칠기 아티스트', body: [ABOUT.head + ' ' + ABOUT.lead, ...ABOUT.intro].join('\n\n'), img: 'ip/artist-profile-1.webp', links: [[SITE + '/about/', 'About 페이지']], focus: focusFrom(wx, 2.0, 14.6, 1, 0, 4.6) };
   // About 글은 원래 글 전부를 벽에: 이름, 한 줄 소개, 첫 문장, 세 단락
-  const IH = 3.0, intro = letters(3.6, IH, (g, W, H) => {
+  const IH = 3.69, intro = letters(4.43, IH, (g, W, H) => {
     const cm = c => CM(IH, H, c);
     font(g, cm(7), 700, FONT_M, ACCENT); g.fillText('ABOUT', 0, cm(8));
     font(g, cm(31), 400, FONT_K); g.fillText('신해달', 0, cm(44));
@@ -1221,7 +1233,7 @@ function exhibitUpcoming(wx, nx, zc, y = 2.3) {
     font(g, cm(8.5), 400, FONT_B, '#3b342d');
     for (const t of ABOUT.intro) y = textBlock(g, wrapText(g, t, W), 0, y + cm(10), cm(14.5));
   });
-  place(intro, wx, 1.95, 12.7, 1, 0);
+  place(intro, wx, 2.0, 13.1, 1, 0);
   pickable(frame, aboutInfo); pickable(intro, aboutInfo);
   // 북쪽 벽: Artist Note. 왼쪽 벽에는 ARTIST NOTE와 같은 크기의 제목 세 줄, 오른쪽 디스플레이에는 본문이
   // 한 단락씩 올라와 잠깐 머물고 다음으로 넘어간다(강조 줄은 조금 더 오래). 움직임 줄이기면 첫 단락에 멈춘다
@@ -1235,6 +1247,13 @@ function exhibitUpcoming(wx, nx, zc, y = 2.3) {
     font(g, cm(20), 400, FONT_K); const bw = Math.max(...headLines.map(l => g.measureText(l).width)), x0 = (W - bw) / 2;
     textBlock(g, headLines, x0, cm(58), cm(32));
     font(g, cm(7), 700, FONT_M, ACCENT); g.fillText('ARTIST NOTE', x0, cm(8));
+    font(g, cm(20), 400, FONT_K); const ink = x0 - Math.max(...headLines.map(l => g.measureText(l).actualBoundingBoxLeft));   // 제목 글자 왼쪽 끝에 맞춤
+    font(g, cm(7.5), 500, FONT_B, '#3b342d'); g.textBaseline = 'middle';
+    [['#c8231c', '컬렉팅 완료', 222], ['#2f5d9e', '작가 소장', 240]].forEach(([c, t, y]) => {   // 색은 작품 스티커와 같게
+      g.fillStyle = c; g.beginPath(); g.arc(ink + cm(4), cm(y), cm(4), 0, Math.PI * 2); g.fill();
+      g.fillStyle = '#3b342d'; g.fillText(t, ink + cm(11), cm(y));
+    });
+    g.textBaseline = 'alphabetic';
   });
   place(noteHead, (HEAD_L + HEAD_R) / 2, 2.2, nz, 0, 1);
   pickable(noteHead, noteInfo);
@@ -1406,18 +1425,34 @@ const caption = (w, light, right = false) => letters(CAP_W - .08, CAP_H, (g, W, 
   for (let i = rows.length - 1; i >= 0; i--) { const [l, size, weight, fam, color] = rows[i]; font(g, H * size, weight, fam, color); g.textAlign = right ? 'right' : 'left'; g.fillText(l, right ? W : 0, y); y -= H * size * 1.32; if (i === 2 || i === 1) y -= H * .01; }
 }, 520);
 const edgeMat = new THREE.MeshStandardMaterial({ color: 0x0f0c0b, roughness: .4 });
+// 빛 웅덩이 판(작가님 결정 2026-11-25, 자문 1-A): 가운데 따뜻한 흰빛, 가장자리로 부드럽게 사라짐(위쪽이 조금 더 밝게, 위에서 비추는 느낌)
+const POOL_T = canvasTex(256, 256, (g, w, h) => {
+  const gr = g.createRadialGradient(w / 2, h * .46, 0, w / 2, h * .5, w / 2);
+  gr.addColorStop(0, 'rgba(255,247,232,.62)'); gr.addColorStop(.45, 'rgba(255,245,228,.42)'); gr.addColorStop(.8, 'rgba(255,243,224,.1)'); gr.addColorStop(1, 'rgba(255,243,224,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, w, h);
+});
+const poolMat = (op) => new THREE.MeshBasicMaterial({ map: POOL_T, transparent: true, opacity: op, depthWrite: false, toneMapped: false, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 });
+// 방마다 세기: 1관 흰 벽 그대로, 2관 노랑 벽지는 진하게(벽지 색은 그대로 둔다), 4관 남색 벽감은 진짜 빛이 있어 옅게
+const POOL_M = { '룸1': poolMat(1), '룸2': poolMat(1.6), '룸4': poolMat(.35) };
+// 작가 소장(어드민 NFS) 작품: 파란 스티커(작가님 2026-11-26). 판매완료 빨간 스티커는 발행 자료 sold를 그대로 쓴다. NFS는 발행 자료에 칸이 없어 여기 적는다
+const NFS_IDS = ['HD-2026-001', 'HD-2026-008', 'HD-2026-010', 'HD-2026-015'];
 // 작품 한 점: (x, cy, z)에 n 쪽을 보게 걸고, 캡션은 d(보는 사람의 오른쪽) 쪽 아래. capAt: 캡션 자리를 따로 줄 때 [x, z]
 function putWork(w, ww, hh, x, cy, z, [nx, nz], [dx, dz], light, where, capAt) {
   const g = new THREE.Group();
   const body = new THREE.Mesh(new THREE.BoxGeometry(ww, hh, .045), edgeMat); body.position.z = .0225; g.add(body);
   const t = tex(workImg(w)); const face = new THREE.Mesh(new THREE.PlaneGeometry(ww, hh), new THREE.MeshBasicMaterial({ map: t, color: 0xeeeeee, toneMapped: false })); face.position.z = .046; g.add(face);
   place(g, x, cy, z, nx, nz);
+  // 빛 웅덩이(작가님 결정 2026-11-25, 자문 1-A): 진짜 SpotLight 대신 작품 뒤 벽에 부드러운 빛 번짐 판. 룸3은 진짜 빛이 있어 뺀다
+  const poolM = POOL_M[(where || '').slice(0, 2)];
+  if (poolM) { const pool = new THREE.Mesh(new THREE.PlaneGeometry(ww + 1.3, hh + 1.6), poolM); pool.renderOrder = -1; place(pool, x + nx * .002, cy + .12, z + nz * .002, nx, nz); }
   const CS = .72;   // 캡션 크기(작가님: 글씨를 더 작게, 작품 오른쪽 아래)
   // 캡션: 작품 오른쪽, 아랫줄이 작품 아랫면에 맞게(작가님 2026-11-15: 작품 우측 하단). 글은 캔버스 아래에서부터 쌓이므로 캔버스 아랫면 = 작품 아랫면
   const CAP_GAP = .06, cw = (CAP_W - .08) * CS, lb = caption(w, light, !!(capAt && capAt[3])), cc = ww / 2 + CAP_GAP + cw / 2, [lx, lz] = capAt || [x + dx * cc + nx * .01, z + dz * cc + nz * .01];
   lb.scale.setScalar(CS); place(lb, lx, capAt && capAt[2] != null ? capAt[2] : cy - hh / 2 + CAP_H * CS / 2, lz, nx, nz);   // capAt[2]: 캡션 아랫줄 높이를 따로 줄 때(벽감)
   // 판매완료 작품: 오른쪽 아래 모서리 바로 밑에 빨간 동그라미 스티커(작가님 2026-11-15). 판매 여부는 발행 자료 works-index.json 의 sold(판매완료만 true)
   if (w.sold) { const dot = new THREE.Mesh(new THREE.CircleGeometry(.022, 28), new THREE.MeshBasicMaterial({ color: 0xc8231c, toneMapped: false }));
+    dot.position.set(ww / 2 - .028, -hh / 2 - .036, .004); g.add(dot); }
+  else if (NFS_IDS.includes(w.id)) { const dot = new THREE.Mesh(new THREE.CircleGeometry(.022, 28), new THREE.MeshBasicMaterial({ color: 0x2f5d9e, toneMapped: false }));   // 작가 소장: 같은 자리 파란 점
     dot.position.set(ww / 2 - .028, -hh / 2 - .036, .004); g.add(dot); }
   const D = DETAIL[w.id] || {};
   const info = { kind: D.en || w.title_en || w.id, title: w.title, meta: D.medium || `${w.year} · ${w.size} cm`, body: (D.body || []).join('\n\n'), ex: D.ex, img: workImg(w), id: w.id,
@@ -1472,7 +1507,8 @@ const oakT = canvasTex(512, 512, (g, w, h) => {   // 밝은 참나무 마루(폭
   for (let i = 0; i < n; i++) { let y = -r() * h; while (y < h) { const L = h * (.35 + r() * .45), v = Math.round(214 + r() * 16); g.fillStyle = `rgb(${v},${v - 18},${v - 42})`; g.fillRect(i * s, y, s - 1.5, L - 1.5); g.fillStyle = 'rgba(150,120,85,.08)'; for (let k = 0; k < 5; k++) g.fillRect(i * s + r() * s, y, 1, L); y += L; } }
 });
 interior('law', [[C1.x0, C1.x1, C1.z0 - .2, C1.z1 + .3], [R1.x0, R1.x1, R1.z0, R1.z1]], [R1.x0 - .25, R1.x1 + .25, R1.z0 - .25, C1.z1 - .05, R1.h + .3], () => {
-  const W = M.white, T2 = [2.4, 2.4], floorM = std({ map: oakT, roughness: .45 });
+  const W = M.white.clone(), T2 = [2.4, 2.4], floorM = std({ map: oakT, roughness: .45 });
+  W.color.setScalar(.87);   // 벽을 13% 낮춰 빛 웅덩이가 살게(작가님 결정 2026-11-25, 자문 1-A)
   // 바닥과 천장
   ground(R1.x0, R1.x1, R1.z0, R1.z1, .04, M.stone, 2.4); ground(C1.x0, C1.x1, C1.z0, C1.z1 + .15, .04, M.stone, 2.4);   // 바닥은 작가소개 방과 같은 돌 타일(작가님)
   ceiling(R1.x0, R1.x1, R1.z0, R1.z1, R1.h, M.hanjiCeil, 1.8);
