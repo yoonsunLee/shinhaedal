@@ -4,8 +4,8 @@
   "hash": "f9b03af67b8e2c8b"
  },
  "about/": {
-  "date": "2026-11-24",
-  "hash": "66a0655a12d4e51a"
+  "date": "2026-11-26",
+  "hash": "04e7071bac1765de"
  },
  "contact/": {
   "date": "2026-10-24",
@@ -24,8 +24,8 @@
   "hash": "f2b8e8e35737482e"
  },
  "en/about/": {
-  "date": "2026-11-24",
-  "hash": "d492ac47c7bfc49d"
+  "date": "2026-11-26",
+  "hash": "ccea16ac319b6e40"
  },
  "en/contact/": {
   "date": "2026-10-24",
@@ -52,12 +52,12 @@
   "hash": "59e2a73c0e74e4c0"
  },
  "en/works/": {
-  "date": "2026-11-15",
-  "hash": "94d912300690c0aa"
+  "date": "2026-11-26",
+  "hash": "bd80142fe0955ac0"
  },
  "gallery/": {
-  "date": "2026-11-23",
-  "hash": "fbd617a9cfdc44d5"
+  "date": "2026-11-26",
+  "hash": "700433ada4f6a810"
  },
  "ip/": {
   "date": "2026-11-15",
@@ -72,12 +72,12 @@
   "hash": "c159c092ba720f0d"
  },
  "works/": {
-  "date": "2026-11-15",
-  "hash": "a5f8e39227ed6f73"
+  "date": "2026-11-26",
+  "hash": "5a3a32693fbce6eb"
  },
  "works/w/HD-2025-001/": {
-  "date": "2026-11-12",
-  "hash": "494bdc54ddad2a4e"
+  "date": "2026-11-26",
+  "hash": "fded4313120a8a65"
  },
  "works/w/HD-2025-002/": {
   "date": "2026-11-23",
@@ -134,5 +134,17 @@
  "works/w/HD-2026-012/": {
   "date": "2026-11-12",
   "hash": "394c4ce72ee0d4bf"
+ },
+ "works/w/HD-2026-013/": {
+  "date": "2026-11-26",
+  "hash": "0beba8e504c70d4b"
+ },
+ "works/w/HD-2026-014/": {
+  "date": "2026-11-26",
+  "hash": "089e52a090b40e17"
+ },
+ "works/w/HD-2026-015/": {
+  "date": "2026-11-26",
+  "hash": "51f0b28803173c8f"
  }
 }
