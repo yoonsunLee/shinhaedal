@@ -38,6 +38,38 @@
    "thumb": "assets/works/HD-2025-002/photo2/thumb.webp",
    "detail": "assets/works/HD-2025-002/photo2/detail.webp",
    "large": "assets/works/HD-2025-002/photo2/large.webp",
+   "caption": "",
+   "caption_en": "",
+   "alt": ""
+  },
+  {
+   "thumb": "assets/works/HD-2025-002/photo3/thumb.webp",
+   "detail": "assets/works/HD-2025-002/photo3/detail.webp",
+   "large": "assets/works/HD-2025-002/photo3/large.webp",
+   "caption": "",
+   "caption_en": "",
+   "alt": ""
+  },
+  {
+   "thumb": "assets/works/HD-2025-002/photo4/thumb.webp",
+   "detail": "assets/works/HD-2025-002/photo4/detail.webp",
+   "large": "assets/works/HD-2025-002/photo4/large.webp",
+   "caption": "",
+   "caption_en": "",
+   "alt": ""
+  },
+  {
+   "thumb": "assets/works/HD-2025-002/photo5/thumb.webp",
+   "detail": "assets/works/HD-2025-002/photo5/detail.webp",
+   "large": "assets/works/HD-2025-002/photo5/large.webp",
+   "caption": "",
+   "caption_en": "",
+   "alt": ""
+  },
+  {
+   "thumb": "assets/works/HD-2025-002/photo6/thumb.webp",
+   "detail": "assets/works/HD-2025-002/photo6/detail.webp",
+   "large": "assets/works/HD-2025-002/photo6/large.webp",
    "caption": "실내에 걸린 모습",
    "caption_en": "Installed in a room",
    "alt": "실내에 걸린 모습"

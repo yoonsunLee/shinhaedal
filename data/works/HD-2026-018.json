@@ -16,5 +16,15 @@
   "detail": "assets/works/HD-2026-018/detail.webp",
   "large": "assets/works/HD-2026-018/large.webp"
  },
- "audio": null
+ "audio": null,
+ "photos": [
+  {
+   "thumb": "assets/works/HD-2026-018/photo0/thumb.webp",
+   "detail": "assets/works/HD-2026-018/photo0/detail.webp",
+   "large": "assets/works/HD-2026-018/photo0/large.webp",
+   "caption": "",
+   "caption_en": "",
+   "alt": ""
+  }
+ ]
 }
