@@ -335,7 +335,7 @@
   "thumb": "assets/works/HD-2026-018/thumb.webp",
   "has_audio": false,
   "series_key": "territory",
-  "series_order": null,
+  "series_order": 2,
   "tw": 560,
   "th": 560,
   "thumb_set": [
@@ -584,7 +584,7 @@
   "thumb": "assets/works/HD-2026-009/thumb.webp",
   "has_audio": false,
   "series_key": "territory",
-  "series_order": null,
+  "series_order": 3,
   "tw": 560,
   "th": 558,
   "thumb_set": [
@@ -723,7 +723,7 @@
   "thumb": "assets/works/HD-2026-004/thumb.webp",
   "has_audio": false,
   "series_key": "territory",
-  "series_order": null,
+  "series_order": 1,
   "tw": 560,
   "th": 544,
   "thumb_set": [
