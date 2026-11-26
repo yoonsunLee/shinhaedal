@@ -15,7 +15,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta name="gallery-variant" content="site">
-<meta name="gallery-build" content="72eef566a810">
+<meta name="gallery-build" content="e4366110016e">
 <link rel="stylesheet" href="../assets/fonts.css">
 <style>
 /* 레이아웃: 화면 전체가 3D 전시장, 그 위에 옻칠처럼 검은 패널이 가장자리에만 얹힌다. 한 가지 어두운 화면으로 고정. */
@@ -1449,7 +1449,7 @@ function putWork(w, ww, hh, x, cy, z, [nx, nz], [dx, dz], light, where, capAt) {
   place(g, x, cy, z, nx, nz);
   // 빛 웅덩이(작가님 결정 2026-11-25, 자문 1-A): 진짜 SpotLight 대신 작품 뒤 벽에 부드러운 빛 번짐 판. 룸3은 진짜 빛이 있어 뺀다
   const poolM = POOL_M[(where || '').slice(0, 2)];
-  if (poolM) { const pool = new THREE.Mesh(new THREE.PlaneGeometry(hallW ? ww * 1.8 + .3 : ww + 1.3, hallW ? hh * 1.8 + .4 : hh + 1.6), poolM); pool.renderOrder = -1; place(pool, x + nx * .002, cy + (hallW ? .04 : .12), z + nz * .002, nx, nz); }
+  if (poolM) { const pool = new THREE.Mesh(new THREE.PlaneGeometry(hallW ? ww * 1.3 + .3 : ww + 1.3, hallW ? hh * 1.3 + .35 : hh + 1.6), poolM); pool.renderOrder = -1; place(pool, x + nx * .002, cy + (hallW ? .04 : .12), z + nz * .002, nx, nz); }
   const CS = hallW ? HALL_CS : .72;   // 작품관 한 공간: 실제 크기에 맞춘 작은 캡션   // 캡션 크기(작가님: 글씨를 더 작게, 작품 오른쪽 아래)
   // 캡션: 작품 오른쪽, 아랫줄이 작품 아랫면에 맞게(작가님 2026-11-15: 작품 우측 하단). 글은 캔버스 아래에서부터 쌓이므로 캔버스 아랫면 = 작품 아랫면
   const CAP_GAP = .06, cw = (CAP_W - .08) * CS, lb = caption(w, light, !!(capAt && capAt[3])), cc = ww / 2 + CAP_GAP + cw / 2, [lx, lz] = capAt || [x + dx * cc + nx * .01, z + dz * cc + nz * .01];
@@ -1540,7 +1540,7 @@ const CORE = [R1.x0 + 5.1, R1.x1, .3, 1.5];   // 가운데 벽: 서쪽 다리 �
 // 구역 정하기: 어드민 zone 칸(앞으로) → 제목 → 연작. 구역 안 차례는 아래 낱말 차례(법학박사 자문 순서, 헌법은 조문 차례)
 const ZONES = ['z1', 'z2', 'z3', 'z4', 'z5', 'z6'];
 const ZONE_WORDS = {
-  z1: ['저작인접권자', '권리누적', '블루북', '권리소진'],
+  z1: ['저작인접권자', '권리누적', '권리소진', '블루북'],   // 권리누적은 첫 작품 바로 옆(전문가 자문 4-A, 작가님 2026-11-26)
   z4: ['내용증명', 'dear', 'from', '擇', '緣', '그의사에의한다'],
   z5: ['바람은점유', '대기권', '무주의바다', '우주조약'],   // 우주조약 II는 같은 자리, 번호 차례로 뒤
   z6: ['ㄷㅎㅁㄱㅎㅂ', '주권', '행복추구권', '소급효', '초상권', '퍼블리시티권'],   // 전문·제1조 → 제1조 2항 → 제10조 → 제13조 → 얼굴의 권리
@@ -1592,12 +1592,16 @@ function pairUp(list) {
   return out;
 }
 const hallGap = (a, b) => { const s = Math.max(a[0], a[1], b[0], b[1]) / SCALE; return s <= .3 ? .6 : s <= .66 ? .9 : 1.2; };   // 실제 크기로 나눠 견준다(배율이 바뀌어도 같은 작품은 같은 간격)   // 크기별 작품 사이(캡션 뒤에서 다음 작품까지)
+// 묶음(전문가 자문 3-A, 작가님 2026-11-26): 같은 연작은 40 cm로 붙이고 묶음 앞뒤는 1.2 m 띄운다. 효력발생 하트는 N차적 묶음, 초상권·퍼블리시티권은 30 cm 짝
+const grpKey = (it) => { const t = normT(it.w.title); if (t.includes('효력발생')) return 'n-th-derivative'; if (t.includes('초상권') || t.includes('퍼블리시티권')) return 'face'; return it.w.series_key || ''; };
+const hallGapIt = (a, b) => { const ka = grpKey(a), kb = grpKey(b); if (ka && ka === kb) return ka === 'face' ? .3 : .4; const g = hallGap(a.sz, b.sz); return ka || kb ? Math.max(g, 1.2) : g; };
 function hallHang(faceList, items) {
   const fill = faceList.map(f => ({ f, its: [], used: 0 }));
   let fi = 0; const left = [];
   for (const it of items) {
+    if (it.brk && fi < fill.length && fill[fi].its.length) fi++;   // 구역이 바뀌면 다음 벽에서 시작(POV는 서쪽 벽 한 벽에, 전문가 자문 2-A)
     while (fi < fill.length) {
-      const F = fill[fi], last = F.its[F.its.length - 1], need = (last ? hallGap(last.sz, it.sz) : 0) + it.sz[0] + HALL_CAPW;
+      const F = fill[fi], last = F.its[F.its.length - 1], need = (last ? hallGapIt(last, it) : 0) + it.sz[0] + HALL_CAPW;
       if (F.used + need <= F.f.len - .3 || (!F.its.length && it.sz[0] + HALL_CAPW <= F.f.len)) { F.its.push(it); F.used += need; break; }
       fi++;
     }
@@ -1608,7 +1612,7 @@ function hallHang(faceList, items) {
     const seq = F.f.rev ? [...F.its].reverse() : F.its;
     let a = Math.max(.15, F.f.end ? F.f.len - F.used : (F.f.len - F.used) / 2);
     seq.forEach((it, i) => {
-      if (i) a += hallGap(seq[i - 1].sz, it.sz);
+      if (i) a += hallGapIt(seq[i - 1], it);
       const at = (c) => [F.f.o[0] + F.f.d[0] * c, F.f.o[1] + F.f.d[1] * c], [dx, dz] = F.f.d, [nx, nz] = F.f.n;
       if (it.grp) {   // 짝: [왼쪽 캡션][작품 A] 12 cm [작품 B][오른쪽 캡션]
         const [A, B] = it.grp, cc = A.sz[0] / 2 + .06 + (CAP_W - .08) * HALL_CS / 2;
@@ -1656,7 +1660,12 @@ interior('law', [[C1.x0, C1.x1, C1.z0 - .2, C1.z1 + .3], [R1.x0, R1.x1, R1.z0, R
   const byZone = {}; const loose = [];
   for (const it of all) { if (it === first) continue; const z = hallZoneOf(it.w); if (z) (byZone[z] = byZone[z] || []).push(it); else loose.push(it); }
   const seq = first ? [first] : [];
-  for (const z of ZONES) seq.push(...pairUp((byZone[z] || []).sort((a, b) => zoneRank(a.w, z) - zoneRank(b.w, z) || a.w.id.localeCompare(b.w.id))));
+  for (const z of ZONES) {
+    const part = pairUp((byZone[z] || []).sort((a, b) => zoneRank(a.w, z) - zoneRank(b.w, z) || a.w.id.localeCompare(b.w.id)));
+    if (part.length && ['z2', 'z3', 'z4'].includes(z)) part[0].brk = true;   // ② 남쪽 벽, ③ POV 서쪽 벽, ④ 북쪽 벽부터
+    const face = part.find(it => grpKey(it) === 'face'); if (face) face.brk = true;   // 초상권·퍼블리시티권: 출구 옆 동쪽 벽(전문가 자문 5-A)
+    seq.push(...part);
+  }
   const over = hallHang(ROUTE, seq);
   // 넘친 작품·구역 모를 작품 → 여유 벽 → 덧 섬 벽. 그래도 남으면 경고만(빠지지 않게 덧 섬을 더 세울 자리)
   let rest = hallHang(SPARE, [...over, ...loose]);
