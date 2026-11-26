@@ -15,7 +15,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta name="gallery-variant" content="site">
-<meta name="gallery-build" content="e4366110016e">
+<meta name="gallery-build" content="a2d2928d5d65">
 <link rel="stylesheet" href="../assets/fonts.css">
 <style>
 /* 레이아웃: 화면 전체가 3D 전시장, 그 위에 옻칠처럼 검은 패널이 가장자리에만 얹힌다. 한 가지 어두운 화면으로 고정. */
@@ -1174,7 +1174,7 @@ function exhibitUpcoming(wx, nx, zc, y = 2.3) {
     font(g, H * .04, 700, FONT_M, ACCENT); g.fillText('VISITOR GUIDE', 0, H * .05);
     font(g, H * .1, 400, FONT_K); g.fillText('관람 안내', 0, H * .16);
     // 평면: 가는 선만
-    const s = H * .78 / 46.4, ox = W * .6, oz = H * .2 + 27 * s;
+    const s = H * .78 / 46.4, ox = W * .66, oz = H * .2 + 27 * s;
     const R = (x0, z0, x1, z1, n, label, bold) => {
       g.strokeStyle = INK; g.lineWidth = bold ? 7 : 4; g.strokeRect(ox + x0 * s, oz + z0 * s, (x1 - x0) * s, (z1 - z0) * s);
       g.textAlign = 'center'; const cx = ox + (x0 + x1) / 2 * s, cz = oz + (z0 + z1) / 2 * s;
@@ -1184,18 +1184,18 @@ function exhibitUpcoming(wx, nx, zc, y = 2.3) {
     R(-10.4, -27, 10.4, -9.4, '', '일월오봉단관'); R(-21, -20, -10.4, 9.4, '', '작품관'); R(10.4, -20, 21, 9.4, '', 'IP관');
     g.setLineDash([10, 8]); R(-8, -7, 8, 7, '', '중정'); g.setLineDash([]);
     R(-21, 9.4, -6, 19.4, '', '작가소개'); R(-6, 9.4, 6, 19.4, '', '로비', true); R(6, 9.4, 21, 19.4, '', '라운지');
-    g.fillStyle = '#b5432f'; g.beginPath(); g.arc(ox, oz + 16.6 * s, H * .016, 0, 7); g.fill();
-    font(g, H * .034, 700, FONT_B, '#b5432f'); g.fillText('현 위치', ox + H * .026, oz + 16.6 * s + H * .012);
-    // 왼쪽: 순서와 도장
+    // 관람 순서(전문가 자문 1-A, 작가님 2026-11-26): 한 칸 번호 목록 + 지도 방마다 같은 번호(점선은 뺌, 작가님)
+    const ORDER = [['로비', 0, 14.4], ['작가소개', -13.5, 14.4], ['작품관', -15.7, -5.3], ['중정', 0, 0], ['일월오봉단관', 0, -18.2], ['IP관', 15.7, -5.3], ['라운지', 13.5, 14.4]];   // 방 이름 가운데(번호는 이름 바로 위)
+    const numDot = (n, x, y, r) => { g.fillStyle = ACCENT; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill(); font(g, r * 1.25, 700, FONT_M, '#fff'); g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(String(n), x, y + r * .06); g.textAlign = 'left'; g.textBaseline = 'alphabetic'; };
+    ORDER.forEach(([, x, z], i) => numDot(i + 1, ox + x * s, oz + z * s - H * .05, H * .022));
+    g.fillStyle = '#b5432f'; g.beginPath(); g.arc(ox - 2.2 * s, oz + 18.1 * s, H * .012, 0, 7); g.fill();
+    font(g, H * .03, 700, FONT_B, '#b5432f'); g.fillText('현 위치', ox - 2.2 * s + H * .02, oz + 18.1 * s + H * .01);
+    // 왼쪽: 순서(한 칸, 줄간격 넉넉히)와 도장(줄간격 1.7배)
     const tx = W * .02;
-    // 글씨는 1.5배·진하게(작가님 2026-11-14, 1안: 5 m에서 읽히게). 관람 순서는 두 줄로 나눠 세움
-    font(g, H * .054, 700, FONT_B); g.fillText('관람 순서', tx, H * .3);
-    font(g, H * .048, 500, FONT_B, INK);
-    const c1 = ['로비', '→ 작가소개', '→ 작품관', '→ 중정'], c2 = ['→ 일월오봉단관', '→ IP관', '→ 라운지'];
-    const cw = Math.max(...c1.map(t => g.measureText(t).width)) + H * .06;
-    textBlock(g, c1, tx, H * .38, H * .068); textBlock(g, c2, tx + cw, H * .38, H * .068);
-    font(g, H * .054, 700, FONT_B); g.fillText('조개 도장', tx, H * .7);
-    font(g, H * .045, 500, FONT_B, INK); textBlock(g, wrapText(g, '숨어있는 조개 표시를 찾아보세요. 라운지에서 멤버십 카드를 받을 수 있습니다.', ox - 21 * s - tx - H * .04), tx, H * .78, H * .064);
+    font(g, H * .054, 700, FONT_B); g.fillText('관람 순서', tx, H * .27);
+    ORDER.forEach(([name], i) => { const y = H * (.345 + i * .068); numDot(i + 1, tx + H * .02, y - H * .015, H * .019); font(g, H * .045, 500, FONT_B, INK); g.fillText(name, tx + H * .055, y); });
+    font(g, H * .054, 700, FONT_B); g.fillText('조개 도장', tx, H * .835);
+    font(g, H * .038, 500, FONT_B, INK); textBlock(g, wrapText(g, '숨어있는 조개 표시를 찾아보세요. 라운지에서 멤버십 카드를 받을 수 있습니다.', ox - 21 * s - tx - H * .04), tx, H * .9, H * .074);
   });
   place(guide, ex, 2.25, 15.9, -1, 0);
   doorSign('라운지', '',   /* 이름은 '라운지'로만(작가님 2026-11-12) */ ex, 3.45, 11.4, -1, 0, 2.2);
@@ -1264,46 +1264,34 @@ function exhibitUpcoming(wx, nx, zc, y = 2.3) {
   pickable(noteHead, noteInfo);
   {
     const DW = 5.6, DH = 3.3, PPM = 300, cx = -9.3, cy = 2.2;   // 제목 바로 옆에 크게
-    boxMM(cx - DW / 2 - .05, cx + DW / 2 + .05, cy - DH / 2 - .05, cy + DH / 2 + .05, nz - .02, nz + .06, M.steel);
+    // 흑칠 판 + 자개 테(전문가 자문 2-A, 작가님 2026-11-26): 화면 빛 같은 검정·강철 테 대신 옻칠 같은 깊은 검정, 둘레는 은은한 자개 띠
+    boxMM(cx - DW / 2 - .03, cx + DW / 2 + .03, cy - DH / 2 - .03, cy + DH / 2 + .03, nz - .02, nz + .06, M.nacre);
     const c = document.createElement('canvas'); c.width = DW * PPM; c.height = DH * PPM;
     const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = maxAniso;
     const scr = new THREE.Mesh(new THREE.PlaneGeometry(DW, DH), new THREE.MeshBasicMaterial({ map: t, toneMapped: false }));
     place(scr, cx, cy, nz + .07, 0, 1); pickable(scr, noteInfo);
-    const W = c.width, H = c.height, g = c.getContext('2d'), px = cm => cm / 100 * PPM, pad = px(30), lh = px(24);
-    // 단락을 위에서부터 이어 붙인 긴 두루마리. 각 단락의 시작 높이를 기억해 그 자리로 올려 멈춘다
-    let blocks = [], total = 0;
-    const layout = () => {
-      blocks = []; let y = 0;
-      for (const raw of ABOUT.note) {
-        const key = raw[0] === '!', start = raw[0] === '>', txt = raw.replace(/^[>!]/, '');
-        g.font = `${key ? 700 : 400} ${px(15)}px ${FONT_B}`;
-        if (start && blocks.length) y += px(18);
-        const lines = wrapText(g, txt, W - pad * 2);
-        blocks.push({ y, lines, key, hold: 2.6 + txt.length * .055 + (key ? 2 : 0) });
-        y += lines.length * lh + px(14);
-      }
-      total = y;
+    const W = c.width, H = c.height, g = c.getContext('2d'), px = cm => cm / 100 * PPM, padX = px(60), FS = px(19), lh = FS * 1.7, GOLD = '#c9a86a';
+    // 한 번에 한 단락만 판 가운데에. 올려 보내지 않고 1.2초에 걸쳐 서서히 바꾼다. 아래 점이 몇 번째 단락인지 보여 준다
+    let pages = [];
+    const layout = () => { pages = ABOUT.note.map(raw => { const key = raw[0] === '!', txt = raw.replace(/^[>!]/, ''); g.font = `${key ? 700 : 400} ${FS}px ${FONT_B}`; return { key, lines: wrapText(g, txt, W - padX * 2), hold: Math.max(7, 2.6 + txt.length * .06) + (key ? 2 : 0) }; }); };
+    const drawPage = (p, a) => {
+      if (!p || a <= 0) return; g.globalAlpha = a; g.font = `${p.key ? 700 : 400} ${FS}px ${FONT_B}`; g.fillStyle = p.key ? GOLD : '#ece4d6';
+      const y0 = (H - px(30)) / 2 - (p.lines.length - 1) * lh / 2 + FS * .35; p.lines.forEach((l, i) => g.fillText(l, padX, y0 + i * lh)); g.globalAlpha = 1;
     };
-    const paint = (off) => {
-      g.fillStyle = '#0b0b0c'; g.fillRect(0, 0, W, H);
-      g.textBaseline = 'alphabetic';
-      for (const b of blocks) b.lines.forEach((l, i) => {
-        const y = pad + px(15) + b.y + i * lh - off; if (y < -lh || y > H + lh) return;
-        g.font = `${b.key ? 700 : 400} ${px(15)}px ${FONT_B}`; g.fillStyle = b.key ? '#c9a86a' : '#efe9df'; g.fillText(l, pad, y);
-      });
-      // 위아래 가장자리는 어둠 속으로 흐리게
-      for (const [y0, y1] of [[0, pad * 1.3], [H, H - pad * 1.6]]) { const gr = g.createLinearGradient(0, y0, 0, y1); gr.addColorStop(0, 'rgba(11,11,12,1)'); gr.addColorStop(1, 'rgba(11,11,12,0)'); g.fillStyle = gr; g.fillRect(0, Math.min(y0, y1), W, Math.abs(y1 - y0)); }
+    const paint = (i, j = -1, e = 0) => {
+      g.fillStyle = '#16110e'; g.fillRect(0, 0, W, H); g.textBaseline = 'alphabetic';
+      drawPage(pages[i], j >= 0 ? 1 - e : 1); if (j >= 0) drawPage(pages[j], e);
+      const n = pages.length, r = px(1.6), gap = px(6), x0 = W / 2 - (n - 1) * gap / 2, cur = j >= 0 && e > .5 ? j : i;
+      for (let q = 0; q < n; q++) { g.beginPath(); g.arc(x0 + q * gap, H - px(24), r, 0, 7); if (q === cur) { g.fillStyle = GOLD; g.fill(); } else { g.strokeStyle = 'rgba(201,168,106,.6)'; g.lineWidth = px(.35); g.stroke(); } }
       t.needsUpdate = true;
     };
-    layout(); paint(0);
-    document.fonts.addEventListener('loadingdone', () => { layout(); paint(blocks[idx] ? blocks[idx].y : 0); });
-    let idx = 0, from = 0, to = 0, k = 1, wait = blocks[0].hold;
-    if (!reduceMotion) animators.push((time, dt) => {
-      if (k < 1) { k = Math.min(1, k + dt / 1.4); const e = k < .5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2; paint(from + (to - from) * e); return; }
+    let idx = 0, nxt = -1, k = 0, wait = 0;
+    layout(); paint(0); wait = pages[0].hold;
+    document.fonts.addEventListener('loadingdone', () => { layout(); paint(idx); });
+    if (!reduceMotion) animators.push((time, dt) => {   // 움직임 줄이기면 첫 단락에 멈춘다
+      if (nxt >= 0) { k = Math.min(1, k + dt / 1.2); paint(idx, nxt, k); if (k >= 1) { idx = nxt; nxt = -1; wait = pages[idx].hold; } return; }
       if ((wait -= dt) > 0) return;
-      const next = (idx + 1) % blocks.length;
-      from = blocks[idx].y; to = next === 0 ? 0 : blocks[next].y; idx = next; k = next === 0 ? .999 : 0; wait = blocks[idx].hold + (next === 0 ? 1.5 : 0);
-      if (next === 0) paint(0);   // 끝까지 읽으면 처음으로 돌아간다
+      nxt = (idx + 1) % pages.length; k = 0;
     });
   }
   doorSign('작품관', 'NEXT · WORKS', -17.25, 2.95, nz, 0, 1, 2.6);   // 문틀(2.6 m) 바로 위로 내림(작가님)
