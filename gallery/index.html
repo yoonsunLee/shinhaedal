@@ -15,7 +15,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta name="gallery-variant" content="site">
-<meta name="gallery-build" content="a2d2928d5d65">
+<meta name="gallery-build" content="38056e73ffb2">
 <link rel="stylesheet" href="../assets/fonts.css">
 <style>
 /* 레이아웃: 화면 전체가 3D 전시장, 그 위에 옻칠처럼 검은 패널이 가장자리에만 얹힌다. 한 가지 어두운 화면으로 고정. */
@@ -1193,9 +1193,9 @@ function exhibitUpcoming(wx, nx, zc, y = 2.3) {
     // 왼쪽: 순서(한 칸, 줄간격 넉넉히)와 도장(줄간격 1.7배)
     const tx = W * .02;
     font(g, H * .054, 700, FONT_B); g.fillText('관람 순서', tx, H * .27);
-    ORDER.forEach(([name], i) => { const y = H * (.345 + i * .068); numDot(i + 1, tx + H * .02, y - H * .015, H * .019); font(g, H * .045, 500, FONT_B, INK); g.fillText(name, tx + H * .055, y); });
-    font(g, H * .054, 700, FONT_B); g.fillText('조개 도장', tx, H * .835);
-    font(g, H * .038, 500, FONT_B, INK); textBlock(g, wrapText(g, '숨어있는 조개 표시를 찾아보세요. 라운지에서 멤버십 카드를 받을 수 있습니다.', ox - 21 * s - tx - H * .04), tx, H * .9, H * .074);
+    ORDER.forEach(([name], i) => { const y = H * (.35 + Math.floor(i / 2) * .076), x = tx + (i % 2) * H * .37; numDot(i + 1, x + H * .02, y - H * .015, H * .019); font(g, H * .045, 500, FONT_B, INK); g.fillText(name, x + H * .055, y); });   // 두 칸: 1 2 / 3 4 / 5 6 / 7(작가님 2026-11-26)
+    font(g, H * .054, 700, FONT_B); g.fillText('조개 도장', tx, H * .71);   // 7번과 넉넉히 띄움(작가님)
+    font(g, H * .038, 500, FONT_B, INK); textBlock(g, wrapText(g, '숨어있는 조개 표시를 찾아보세요. 라운지에서 멤버십 카드를 받을 수 있습니다.', ox - 21 * s - tx - H * .04), tx, H * .785, H * .074);
   });
   place(guide, ex, 2.25, 15.9, -1, 0);
   doorSign('라운지', '',   /* 이름은 '라운지'로만(작가님 2026-11-12) */ ex, 3.45, 11.4, -1, 0, 2.2);
