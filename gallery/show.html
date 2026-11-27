@@ -18,7 +18,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta name="gallery-variant" content="site">
-<meta name="gallery-build" content="408a2004c5b3">
+<meta name="gallery-build" content="40081bb5bc40">
 <link rel="stylesheet" href="../assets/fonts.css">
 <style>
 /* 레이아웃: 화면 전체가 3D 전시장, 그 위에 옻칠처럼 검은 패널이 가장자리에만 얹힌다. 한 가지 어두운 화면으로 고정. */
@@ -1606,8 +1606,14 @@ const WALL3 = VW('벽 3', [V1.x1 - .01, V1.z0], [-1, 0], V1_W3);
 //   입구 벽 2점 · 벽 1에 3점(작가님 2026-11-27 A, 1점 · 3점 샘플은 지움)
 const V1_SPLIT = 2;
 const V1_W1_ALL = ['HD-2026-001', 'HD-2026-016', 'HD-2026-015', 'HD-2026-008', 'HD-2026-017'];
-const V1_BIO_X = V1_IN[0] - 1.1 - .55 - .74 - .63 - .74 - .1485;   // 작가소개 판 가운데(아래 판 자리와 같은 식)
-const V1_SW0 = V1_BIO_X - .2 - .74 - .25;                          // 입구 벽 작품 줄의 동쪽 끝(작가소개 판에서 한 칸 띄움)
+// 서문 · 작가소개 판 크기(작가님 2026-11-27 '온라인 전시니까 더 크게', B 2배 고름. 1.5배 샘플은 지움)
+const PK = 2;
+const P_IW = .63 * PK, P_BW = .297 * PK, P_DL = V1_IN[0] - 1.1 - .55;   // 판 너비(서문 A2 · 작가소개 A4, 1.5배 바탕에 PK배), 책상 왼쪽 끝
+const P_IX = P_DL - .74 - P_IW / 2, P_BX = P_DL - .74 - P_IW - .74 - P_BW / 2;   // 판 가운데: 책상 → 서문 → 작가소개(사이 0.74 m)
+const P_YK = (PK - 1) * .15;   // 큰 판은 가운데를 조금 올린다
+const HALL1_INTRO = [P_IX, V1.z1 - .2 - (1.9 + (PK - 1) * .4)];   // 메뉴 '작품관'·홈페이지 #works(작가님 2026-11-27): 전시 서문 판 정면 앞, 남쪽(서문)을 본다
+const V1_BIO_X = P_BX;   // 작가소개 판 가운데
+const V1_SW0 = V1_BIO_X - (P_BW / 2 - .1485) - .2 - .74 - .25;   // 입구 벽 작품 줄의 동쪽 끝(작가소개 판에서 한 칸 띄움)
 const WALL0 = VW('입구 벽', [V1_SW0, V1.z1 - .2 - .006], [0, -1], V1_SW0 - V1.x0);
 const V1_SPLIT_HANG = (() => { const a = V1_W1_ALL.slice(0, V1_SPLIT), b = V1_W1_ALL.slice(V1_SPLIT);
   return [[WALL0, a.map((id, i) => [id, (i + .5) / a.length * .78])], [WALL1, b.map((id, i) => [id, (i + 1) / (b.length + 1)])]]; })();
@@ -1650,10 +1656,10 @@ interior('law', [[V1.x0, V1.x1, V1.z0, V1.z1], [V1_IN[0], V1_IN[1], V1.z1 - .2, 
   // 자리(작가님 2026-11-27): 벽 1이 좁아 입구 쪽 벽(남쪽), 방명록 책상 옆으로 옮김. 문 쪽부터 책상 → 서문 → 작가소개 → 모서리 → 벽 1
   const SW = V1.z1 - .2 - .006;   // 입구 쪽 벽 방 쪽 면
   const PG = .74, DL = V1_IN[0] - 1.1 - .55;   // 책상 → 서문 → 작가소개 사이 틈(방을 서쪽으로 옮긴 뒤에도 전과 같게, 책상 왼쪽 끝 DL에서 잰다)
-  { const x = DL - PG - .315, z = SW, PH = .594 * SCALE, yc = HANG_CY + .12;
+  { const x = P_IX, z = SW, PH = .594 * SCALE * PK, yc = HANG_CY + .12 + P_YK;
     const p = cutout('img/hall1-intro.webp', PH, { alpha: false }); place(p, x, yc - PH / 2, z, 0, -1);
     pickable(p, { kind: '서문', title: V1_INTRO.title, body: [V1_INTRO.head, ...V1_INTRO.body, '— ' + V1_INTRO.sign, '비평', V1_INTRO.quote + ' — ' + V1_INTRO.critic].join('\n\n') }); }
-  { const x = DL - PG - .63 - PG - .1485, z = SW, PH = .297 * SCALE, yc = HANG_CY + .05, B = V1_BIO;
+  { const x = P_BX, z = SW, PH = .297 * SCALE * PK, yc = HANG_CY + .05 + P_YK, B = V1_BIO;
     const p = cutout('img/hall1-bio.webp', PH, { alpha: false }); place(p, x, yc - PH / 2, z, 0, -1);
     pickable(p, { kind: '작가소개', title: `${B.name} · ${B.en}`, meta: B.role, body: [B.lead, ...B.intro].join('\n\n'),
       ex: [...B.left, ...B.right].flatMap(([h, rows]) => rows.map(r => Array.isArray(r) ? `${r[0]} ${r[1]}` : r)), exTitle: 'CV', links: [[`${SITE}/cv/`, 'CV 페이지']] }); }
@@ -6023,7 +6029,7 @@ const view = { yaw: 0, pitch: -.12, dist: 3.4 };
 const WALK_K = 1;   // 시험용으로 걸음 2배(작가님). 완성되면 1로 되돌린다
 const wrapA = a => Math.atan2(Math.sin(a), Math.cos(a));
 const PLACES = {
-  outside: { pos: [0, 31], yaw: 0 }, lobby: { pos: [0, 17.2], yaw: 0 }, artist: { pos: [-12.8, 14.2], yaw: Math.PI / 2 }, works: { pos: HALL1_START, yaw: Math.PI / 2 },   // 작품관 = 1관(2026-11-27): 벽 1 첫 작품(001) 정면
+  outside: { pos: [0, 31], yaw: 0 }, lobby: { pos: [0, 17.2], yaw: 0 }, artist: { pos: [-12.8, 14.2], yaw: Math.PI / 2 }, works: { pos: HALL1_INTRO, yaw: Math.PI },   // 작품관 = 1관: 전시 서문 앞(작가님 2026-11-27)
   court: { pos: [0, 6.6], yaw: 0 }, ip: { pos: [10.85, -4.5], yaw: -Math.PI / 2 },   /* 물빛 통로 안쪽 끝에서 해변 문을 보고(작가님 2026-11-20: 문 앞에서 벽을 보고 섰다) */ obong: { pos: [0, -13.5], yaw: 0 }, lounge: { pos: [12.6, 13.8], yaw: -Math.PI / 2 },
 };
 let walkTo = null, focus = null;   // focus: 작품을 보는 동안 카메라가 따로 선다
