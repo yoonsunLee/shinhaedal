@@ -17,7 +17,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta name="gallery-variant" content="site">
-<meta name="gallery-build" content="0055a15cf359">
+<meta name="gallery-build" content="90febbe5f3b8">
 <link rel="stylesheet" href="../assets/fonts.css">
 <style>
 /* 레이아웃: 화면 전체가 3D 전시장, 그 위에 옻칠처럼 검은 패널이 가장자리에만 얹힌다. 한 가지 어두운 화면으로 고정. */
@@ -1613,8 +1613,9 @@ interior('law', [[V1.x0, V1.x1, V1.z0, V1.z1], [V1_IN[0], V1_IN[1], V1.z1 - .2, 
   wall(V1_OUT[1], V1.x1 + .2, 0, V1.h, V1.z1 - .2, V1.z1);
   wall(V1_IN[0], V1_IN[1], DHI, V1.h, V1.z1 - .2, V1.z1, false);
   wall(V1_OUT[0], V1_OUT[1], DH, V1.h, V1.z1 - .2, V1.z1, false);
-  { const a = V1_IN[0], b = V1_IN[1], f = .05, zi = V1.z1 - .2;   // 입구 놋쇠 문틀(방 쪽 면)
-    boxMM(a - f, a, 0, DHI + f, zi - .02, zi, M.brass); boxMM(b, b + f, 0, DHI + f, zi - .02, zi, M.brass); boxMM(a - f, b + f, DHI, DHI + f, zi - .02, zi, M.brass); }   // 놋쇠는 방 쪽 면에만(통로 안으로 튀어나오지 않게)
+  // 입구 통로 안쪽 면(작가님 2026-11-27 '아직도 두 겹'): 작가소개 벽과 1관 벽 두 겹의 문 안쪽 면을 한 장으로 덮어 하나의 문으로 보이게. 놋쇠 선은 뺐다
+  { const a = V1_IN[0], b = V1_IN[1], zA = V1.z1 - .2 - .01, zB = 9.4 + .17, lin = new THREE.MeshBasicMaterial({ color: 0xe4e1db, toneMapped: false });
+    boxMM(a, a + .012, 0, DHI, zA, zB, lin); boxMM(b - .012, b, 0, DHI, zA, zB, lin); boxMM(a, b, DHI - .012, DHI, zA, zB, lin); }
   { const a = V1_OUT[0], b = V1_OUT[1], f = .08, zi = V1.z1 - .2, wd = M.wood;   // 출구: 짙은 나무 문틀(열린 문). 문 너머로 2관이 보이고, 지나가면 2관 입구로 이어진다(아래 portal)
     boxMM(a - f, a, 0, DH + f, zi - .04, zi + .02, wd); boxMM(b, b + f, 0, DH + f, zi - .04, zi + .02, wd); boxMM(a - f, b + f, DH, DH + f, zi - .04, zi + .02, wd); }
   { const g = [V1_OUT[0], V1_OUT[1], V1.z1 - .4, V1.z1 - .2]; g.gate = true; colliders.push(g); }   // 2관 문 잠금(작가님 2026-11-27 A): 방명록을 남기면 열린다(guestbook.js GB_GATE_LOCKED)
@@ -1636,7 +1637,7 @@ interior('law', [[V1.x0, V1.x1, V1.z0, V1.z1], [V1_IN[0], V1_IN[1], V1.z1 - .2, 
       ex: [...B.left, ...B.right].flatMap(([h, rows]) => rows.map(r => Array.isArray(r) ? `${r[0]} ${r[1]}` : r)), exTitle: 'CV', links: [[`${SITE}/cv/`, 'CV 페이지']] }); }
   // 방명록 책상(작가님 2026-11-27): 펼친 책 + 펜, 벽에 '방명록' 작은 판. 누르면 쓰는 창(guestbook.js)
   //   자리: 2관(시크릿관) 문 왼쪽, 입구 쪽 벽(작가님 2026-11-27 '2관 입구 쪽으로'). 방명록을 남겨야 2관 문이 열린다(작가님 A, 아래 문 잠금)
-  { const cx = V1_OUT[0] - .35 - .55, zb = V1.z1 - .2, DW = 1.1, DD = .5, DHt = .78, z0 = zb - DD;
+  { const cx = V1_OUT[0] - .35 - .55 - .3, zb = V1.z1 - .2, DW = 1.1, DD = .5, DHt = .78, z0 = zb - DD;
     const wood = std({ color: 0xb08a62, roughness: .55 });
     boxMM(cx - DW / 2, cx + DW / 2, DHt - .04, DHt, z0, zb, wood);
     for (const sx of [-1, 1]) boxMM(cx + sx * (DW / 2 - .05) - .02, cx + sx * (DW / 2 - .05) + .02, 0, DHt - .04, z0 + .04, zb - .04, wood);
@@ -1649,15 +1650,17 @@ interior('law', [[V1.x0, V1.x1, V1.z0, V1.z1], [V1_IN[0], V1_IN[1], V1.z1 - .2, 
     }, { ppm: 900 });
     book.rotation.x = -Math.PI / 2; book.rotation.z = .06; book.position.set(cx - .08, DHt + .004, z0 + .26); scene.add(book);
     const pen = boxMM(0, .15, 0, .012, -.006, .006, std({ color: 0x1b1b1f, roughness: .4 })); pen.position.set(cx + .27, DHt + .002, z0 + .2); pen.rotation.y = .5;
-    const sign = panel(.36, .1, (g, W, H) => { g.fillStyle = '#fbfbf9'; g.fillRect(0, 0, W, H); font(g, H * .5, 700, FONT_B, INK); g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('방명록', W / 2, H * .54); g.textAlign = 'left'; g.textBaseline = 'alphabetic'; }, { ppm: 600 });
-    place(sign, cx, 1.12, zb - .006, 0, -1);
-    // 시크릿관 안내판(작가님 문장 그대로 2026-11-27): 책상 위 벽
-    const L1 = '이 곳은 컬렉팅된 작품이 모여있는 시크릿관입니다.', L2 = ['익명 방명록을 작성해주시면, 컬렉팅된 신해달 작가의 작품을', '볼 수 있는 시크릿관에 입장하실 수 있습니다.'];
-    const note = panel(1.5, .44, (g, W, H) => { g.fillStyle = '#fbfbf9'; g.fillRect(0, 0, W, H); g.textAlign = 'center'; g.textBaseline = 'middle';
-      font(g, H * .125, 700, FONT_B, INK); g.fillText(L1, W / 2, H * .28);
-      font(g, H * .088, 500, FONT_B, INK); L2.forEach((t, i) => g.fillText(t, W / 2, H * (.58 + i * .16)));
-      g.textAlign = 'left'; g.textBaseline = 'alphabetic'; }, { ppm: 700 });
-    place(note, cx, 1.66, zb - .006, 0, -1);
+    // 시크릿관 안내 · '방명록': 판 대신 벽에 바로 쓴 레터링(작가님 2026-11-27 '시트지 말고 레터링처럼 고급스럽게'). 문장은 작가님 문장 그대로
+    //   먹빛 글씨(작가님 2026-11-27 A, 놋쇠빛 샘플은 지움)
+    const INK_H = '#2a2622', INK_S = '#6b635a';
+    const H1 = ['이 곳은 컬렉팅된 작품이 모여있는', '시크릿관입니다.'], H2L = ['익명 방명록을 작성해주시면, 컬렉팅된 신해달 작가의 작품을', '볼 수 있는 시크릿관에 입장하실 수 있습니다.'];
+    const NW = 1.7, NHt = .62, note = letters(NW, NHt, (g, W, H) => { const u = H / NHt; g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+      font(g, .082 * u, 400, FONT_K, INK_H); H1.forEach((t, k) => g.fillText(t, W / 2, (.1 + k * .125) * u));
+      g.fillStyle = INK_H; g.fillRect(W / 2 - .09 * u, .3 * u, .18 * u, Math.max(1, .0025 * u));
+      font(g, .036 * u, 400, FONT_B, INK_S); H2L.forEach((t, k) => g.fillText(t, W / 2, (.4 + k * .062) * u)); }, 700);
+    place(note, cx, 1.9, zb - .006, 0, -1);
+    const sign = letters(.5, .14, (g, W, H) => { g.textAlign = 'center'; g.textBaseline = 'middle'; font(g, H * .5, 400, FONT_K, INK_H); g.fillText('방명록', W / 2, H * .55); });
+    place(sign, cx, 1.16, zb - .006, 0, -1);
     const info = { gb: true, title: '방명록' };
     for (const o of [book, sign, note]) pickable(o, info);
     HALL_GB.push(cx, z0 - .9); }
