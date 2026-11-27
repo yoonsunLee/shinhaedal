@@ -17,7 +17,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta name="gallery-variant" content="site">
-<meta name="gallery-build" content="90febbe5f3b8">
+<meta name="gallery-build" content="be555dd81d1f">
 <link rel="stylesheet" href="../assets/fonts.css">
 <style>
 /* 레이아웃: 화면 전체가 3D 전시장, 그 위에 옻칠처럼 검은 패널이 가장자리에만 얹힌다. 한 가지 어두운 화면으로 고정. */
@@ -1685,9 +1685,9 @@ interior('law', [[V1.x0, V1.x1, V1.z0, V1.z1], [V1_IN[0], V1_IN[1], V1.z1 - .2, 
     boxMM(px - PW / 2 - .03, px + PW / 2 + .03, PH - .04, PH, z - PW / 2 - .03, z + PW / 2 + .03, M.white);
     solid(px - PW / 2, px + PW / 2, z - PW / 2, z + PW / 2);
     const D = DETAIL[TOY_ID] || {}, toyW = WORKS_INDEX.find(w => w.id === TOY_ID);
-    const info = { kind: D.en, title: toyW ? toyW.title : '조개배달부 얼빵해달 2026 Limited Edition', meta: D.medium, body: (D.body || []).join('\n\n'), ex: D.ex, links: [[`${SITE}/works/w/${TOY_ID}/`, '작품 페이지']], focus: { pos: [px - 1.4, z], look: [px, PH + .1, z] } };
+    const info = { kind: D.en, title: toyW ? toyW.title : '조개배달부 얼빵해달 2026 Limited Edition', meta: D.medium, img: toyW ? workImg(toyW) : 'img/toy-cutout.webp', id: TOY_ID,   /* 창에 홈페이지 작품 사진(작가님 2026-11-27) */ body: (D.body || []).join('\n\n'), ex: D.ex, links: [[`${SITE}/works/w/${TOY_ID}/`, '작품 페이지']], focus: { pos: [px - 1.4, z], look: [px, PH + .1, z] } };
     // 앉은 둘: 지금은 사진 오려 낸 판(라운지와 같은 그림). 누워 배영하는 하나(발바닥 자개)는 3D 모델을 만들어 비교해 드린 뒤 넣는다
-    for (const dz of [-.12, .12]) { const fig = cutout('img/toy-cutout.webp', .15); place(fig, px, PH + .075, z + dz, -1, 0); pickable(fig, info); }
+    for (const dz of [-.12, .12]) { const fig = cutout('img/toy-cutout.webp', .15); place(fig, px, PH + .002, z + dz, -1, 0);   /* 전시대 윗면에 바로 앉게(작가님 2026-11-27, 전엔 7.5 cm 떠 있었다) */ pickable(fig, info); }
     pickable(col, info);
     // 명판: 작가님이 준 「신해달 명패」 사진 그대로(2026-11-27, 둘레 흰 여백만 잘라 냄). cutout은 아래 끝 기준이라 반 높이만큼 내린다
     const PLW = .28 * SCALE, PLH = PLW * 447 / 1119;
@@ -5958,7 +5958,7 @@ const inInterior = (x, z) => INTERIORS.find(I => I.rects.some(r => x > r[0] && x
 function blocked(x, z, list = colliders, noDoor = false) {
   if ((x < BOUND.x0 || x > BOUND.x1 || z < BOUND.z0 || z > BOUND.z1) && !inInterior(x, z)) return true;
   const here = inInterior(x, z), nb = here && LINKS[here.name];
-  for (const c of list) { if (noDoor && c.door) continue; if (c.gate && !(globalThis.GB_GATE_LOCKED && GB_GATE_LOCKED())) continue; if (c.owner && here && c.owner !== here.name && !(nb && nb.has(c.owner))) continue; if (x > c[0] - RAD && x < c[1] + RAD && z > c[2] - RAD && z < c[3] + RAD) { if (c.gate && !noDoor && globalThis.GB_GATE) GB_GATE(); return true; } }
+  for (const c of list) { if (noDoor && c.door) continue; if (c.gate && !(globalThis.GB_GATE_LOCKED && GB_GATE_LOCKED())) continue; if (c.owner && here && c.owner !== here.name && !(nb && nb.has(c.owner))) continue; if (x > c[0] - RAD && x < c[1] + RAD && z > c[2] - RAD && z < c[3] + RAD) { if (c.gate && !noDoor && globalThis.GB_GATE && (x === me.x || z === me.z) && Math.abs(x - me.x) + Math.abs(z - me.z) < .6) GB_GATE(); return true; } }
   return false;
 }
 /* 눌러서 걷기 길 찾기(작가님 2026-11-20: 미로 모퉁이·난간·문 앞에서 멈춤) — 곧장 못 가면 0.25 m 칸으로 돌아가는 길을 찾는다.
