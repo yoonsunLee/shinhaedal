@@ -418,6 +418,25 @@
   "home_lead_days": 0
  },
  {
+  "id": "EX-2026-21",
+  "title": "기획 단체전",
+  "venue": "갤러리 쏠라",
+  "start_date": "2026-12-10",
+  "end_date": "2026-12-16",
+  "work_nos": "HD-2026-024",
+  "type": "단체전",
+  "type_en": "Group Exhibition",
+  "note_public": "",
+  "title_en": "Group Exhibition",
+  "venue_en": "Gallery Sola",
+  "poster_url": "",
+  "map_url": "https://naver.me/5SKjNUdp",
+  "featured_work_nos": "",
+  "about_selected": false,
+  "home_mode": "hide",
+  "home_lead_days": null
+ },
+ {
   "id": "EX-2027-01",
   "title": "뱅크아트페어",
   "venue": "SETEC, 서울, 대한민국",
