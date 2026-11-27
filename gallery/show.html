@@ -17,7 +17,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta name="gallery-variant" content="site">
-<meta name="gallery-build" content="40a0e47f6071">
+<meta name="gallery-build" content="80d13c775774">
 <link rel="stylesheet" href="../assets/fonts.css">
 <style>
 /* 레이아웃: 화면 전체가 3D 전시장, 그 위에 옻칠처럼 검은 패널이 가장자리에만 얹힌다. 한 가지 어두운 화면으로 고정. */
@@ -1533,8 +1533,9 @@ await Promise.all([...hangable, ...WORKS_INDEX.filter(w => w.id === TOY_ID)].map
 }));
 // 방(1.5배): 동서 13.65(실제 벽 2) × 남북 8.36(실제 벽 1), 천장 3.6. 입구(실제 북쪽 유리문, 벽 1에서 3.0 m → 4.5 m)를 작가소개 문(DOORX)에 맞춘다
 const V1K = 2;   // 방 가로(동서)는 실제의 2배, 세로(남북)는 1.5배 그대로(작가님 2026-11-27: 넓히되 북쪽 2관과 겹치지 않게). 작품·캡션은 1.5배
-const V1 = { x0: DOORX - 3.0 * V1K, x1: DOORX - 3.0 * V1K + 9.10 * V1K, z0: 9.25 - 5.57 * 1.5, z1: 9.25, h: 3.6 };
-const V1_IN = [DOORX - 1.2, DOORX + 1.2];            // 입구 = 작가소개 북쪽 문과 같은 폭
+// 서쪽으로 옮김(작가님 2026-11-27 A): 동쪽 끝이 중정에 겹쳐 중정 바닥이 검게 보였다 → 동쪽 벽을 작품관 동쪽 벽(-10.4) 안쪽에 맞춤
+const V1 = { x0: -10.6 - 9.10 * V1K, x1: -10.6, z0: 9.25 - 5.57 * 1.5, z1: 9.25, h: 3.6 };
+const V1_IN = [DOORX - 1.25, DOORX + 1.25];            // 입구 = 작가소개 북쪽 문과 같은 폭
 const V1_OUT = [V1.x1 - 1.85, V1.x1 - .35];           // 출구(실제 남서 유리문 자리) → 2관
 const V1_W3 = 9.25 - V1.z0;                           // 벽 3 길이 = 동쪽 벽 전체(작가님 2026-11-27: 실제 문 자리라 빈 칸이 생기면 온라인 관람객은 이유를 모르니, 전시대·작품 간격을 넓혀 벽 전체를 씀)
 const HALL_DOOR = { x0: -13.25, x1: -11.45, h: 2.6 };   // 예전 작품관 출구(중정 전실 코드가 쓴다). 1관에서는 쓰지 않는다
@@ -1578,9 +1579,9 @@ const WALL3 = VW('벽 3', [V1.x1 - .01, V1.z0], [-1, 0], V1_W3);
 const V1_HANG = [
   [WALL1, [['HD-2026-001', 0.125], ['HD-2026-016', 0.2948], ['HD-2026-015', 0.4786], ['HD-2026-008', 0.6709], ['HD-2026-017', 0.8621]]],   // 서문·작가소개를 입구 벽으로 옮기고 같은 간격(작가님 2026-11-27)
   [WALL2, [['HD-2025-002', 0.0992], ['HD-2026-009', 0.1692], ['HD-2026-018', 0.2442], ['HD-2026-014', 0.3198], ['HD-2026-019', 0.4432, 'L'], ['HD-2026-020', 0.5215], ['HD-2026-021', 0.6471, 'L'], ['HD-2026-022', 0.6916], ['HD-2026-023', 0.7816], ['HD-2026-024', 0.8871]]],   // 양 끝 1.6 m, 도달주의 두 쌍은 6 cm로 붙임(작가님 2026-11-27)
-  [WALL3, [['HD-2026-011', .31, 'B'], ['HD-2026-025', .398, 'B'], ['HD-2026-026', .477, 'B'], ['HD-2026-027', .557, 'B'], ['HD-2026-028', .641, 'B'], ['HD-2026-029', .72, 'B'], ['HD-2026-030', .80, 'B']]],   // 2관 문에서 떨어지게 끝을 .80까지(작가님 2026-11-27)
+  [WALL3, [['HD-2026-011', .31], ['HD-2026-025', .398], ['HD-2026-026', .477], ['HD-2026-027', .557], ['HD-2026-028', .641], ['HD-2026-029', .72], ['HD-2026-030', .80]]],   // 2관 문에서 떨어지게 끝을 .80까지(작가님 2026-11-27)
 ];
-interior('law', [[V1.x0, V1.x1, V1.z0, V1.z1], [V1_IN[0], V1_IN[1], V1.z1 - .2, V1.z1 + .3]], [V1.x0 - .25, V1.x1 + .25, V1.z0 - .25, V1.z1 - .05, V1.h + .3], () => {
+interior('law', [[V1.x0, V1.x1, V1.z0, V1.z1], [V1_IN[0], V1_IN[1], V1.z1 - .2, V1.z1 + .3]], [V1.x0 - .25, V1.x1 + .15, V1.z0 - .25, V1.z1 - .05, V1.h + .3], () => {   // 동쪽 테두리는 중정(-10.4)에 닿지 않게(닿으면 1관 안에서 중정 바닥을 숨긴다)
   const W = M.white.clone(), T2 = [2.4, 2.4];
   W.color.setScalar(.9);   // 흰 벽(지금 가상 작품관처럼 밝게, 작가님 2026-11-27). 빛 웅덩이가 살 만큼만 낮춤
   const wall = (x0, x1, y0, y1, z0, z1, col = true) => { const m = boxMM(x0, x1, y0, y1, z0, z1, W, T2); blockers.push(m); if (col) solid(x0, x1, z0, z1); return m; };
@@ -1593,16 +1594,17 @@ interior('law', [[V1.x0, V1.x1, V1.z0, V1.z1], [V1_IN[0], V1_IN[1], V1.z1 - .2, 
   wall(V1.x1, V1.x1 + .2, 0, V1.h, V1.z0 - .2, V1.z1);
   // 입구 쪽 벽(남쪽): 처음엔 실제처럼 통창이었으나 지금 갤러리 분위기에 맞게 흰 벽으로(작가님 2026-11-27).
   // 입구 = 작가소개 북쪽 문과 같은 자리(놋쇠 문틀, 열림). 출구 = 동쪽 끝(실제 남서 유리문 자리), 다른 관과 같은 짙은 나무 문틀 + 놋쇠 테 간유리 두 짝. 2관을 지을 때까지 닫힘
-  const DH = 2.55;
+  const DH = 2.55, DHI = 2.6;   // 입구는 작가소개 문(폭 2.5 · 높이 2.6)과 똑같이: 두 벽이 붙은 한 통로로 보이게(작가님 2026-11-27 '벽 정리')
   wall(V1.x0 - .2, V1_IN[0], 0, V1.h, V1.z1 - .2, V1.z1);
   wall(V1_IN[1], V1_OUT[0], 0, V1.h, V1.z1 - .2, V1.z1);
   wall(V1_OUT[1], V1.x1 + .2, 0, V1.h, V1.z1 - .2, V1.z1);
-  wall(V1_IN[0], V1_IN[1], DH, V1.h, V1.z1 - .2, V1.z1, false);
+  wall(V1_IN[0], V1_IN[1], DHI, V1.h, V1.z1 - .2, V1.z1, false);
   wall(V1_OUT[0], V1_OUT[1], DH, V1.h, V1.z1 - .2, V1.z1, false);
   { const a = V1_IN[0], b = V1_IN[1], f = .05, zi = V1.z1 - .2;   // 입구 놋쇠 문틀(방 쪽 면)
-    boxMM(a - f, a, 0, DH + f, zi - .02, zi + .02, M.brass); boxMM(b, b + f, 0, DH + f, zi - .02, zi + .02, M.brass); boxMM(a - f, b + f, DH, DH + f, zi - .02, zi + .02, M.brass); }
+    boxMM(a - f, a, 0, DHI + f, zi - .02, zi, M.brass); boxMM(b, b + f, 0, DHI + f, zi - .02, zi, M.brass); boxMM(a - f, b + f, DHI, DHI + f, zi - .02, zi, M.brass); }   // 놋쇠는 방 쪽 면에만(통로 안으로 튀어나오지 않게)
   { const a = V1_OUT[0], b = V1_OUT[1], f = .08, zi = V1.z1 - .2, wd = M.wood;   // 출구: 짙은 나무 문틀(열린 문). 문 너머로 2관이 보이고, 지나가면 2관 입구로 이어진다(아래 portal)
     boxMM(a - f, a, 0, DH + f, zi - .04, zi + .02, wd); boxMM(b, b + f, 0, DH + f, zi - .04, zi + .02, wd); boxMM(a - f, b + f, DH, DH + f, zi - .04, zi + .02, wd); }
+  { const g = [V1_OUT[0], V1_OUT[1], V1.z1 - .4, V1.z1 - .2]; g.gate = true; colliders.push(g); }   // 2관 문 잠금(작가님 2026-11-27 A): 방명록을 남기면 열린다(guestbook.js GB_GATE_LOCKED)
   // 빛: 방 전체를 고르게 밝게(3줄 × 2줄)
   for (let i = 0; i < 4; i++) for (let j = 0; j < 3; j++) { const x = V1.x0 + 2.3 + (V1.x1 - V1.x0 - 4.6) * i / 3, z = V1.z0 + 2.2 + (V1.z1 - V1.z0 - 4.6) * j / 2; const l = new THREE.PointLight(0xfff6ea, 4.4, 10, 1.2); l.position.set(x, V1.h - .4, z); scene.add(l); }
   // 서문(A2) · 작가소개(A4): 작가님이 주신 판 그대로(2026-11-27). 누르면 같은 글이 창으로 뜬다
@@ -1610,16 +1612,17 @@ interior('law', [[V1.x0, V1.x1, V1.z0, V1.z1], [V1_IN[0], V1_IN[1], V1.z1 - .2, 
   // 판은 그림 그대로 건다(cutout은 아래 끝이 기준이라 가운데 높이에서 반만큼 내린다)
   // 자리(작가님 2026-11-27): 벽 1이 좁아 입구 쪽 벽(남쪽), 방명록 책상 옆으로 옮김. 문 쪽부터 책상 → 서문 → 작가소개 → 모서리 → 벽 1
   const SW = V1.z1 - .2 - .006;   // 입구 쪽 벽 방 쪽 면
-  const PG = ((V1_IN[0] - 1.1 - .55) - V1.x0 - .297 - .63) / 3;   // 모서리 · 작가소개 · 서문 · 책상 사이 세 틈을 같게
-  { const x = V1.x0 + PG * 2 + .297 + .315, z = SW, PH = .594 * SCALE, yc = HANG_CY + .12;
+  const PG = .74, DL = V1_IN[0] - 1.1 - .55;   // 책상 → 서문 → 작가소개 사이 틈(방을 서쪽으로 옮긴 뒤에도 전과 같게, 책상 왼쪽 끝 DL에서 잰다)
+  { const x = DL - PG - .315, z = SW, PH = .594 * SCALE, yc = HANG_CY + .12;
     const p = cutout('img/hall1-intro.webp', PH, { alpha: false }); place(p, x, yc - PH / 2, z, 0, -1);
     pickable(p, { kind: '서문', title: V1_INTRO.title, body: [V1_INTRO.head, ...V1_INTRO.body, '— ' + V1_INTRO.sign, '비평', V1_INTRO.quote + ' — ' + V1_INTRO.critic].join('\n\n') }); }
-  { const x = V1.x0 + PG + .1485, z = SW, PH = .297 * SCALE, yc = HANG_CY + .05, B = V1_BIO;
+  { const x = DL - PG - .63 - PG - .1485, z = SW, PH = .297 * SCALE, yc = HANG_CY + .05, B = V1_BIO;
     const p = cutout('img/hall1-bio.webp', PH, { alpha: false }); place(p, x, yc - PH / 2, z, 0, -1);
     pickable(p, { kind: '작가소개', title: `${B.name} · ${B.en}`, meta: B.role, body: [B.lead, ...B.intro].join('\n\n'),
       ex: [...B.left, ...B.right].flatMap(([h, rows]) => rows.map(r => Array.isArray(r) ? `${r[0]} ${r[1]}` : r)), exTitle: 'CV', links: [[`${SITE}/cv/`, 'CV 페이지']] }); }
-  // 방명록 책상(작가님 2026-11-27): 1관에 들어와 문 왼쪽, 입구 쪽 벽에 붙여. 펼친 책 + 펜, 벽에 '방명록' 작은 판. 누르면 쓰는 창(guestbook.js)
-  { const cx = V1_IN[0] - 1.1, zb = V1.z1 - .2, DW = 1.1, DD = .5, DHt = .78, z0 = zb - DD;
+  // 방명록 책상(작가님 2026-11-27): 펼친 책 + 펜, 벽에 '방명록' 작은 판. 누르면 쓰는 창(guestbook.js)
+  //   자리: 2관(시크릿관) 문 왼쪽, 입구 쪽 벽(작가님 2026-11-27 '2관 입구 쪽으로'). 방명록을 남겨야 2관 문이 열린다(작가님 A, 아래 문 잠금)
+  { const cx = V1_OUT[0] - .35 - .55, zb = V1.z1 - .2, DW = 1.1, DD = .5, DHt = .78, z0 = zb - DD;
     const wood = std({ color: 0xb08a62, roughness: .55 });
     boxMM(cx - DW / 2, cx + DW / 2, DHt - .04, DHt, z0, zb, wood);
     for (const sx of [-1, 1]) boxMM(cx + sx * (DW / 2 - .05) - .02, cx + sx * (DW / 2 - .05) + .02, 0, DHt - .04, z0 + .04, zb - .04, wood);
@@ -1633,9 +1636,16 @@ interior('law', [[V1.x0, V1.x1, V1.z0, V1.z1], [V1_IN[0], V1_IN[1], V1.z1 - .2, 
     book.rotation.x = -Math.PI / 2; book.rotation.z = .06; book.position.set(cx - .08, DHt + .004, z0 + .26); scene.add(book);
     const pen = boxMM(0, .15, 0, .012, -.006, .006, std({ color: 0x1b1b1f, roughness: .4 })); pen.position.set(cx + .27, DHt + .002, z0 + .2); pen.rotation.y = .5;
     const sign = panel(.36, .1, (g, W, H) => { g.fillStyle = '#fbfbf9'; g.fillRect(0, 0, W, H); font(g, H * .5, 700, FONT_B, INK); g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('방명록', W / 2, H * .54); g.textAlign = 'left'; g.textBaseline = 'alphabetic'; }, { ppm: 600 });
-    place(sign, cx, 1.35, zb - .006, 0, -1);
+    place(sign, cx, 1.12, zb - .006, 0, -1);
+    // 시크릿관 안내판(작가님 문장 그대로 2026-11-27): 책상 위 벽
+    const L1 = '이 곳은 컬렉팅된 작품이 모여있는 시크릿관입니다.', L2 = ['익명 방명록을 작성해주시면, 컬렉팅된 신해달 작가의 작품을', '볼 수 있는 시크릿관에 입장하실 수 있습니다.'];
+    const note = panel(1.5, .44, (g, W, H) => { g.fillStyle = '#fbfbf9'; g.fillRect(0, 0, W, H); g.textAlign = 'center'; g.textBaseline = 'middle';
+      font(g, H * .125, 700, FONT_B, INK); g.fillText(L1, W / 2, H * .28);
+      font(g, H * .088, 500, FONT_B, INK); L2.forEach((t, i) => g.fillText(t, W / 2, H * (.58 + i * .16)));
+      g.textAlign = 'left'; g.textBaseline = 'alphabetic'; }, { ppm: 700 });
+    place(note, cx, 1.66, zb - .006, 0, -1);
     const info = { gb: true, title: '방명록' };
-    for (const o of [book, sign]) pickable(o, info);
+    for (const o of [book, sign, note]) pickable(o, info);
     HALL_GB.push(cx, z0 - .9); }
   // 바닥 화살표(작가님 2026-11-27): 입구로 들어오면 서문부터 보게 왼쪽(서쪽, 조금 남쪽으로)을 가리킨다
   { const g = new THREE.Group(), m = new THREE.Mesh(new THREE.PlaneGeometry(.6, .6), arrowM); m.rotation.x = -Math.PI / 2; m.renderOrder = 2; g.add(m); g.position.set(DOORX - .5, .046, V1.z1 - 2.0); g.rotation.y = Math.PI / 2 + .45; scene.add(g); }   // 다른 바닥 화살표는 모두 꺼 두었으니(2026-11-26) 이것만 따로 그린다
@@ -1662,9 +1672,10 @@ interior('law', [[V1.x0, V1.x1, V1.z0, V1.z1], [V1_IN[0], V1_IN[1], V1.z1 - .2, 
     // 앉은 둘: 지금은 사진 오려 낸 판(라운지와 같은 그림). 누워 배영하는 하나(발바닥 자개)는 3D 모델을 만들어 비교해 드린 뒤 넣는다
     for (const dz of [-.12, .12]) { const fig = cutout('img/toy-cutout.webp', .15); place(fig, px, PH + .075, z + dz, -1, 0); pickable(fig, info); }
     pickable(col, info);
-    const plate = panel(.28 * SCALE, .07 * SCALE, (g, W, H) => { g.fillStyle = '#111'; g.fillRect(0, 0, W, H); g.strokeStyle = '#8f9aa6'; g.lineWidth = H * .05; g.strokeRect(H * .08, H * .08, W - H * .16, H - H * .16);
-      font(g, H * .5, 700, FONT_B, '#dfe6ee'); g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('ⓒ신해달', W / 2, H * .54); g.textAlign = 'left'; g.textBaseline = 'alphabetic'; }, { ppm: 700 });
-    place(plate, x - .006, HANG_CY + .25, z, -1, 0); }
+    // 명판: 작가님이 준 「신해달 명패」 사진 그대로(2026-11-27, 둘레 흰 여백만 잘라 냄). cutout은 아래 끝 기준이라 반 높이만큼 내린다
+    const PLW = .28 * SCALE, PLH = PLW * 447 / 1119;
+    const plate = cutout('img/nameplate.webp', PLH);
+    place(plate, x - .006, HANG_CY + .25 - PLH / 2, z, -1, 0); }
 }, [DOORX, 9.3, 11]);   // 작가소개에서 문 너머로 1관이 보이게(2관과 이어 붙인 장면이라 이웃이 아니면 숨는다)
 
 /* ── 2관 · 시크릿(작가님 결정 2026-11-27) ──
@@ -1672,12 +1683,14 @@ interior('law', [[V1.x0, V1.x1, V1.z0, V1.z1], [V1_IN[0], V1_IN[1], V1.z1 - .2, 
    북쪽 벽 문(예전 작품관 출구 자리 HALL_DOOR)으로 나가면 어두운 전실 → 중정.
    차례: 들어와서 왼쪽(서쪽)으로 남쪽 벽 POV 출근 → 퇴근 → 업무 중, 서쪽 벽 우주조약, 북쪽 벽 N차적 저작물A → nn차적 저작물a → 권리누적 → 헌법 제10조 → 출구.
    걸지 않음: POV : 유급휴일(작가님). 바람은 점유를 나중에 넣으면 여기. */
-const H2 = { x0: -18.0, x1: -9.6, z0: R1.z0, z1: -.6, h: 3.4 };   // 8.4 × 5.0 m로 줄임(작가님 2026-11-27: 작품이 작아 방이 비어 보였다). 북쪽 출구 · 남쪽 입구 자리는 그대로   // 안쪽 면. 북쪽 면 = 예전 작품관 북쪽 벽(전실 문이 그대로 맞는다)
-const H2_IN = [-11.45, -9.95];   // 입구(1관 출구에서 이어짐)
+// 서쪽으로 1.5 m 옮김(2026-11-27, 1관과 같은 까닭): 동쪽 끝(-9.6)이 중정(-10.4부터)에 겹쳐, 2관·전실 근처에서 중정 바닥이 숨겨져 검게 보였다. 북쪽 출구(HALL_DOOR)는 그대로
+const H2_DX = -1.5;   // 1.3 m 옮긴 뒤 20 cm 더(작가님 2026-11-27 A): 전실 벽 끝(-11.05)이 동쪽 벽 안에 들어가 동북 모서리 기둥이 필요 없다
+const H2 = { x0: -18.0 + H2_DX, x1: -9.6 + H2_DX, z0: R1.z0, z1: -.6, h: 3.4 };   // 8.4 × 5.0 m로 줄임(작가님 2026-11-27: 작품이 작아 방이 비어 보였다). 북쪽 출구 · 남쪽 입구 자리는 그대로   // 안쪽 면. 북쪽 면 = 예전 작품관 북쪽 벽(전실 문이 그대로 맞는다)
+const H2_IN = [-11.45 + H2_DX, -9.95 + H2_DX];   // 입구(1관 출구에서 이어짐)
 const H2_HANG = [
-  [{ name: '작품관 · 2관 남쪽 벽', n: [0, -1], z: H2.z1 }, [['HD-2026-006', -12.95], ['HD-2026-007', -14.52], ['HD-2026-003', -16.34]]],
+  [{ name: '작품관 · 2관 남쪽 벽', n: [0, -1], z: H2.z1 }, [['HD-2026-006', -12.95 + H2_DX], ['HD-2026-007', -14.52 + H2_DX], ['HD-2026-003', -16.34 + H2_DX]]],
   [{ name: '작품관 · 2관 서쪽 벽', n: [1, 0], x: H2.x0 }, [['HD-2026-004', (R1.z0 - .6) / 2]]],
-  [{ name: '작품관 · 2관 북쪽 벽', n: [0, 1], z: H2.z0 }, [['HD-2026-002', -17.13], ['HD-2025-004', -16.14], ['HD-2025-001', -15.25], ['HD-2026-005', -14.23]]],
+  [{ name: '작품관 · 2관 북쪽 벽', n: [0, 1], z: H2.z0 }, [['HD-2026-002', -17.13 + H2_DX], ['HD-2025-004', -16.14 + H2_DX], ['HD-2025-001', -15.25 + H2_DX], ['HD-2026-005', -14.23 + H2_DX]]],
 ];
 interior('hall2', [[H2.x0, H2.x1, H2.z0, H2.z1], [H2_IN[0], H2_IN[1], H2.z1 - .1, H2.z1 + .1], [HALL_DOOR.x0, HALL_DOOR.x1, H2.z0 - .35, H2.z0 + .1]],
   [H2.x0 - .25, H2.x1 + .25, H2.z0 - .25, H2.z1 + .25, H2.h + .3], () => {
@@ -1690,7 +1703,7 @@ interior('hall2', [[H2.x0, H2.x1, H2.z0, H2.z1], [H2_IN[0], H2_IN[1], H2.z1 - .1
   wall(H2.x1, H2.x1 + T, 0, H2.h, H2.z0 - T, H2.z1 + T);
   wall(H2.x0, HALL_DOOR.x0, 0, H2.h, H2.z0 - T, H2.z0); wall(HALL_DOOR.x1, H2.x1, 0, H2.h, H2.z0 - T, H2.z0); wall(HALL_DOOR.x0, HALL_DOOR.x1, 2.6, H2.h, H2.z0 - T, H2.z0, false);
   wall(H2.x0, H2_IN[0], 0, H2.h, H2.z1, H2.z1 + T); wall(H2_IN[1], H2.x1, 0, H2.h, H2.z1, H2.z1 + T); wall(H2_IN[0], H2_IN[1], 2.55, H2.h, H2.z1, H2.z1 + T, false);
-  wall(-11.2, H2.x1, 0, H2.h, H2.z0, -4.6);   // 동북 모서리: 중정 문틀이 방 안으로 들어오는 자리를 어두운 벽으로 덮는다
+  // (예전 동북 모서리 기둥: 방을 서쪽으로 옮겨 전실 벽이 동쪽 벽 안에 들어가서 뺐다)   // 동북 모서리: 중정 문틀이 방 안으로 들어오는 자리를 어두운 벽으로 덮는다
   { const a = H2_IN[0], b = H2_IN[1], f = .08, zi = H2.z1 + .02;   // 입구 문틀: 1관 출구와 같은 나무 문틀
     boxMM(a - f, a, 0, 2.55 + f, zi - .07, zi, M.wood); boxMM(b, b + f, 0, 2.55 + f, zi - .07, zi, M.wood); boxMM(a - f, b + f, 2.55, 2.55 + f, zi - .07, zi, M.wood); }
   // 바닥에 내려앉는 빛(작품 앞 둥근 자국)
@@ -5907,7 +5920,7 @@ const inInterior = (x, z) => INTERIORS.find(I => I.rects.some(r => x > r[0] && x
 function blocked(x, z, list = colliders, noDoor = false) {
   if ((x < BOUND.x0 || x > BOUND.x1 || z < BOUND.z0 || z > BOUND.z1) && !inInterior(x, z)) return true;
   const here = inInterior(x, z), nb = here && LINKS[here.name];
-  for (const c of list) { if (noDoor && c.door) continue; if (c.owner && here && c.owner !== here.name && !(nb && nb.has(c.owner))) continue; if (x > c[0] - RAD && x < c[1] + RAD && z > c[2] - RAD && z < c[3] + RAD) return true; }
+  for (const c of list) { if (noDoor && c.door) continue; if (c.gate && !(globalThis.GB_GATE_LOCKED && GB_GATE_LOCKED())) continue; if (c.owner && here && c.owner !== here.name && !(nb && nb.has(c.owner))) continue; if (x > c[0] - RAD && x < c[1] + RAD && z > c[2] - RAD && z < c[3] + RAD) { if (c.gate && !noDoor && globalThis.GB_GATE) GB_GATE(); return true; } }
   return false;
 }
 /* 눌러서 걷기 길 찾기(작가님 2026-11-20: 미로 모퉁이·난간·문 앞에서 멈춤) — 곧장 못 가면 0.25 m 칸으로 돌아가는 길을 찾는다.
@@ -6283,10 +6296,11 @@ function award(k) {
   if (globalThis.GB_AFTER_STAMP) GB_AFTER_STAMP(k);
 }
 /* ───────── 방명록(온라인 개인전, 작가님 결정 2026-11-27) ─────────
-   1관 입구 왼쪽 책상을 누르거나, 1관 조개 도장을 받으면 뜨는 창에서 남긴다.
+   2관(시크릿관) 문 왼쪽 책상을 누르거나, 1관 조개 도장을 받으면 뜨는 창에서 남긴다.
    아이디는 서버가 주는 랜덤 아이디(작품 제목 낱말 + 숫자 네 자리, 겹치지 않음, 고칠 수 없음).
    개인정보를 받지 않는다: 서버에는 아이디 · 글 · 시각만. 남긴 글은 작가(관리 화면)와 나(이 브라우저에 남긴 사본)만 본다.
-   남기기는 온라인 전시 기간(2026-11-30 ~ 12-06, 한국 시간)에만. 그 전에는 숨은 시험 주소(?gb=열쇠)로만 */
+   남기기는 온라인 전시 기간(2026-11-30 ~ 12-06, 한국 시간)에만. 그 전에는 숨은 시험 주소(?gb=열쇠)로만
+   2관 문 잠금(작가님 2026-11-27 A): 남길 수 있는 동안에는 글을 남겨야 2관 문이 열린다(이 브라우저). 서버가 안 되면 그냥 열어 둔다 */
 const GB_API = globalThis.__GB_ENDPOINT || 'https://shinhaedalapi.mycafe24.com/guestbook/gb.php';
 const GB_OPEN = '2026-11-30', GB_CLOSE = '2026-12-06', GB_MAX = 500;
 const GB_BETA = (new URLSearchParams(location.search).get('gb') || '').slice(0, 80);
@@ -6302,6 +6316,7 @@ gbEl.innerHTML = `<div class="modal-in">
   </div>
   <div class="gb-write" id="gbWrite">
     <h2>방명록</h2>
+    <p class="gb-lead" id="gbLead" hidden>익명 방명록을 작성해주시면, 컬렉팅된 신해달 작가의 작품을 볼 수 있는 시크릿관에 입장하실 수 있습니다.</p>
     <div class="gb-idbox" id="gbIdBox"><label class="gb-lab" for="gbId">아이디</label><input class="gb-id" id="gbId" type="text" readonly tabindex="-1" value=""></div>
     <textarea id="gbText" maxlength="${GB_MAX}" rows="6" aria-label="방명록 글"></textarea>
     <p class="gb-foot"><span>남긴 글은 작가와 나만 볼 수 있어요.</span><span id="gbCount">0/${GB_MAX}</span></p>
@@ -6318,6 +6333,8 @@ document.body.appendChild(gbEl);
 .gb .gb-ask .lead { margin: 12px 0 0; line-height: 1.6; text-align: center; }
 .gb .row { margin-top: 24px; }
 .gb .gb-write h2 { margin-bottom: 22px; }
+.gb .gb-lead { margin: -8px 0 20px; text-align: center; line-height: 1.6; font-size: 14px; color: #d9d1c4; }
+.gb .gb-lead[hidden] { display: none; }
 .gb .gb-idbox { margin-bottom: 18px; }
 .gb .gb-idbox[hidden] { display: none; }
 .gb .gb-lab { display: block; margin: 0 2px 6px; font-size: 12.5px; line-height: 1.4; color: #9d958a; }
@@ -6333,7 +6350,7 @@ document.body.appendChild(gbEl);
 @media (max-width: 420px) { .gb .modal-in { padding: 26px 20px 22px; } }
 .gb .row button:disabled { opacity: .5; cursor: default; }`; document.head.appendChild(st); }
 const gb$ = id => document.getElementById(id);
-let gbMe = store.get('gb-id', null), gbBusy = false;
+let gbMe = store.get('gb-id', null), gbBusy = false, gbFail = false;   // gbFail: 서버가 안 되면 2관 문을 그냥 연다(이번 방문만)
 const gbMineList = () => store.get('gb-mine', []);
 function gbRenderMine() {
   const mine = gbMineList(); gb$('gbMineBox').hidden = !mine.length;
@@ -6349,11 +6366,12 @@ const GB_ERR = { closed: '지금은 방명록을 남길 수 없어요.', wait: '
 async function gbEnsureId() {
   if (gbMe) return gbMe;
   const j = await gbCall({ a: 'id' }).catch(() => ({ ok: false, code: 'net' }));
-  if (j.ok) { gbMe = { id: j.id, key: j.key }; store.set('gb-id', gbMe); }
+  if (j.ok) { gbMe = { id: j.id, key: j.key }; store.set('gb-id', gbMe); } else gbFail = true;
   return gbMe;
 }
 function gbShowId() { gb$('gbId').value = gbMe ? gbMe.id : ''; }
 async function gbOpenWrite(from) {
+  gb$('gbLead').hidden = from !== 'gate';
   gb$('gbAsk').hidden = true; gb$('gbWrite').hidden = false; gbEl.hidden = false; gbMsg(''); gbRenderMine();
   const can = gbCanWrite();
   gb$('gbText').hidden = !can; gb$('gbSend').hidden = !can; gb$('gbText').parentElement.querySelector('.gb-foot').hidden = !can;
@@ -6363,7 +6381,11 @@ async function gbOpenWrite(from) {
   if (!gbMe) { gb$('gbId').value = '…'; await gbEnsureId(); gbShowId(); }
   setTimeout(() => gb$('gbText').focus(), 60);
 }
-function gbClose() { gbEl.hidden = true; }
+let gbGateAt = 0;
+function gbClose() { gbEl.hidden = true; gbGateAt = performance.now(); }
+// 2관 문 잠금: 남길 수 있는 동안, 이 브라우저에서 아직 안 남겼고 서버가 되는 때만 잠근다
+globalThis.GB_GATE_LOCKED = () => gbCanWrite() && !gbFail && !store.get('gb-pass', false) && !gbMineList().length;
+globalThis.GB_GATE = () => { if (!gbEl.hidden || performance.now() - gbGateAt < 2500) return; gbGateAt = performance.now(); gbOpenWrite('gate'); };
 globalThis.GB_OPEN_DESK = () => gbOpenWrite('desk');
 // 1관 조개 도장을 받으면 묻는 창(작가님 2026-11-27). '다시 보지 않기'를 누르면 이 브라우저에서는 다시 묻지 않는다
 globalThis.GB_AFTER_STAMP = k => {
@@ -6385,9 +6407,9 @@ gb$('gbSend').addEventListener('click', async () => {
     gbShowId();
     let j = await gbCall({ a: 'post', id: gbMe.id, key: gbMe.key, body: t }).catch(() => ({ ok: false, code: 'net' }));
     if (!j.ok && j.code === 'key') { store.set('gb-id', null); gbMe = null; await gbEnsureId(); gbShowId(); if (gbMe) j = await gbCall({ a: 'post', id: gbMe.id, key: gbMe.key, body: t }).catch(() => ({ ok: false, code: 'net' })); }
-    if (!j.ok) { gbMsg(GB_ERR[j.code] ?? '지금은 남길 수 없어요. 조금 뒤에 다시 해 주세요.'); return; }
-    const mine = gbMineList(); mine.push({ t, at: j.at }); store.set('gb-mine', mine.slice(-50));
-    gb$('gbText').value = ''; gb$('gbCount').textContent = `0/${GB_MAX}`; gbRenderMine(); gbMsg('남겼어요. 고맙습니다.');
+    if (!j.ok) { if (j.code !== 'long' && j.code !== 'empty') gbFail = true; gbMsg(GB_ERR[j.code] ?? '지금은 남길 수 없어요. 조금 뒤에 다시 해 주세요.'); return; }
+    const mine = gbMineList(); mine.push({ t, at: j.at }); store.set('gb-mine', mine.slice(-50)); store.set('gb-pass', true);
+    gb$('gbText').value = ''; gb$('gbCount').textContent = `0/${GB_MAX}`; gbRenderMine(); gbMsg('남겼어요. 고맙습니다. 이제 2관에 들어갈 수 있어요.');
     if (globalThis.shStat) shStat('gb_post', '');
   } finally { gbBusy = false; gb$('gbSend').disabled = false; }
 });
