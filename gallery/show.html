@@ -3,6 +3,7 @@
 <meta charset="utf-8">
 <script>/* 온라인 개인전 판(2026-11-30~): 주소는 /gallery/ 로 보이게 해 통계도 같은 갤러리로 센다 */try{history.replaceState(history.state,"",location.pathname.replace(/show\.html$/,"")+location.search+location.hash)}catch(e){}</script>
 <meta name="robots" content="noindex">
+<link rel="preload" as="image" href="img/HD-2026-001.webp" crossorigin="anonymous" fetchpriority="high">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>신해달 갤러리</title>
 <meta name="description" content="신해달 작가의 3D 갤러리. 작품관, IP관, 일월오봉단관, 해달 라운지를 걸어서 둘러봅니다.">
@@ -17,7 +18,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta name="gallery-variant" content="site">
-<meta name="gallery-build" content="a918fa2edf9c">
+<meta name="gallery-build" content="408a2004c5b3">
 <link rel="stylesheet" href="../assets/fonts.css">
 <style>
 /* 레이아웃: 화면 전체가 3D 전시장, 그 위에 옻칠처럼 검은 패널이 가장자리에만 얹힌다. 한 가지 어두운 화면으로 고정. */
@@ -320,7 +321,7 @@ body:has(.welcome:not(.gone)) .hint, body:has(.welcome:not(.gone)) .loading { op
     </form>
     <div class="flip" id="flip" hidden title="눌러서 뒤집기">
       <div class="flip-in">
-        <div class="face front"><img crossorigin="anonymous" src="img/card-flat.webp" alt="현대사회스포츠센터 멤버십 카드 앞면"></div>
+        <div class="face front"><img crossorigin="anonymous" loading="lazy" src="img/card-flat.webp" alt="현대사회스포츠센터 멤버십 카드 앞면"></div>
         <div class="face backside">
           <p class="q">처음부터 능숙한 존재는 없습니다.<br>누구에게나 서툰 시작이 있고, 시작하기에 늦은 때도 없습니다.<br>누군가의 미숙함을 너그럽게 보길 바라는 마음을 담았습니다.</p>
           <div class="stamps" id="cardStamps"></div>
@@ -508,6 +509,10 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.0;
 const TEX_CAP = coarse ? 768 : 0;   // 폰·태블릿(손가락 화면)만 그림을 768 이하로 줄여 올린다(작가님 2026-11-27 B)
 if (TEX_CAP && renderer.capabilities.maxTextureSize > TEX_CAP) { renderer.capabilities.maxTextureSize = TEX_CAP; const w0 = console.warn.bind(console); console.warn = (...a) => { if (typeof a[0] === 'string' && a[0].includes('Texture has been resized')) return; w0(...a); }; }
+{ let lostAt = 0; const again = () => { try { const k = 'haedal-gallery:ctx-reload', n = JSON.parse(sessionStorage.getItem(k) || '[]').filter(t => Date.now() - t < 300000); if (n.length >= 2) return; n.push(Date.now()); sessionStorage.setItem(k, JSON.stringify(n)); } catch (e) {} location.reload(); };
+  canvas.addEventListener('webglcontextlost', (e) => { e.preventDefault(); lostAt = performance.now(); }, false);
+  canvas.addEventListener('webglcontextrestored', again, false);
+  setInterval(() => { if (lostAt && document.visibilityState === 'visible' && performance.now() - lostAt > 4000) { lostAt = 0; again(); } }, 1000); }   // 그래픽 연결 끊김 → 다시 열기(최적화 2026-11-27)
 const maxAniso = renderer.capabilities.getMaxAnisotropy();
 const scene = new THREE.Scene();
 const BASE_FOV = coarse ? 75 : 70;   // 1인칭 눈높이(작가님 결정): 화각을 넓혀 좁은 곳도 덜 답답하게
@@ -1048,6 +1053,7 @@ const focusFrom = (x, y, z, nx, nz, dist = 2.6) => ({ pos: [x + nx * dist, z + n
 const animators = [];
 // 홍보 포스터 한 장(종이 + 흰 테, 그림 비율에 맞춰 폭을 정함). 걸 전시가 없으면 big 자리는 대표작(HD-2026-001), 작은 자리는 null.
 //   slot: 자리 번호(작은 자리끼리 1~3순위를 나눠 건다) / h: 높이(m) / tape: 모서리 테이프 / back: 뒤판 색(없으면 흰 종이 테만)
+const PROMO_TEX = new Map();   // 그림 주소 → { t, fits }: 같은 포스터 그림은 한 장만(최적화 2026-11-27)
 function promoPoster(slot, h, { big = false, tape = false, back = null, toneMapped = true, online = false } = {}) {
   const e = promoFor(slot), w0 = WORKS_INDEX.find(w => w.id === 'HD-2026-001');
   if (!e && (!big || !w0)) return null;
@@ -1058,7 +1064,8 @@ function promoPoster(slot, h, { big = false, tape = false, back = null, toneMapp
   const tapes = tape ? [-1, 1].map(s => { const t = new THREE.Mesh(new THREE.PlaneGeometry(h * .2, h * .065), new THREE.MeshBasicMaterial({ color: 0xe9e2cf, transparent: true, opacity: .85, toneMapped: false, side: THREE.DoubleSide })); t.rotation.z = s * -.6; g.add(t); return [s, t]; }) : [];
   const fit = a => { face.scale.set(h * a, h, 1); edge.scale.set(h * a + h * .04, h * 1.04, 1); for (const [s, t] of tapes) t.position.set(s * h * a / 2, h / 2, .007); };
   fit(.8);
-  const t = loader.load(src, t => fit(t.image.width / t.image.height)); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = maxAniso; m.map = t;
+  let PT = PROMO_TEX.get(src); if (!PT) { PT = { fits: [] }; PT.t = loader.load(src, tt => { const a = tt.image.width / tt.image.height; for (const f of PT.fits) f(a); PT.fits = null; }); PT.t.colorSpace = THREE.SRGBColorSpace; PT.t.anisotropy = maxAniso; PROMO_TEX.set(src, PT); }
+  if (PT.fits) PT.fits.push(fit); else fit(PT.t.image.width / PT.t.image.height); m.map = PT.t;
   const on = e && TODAY >= e.start_date, dt = x => x.replace(/-/g, '.');
   g.userData.info = ol ? { kind: 'NOW ON VIEW · 온라인 개인전', title: e.title, meta: ONLINE_DATES + ' · shinhaedal.com', img: src, links: [[SITE + '/', '홈페이지에서 보기']] }
     : e ? { kind: (on ? 'NOW ON VIEW' : 'UPCOMING') + ' · ' + e.type, title: e.title, meta: `${dt(e.start_date)} – ${dt(e.end_date).slice(5)} · ${e.venue}`, img: src, links: [[SITE + '/', '홈페이지에서 보기']] }
@@ -1125,8 +1132,12 @@ function drawHero(t) {
   g.fillText('쉽게 들어와서 오래 머무는 작업.', W * .045, H * .86); g.fillText('순서가 다를 뿐, 깊이는 같습니다.', W * .045, H * .955);
   heroTex.needsUpdate = true;
 }
-let heroT = 0;
-animators.push((t, dt) => { heroT += dt; if ((heroT * 30 | 0) !== ((heroT - dt) * 30 | 0)) drawHero(heroT); });
+let heroT = 0, HERO_SC = null, heroLast = -1; const _heroF = new THREE.Frustum(), _heroM = new THREE.Matrix4();   // 보일 때만 다시 그린다(최적화 2026-11-27)
+animators.push((t, dt) => { heroT += dt; if (!HERO_SC || (heroT * 30 | 0) === (heroLast * 30 | 0)) return;
+  for (let p = HERO_SC; p; p = p.parent) if (!p.visible) return;
+  if (camera.position.distanceTo(HERO_SC.position) > 45) return;
+  _heroM.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse); _heroF.setFromProjectionMatrix(_heroM); if (!_heroF.intersectsObject(HERO_SC)) return;
+  heroLast = heroT; drawHero(heroT); });
 
 /* ───────── 전시 안내(로비 · 작가소개 함께 씀) ───────── */
 // 개인전(홍보 1순위) 머리글 + 포스터 + 설명. wx·nx: 벽 자리와 바라보는 쪽, zl: 보는 사람 기준 왼쪽 끝 z, s: 크기 배율, by: 포스터 밑 높이
@@ -1309,7 +1320,7 @@ function exhibitUpcoming(wx, nx, zc, y = 2.3) {
     layout(); paint(0);
     document.fonts.addEventListener('loadingdone', () => { layout(); paint(blocks[idx] ? blocks[idx].y : 0); });
     let idx = 0, from = 0, to = 0, k = 1, wait = blocks[0].hold;
-    if (!reduceMotion) animators.push((time, dt) => {
+    if (!reduceMotion) animators.push((time, dt, me) => { if (me && !['artist', 'lobby'].includes(zoneOf(me.x, me.z))) return;   // 작가소개·로비 밖에선 멈춤(최적화 2026-11-27)
       if (k < 1) { k = Math.min(1, k + dt / 1.4); const e = k < .5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2; paint(from + (to - from) * e); return; }
       if ((wait -= dt) > 0) return;
       const next = (idx + 1) % blocks.length;
@@ -1763,14 +1774,16 @@ interior('hall2', [[H2.x0, H2.x1, H2.z0, H2.z1], [H2_IN[0], H2_IN[1], H2.z1 - .1
 
 // 가볍게(작가님 2026-11-27 A): 화면 선명도 저절로 맞추기. 처음 몇 초(불러오기)는 빼고, 3초마다 한 장 그리는 시간을 재서
 //   느리면(가운데값 24 ms 넘음 = 초당 40장 아래) 한 단계(0.25)씩 덜 선명하게 그린다. 1.5(높은 화면)부터 0.75까지. 한번 내리면 다시 올리지 않는다
-{ let pr = Math.min(devicePixelRatio, 1.5), last = 0, buf = [], since = 0;
+{ let pr = Math.min(devicePixelRatio, 1.5), last = 0, buf = [], since = 0, trial = null, stop = false;
   renderer.setPixelRatio(pr);
   const tick = now => {
     if (last && now - last < 250) buf.push(now - last);   // 탭을 숨겼다 돌아온 틈은 빼고
     last = now;
     if (now > 6000 && now - since > 3000 && buf.length > 30) {
       const m = buf.slice().sort((a, b) => a - b)[buf.length >> 1]; buf = []; since = now;
-      if (m > 24 && pr > .75) { pr = Math.max(.75, pr - .25); renderer.setPixelRatio(pr); resize(); console.debug('화면 선명도 낮춤', pr, m.toFixed(1) + 'ms'); }
+      // 절전 모드 폰(초당 30장으로 묶임)은 선명도를 낮춰도 빨라지지 않는다 → 한 단계 낮춘 뒤 나아지지 않으면 되돌리고 그만둔다(최적화 2026-11-27)
+      if (trial) { if (m > trial.m * .85) { pr = trial.pr; renderer.setPixelRatio(pr); resize(); stop = true; console.debug('선명도 되돌림(묶인 빠르기)', pr); } trial = null; }
+      else if (!stop && m > 24 && pr > .75) { trial = { pr, m }; pr = Math.max(.75, pr - .25); renderer.setPixelRatio(pr); resize(); console.debug('화면 선명도 낮춤', pr, m.toFixed(1) + 'ms'); }
     } else if (now - since > 3000 && buf.length > 400) buf = [];
     requestAnimationFrame(tick);
   };
@@ -3474,7 +3487,7 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
       const z = zc + sg * .8 + dz, x = shoreX(z) - dx, T = TREES[k], m = new THREE.Mesh(T.g, T.m);
       m.scale.setScalar(sc * .92); m.scale.x *= fl; m.position.set(x, 0, z); scene.add(m); blockers.push(m); treeCards.push(m); });
     animators.push(() => { for (const m of treeCards) if (m.visible) m.rotation.y = Math.atan2(camera.position.x - m.position.x, camera.position.z - m.position.z); });
-    BEACH.T = { midT, farT, leafT, barkT, midD: ldT('forest-mid-dusk.webp', true, false), farD: ldT('forest-far-dusk.webp', true, false) };   // 길에서 같은 그림을 쓴다
+    BEACH.T = { midT, farT, leafT, barkT, farD: ldT('forest-far-dusk.webp', true, false) };   // 길에서 같은 그림을 쓴다
     {
       const front = .7, zN = BE.z0 - front, zS = BE.z1 + front, xW = CH.x1 - front, spots = []; let nT = 0;
       for (let x = shoreX(zN) - 1.2; x > xW + 1; x -= 2.7) spots.push([x, zN - r() * .6]);
@@ -4550,9 +4563,9 @@ const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a
           gl.scene.updateMatrixWorld(true);
           gl.scene.traverse(o => { if (!o.isMesh) return;
             let n = o; while (n && !['Building', 'Wall', 'Floor', 'Ground', 'Props', 'Trees'].includes(n.name)) n = n.parent; const key = n ? n.name : 'Props';
-            if (!lmT[key]) { const t = tex(`ip/new/sea/lm-${key}.webp`); t.flipY = false; t.channel = 1; lmT[key] = t; }
             if (o.material.name === 'lampHead' || o.material.name === 'pole' || o.material.name === 'wood') { o.visible = false; return; }
-            if (FOREST && (key === 'Floor' || key === 'Ground' || key === 'Props' || key === 'Trees' || (key === 'Wall' && !['stone', 'coping', 'gateWood'].includes(o.material.name)))) { o.visible = false; return; }   // 숲길: 길·모래·방파제·난간·화단·나무는 숨긴다(건물·마당 돌담·대문만 남김)   // 가로등·벤치는 뺐다(작가님 2026-11-20)
+            if (FOREST && (key === 'Floor' || key === 'Ground' || key === 'Props' || key === 'Trees' || (key === 'Wall' && !['stone', 'coping', 'gateWood'].includes(o.material.name)))) { o.visible = false; return; }
+            if (!lmT[key]) { const t = tex(`ip/new/sea/lm-${key}.webp`); t.flipY = false; t.channel = 1; lmT[key] = t; }   // 빛 그림은 보이는 조각 것만 받는다(최적화 2026-11-27)   // 숲길: 길·모래·방파제·난간·화단·나무는 숨긴다(건물·마당 돌담·대문만 남김)   // 가로등·벤치는 뺐다(작가님 2026-11-20)
             if (key === 'Wall' && o.material.name === 'grass') { const P = o.geometry.attributes.position, v = new THREE.Vector3(); for (let i = 0; i < P.count; i++) { v.fromBufferAttribute(P, i).applyMatrix4(o.matrixWorld); if (v.x < 44.2) { const k = Math.max(0, Math.min(1, (v.x - 42.4) / 1.8)); P.setY(i, Math.min(P.getY(i), .4 + (P.getY(i) - .4) * k)); } } P.needsUpdate = true; o.geometry.computeBoundingSphere(); }   // 스포츠센터 벽 앞 잔디 언덕이 창을 가렸다: 벽 쪽 1.8 m는 낮춘다(작가님 2026-11-20)
             if (key === 'Wall' && (o.material.name === 'stone' || o.material.name === 'coping')) o.userData.clipX = FOREST ? 54.42 : 57.6;   // 마당 남쪽 돌담이 모래·바다 위로 길게 나갔다: 방파제 끝(x 57.6)에서 자른다
             const spec = MAT[o.material.name] || { c: 0xffffff }; if (o.material.name === 'pineLeaf') pineLeafMs.push(o); if (o.material.name === 'pineBark') pineBarkMs.push(o);
@@ -5559,7 +5572,7 @@ const banners = [];
   // 라운지 바깥벽: 홈페이지 첫 화면을 띄운 디스플레이(4:3, 테두리만 가늘게)
   const dH = 4.9, dW = dH * HERO_W / HERO_H;   // 라운지 바깥벽(높이 6 m)을 시원하게 채운다
   boxMM(13.5 - dW / 2 - .06, 13.5 + dW / 2 + .06, .3 - .06, .3 + dH + .06, 19.55, 19.72, M.steel);
-  const sc = new THREE.Mesh(new THREE.PlaneGeometry(dW, dH), new THREE.MeshBasicMaterial({ map: heroTex, toneMapped: false })); place(sc, 13.5, .3 + dH / 2, 19.74, 0, 1);
+  const sc = new THREE.Mesh(new THREE.PlaneGeometry(dW, dH), new THREE.MeshBasicMaterial({ map: heroTex, toneMapped: false })); HERO_SC = sc; place(sc, 13.5, .3 + dH / 2, 19.74, 0, 1);
   pickable(sc, { kind: 'SHIN HAEDAL', title: '쉽게 들어와서 오래 머무는 작업.', body: '순서가 다를 뿐, 깊이는 같습니다.', img: 'ip/hero-bg.webp', links: [[SITE + '/', '홈페이지']] });
   // 이름 간판(작가님 시안 2차): 「신해달 갤러리」 한 줄은 Pretendard ExtraBold(800), 기본 글자 폭, 자간 살짝. 아래 영문은 왼쪽 맞춤·한글 높이의 1/5(Pretendard Medium)
   //   채도 낮은 샴페인 브론즈 입체 글자: 앞면 은은한 반광, 옆면 한 톤 어둡게, 모서리는 아주 얕게. 글자 모양 그림을 얇게 여러 장 겹쳐 옆면 두께를 만든다.
@@ -6696,7 +6709,7 @@ function renderViews() {
     for (const o of hid) o.visible = true;
     V.u.map.value = viewRT[k].texture; V.u.res.value.copy(_vSz); V.u.on.value = 1;
   });
-  INTERIORS.forEach((I, i) => I.objs.forEach((o, j) => { o.visible = was[i][j]; }));
+  INTERIORS.forEach((I, i) => I.objs.forEach((o, j) => { if (j < was[i].length) o.visible = was[i][j]; }));
 }
 // 그림책 패스(샘플, ?pstyle=1·2): 장면을 한 번 그린 뒤 깊이·색 경계에 남색 손그림 선, 명암을 몇 단으로, 종이·색연필 결을 덧입힌다
 let inkRT = null, inkQ = null;
@@ -6969,9 +6982,10 @@ me.face = view.yaw = 0; if (''.includes("dbg=1")) { window.__dbg = { openCard, p
     if (loadedAll) welcomeReady();
     if (again) { again = false; setTimeout(warmGPU, 50); }
   };
-  manager.onLoad = ((f) => () => { f && f(); loadedAll = true; welcomeSet(.88); setTimeout(warmGPU, 50); })(manager.onLoad);
+  manager.onLoad = ((f) => () => { f && f(); loadedAll = true; if (LATE.held) setTimeout(LATE.go, 300); welcomeSet(.88); setTimeout(warmGPU, 50); })(manager.onLoad);
   LATE.onIdle = () => setTimeout(warmGPU, 50);   /* 뒤에서 받은 IP관·라운지 모델이 다 오면 한 번 더 데운다(그림은 위 manager.onLoad가 다시 불린다) */
-  setTimeout(LATE.go, 40000);   /* 뒤 묶음은 입장 버튼이 켜진 뒤 시작(아래 open). 느린 망에서 첫 묶음과 다투지 않게, 늦어도 40초 뒤엔 시작 */
+  setTimeout(() => { if (!LATE.held) LATE.go(); }, 40000); setTimeout(LATE.go, 120000);
+  animators.push((t, dt, me) => { if (LATE.held && !LATE.open && me && ['court', 'ip', 'lounge'].includes(zoneOf(me.x, me.z))) LATE.go(); });   // 느린 망: 중정·IP관·라운지에 가면 바로 받는다   /* 뒤 묶음은 입장 버튼이 켜진 뒤 시작(아래 open). 느린 망에서 첫 묶음과 다투지 않게, 늦어도 40초 뒤엔 시작 */
   manager.onProgress = ((f) => (u, d, t) => { f && f(u, d, t); if (!loadedAll) welcomeSet(d / t * .85); })(manager.onProgress);
   setTimeout(warmGPU, 8000);   /* 따로 불러오는 그림(바다 결 등)까지 */
   interiorKey = ''; }
@@ -6992,7 +7006,7 @@ me.face = view.yaw = 0; if (''.includes("dbg=1")) { window.__dbg = { openCard, p
   if (ENTRY === 'ip') LATE.go();   // IP관 그림·모델은 원래 뒤에서 받는다 — IP관으로 바로 갈 땐 처음부터 같이 받는다
   let shown = 0, ready = false;
   welcomeSet = (v) => { v = Math.max(shown, Math.min(1, v)); shown = v; fill.style.width = (v * 100).toFixed(1) + '%'; bar.setAttribute('aria-valuenow', String(Math.round(v * 100))); };
-  const open = () => { if (ready) return; ready = true; setTimeout(LATE.go, 300);   /* 입장 버튼이 켜지면 IP관·라운지 묶음을 뒤에서 받기 시작 */ go.setAttribute('aria-disabled', 'false'); go.textContent = '갤러리 입장'; live.textContent = '준비됨'; };
+  const open = (forced) => { if (ready) return; ready = true; if (forced && !loadedAll) LATE.held = true; else setTimeout(LATE.go, 300);   /* 입장 버튼이 켜지면 IP관·라운지 묶음을 뒤에서 받기 시작 */ go.setAttribute('aria-disabled', 'false'); go.textContent = '갤러리 입장'; live.textContent = '준비됨'; };
   welcomeReady = () => { if (ready) return; requestAnimationFrame(() => requestAnimationFrame(() => {   // 데운 뒤 두 프레임 쉬고 켠다
     open(); welcomeSet(1); }));
   };
@@ -7001,7 +7015,7 @@ me.face = view.yaw = 0; if (''.includes("dbg=1")) { window.__dbg = { openCard, p
   go.addEventListener('click', () => { if (ready) enter(); });
   // 작가님 2026-11-20: 다 받으면 입장 버튼을 누르지 않아도 카드가 사라지고 들어간다(막대가 다 찬 걸 잠깐 보여 준 뒤). 소리는 화면을 처음 누를 때 켜진다
   { let t = 0; const auto = () => { if (ready && welcomeOpen && !t) t = setTimeout(enter, 900); }; const iv = setInterval(() => { auto(); if (!welcomeOpen) clearInterval(iv); }, 200); }
-  setTimeout(() => { if (welcomeOpen) open(); }, 12000);
+  setTimeout(() => { if (welcomeOpen) open(true); }, 12000);   // 강제 열림: 뒤 묶음은 첫 묶음이 다 오면(최적화 2026-11-27)
   if (/[?&]at=/.test('')) enter();   // 점검용 바로 가기(?at=)는 카드 없이
   else setTimeout(() => { try { go.focus({ preventScroll: true }); } catch (e) {} }, 50);
 }
