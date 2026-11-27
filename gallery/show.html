@@ -17,7 +17,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta name="gallery-variant" content="site">
-<meta name="gallery-build" content="e457de046ad0">
+<meta name="gallery-build" content="0055a15cf359">
 <link rel="stylesheet" href="../assets/fonts.css">
 <style>
 /* 레이아웃: 화면 전체가 3D 전시장, 그 위에 옻칠처럼 검은 패널이 가장자리에만 얹힌다. 한 가지 어두운 화면으로 고정. */
@@ -1579,6 +1579,7 @@ const V1_BIO = {
     ['SELECTED ART FAIRS', [['2026', '《ART SHOPPING PARIS》, 카루젤 뒤 루브르, 파리, 프랑스'], ['2026', '《서울아트살롱》, 그랜드 하얏트 호텔, 서울'], ['2026', '《URBAN BREAK & TOYCON SEOUL》 단독 부스, 코엑스, 서울'],
       ['2026', '《LOOPOP》, 더현대 백화점, 서울'], ['2026', '《UNKNOWN VIBE THE BLOOM》, 신라호텔, 서울'], ['2025', '《서울아트쇼》, 코엑스, 서울']]]],
 };   // 방명록 책상 앞 자리(x, z) — 통계·창에서 쓴다
+const HALL1_LI = 14, H2_SI = 3;   // 빛을 줄이며(2026-11-27) 밝기를 맞춘 값: 1관 점광 세기, 2관 벽 조명 기본 세기
 const HALL_CS = .2, HALL_CAPW = .06 + (CAP_W - .08) * HALL_CS;
 const H2_POOL_SOFT = poolMat(.5);   // 2관 빛 번짐: 절반 세기(작가님 2026-11-27 A)
 const HALL_CS2 = .3;   // 2관(어두운 방) 캡션은 1관의 1.5배(작가님 2026-11-27 A: 어두워 안 읽혔다)   // 실제 전시장처럼 작은 캡션(약 24 × 12 cm, 실제 명제표의 1.5배쯤)
@@ -1618,7 +1619,8 @@ interior('law', [[V1.x0, V1.x1, V1.z0, V1.z1], [V1_IN[0], V1_IN[1], V1.z1 - .2, 
     boxMM(a - f, a, 0, DH + f, zi - .04, zi + .02, wd); boxMM(b, b + f, 0, DH + f, zi - .04, zi + .02, wd); boxMM(a - f, b + f, DH, DH + f, zi - .04, zi + .02, wd); }
   { const g = [V1_OUT[0], V1_OUT[1], V1.z1 - .4, V1.z1 - .2]; g.gate = true; colliders.push(g); }   // 2관 문 잠금(작가님 2026-11-27 A): 방명록을 남기면 열린다(guestbook.js GB_GATE_LOCKED)
   // 빛: 방 전체를 고르게 밝게(3줄 × 2줄)
-  for (let i = 0; i < 4; i++) for (let j = 0; j < 3; j++) { const x = V1.x0 + 2.3 + (V1.x1 - V1.x0 - 4.6) * i / 3, z = V1.z0 + 2.2 + (V1.z1 - V1.z0 - 4.6) * j / 2; const l = new THREE.PointLight(0xfff6ea, 4.4, 10, 1.2); l.position.set(x, V1.h - .4, z); scene.add(l); }
+  // 가볍게(작가님 2026-11-27 A): 빛 12개(4 × 3) → 3개(한 줄). 빛 하나하나를 모든 벽·바닥이 늘 계산해서 갤러리 전체가 무거웠다
+  for (let i = 0; i < 3; i++) { const x = V1.x0 + 3.2 + (V1.x1 - V1.x0 - 6.4) * i / 2, z = (V1.z0 + V1.z1) / 2; const l = new THREE.PointLight(0xfff6ea, HALL1_LI, 16, 1.2); l.position.set(x, V1.h - .4, z); scene.add(l); }
   // 서문(A2) · 작가소개(A4): 작가님이 주신 판 그대로(2026-11-27). 누르면 같은 글이 창으로 뜬다
   const at = (F, f) => [F.o[0] + F.d[0] * F.len * f, F.o[1] + F.d[1] * F.len * f];
   // 판은 그림 그대로 건다(cutout은 아래 끝이 기준이라 가운데 높이에서 반만큼 내린다)
@@ -1722,14 +1724,20 @@ interior('hall2', [[H2.x0, H2.x1, H2.z0, H2.z1], [H2_IN[0], H2_IN[1], H2.z1 - .1
   const floorGlow = canvasTex(128, 128, (g, w, h) => { const gr = g.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2); gr.addColorStop(0, 'rgba(255,238,210,.5)'); gr.addColorStop(1, 'rgba(255,238,210,0)'); g.fillStyle = gr; g.fillRect(0, 0, w, h); });
   const glowM = new THREE.MeshBasicMaterial({ map: floorGlow, transparent: true, depthWrite: false, toneMapped: false, opacity: .55 });
   const byId = Object.fromEntries(hangable.map(w => [w.id, w]));
+  for (const F of H2_HANG.map(h => h[0])) F.lit = [];
   for (const [F, list] of H2_HANG) for (const [id, c] of list) {
     const w = byId[id]; if (!w) { HALL_LEFT.push(id); continue; }
     const [ww, hh] = parseSize(w.size).map(v => v / 100 * SCALE), cy = Math.max(HANG_CY, .3 + hh / 2), [nx, nz] = F.n;
     const x = F.x != null ? F.x + nx * .01 : c, z = F.z != null ? F.z + nz * .01 : c;
     putWork(w, ww, hh, x, cy, z, F.n, [nz, -nx], true, F.name);
     const r = Math.max(ww, hh) * .9 + .5, gl = new THREE.Mesh(new THREE.PlaneGeometry(r * 1.6, r), glowM); gl.rotation.x = -Math.PI / 2; gl.rotation.z = Math.atan2(nx, nz); gl.position.set(x + nx * (r * .45), .05, z + nz * (r * .45)); scene.add(gl);
-    const sp = new THREE.SpotLight(0xfff0dc, 3, 6, .3, .6, 1.2); sp.position.set(x + nx * 1.4, H2.h - .05, z + nz * 1.4); sp.target.position.set(x, cy, z); scene.add(sp, sp.target);   // 핀 조명: 천장에서 작품으로
+    (F.lit = F.lit || []).push([x, cy, z, ww]);
   }
+  // 조명: 작품마다 하나(8개)였던 것을 벽마다 하나(3개)로(작가님 2026-11-27 A '가볍게'). 벽 앞 천장에서 그 벽 작품 묶음 전체를 비춘다
+  for (const [F] of H2_HANG) { const L = F.lit; if (!L.length) continue; const [nx, nz] = F.n;
+    const xs = L.map(l => l[0]), zs = L.map(l => l[2]), x = (Math.min(...xs) + Math.max(...xs)) / 2, z = (Math.min(...zs) + Math.max(...zs)) / 2, cy = L.reduce((a, l) => a + l[1], 0) / L.length;
+    const span = Math.max(Math.max(...xs) - Math.min(...xs), Math.max(...zs) - Math.min(...zs)) + Math.max(...L.map(l => l[3])) + .6, out = 2.2, dist = Math.hypot(out, H2.h - cy);
+    const sp = new THREE.SpotLight(0xfff0dc, H2_SI * Math.max(1, span / 1.6), 9, Math.min(1.1, Math.atan(span / 2 / dist) + .08), .45, 1.2); sp.position.set(x + nx * out, H2.h - .05, z + nz * out); sp.target.position.set(x, cy, z); scene.add(sp, sp.target); }
 });
 // 1관 출구 ↔ 2관 입구: 문을 지나면 이어 붙고(portal), 문 너머로 서로 보인다(viewPortal)
 { const oc = (V1_OUT[0] + V1_OUT[1]) / 2, ic = (H2_IN[0] + H2_IN[1]) / 2, w = V1_OUT[1] - V1_OUT[0];
@@ -1738,6 +1746,21 @@ interior('hall2', [[H2.x0, H2.x1, H2.z0, H2.z1], [H2_IN[0], H2_IN[1], H2.z1 - .1
   const o = viewPortal('law', 'hall2', [oc, V1.z1 - .2, Math.PI], [ic, H2.z1 - .5, 0], w - .02, 2.54, 0, { back: .01, fallback: 0x1d1b21 });
   const i = viewPortal('hall2', 'law', [ic, H2.z1, Math.PI], [oc, V1.z1 - .7, 0], w - .02, 2.54, 0, { back: .01, fallback: 0xeeeeea });
   INTERIORS.find(I => I.name === 'law').objs.push(o.hole); scene.add(o.hole); INTERIORS.find(I => I.name === 'hall2').objs.push(i.hole); scene.add(i.hole); }
+
+// 가볍게(작가님 2026-11-27 A): 화면 선명도 저절로 맞추기. 처음 몇 초(불러오기)는 빼고, 3초마다 한 장 그리는 시간을 재서
+//   느리면(가운데값 24 ms 넘음 = 초당 40장 아래) 한 단계(0.25)씩 덜 선명하게 그린다. 1.5(높은 화면)부터 0.75까지. 한번 내리면 다시 올리지 않는다
+{ let pr = Math.min(devicePixelRatio, 1.5), last = 0, buf = [], since = 0;
+  renderer.setPixelRatio(pr);
+  const tick = now => {
+    if (last && now - last < 250) buf.push(now - last);   // 탭을 숨겼다 돌아온 틈은 빼고
+    last = now;
+    if (now > 6000 && now - since > 3000 && buf.length > 30) {
+      const m = buf.slice().sort((a, b) => a - b)[buf.length >> 1]; buf = []; since = now;
+      if (m > 24 && pr > .75) { pr = Math.max(.75, pr - .25); renderer.setPixelRatio(pr); resize(); console.debug('화면 선명도 낮춤', pr, m.toFixed(1) + 'ms'); }
+    } else if (now - since > 3000 && buf.length > 400) buf = [];
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick); }
 
 /* ── 문턱+ 룸2 POV ── */
 // 문턱②: 룸1 서쪽 벽 남쪽 끝 문에서 서쪽으로 가다 한 번 꺾여 북쪽으로(폭 2.6, 천장 3.0, 조명은 밝게 그대로).
