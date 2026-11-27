@@ -17,7 +17,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta name="gallery-variant" content="site">
-<meta name="gallery-build" content="fe824765c291">
+<meta name="gallery-build" content="40a0e47f6071">
 <link rel="stylesheet" href="../assets/fonts.css">
 <style>
 /* 레이아웃: 화면 전체가 3D 전시장, 그 위에 옻칠처럼 검은 패널이 가장자리에만 얹힌다. 한 가지 어두운 화면으로 고정. */
@@ -428,6 +428,8 @@ const PROMOS = EXHIBITIONS.filter(e => e.start_date && e.end_date && e.home_mode
   .sort((a, b) => (onlineOn(a) ? 0 : 1) - (onlineOn(b) ? 0 : 1) || (a.home_mode === 'pin' ? 0 : 1) - (b.home_mode === 'pin' ? 0 : 1) || homeTypeRank(a.type) - homeTypeRank(b.type)
     || (TODAY >= a.start_date ? 0 : 1) - (TODAY >= b.start_date ? 0 : 1) || String(a.start_date).localeCompare(String(b.start_date)) || String(a.id).localeCompare(String(b.id)))
   .slice(0, HOME_CARDS_MAX);   // 포스터가 없는 전시는 아래 exCard 글씨 카드를 포스터 대신 건다(작가님 2026-11-15)
+const ONLINE_POSTER = 'posters/online-2026.webp', ONLINE_DATES = '2026.11.30 – 12.06';   // 온라인 개인전 포스터(작가님이 준 그림 그대로)
+const onlinePosterOn = () => TODAY >= '2026-11-30' && TODAY <= '2026-12-06';
 const promoFor = (slot = 0) => PROMOS.length ? PROMOS[slot % Math.min(3, PROMOS.length)] : null;
 const LOCAL_POSTERS = new Set(['EX-2026-01']);   // 갤러리 폴더(posters/)에 옮겨 둔 포스터. 없는 것은 홈페이지 주소로 불러온다(아티팩트에서는 안 보임 → 새 전시를 걸면 여기 복사해 넣는다)
 // 포스터가 없는 전시는 홈페이지 전시 카드처럼 글씨로 만든 세로 카드(5:7)를 포스터 자리에 건다(작가님 2026-11-15). 그림 주소(data:)로 돌려주어 포스터를 쓰는 곳 어디서나 그대로 쓴다
@@ -1044,10 +1046,10 @@ const focusFrom = (x, y, z, nx, nz, dist = 2.6) => ({ pos: [x + nx * dist, z + n
 const animators = [];
 // 홍보 포스터 한 장(종이 + 흰 테, 그림 비율에 맞춰 폭을 정함). 걸 전시가 없으면 big 자리는 대표작(HD-2026-001), 작은 자리는 null.
 //   slot: 자리 번호(작은 자리끼리 1~3순위를 나눠 건다) / h: 높이(m) / tape: 모서리 테이프 / back: 뒤판 색(없으면 흰 종이 테만)
-function promoPoster(slot, h, { big = false, tape = false, back = null, toneMapped = true } = {}) {
+function promoPoster(slot, h, { big = false, tape = false, back = null, toneMapped = true, online = false } = {}) {
   const e = promoFor(slot), w0 = WORKS_INDEX.find(w => w.id === 'HD-2026-001');
   if (!e && (!big || !w0)) return null;
-  const g = new THREE.Group(), src = e ? posterSrc(e) : workImg(w0);
+  const ol = online && e && onlinePosterOn(), g = new THREE.Group(), src = ol ? ONLINE_POSTER : e ? posterSrc(e) : workImg(w0);
   const m = new THREE.MeshBasicMaterial({ color: 0xf2efe9, toneMapped, side: THREE.DoubleSide });
   const face = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), m), edge = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ color: back ?? 0xf6f3ee, toneMapped, side: THREE.DoubleSide }));
   face.position.z = .004; edge.position.z = .001; g.add(edge, face);
@@ -1056,7 +1058,8 @@ function promoPoster(slot, h, { big = false, tape = false, back = null, toneMapp
   fit(.8);
   const t = loader.load(src, t => fit(t.image.width / t.image.height)); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = maxAniso; m.map = t;
   const on = e && TODAY >= e.start_date, dt = x => x.replace(/-/g, '.');
-  g.userData.info = e ? { kind: (on ? 'NOW ON VIEW' : 'UPCOMING') + ' · ' + e.type, title: e.title, meta: `${dt(e.start_date)} – ${dt(e.end_date).slice(5)} · ${e.venue}`, img: src, links: [[SITE + '/', '홈페이지에서 보기']] }
+  g.userData.info = ol ? { kind: 'NOW ON VIEW · 온라인 개인전', title: e.title, meta: ONLINE_DATES + ' · shinhaedal.com', img: src, links: [[SITE + '/', '홈페이지에서 보기']] }
+    : e ? { kind: (on ? 'NOW ON VIEW' : 'UPCOMING') + ' · ' + e.type, title: e.title, meta: `${dt(e.start_date)} – ${dt(e.end_date).slice(5)} · ${e.venue}`, img: src, links: [[SITE + '/', '홈페이지에서 보기']] }
     : { kind: '대표작', title: w0.title, meta: `${w0.year} · ${w0.size} cm`, img: src, links: [[SITE + '/', '홈페이지에서 보기']] };
   pickable(g, g.userData.info);
   return g;
@@ -1128,7 +1131,7 @@ animators.push((t, dt) => { heroT += dt; if ((heroT * 30 | 0) !== ((heroT - dt) 
 const SOLO = promoFor(0);   // 홍보 1순위(홈 첫 화면에 나오는 전시의 1순위)
 const exDates = (e) => `${e.start_date.replace(/-/g, '.')} – ${e.end_date.slice(5).replace('-', '.')}`;
 const exVenue = e => e.venue.split(',').slice(0, 2).join(',');
-function exhibitSolo(wx, nx, zl, s = 1, by = .95) {
+function exhibitSolo(wx, nx, zl, s = 1, by = .95, online = false) {
   const solo = SOLO; if (!solo) return;
   const rz = -nx, Z = d => zl + rz * d * s, on = TODAY >= solo.start_date, dday = Math.round((Date.parse(solo.start_date) - Date.parse(TODAY)) / 864e5);
   const head = letters(2.3 * s, .5 * s, (g, W, H) => {
@@ -1136,7 +1139,8 @@ function exhibitSolo(wx, nx, zl, s = 1, by = .95) {
     font(g, H * .44, 400, FONT_K); g.fillText(solo.type === '개인전' ? '신해달 개인전' : solo.type, 0, H * .82);
   });
   place(head, wx, by + 2.35 * s, Z(1.15), nx, 0);
-  const poster = cutout(posterSrc(solo), 1.95 * s, { alpha: false });
+  const pSrc = online && onlinePosterOn() ? ONLINE_POSTER : posterSrc(solo);
+  const poster = cutout(pSrc, 1.95 * s, { alpha: false });
   place(poster, wx, by, Z(.65), nx, 0);
   const cap = letters(1.0 * s, 1.4 * s, (g, W, H) => {
     font(g, H * .085, 700, FONT_B); textBlock(g, wrapText(g, solo.title, W), 0, H * .1, H * .1);
@@ -1145,7 +1149,7 @@ function exhibitSolo(wx, nx, zl, s = 1, by = .95) {
     if (onlineOn(solo)) { font(g, H * .055, 700, FONT_B, '#2f7d6d'); textBlock(g, ['온라인 개인전', `${ONLINE_SHOW.start.replace(/-/g, '.')} – ${ONLINE_SHOW.end.slice(5).replace('-', '.')}`], 0, H * .64, H * .075); }
   });
   place(cap, wx, by + .7 * s, Z(2.1), nx, 0);
-  const info = { kind: (on ? 'NOW ON VIEW' : 'UPCOMING') + ' · ' + solo.type, title: solo.title, meta: `${exDates(solo)} · ${solo.venue}`, img: posterSrc(solo),
+  const info = { kind: (on ? 'NOW ON VIEW' : 'UPCOMING') + ' · ' + solo.type, title: solo.title, meta: `${exDates(solo)} · ${solo.venue}`, img: pSrc,
     exTitle: '출품작', ex: solo.work_nos.split(',').map(id => (WORKS_INDEX.find(w => w.id === id) || {}).title || id), links: [[SITE + '/', '홈페이지에서 보기']], focus: focusFrom(wx, by + 1.05 * s, Z(1.3), nx, 0, 3.6 * s) };
   pickable(poster, info); pickable(cap, info);
 }
@@ -1171,7 +1175,7 @@ function exhibitUpcoming(wx, nx, zc, y = 2.3) {
   const LB = ROOMS.lobby;
   // 서쪽 벽: 지금 전시(개인전) 하나만 크게. 예정 전시는 작가소개 방 로비 문 옆 벽으로 옮김(작가님 2026-11-13)
   const wallX = LB.x0 + .16;
-  exhibitSolo(wallX, 1, 17.75, 1.35, .8);
+  exhibitSolo(wallX, 1, 17.75, 1.35, .8, true);   // 로비: 온라인 개인전 기간엔 새 포스터
   doorSign('작가소개', 'ABOUT THE ARTIST', wallX, 3.45, 11.4, 1, 0, 2.2);
   // 동쪽 벽: 관람 안내도를 크게
   const ex = LB.x1 - .16;
@@ -2464,7 +2468,7 @@ interior('exit', [[C5.ax0, C5.ax1, C5.z0 - .3, C5.bz0 + .1], [C5.ax0, C5.x1 + .2
   // 빛나는 간유리가 전실에 흘리는 빛(문 쪽에서만)
   { const l = new THREE.PointLight(0xfff3e0, 1.3, 7, 1.6); l.position.set(-11.0, 1.7, (CDOOR.z0 + CDOOR.z1) / 2); scene.add(l); }
   // 홍보 포스터(작가님 2026-11-13): 중정으로 나가는 둘째 길 북쪽 벽(걸으며 왼쪽), 문 가까이. 작은 빛 하나
-  { const p = promoPoster(0, .75, { big: true }); if (p) { place(p, -12.4, 1.55, C5.bz0 + .012, 0, 1); const l = new THREE.PointLight(0xfff3e0, .9, 3, 1.6); l.position.set(-12.4, 2.6, C5.bz0 + .9); scene.add(l); } }
+  { const p = promoPoster(0, .75, { big: true, online: true }); if (p) { place(p, -12.4, 1.55, C5.bz0 + .012, 0, 1); const l = new THREE.PointLight(0xfff3e0, .9, 3, 1.6); l.position.set(-12.4, 2.6, C5.bz0 + .9); scene.add(l); } }
 }, [-10.4, (CDOOR.z0 + CDOOR.z1) / 2, 9]);
 
 // 눈의 적응: 어두운 룸4·문턱④⑤에서는 천천히 눈이 열리고(조금 밝게), 중정에 나서면 1~1.5초에 걸쳐 제 밝기로 돌아온다
@@ -5436,6 +5440,7 @@ const banners = [];
   const dday = e => Math.round((Date.parse(e.start_date) - Date.parse(TODAY)) / 864e5);
   const W_ = 2.0, H_ = 4.9, TOP = 5.9, PPM = 240;
   for (const x of [-4.2, 4.2]) {
+    const on2 = x > 0 && !!solo && onlinePosterOn();   // 오른쪽 한 장: 온라인 개인전 포스터와 그 포스터의 글
     const ex = solo, upcoming = solo && TODAY < solo.start_date, label = upcoming ? 'UPCOMING' : 'NOW ON VIEW';
     const c = document.createElement('canvas'); c.width = W_ * PPM; c.height = H_ * PPM;
     const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = maxAniso;
@@ -5457,7 +5462,7 @@ const banners = [];
       let y = H * .11;
       if (img) { const iw = W - pad * 2, ih = iw * img.height / img.width; g.drawImage(img, pad, y, iw, ih); y += ih + H * .05; }
       else y += H * .06;
-      g.fillStyle = '#c9a86a'; g.font = `500 ${W * .05}px ${FONT_B}`; g.fillText(ex.type, pad, y); y += W * .1;
+      g.fillStyle = '#c9a86a'; g.font = `500 ${W * .05}px ${FONT_B}`; g.fillText(on2 ? '온라인 개인전' : ex.type, pad, y); y += W * .1;
       g.fillStyle = '#efe9df';
       {   // 전시 제목은 한 줄에: 넘치면 글자를 줄인다(작가님 2026-11-12)
         let fs = W * (img ? .095 : .13); g.font = `400 ${fs}px ${FONT_K}`;
@@ -5465,8 +5470,8 @@ const banners = [];
         g.fillText(ex.title, pad, y); y += Math.max(fs * 1.25, W * (img ? .09 : .11));
       }
       if (ex.title_en) { g.fillStyle = '#b9b4ab'; g.font = `400 ${W * .045}px ${FONT_M}`; for (const l of wrapText(g, ex.title_en, W - pad * 2)) { g.fillText(l, pad, y); y += W * .065; } }
-      y += W * .04; g.fillStyle = '#efe9df'; g.font = `500 ${W * .06}px ${FONT_B}`; g.fillText(dfmt(ex), pad, y);
-      y += W * .085; g.fillText(ex.venue.split(',').slice(0, 2).join(','), pad, y);
+      y += W * .04; g.fillStyle = '#efe9df'; g.font = `500 ${W * .06}px ${FONT_B}`; g.fillText(on2 ? ONLINE_DATES : dfmt(ex), pad, y);
+      y += W * .085; g.fillText(on2 ? 'shinhaedal.com' : ex.venue.split(',').slice(0, 2).join(','), pad, y);
       g.fillStyle = '#c9a86a'; g.font = `700 ${W * .045}px ${FONT_M}`; g.fillText('SHIN HAEDAL GALLERY', pad, H - pad);
       t.needsUpdate = true;
     };
@@ -5474,7 +5479,7 @@ const banners = [];
     if (ex && ex.poster_url) {
       const img = new Image(); img.crossOrigin = 'anonymous';
       img.onload = () => paint(img);
-      img.src = posterSrc(ex);
+      img.src = on2 ? ONLINE_POSTER : posterSrc(ex);
     }
     document.fonts.addEventListener('loadingdone', () => paint());   // 글꼴이 늦게 오면 다시 그린다
     const geo = new THREE.PlaneGeometry(W_, H_, 6, 24);
@@ -5484,8 +5489,8 @@ const banners = [];
     for (const yy of [TOP + .03]) { /* 아래 막대는 뺌(작가님: 바람에 나부끼는데 막대만 가만히 있어 어색) */ const bar = new THREE.Mesh(new THREE.CylinderGeometry(.03, .03, W_ + .12, 10), M.steel); bar.rotation.z = Math.PI / 2; bar.position.set(x, yy, 19.9); scene.add(bar); }
     for (const sx of [-1, 1]) boxMM(x + sx * (W_ / 2 - .1) - .02, x + sx * (W_ / 2 - .1) + .02, TOP + .01, TOP + .05, 19.55, 19.9, M.steel);
     banners.push({ mesh, base: geo.attributes.position.array.slice(), h: H_, phase: x });
-    if (ex) pickable(mesh, { kind: (upcoming ? `UPCOMING · D-${dday(ex)}` : 'NOW ON VIEW') + ' · ' + ex.type, title: ex.title, meta: `${dfmt(ex)} · ${ex.venue}`,
-      img: posterSrc(ex),
+    if (ex) pickable(mesh, { kind: (upcoming ? `UPCOMING · D-${dday(ex)}` : 'NOW ON VIEW') + ' · ' + ex.type, title: ex.title, meta: on2 ? ONLINE_DATES + ' · shinhaedal.com' : `${dfmt(ex)} · ${ex.venue}`,
+      img: on2 ? ONLINE_POSTER : posterSrc(ex),
       exTitle: ex.work_nos ? '출품작' : undefined, ex: ex.work_nos ? ex.work_nos.split(',').map(id => (WORKS_INDEX.find(w => w.id === id.trim()) || {}).title || id) : undefined,
       links: [[SITE + '/', '홈페이지에서 보기']], focus: { pos: [x, 27.5], look: [x, 5.0, 19.9] } });
   }
