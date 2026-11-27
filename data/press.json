@@ -94,5 +94,21 @@
   "link_type": "exhibition",
   "linked_exhibition_id": "EX-2026-04",
   "featured": false
+ },
+ {
+  "no": "PR-2026-007",
+  "outlet": "코리안투데이",
+  "outlet_en": "Korean Today",
+  "date": "2026-11-27",
+  "title": "헌법에서 모음을 지우면? 자개로 읽는 법, 옻칠로 전하는 마음",
+  "url": "https://www.thekorean.today/62326",
+  "quote": "법학과 전통 공예를 연결한 평면 작품부터 ‘얼빵해달’ 아트토이까지",
+  "image": "https://www.thekorean.today/wp-content/uploads/2026/11/kt20261126164201-n0plwu-1024x819.png",
+  "title_en": "What Remains of the Constitution Without Its Vowels? Reading in Mother-of-Pearl, Sentiment in Lacquer",
+  "quote_en": "",
+  "note_public": "",
+  "link_type": "exhibition",
+  "linked_exhibition_id": "EX-2026-01",
+  "featured": true
  }
 ]
