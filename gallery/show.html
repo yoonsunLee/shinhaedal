@@ -18,7 +18,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta name="gallery-variant" content="site">
-<meta name="gallery-build" content="40081bb5bc40">
+<meta name="gallery-build" content="45a9a3c77bb9">
 <link rel="stylesheet" href="../assets/fonts.css">
 <style>
 /* 레이아웃: 화면 전체가 3D 전시장, 그 위에 옻칠처럼 검은 패널이 가장자리에만 얹힌다. 한 가지 어두운 화면으로 고정. */
@@ -1274,7 +1274,7 @@ function exhibitUpcoming(wx, nx, zc, y = 2.3) {
     textBlock(g, headLines, x0, cm(58), cm(32));
     font(g, cm(7), 700, FONT_M, ACCENT); g.fillText('ARTIST NOTE', x0, cm(8));
     font(g, cm(20), 400, FONT_K); const ink = x0 - Math.max(...headLines.map(l => g.measureText(l).actualBoundingBoxLeft));   // 제목 글자 왼쪽 끝에 맞춤
-    font(g, cm(6.5), 700, FONT_B, '#3b342d'); g.fillText('캡션 밑 스티커의 의미', ink, cm(206));   // 제목(작가님 2026-11-26)
+    font(g, cm(6.5), 700, FONT_B, '#3b342d'); g.fillText('작품 밑 스티커의 의미', ink, cm(206));   // 제목(작가님 2026-11-26)
     font(g, cm(7.5), 500, FONT_B, '#3b342d'); g.textBaseline = 'middle';
     [['#c8231c', '컬렉팅 완료', 222], ['#2f5d9e', '작가 소장', 240]].forEach(([c, t, y]) => {   // 색은 작품 스티커와 같게
       g.fillStyle = c; g.beginPath(); g.arc(ink + cm(4), cm(y), cm(4), 0, Math.PI * 2); g.fill();
