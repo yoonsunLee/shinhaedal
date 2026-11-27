@@ -17,7 +17,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta name="gallery-variant" content="site">
-<meta name="gallery-build" content="ed689f89b03a">
+<meta name="gallery-build" content="a918fa2edf9c">
 <link rel="stylesheet" href="../assets/fonts.css">
 <style>
 /* 레이아웃: 화면 전체가 3D 전시장, 그 위에 옻칠처럼 검은 패널이 가장자리에만 얹힌다. 한 가지 어두운 화면으로 고정. */
@@ -506,6 +506,8 @@ renderer.setSize(innerWidth, innerHeight, false);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.0;
+const TEX_CAP = coarse ? 768 : 0;   // 폰·태블릿(손가락 화면)만 그림을 768 이하로 줄여 올린다(작가님 2026-11-27 B)
+if (TEX_CAP && renderer.capabilities.maxTextureSize > TEX_CAP) { renderer.capabilities.maxTextureSize = TEX_CAP; const w0 = console.warn.bind(console); console.warn = (...a) => { if (typeof a[0] === 'string' && a[0].includes('Texture has been resized')) return; w0(...a); }; }
 const maxAniso = renderer.capabilities.getMaxAnisotropy();
 const scene = new THREE.Scene();
 const BASE_FOV = coarse ? 75 : 70;   // 1인칭 눈높이(작가님 결정): 화각을 넓혀 좁은 곳도 덜 답답하게
@@ -6812,6 +6814,119 @@ function frame() {
 me.face = view.yaw = 0; if (''.includes("dbg=1")) { window.__dbg = { openCard, pickables, SOUND, scene, camera, THREE, renderer, me, view, blocked, inInterior, colliders, LINKS, LINK_IF, VIEWS, INTERIORS, stampMarks, award, get pawsXZ() { return typeof paws === 'undefined' ? null : paws.map(p => [p.m.position.x, p.m.position.z, p.m.visible, p.m.material.opacity]); } }; }
 // 화면 확인용: 주소에 ?at=x,z,방향(라디안, 0 = 북쪽, + = 왼쪽으로 돈다)을 붙이면 그 자리에서 시작한다
 { const at = new URLSearchParams('').get('at'); if (at) { const [x, z, yaw = 0] = at.split(',').map(Number); me.x = x; me.z = z; me.face = view.yaw = yaw; walkTo = null; snapCam = true; } }
+/* ───────── 그리기 수 줄이기 2: 움직이지 않는 조각 합치기(최적화 점검 2026-11-27) ─────────
+   로비에서 한 화면에 540번 그렸다. 대부분 벽·기둥·띠 같은 작은 상자(삼각형 12개)를 하나씩 따로 그린 것이다.
+   바깥 건물(안쪽 공간에 들지 않는 것)과 안쪽 공간 하나하나에서, 같은 재질·같은 숨김 무리·16 m 칸이 같은 조각을 한 덩어리로 합쳐 한 번에 그린다.
+   원래 조각은 합친 덩어리 아래에 안 보이게 남겨 둔다(누르기·카메라 벽 살피기·발밑 찾기는 원래 조각으로 그대로 한다).
+   어떤 조각이 움직이거나(자리·돌림·크기), 재질·모양이 바뀌거나, 누가 보이기를 바꾸면 그 조각만 바로 덩어리에서 빼서 따로 그린다. 그래서 문·움직이는 것도 그대로 동작한다.
+   주소에 ?nomerge=1 을 붙이면 합치지 않는다(비교용). */
+{
+  const OFF = new URLSearchParams(location.search).has('nomerge');
+  const pickSet = new Set(pickables), floorSet = new Set(floors), CELL = 16;
+  const okMat = m => m && !m.transparent && !m.isShaderMaterial && m.alphaTest === 0 && !m.wireframe && m.onBeforeCompile === THREE.Material.prototype.onBeforeCompile && m.visible;
+  const sig = g => Object.keys(g.attributes).sort().map(k => k + g.attributes[k].itemSize + (g.attributes[k].normalized ? 'n' : '')).join(',');
+  const okMesh = o => o.isMesh && !o.isInstancedMesh && !o.isSkinnedMesh && o.children.length === 0 && o.visible && o.layers.mask === 1
+    && Object.keys(o.userData).length === 0 && o.renderOrder === 0 && o.frustumCulled && !pickSet.has(o) && !floorSet.has(o)
+    && o.onBeforeRender === THREE.Object3D.prototype.onBeforeRender && o.onAfterRender === THREE.Object3D.prototype.onAfterRender
+    && o.geometry && o.geometry.isBufferGeometry && o.geometry.attributes.position && o.geometry.attributes.normal && !o.geometry.morphAttributes.position
+    && !o.geometry.attributes.position.isInterleavedBufferAttribute && Object.values(o.geometry.attributes).every(a => !a.isInterleavedBufferAttribute && a.array instanceof Float32Array)
+    && [].concat(o.material).every(okMat);
+  // 무리: 바깥(늘 보임) / 바깥(안쪽 공간에 있을 때 숨김) / 안쪽 공간마다
+  const hideOut = new Set([...OUTDOOR, ...INTERIORS.flatMap(I => I.intruders)]);
+  const groups = new Map();   // key → { list: [{ o, parts:[{mat, start, count}] }], mat, home }
+  const homes = [];           // [배열, 원래 조각들] : 원래 조각을 담은 목록(숨김 목록, 안쪽 공간 목록)을 덩어리로 바꾼다
+  const take = (o, home) => {
+    o.updateMatrixWorld(true);
+    const p = new THREE.Vector3().setFromMatrixPosition(o.matrixWorld), cell = Math.floor(p.x / CELL) + ',' + Math.floor(p.z / CELL);
+    const g = o.geometry, mats = [].concat(o.material), n = g.index ? g.index.count : g.attributes.position.count;
+    const parts = Array.isArray(o.material) ? g.groups.map(gr => ({ mat: mats[gr.materialIndex], start: gr.start, count: Math.min(gr.count, n - gr.start) })).filter(q => q.mat && q.count > 0) : [{ mat: o.material, start: 0, count: n }];
+    for (const q of parts) {
+      const key = home + '|' + cell + '|' + q.mat.uuid + '|' + sig(g) + '|' + (o.castShadow ? 1 : 0) + (o.receiveShadow ? 1 : 0);
+      let G = groups.get(key); if (!G) groups.set(key, G = { list: [], mat: q.mat, home, cast: o.castShadow, recv: o.receiveShadow });
+      G.list.push({ o, q });
+    }
+  };
+  if (!OFF) {
+    for (const o of scene.children) if (okMesh(o) && !INTERIORS.some(I => I.objs.includes(o))) take(o, hideOut.has(o) ? 'out-hide' : 'out');
+    INTERIORS.forEach((I, i) => { for (const o of I.objs) if (o.parent === scene && okMesh(o)) take(o, 'I' + i); });
+  }
+  const _v = new THREE.Vector3(), _n = new THREE.Matrix3();
+  const build = (G) => {
+    const live = G.list;
+    const names = Object.keys(live[0].o.geometry.attributes);
+    let nv = 0, ni = 0; for (const { o, q } of live) { nv += o.geometry.attributes.position.count; ni += q.count; }
+    const out = {}; for (const k of names) out[k] = new Float32Array(nv * live[0].o.geometry.attributes[k].itemSize);
+    const idx = nv > 65535 ? new Uint32Array(ni) : new Uint16Array(ni);
+    let vo = 0, io = 0;
+    for (const { o, q } of live) {
+      const g = o.geometry, M4 = o.matrixWorld, flip = M4.determinant() < 0; _n.getNormalMatrix(M4);
+      const pc = g.attributes.position.count;
+      for (const k of names) { const a = g.attributes[k], s = a.itemSize, d = out[k];
+        if (k === 'position') for (let i = 0; i < pc; i++) { _v.fromBufferAttribute(a, i).applyMatrix4(M4); d[(vo + i) * 3] = _v.x; d[(vo + i) * 3 + 1] = _v.y; d[(vo + i) * 3 + 2] = _v.z; }
+        else if (k === 'normal') for (let i = 0; i < pc; i++) { _v.fromBufferAttribute(a, i).applyMatrix3(_n).normalize(); d[(vo + i) * 3] = _v.x; d[(vo + i) * 3 + 1] = _v.y; d[(vo + i) * 3 + 2] = _v.z; }
+        else if (k === 'tangent') for (let i = 0; i < pc; i++) { _v.set(a.getX(i), a.getY(i), a.getZ(i)).transformDirection(M4); d[(vo + i) * 4] = _v.x; d[(vo + i) * 4 + 1] = _v.y; d[(vo + i) * 4 + 2] = _v.z; d[(vo + i) * 4 + 3] = a.getW(i) * (flip ? -1 : 1); }
+        else d.set(a.array.subarray(0, pc * s), vo * s); }
+      const src = g.index ? g.index.array : null;
+      for (let t = 0; t < q.count; t += 3) { const i0 = src ? src[q.start + t] : q.start + t, i1 = src ? src[q.start + t + 1] : q.start + t + 1, i2 = src ? src[q.start + t + 2] : q.start + t + 2;
+        idx[io++] = vo + i0; if (flip) { idx[io++] = vo + i2; idx[io++] = vo + i1; } else { idx[io++] = vo + i1; idx[io++] = vo + i2; } }
+      vo += pc;
+    }
+    const geo = new THREE.BufferGeometry(); for (const k of names) geo.setAttribute(k, new THREE.BufferAttribute(out[k], live[0].o.geometry.attributes[k].itemSize, live[0].o.geometry.attributes[k].normalized));
+    geo.setIndex(new THREE.BufferAttribute(idx, 1)); geo.computeBoundingSphere(); geo.computeBoundingBox();
+    return geo;
+  };
+  const MERGED = [];
+  let saved = 0;
+  for (const G of groups.values()) {
+    if (G.list.length < 2) continue;
+    const mesh = new THREE.Mesh(build(G), G.mat); mesh.castShadow = G.cast; mesh.receiveShadow = G.recv; mesh.name = 'merged';
+    mesh.matrixAutoUpdate = false; mesh.updateMatrix();
+    G.mesh = mesh; scene.add(mesh); MERGED.push(G); saved += G.list.length - 1;
+  }
+  // 원래 조각: 모든 면이 덩어리에 들어간 조각만 합친다(재질이 여럿인 상자는 재질마다 덩어리가 다르다). 덩어리가 1조각이 되면 풀고 다시 센다
+  let keepMerged = MERGED, full;
+  for (let round = 0; round < 6; round++) {
+    const owners = new Map(); for (const G of keepMerged) for (const e of G.list) owners.set(e.o, (owners.get(e.o) || 0) + 1);
+    full = new Map(); for (const [o, n] of owners) if (n >= (Array.isArray(o.material) ? o.geometry.groups.length : 1)) full.set(o, []);
+    let changed = false;
+    for (const G of keepMerged) { const n0 = G.list.length; G.list = G.list.filter(e => full.has(e.o)); if (G.list.length !== n0) changed = true; }
+    const k2 = keepMerged.filter(G => G.list.length >= 2); if (k2.length !== keepMerged.length) changed = true;
+    for (const G of keepMerged) if (G.list.length < 2) { scene.remove(G.mesh); G.mesh.geometry.dispose(); }
+    keepMerged = k2; if (!changed) break;
+  }
+  for (const G of keepMerged) for (const e of G.list) full.get(e.o).push(G);
+  for (const G of keepMerged) { G.mesh.geometry.dispose(); G.mesh.geometry = build(G); }
+  const snap = new Map(), parked = new Set();
+  const inLists = new Map();   // 덩어리 → 원래 조각이 들어 있던 목록들(OUTDOOR, 안쪽 공간의 intruders·objs)
+  const lists = [OUTDOOR, ...INTERIORS.flatMap(I => [I.intruders, I.objs])];
+  for (const G of keepMerged) for (const { o } of G.list) {
+    if (!parked.has(o)) { parked.add(o); snap.set(o, { p: o.position.clone(), q: o.quaternion.clone(), s: o.scale.clone(), m: o.material, g: o.geometry, v: o.visible, Gs: full.get(o), L: lists.filter(L => L.includes(o)) }); }
+    const ls = inLists.get(G) || new Set(); for (const L of snap.get(o).L) ls.add(L); inLists.set(G, ls);
+  }
+  for (const G of keepMerged) for (const L of inLists.get(G) || []) L.push(G.mesh);
+  // 원래 조각은 장면에서 떼어 낸다(그리지 않음). 세계 자리(matrixWorld)는 그대로 두어 누르기·벽 살피기·발밑 찾기는 원래 조각으로 한다.
+  // 누르기 층은 덩어리와 같은 것을 같이 쓴다 → 안쪽 공간에 들어가 덩어리가 숨으면(setShown) 원래 조각도 누르기에서 빠진다
+  for (const o of parked) { const S = snap.get(o); o.updateMatrixWorld(true); scene.remove(o); o.layers = S.Gs[0].mesh.layers; }
+  for (const L of lists) for (let i = L.length - 1; i >= 0; i--) if (parked.has(L[i])) L.splice(i, 1);
+  // 하나라도 바뀌면(자리·돌림·크기·재질·모양·보이기) 그 조각을 빼서 따로 그리고, 덩어리는 다시 만든다
+  const dirty = new Set();
+  const unmerge = (o) => {
+    const S = snap.get(o); snap.delete(o); o.userData.__unmerged = true;
+    const top = S.Gs[0].mesh, ly = new THREE.Layers(); ly.mask = top.layers.mask; o.layers = ly;
+    scene.add(o); for (const L of S.L) L.push(o);
+    if (!top.visible) o.visible = false;   // 지금 덩어리가 숨어 있으면 같이 숨긴다
+    for (const G of S.Gs) { G.list = G.list.filter(e => e.o !== o); dirty.add(G); }
+  };
+  const prevSBR = scene.onBeforeRender;
+  scene.onBeforeRender = function (...a) {
+    for (const [o, S] of snap) if (o.visible !== S.v || o.material !== S.m || o.geometry !== S.g || !o.position.equals(S.p) || !o.quaternion.equals(S.q) || !o.scale.equals(S.s)) unmerge(o);
+    if (dirty.size) { for (const G of dirty) { G.mesh.geometry.dispose(); if (G.list.length) G.mesh.geometry = build(G); else { G.mesh.geometry = new THREE.BufferGeometry(); G.mesh.visible = false; } } dirty.clear(); }
+    return prevSBR.apply(this, a);
+  };
+  globalThis.__MERGE = { groups: keepMerged.length, pieces: parked.size, left: () => snap.size };
+  console.debug('조각 합치기:', parked.size, '조각 →', keepMerged.length, '덩어리');
+}
+
 // 버벅임 막기: 처음 보이는 순간 그 재질의 셰이더를 만드느라 멈추지 않게, 시작할 때 모든 안쪽 공간을 한 번 보이게 하고 미리 만들어 둔다(작가님: 문 지날 때 버벅임)
 { for (const I of INTERIORS) for (const o of I.objs) if (!o.isLight) setShown(o, true);
   /* 데우기 나누기(⑤-3, 2026-11-14): 예전에는 한 번에 다 그려 셰이더 300여 개를 만들고 그림을 올리느라 화면이 십몇 초 굳었다(헤드리스 15초 한 덩이).
