@@ -4,8 +4,8 @@
   "hash": "3a96884c197bcdbd"
  },
  "about/": {
-  "date": "2026-11-26",
-  "hash": "04e7071bac1765de"
+  "date": "2026-11-27",
+  "hash": "05312360c4e4f2aa"
  },
  "contact/": {
   "date": "2026-10-24",
@@ -16,16 +16,16 @@
   "hash": "cdcb7a9468ac43eb"
  },
  "cv/": {
-  "date": "2026-11-24",
-  "hash": "21f8947fbd5b8b0c"
+  "date": "2026-11-27",
+  "hash": "6ffeb853de2ff7b1"
  },
  "en/": {
   "date": "2026-11-26",
   "hash": "8ca62ded0ec5cf1f"
  },
  "en/about/": {
-  "date": "2026-11-26",
-  "hash": "ccea16ac319b6e40"
+  "date": "2026-11-27",
+  "hash": "a29c817886c90a6f"
  },
  "en/contact/": {
   "date": "2026-10-24",
@@ -36,8 +36,8 @@
   "hash": "3427544cb1369583"
  },
  "en/cv/": {
-  "date": "2026-11-24",
-  "hash": "fb08f4b511ea1bfd"
+  "date": "2026-11-27",
+  "hash": "b6c198e9bdb36af5"
  },
  "en/ip/": {
   "date": "2026-11-15",
@@ -81,15 +81,15 @@
  },
  "works/w/HD-2025-002/": {
   "date": "2026-11-27",
-  "hash": "51e0d777a17bcfb3"
+  "hash": "15c1b515c28a854c"
  },
  "works/w/HD-2025-004/": {
   "date": "2026-11-26",
   "hash": "fd9f8126336e440b"
  },
  "works/w/HD-2026-001/": {
-  "date": "2026-11-24",
-  "hash": "c1510bcc308c3853"
+  "date": "2026-11-27",
+  "hash": "d12d4ff14bd4620b"
  },
  "works/w/HD-2026-002/": {
   "date": "2026-11-26",
@@ -116,24 +116,24 @@
   "hash": "3ec9cc69b2fa70b3"
  },
  "works/w/HD-2026-008/": {
-  "date": "2026-11-26",
-  "hash": "4946fc505329daa8"
+  "date": "2026-11-27",
+  "hash": "32b98aa565cbd9d5"
  },
  "works/w/HD-2026-009/": {
-  "date": "2026-11-26",
-  "hash": "966e5f617281afef"
+  "date": "2026-11-27",
+  "hash": "37bc749a11fbdca5"
  },
  "works/w/HD-2026-010/": {
   "date": "2026-11-26",
   "hash": "bd87bd2fa068dd85"
  },
  "works/w/HD-2026-011/": {
-  "date": "2026-11-26",
-  "hash": "63be0b25f0034a16"
+  "date": "2026-11-27",
+  "hash": "130f4251b54e54e2"
  },
  "works/w/HD-2026-012/": {
-  "date": "2026-11-26",
-  "hash": "751869826bd81fed"
+  "date": "2026-11-27",
+  "hash": "5a39511b88c67289"
  },
  "works/w/HD-2026-013/": {
   "date": "2026-11-26",
@@ -141,70 +141,70 @@
  },
  "works/w/HD-2026-014/": {
   "date": "2026-11-27",
-  "hash": "16eb7f0cb6ef1d15"
+  "hash": "01bf33997ea30394"
  },
  "works/w/HD-2026-015/": {
   "date": "2026-11-27",
-  "hash": "6f48fbb4a8accca8"
+  "hash": "53b2892f638e4fea"
  },
  "works/w/HD-2026-016/": {
   "date": "2026-11-27",
-  "hash": "201741628017c0c9"
+  "hash": "0858112653b474bd"
  },
  "works/w/HD-2026-017/": {
   "date": "2026-11-27",
-  "hash": "4f343f22902c41a7"
+  "hash": "5e2f0877d6c5b472"
  },
  "works/w/HD-2026-018/": {
   "date": "2026-11-27",
-  "hash": "8ce8262cb2a368f5"
+  "hash": "e59f04bd016008e9"
  },
  "works/w/HD-2026-019/": {
   "date": "2026-11-27",
-  "hash": "3abb95d314e93e56"
+  "hash": "8ec37f10e3d57322"
  },
  "works/w/HD-2026-020/": {
   "date": "2026-11-27",
-  "hash": "ccf44945fa6e98f4"
+  "hash": "e2a65a1326808e5d"
  },
  "works/w/HD-2026-021/": {
   "date": "2026-11-27",
-  "hash": "cc716925ffda1b20"
+  "hash": "532a48b4a45705db"
  },
  "works/w/HD-2026-022/": {
   "date": "2026-11-27",
-  "hash": "4717d9a815a5c9d8"
+  "hash": "60a0d449c32f3370"
  },
  "works/w/HD-2026-023/": {
   "date": "2026-11-27",
-  "hash": "7d6a99bf6e2938fe"
+  "hash": "57e4758952cd8c4a"
  },
  "works/w/HD-2026-024/": {
   "date": "2026-11-27",
-  "hash": "2ec3aa08030ed905"
+  "hash": "f4fec6695ade2703"
  },
  "works/w/HD-2026-025/": {
   "date": "2026-11-27",
-  "hash": "11ee28365747d869"
+  "hash": "470e06dbc4897fe7"
  },
  "works/w/HD-2026-026/": {
   "date": "2026-11-27",
-  "hash": "24a58403c04adcc7"
+  "hash": "275cee40d5003ca5"
  },
  "works/w/HD-2026-027/": {
   "date": "2026-11-27",
-  "hash": "5d3045863381f75e"
+  "hash": "a0f3fbe8500d8782"
  },
  "works/w/HD-2026-028/": {
   "date": "2026-11-27",
-  "hash": "14dfe682fcec687f"
+  "hash": "26b9507109efde1d"
  },
  "works/w/HD-2026-029/": {
   "date": "2026-11-27",
-  "hash": "f9ebe1c98344ad94"
+  "hash": "1e969e4ca037747e"
  },
  "works/w/HD-2026-030/": {
   "date": "2026-11-27",
-  "hash": "4bb3b648e7207d07"
+  "hash": "3b25e8bdd32a38fb"
  }
 }
