@@ -18,7 +18,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta name="gallery-variant" content="site">
-<meta name="gallery-build" content="45a9a3c77bb9">
+<meta name="gallery-build" content="99f04ea07a83">
 <link rel="stylesheet" href="../assets/fonts.css">
 <style>
 /* 레이아웃: 화면 전체가 3D 전시장, 그 위에 옻칠처럼 검은 패널이 가장자리에만 얹힌다. 한 가지 어두운 화면으로 고정. */
@@ -1795,6 +1795,71 @@ interior('hall2', [[H2.x0, H2.x1, H2.z0, H2.z1], [H2_IN[0], H2_IN[1], H2.z1 - .1
   };
   requestAnimationFrame(tick); }
 
+/* ── 작품관 → 중정 전실: 미러볼과 큰 온라인 개인전 포스터(작가님 2026-11-28 '이 공간에 미러볼이랑 전시포스터를 크게') ──
+   포스터는 그림 한 장(작가님 고름: 영상 샘플은 지움). 온라인 개인전 기간(11.30~12.06)에만 나온다.
+   전실 벽은 빛을 받지 않는 남색(MeshBasic)이라, 미러볼 빛 조각은 벽·천장·바닥 면 위에 얹는 밝은 점으로 그린다 */
+function discoRoom() {
+  const X0 = C5.ax0, X1 = -10.4, Z0 = C5.bz0, Z1 = C5.bz1, HH = C5.h;   // 전실 둘째 길 안쪽 면
+  // 큰 포스터: 전실 안쪽 끝 벽(서쪽, 작가님 2026-11-28 '안쪽벽'). 높이 2.3 m(바닥에서 45 cm)
+  const PH = 2.3, PW = PH * 1122 / 1402, PX = X0 + .012, PY = .45 + PH / 2, PZ = (Z0 + Z1) / 2;
+  const g = new THREE.Group();
+  const face = new THREE.Mesh(new THREE.PlaneGeometry(PW, PH), new THREE.MeshBasicMaterial({ color: 0xffffff, toneMapped: false }));
+  const edge = new THREE.Mesh(new THREE.PlaneGeometry(PW + .06, PH + .06), new THREE.MeshBasicMaterial({ color: 0x0b0b10, toneMapped: false }));
+  face.position.z = .004; g.add(edge, face);
+  const tex = loader.load(ONLINE_POSTER); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = maxAniso; face.material.map = tex;
+  g.userData.info = { kind: 'NOW ON VIEW · 온라인 개인전', title: (EXHIBITIONS.find(e => e.id === ONLINE_SHOW.id) || {}).title || '', meta: ONLINE_DATES + ' · shinhaedal.com', img: ONLINE_POSTER, links: [[SITE + '/', '홈페이지에서 보기']] };
+  pickable(g, g.userData.info);
+  place(g, PX, PY, PZ, 1, 0);
+  { const l = new THREE.PointLight(0xfff3e0, .9, 3.4, 1.6); l.position.set(PX + 1.0, 2.9, PZ); scene.add(l); }
+
+  // 미러볼: 전실 천장에서 늘어뜨림(포스터를 가리지 않게 가운데에서 조금 북쪽). 자개 빛(청록·연보라·분홍·은) 작은 판 조각
+  const BX = (X0 + X1) / 2 - .4, BY = HH - .7, BZ = Z0 + 1.05, BR = .24;
+  const tiles = canvasTex(512, 256, (c, W, H) => {
+    c.fillStyle = '#2a2a33'; c.fillRect(0, 0, W, H);
+    const cols = ['#cfe9ee', '#a9d8de', '#d9c9ef', '#efd3e4', '#e8eef2', '#b9c7e8', '#f4f1ea', '#9fd0c6'];
+    const nx = 48, ny = 24, w = W / nx, h = H / ny;
+    for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { c.fillStyle = cols[(Math.random() * cols.length) | 0]; c.globalAlpha = .75 + Math.random() * .25; c.fillRect(i * w + 1, j * h + 1, w - 2, h - 2); }
+    c.globalAlpha = 1;
+  });
+  const ball = new THREE.Mesh(new THREE.SphereGeometry(BR, 36, 18), new THREE.MeshStandardMaterial({ map: tiles, emissive: 0xffffff, emissiveMap: tiles, emissiveIntensity: .45, metalness: .55, roughness: .22, flatShading: true }));
+  ball.position.set(BX, BY, BZ); ball.userData.disco = true; scene.add(ball);
+  { const rod = new THREE.Mesh(new THREE.CylinderGeometry(.006, .006, HH - BY - BR), new THREE.MeshBasicMaterial({ color: 0x8b8f99 })); rod.position.set(BX, (HH + BY + BR) / 2, BZ); rod.userData.disco = true; scene.add(rod); }
+  { const l = new THREE.PointLight(0xffffff, 1.6, 2.2, 1.5); l.position.set(BX + .5, BY - .5, BZ + .6); scene.add(l); }   // 미러볼 판이 반짝이게
+
+  // 빛 조각: 볼에서 나가는 방향들을 볼과 함께 돌려, 닿는 면 위에 밝은 점을 얹는다
+  const N = 90, dirs = [];
+  for (let i = 0; i < N; i++) { const y = -1 + 2 * Math.random() * .85, r = Math.sqrt(1 - y * y), a = Math.random() * Math.PI * 2; dirs.push(new THREE.Vector3(r * Math.cos(a), y, r * Math.sin(a))); }
+  const dotT = canvasTex(64, 64, (c, W, H) => { const gr = c.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W / 2); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(.35, 'rgba(255,255,255,.7)'); gr.addColorStop(1, 'rgba(255,255,255,0)'); c.fillStyle = gr; c.fillRect(0, 0, W, H); });
+  const dots = new THREE.InstancedMesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: dotT, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false, opacity: .8 }), N);
+  const tint = [0xbff3f0, 0xe4d2ff, 0xffd6ea, 0xffffff, 0xcfe0ff];
+  for (let i = 0; i < N; i++) dots.setColorAt(i, new THREE.Color(tint[i % tint.length]));
+  dots.frustumCulled = false; dots.renderOrder = 5; dots.userData.disco = true; scene.add(dots);
+  const P = new THREE.Vector3(BX, BY, BZ), d = new THREE.Vector3(), q = new THREE.Quaternion(), s = new THREE.Vector3(), m4 = new THREE.Matrix4(), pos = new THREE.Vector3();
+  const NRM = { x0: new THREE.Vector3(1, 0, 0), x1: new THREE.Vector3(-1, 0, 0), y0: new THREE.Vector3(0, 1, 0), y1: new THREE.Vector3(0, -1, 0), z0: new THREE.Vector3(0, 0, 1), z1: new THREE.Vector3(0, 0, -1) }, Z = new THREE.Vector3(0, 0, 1);
+  const holes = (k, p) => (k === 'x1' && p.z > CDOOR.z0 && p.z < CDOOR.z1 && p.y < 3.1) || (k === 'z1' && p.x > HALL_DOOR.x0 && p.x < HALL_DOOR.x1 && p.y < HALL_DOOR.h);   // 문 자리에는 얹지 않는다
+  let ang = 0;
+  animators.push((t, dt, me) => {
+    const near = me && Math.hypot(me.x - BX, me.z - BZ) < 11;
+    if (!near) return;
+    ang += dt * (reduceMotion ? .08 : .35); ball.rotation.y = ang;
+    const ca = Math.cos(ang), sa = Math.sin(ang);
+    for (let i = 0; i < N; i++) {
+      const v = dirs[i]; d.set(v.x * ca + v.z * sa, v.y, -v.x * sa + v.z * ca);
+      let tm = Infinity, k = '';
+      const tryF = (tv, key) => { if (tv > 0 && tv < tm) { tm = tv; k = key; } };
+      if (d.x) tryF(((d.x > 0 ? X1 : X0) - P.x) / d.x, d.x > 0 ? 'x1' : 'x0');
+      if (d.y) tryF(((d.y > 0 ? HH : .03) - P.y) / d.y, d.y > 0 ? 'y1' : 'y0');   // 바닥 판은 3 cm 위
+      if (d.z) tryF(((d.z > 0 ? Z1 : Z0) - P.z) / d.z, d.z > 0 ? 'z1' : 'z0');
+      pos.copy(P).addScaledVector(d, tm);
+      if (holes(k, pos)) { s.set(0, 0, 0); m4.compose(pos, q, s); dots.setMatrixAt(i, m4); continue; }
+      const n = NRM[k]; pos.addScaledVector(n, .02);
+      q.setFromUnitVectors(Z, n); const sz = .05 + tm * .022; s.set(sz, sz, 1);
+      m4.compose(pos, q, s); dots.setMatrixAt(i, m4);
+    }
+    dots.instanceMatrix.needsUpdate = true;
+  });
+}
+
 /* ── 문턱+ 룸2 POV ── */
 // 문턱②: 룸1 서쪽 벽 남쪽 끝 문에서 서쪽으로 가다 한 번 꺾여 북쪽으로(폭 2.6, 천장 3.0, 조명은 밝게 그대로).
 //        벽의 리히텐슈타인 점이 2 mm에서 4 cm로 커지며 흰색에서 노랑으로 넘어가고, 꺾이는 벽에 굵은 윤곽선 「POV」만. 꺾인 뒤 바닥은 테라초.
@@ -2549,7 +2614,7 @@ interior('exit', [[C5.ax0, C5.ax1, C5.z0 - .3, C5.bz0 + .1], [C5.ax0, C5.x1 + .2
   // 빛나는 간유리가 전실에 흘리는 빛(문 쪽에서만)
   { const l = new THREE.PointLight(0xfff3e0, 1.3, 7, 1.6); l.position.set(-11.0, 1.7, (CDOOR.z0 + CDOOR.z1) / 2); scene.add(l); }
   // 홍보 포스터(작가님 2026-11-13): 중정으로 나가는 둘째 길 북쪽 벽(걸으며 왼쪽), 문 가까이. 작은 빛 하나
-  { const p = promoPoster(0, .75, { big: true, online: true }); if (p) { place(p, -12.4, 1.55, C5.bz0 + .012, 0, 1); const l = new THREE.PointLight(0xfff3e0, .9, 3, 1.6); l.position.set(-12.4, 2.6, C5.bz0 + .9); scene.add(l); } }
+  if (onlinePosterOn()) discoRoom(); else { const p = promoPoster(0, .75, { big: true, online: true }); if (p) { place(p, -12.4, 1.55, C5.bz0 + .012, 0, 1); const l = new THREE.PointLight(0xfff3e0, .9, 3, 1.6); l.position.set(-12.4, 2.6, C5.bz0 + .9); scene.add(l); } }
 }, [-10.4, (CDOOR.z0 + CDOOR.z1) / 2, 9]);
 
 // 눈의 적응: 어두운 룸4·문턱④⑤에서는 천천히 눈이 열리고(조금 밝게), 중정에 나서면 1~1.5초에 걸쳐 제 밝기로 돌아온다
