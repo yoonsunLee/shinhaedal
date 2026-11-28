@@ -1255,7 +1255,7 @@ function exhibitUpcoming(wx, nx, zc, y = 2.3) {
     font(g, cm(20), 400, FONT_K); const ink = x0 - Math.max(...headLines.map(l => g.measureText(l).actualBoundingBoxLeft));   // 제목 글자 왼쪽 끝에 맞춤
     font(g, cm(6.5), 700, FONT_B, '#3b342d'); g.fillText('작품 밑 스티커의 의미', ink, cm(206));   // 제목(작가님 2026-11-26)
     font(g, cm(7.5), 500, FONT_B, '#3b342d'); g.textBaseline = 'middle';
-    [['#c8231c', '컬렉팅 완료', 222], ['#2f5d9e', '작가 소장', 240]].forEach(([c, t, y]) => {   // 색은 작품 스티커와 같게
+    [['#c8231c', '컬렉팅 완료', 222], ['#141414', '작가 소장', 240]].forEach(([c, t, y]) => {   // 색은 작품 스티커와 같게
       g.fillStyle = c; g.beginPath(); g.arc(ink + cm(4), cm(y), cm(4), 0, Math.PI * 2); g.fill();
       g.fillStyle = '#3b342d'; g.fillText(t, ink + cm(11), cm(y));
     });
@@ -1458,7 +1458,7 @@ function putWork(w, ww, hh, x, cy, z, [nx, nz], [dx, dz], light, where, capAt) {
   // 판매완료 작품: 오른쪽 아래 모서리 바로 밑에 빨간 동그라미 스티커(작가님 2026-11-15). 판매 여부는 발행 자료 works-index.json 의 sold(판매완료만 true)
   if (w.sold) { const dot = new THREE.Mesh(new THREE.CircleGeometry(.04, 32), new THREE.MeshBasicMaterial({ color: 0xc8231c, toneMapped: false }));   // 스티커 지름 8 cm(작가님 2026-11-26: 더 크게)
     dot.position.set(ww / 2 - .046, -hh / 2 - .06, .004); g.add(dot); }
-  else if (NFS_IDS.includes(w.id)) { const dot = new THREE.Mesh(new THREE.CircleGeometry(.04, 32), new THREE.MeshBasicMaterial({ color: 0x2f5d9e, toneMapped: false }));   // 작가 소장: 같은 자리 파란 점
+  else if (NFS_IDS.includes(w.id)) { const dot = new THREE.Mesh(new THREE.CircleGeometry(.04, 32), new THREE.MeshBasicMaterial({ color: 0x141414, toneMapped: false }));   // 작가 소장: 같은 자리 파란 점
     dot.position.set(ww / 2 - .046, -hh / 2 - .06, .004); g.add(dot); }
   if (hallW) for (const c of [...g.children]) if (c.geometry && c.geometry.type === 'CircleGeometry') {   // 작품관: 스티커는 캡션 밑, 캡션 글 첫머리에 맞춰(작가님 2026-11-26). 지름 6 cm
     const r = .03 / CS, half = (CAP_W - .08) / 2, right = !!(capAt && capAt[3]);
