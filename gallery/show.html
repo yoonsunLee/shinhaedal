@@ -18,7 +18,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta name="gallery-variant" content="site">
-<meta name="gallery-build" content="99f04ea07a83">
+<meta name="gallery-build" content="18c3fa5c218f">
 <link rel="stylesheet" href="../assets/fonts.css">
 <style>
 /* 레이아웃: 화면 전체가 3D 전시장, 그 위에 옻칠처럼 검은 패널이 가장자리에만 얹힌다. 한 가지 어두운 화면으로 고정. */
@@ -413,7 +413,7 @@ const [WORKS_INDEX, EXHIBITIONS, SERIES] = await Promise.all([getJSON('works-ind
 const SITE = 'https://shinhaedal.com';
 const SHOP_URL = 'https://www.idus.com/v2/artist/b987fcad-fa10-4f28-a90d-8553dbaab0ad/product';
 // 한국 날짜. 주소 끝에 ?today=2026-11-25 처럼 붙이면 그날로 보고 현수막·로비 안내를 미리 확인할 수 있다
-const TODAY = (new URLSearchParams('').get('today') || '').match(/^\d{4}-\d{2}-\d{2}$/)?.[0] || new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
+const TODAY = (new URLSearchParams('').get('today') || '').match(/^\d{4}-\d{2}-\d{2}$/)?.[0] || ((d) => /[?&]gb=/.test(location.search) && d < '2026-11-30' ? '2026-11-30' : d)(new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10));   // 시험 주소(?gb=)는 30일처럼
 // 갤러리 곳곳의 홍보 포스터(작가님 2026-11-15): 지금 홈페이지 첫 화면(Upcoming · Now on view)에 나오는 전시를 그대로 건다.
 //   판정은 홈페이지 index.html 의 homeCandidates 와 같다 — 전시별 예고 기간(home_lead_days, 없으면 30일), 홈 노출 '숨김'(hide)은 빼고,
 //   차례는 고정(pin) → 개인전 → 단체전류 → 아트페어류 → 진행 중 먼저 → 개막이 이른 것. 홈처럼 앞의 3개까지.
